@@ -1,0 +1,70 @@
+<html>
+
+<head>
+
+<script src="jquery-1.4.2.min.js" type="text/javascript"></script>
+<script src="sh_main.js" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="sh_nedit.css">
+
+<style type="text/css">
+	
+	body {
+		padding: 0px;
+		margin: 0px;
+	}
+	
+	#previewDiv {
+		padding: 0px 0px 0px 0px;
+		margin: 0px 0px 0px 0px;
+        font-family: monospace;
+        font-size: 18px;
+		height: auto;
+	}
+	
+</style>
+
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">  
+
+</head>
+
+<body>
+
+<pre id="previewDiv" class="sh____LANGUAGE___">___CONTENT___</pre>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+        function copyText() {
+            var s = input.val();
+            
+            //s = s.replace(/\n/g, "<br>");
+			//s = s.replace(/ /g, "&nbsp;");
+            
+			$("#previewDiv").html(s);
+        };
+        
+		function applyLineNumbers() {
+			var lines = $("#previewDiv").html().split(/\n/);
+			var result = "";
+			
+			for (var i = 0; i < lines.length; ++i) {
+				var line = (i + 1).toString();
+				while(line.length < 5) line = " " + line;
+				line += ". ";
+				line += lines[i];
+				line += "\n";
+				result += line;
+			}
+			
+			$("#previewDiv").html(result);
+		};
+                                
+        $("#previewDiv").hide();
+		sh_highlightDocument("", ".js");
+        applyLineNumbers();
+        $("#previewDiv").show();
+	});
+</script>
+
+</body>
+
+</html>
