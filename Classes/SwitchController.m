@@ -27,7 +27,7 @@
     
     [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight
                            forView:self.view
-                             cache:YES];
+                             cache:NO];
     
     [controller viewWillAppear:YES];
     [currentController viewWillDisappear:YES];
@@ -36,7 +36,7 @@
     [currentController viewDidDisappear:YES];
     [controller viewDidAppear:YES];
     
-    [UIView commitAnimations];
+    //[UIView commitAnimations];
     
     self.currentController = controller;
 }

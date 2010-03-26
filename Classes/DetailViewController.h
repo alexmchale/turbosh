@@ -13,12 +13,13 @@
     UIPopoverController *popoverController;
     UIToolbar *toolbar;
     
-    SwitchController *switcher;
+    UIViewController *currentController;
+    
 }
 
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 
-@property (nonatomic, retain) IBOutlet SwitchController *switcher;
+@property (nonatomic, retain) UIViewController *currentController;
 
 - (void) switchTo:(UIViewController *)controller;
 

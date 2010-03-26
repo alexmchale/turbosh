@@ -76,5 +76,30 @@
     [super dealloc];
 }
 
+- (void)webViewDidFinishLoad:(UIWebView *)webView
+{
+    //[UIView commitAnimations];
+}
+
+- (BOOL)
+                       webView:(UIWebView*)webView 
+    shouldStartLoadWithRequest:(NSURLRequest*)request 
+                navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSURL *url = [request URL];
+	NSString *path = [url path];
+    NSArray *nibbles = [path componentsSeparatedByString:@"/"];
+    NSString *lastNibble = [nibbles objectAtIndex:[nibbles count] - 1];
+    
+    if (lastNibble && [lastNibble isEqual:@"loadComplete.html"])
+    {
+        [UIView commitAnimations];
+        return NO;
+    }
+    else
+    {
+        return YES;        
+    }
+}
 
 @end

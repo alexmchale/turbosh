@@ -18,17 +18,38 @@
 
 @implementation DetailViewController
 
-@synthesize toolbar, popoverController, switcher;
+@synthesize toolbar, popoverController, currentController;
 
 #pragma mark -
 #pragma mark Managing the detail item
 
 - (void)switchTo:(UIViewController *)controller
 {
-    [switcher switchTo:controller];
+    NSInteger toolbarHeight = toolbar.frame.size.height;
+    CGRect fr1 = self.view.frame;
+    controller.view.frame = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);
+    
+    [UIView beginAnimations:@"View Flip" context:nil];
+    [UIView setAnimationDuration:1.25];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    
+    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp
+                           forView:self.view
+                             cache:NO];
+    
+    [controller viewWillAppear:YES];
+    [currentController viewWillDisappear:YES];
+    [currentController.view removeFromSuperview];    
+    [self.view insertSubview:controller.view atIndex:0];
+    [currentController viewDidDisappear:YES];
+    [controller viewDidAppear:YES];
+    
+    //[UIView commitAnimations];
+    
+    self.currentController = controller;
+    
     [popoverController dismissPopoverAnimated:YES];
 }
-
 
 #pragma mark -
 #pragma mark Split view support
@@ -117,7 +138,7 @@
 - (void)dealloc {
     [popoverController release];
     [toolbar release];
-    [switcher release];
+    [currentController release];
     [super dealloc];
 }
 
