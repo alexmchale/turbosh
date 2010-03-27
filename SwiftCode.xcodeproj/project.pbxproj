@@ -128,7 +128,7 @@
 		74B36E97115B146D00E3B2D1 /* ContentPaneSwitcher.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContentPaneSwitcher.xib; sourceTree = "<group>"; };
 		74B36E9C115B28FF00E3B2D1 /* SwitchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchController.h; sourceTree = "<group>"; };
 		74B36E9D115B28FF00E3B2D1 /* SwitchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchController.m; sourceTree = "<group>"; };
-		74B36E9E115B28FF00E3B2D1 /* SwitchController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchController.xib; sourceTree = "<group>"; };
+		74B36E9E115B28FF00E3B2D1 /* SwitchController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SwitchController.xib; path = Classes/SwitchController.xib; sourceTree = "<group>"; };
 		74B36EE4115B2A9700E3B2D1 /* editor.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = editor.html; sourceTree = "<group>"; };
 		74B36EE5115B2A9800E3B2D1 /* jquery-1.4.2.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jquery-1.4.2.min.js"; sourceTree = "<group>"; };
 		74B36EE8115B2A9800E3B2D1 /* sh_acid.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = sh_acid.css; sourceTree = "<group>"; };
@@ -252,7 +252,6 @@
 				2804200A108E984D000629CD /* DetailViewController.m */,
 				74B36E9C115B28FF00E3B2D1 /* SwitchController.h */,
 				74B36E9D115B28FF00E3B2D1 /* SwitchController.m */,
-				74B36E9E115B28FF00E3B2D1 /* SwitchController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -298,6 +297,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */,
+				74B36E9E115B28FF00E3B2D1 /* SwitchController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
 				8D1107310486CEB800E47090 /* SwiftCode-Info.plist */,
