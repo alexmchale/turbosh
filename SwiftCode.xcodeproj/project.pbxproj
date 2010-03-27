@@ -106,6 +106,8 @@
 		74B36FA4115B2B2A00E3B2D1 /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B36FA1115B2B2A00E3B2D1 /* Project.m */; };
 		74B36FA5115B2B2A00E3B2D1 /* ProjectFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B36FA3115B2B2A00E3B2D1 /* ProjectFile.m */; };
 		74B37176115CF37D00E3B2D1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B37175115CF37D00E3B2D1 /* QuartzCore.framework */; };
+		74B371EF115DC8C300E3B2D1 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B371EE115DC8C300E3B2D1 /* libsqlite3.dylib */; };
+		74B37211115DCF8500E3B2D1 /* Store.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B37210115DCF8500E3B2D1 /* Store.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -217,6 +219,9 @@
 		74B36FA2115B2B2A00E3B2D1 /* ProjectFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectFile.h; sourceTree = "<group>"; };
 		74B36FA3115B2B2A00E3B2D1 /* ProjectFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectFile.m; sourceTree = "<group>"; };
 		74B37175115CF37D00E3B2D1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		74B371EE115DC8C300E3B2D1 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		74B3720F115DCF8500E3B2D1 /* Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Store.h; sourceTree = "<group>"; };
+		74B37210115DCF8500E3B2D1 /* Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Store.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* SwiftCode-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftCode-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -229,6 +234,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
 				74B37176115CF37D00E3B2D1 /* QuartzCore.framework in Frameworks */,
+				74B371EF115DC8C300E3B2D1 /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,13 +274,14 @@
 				74B36FA3115B2B2A00E3B2D1 /* ProjectFile.m */,
 				74B36F8B115B2AAA00E3B2D1 /* FileViewController.h */,
 				74B36F8C115B2AAA00E3B2D1 /* FileViewController.m */,
-				74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */,
 				74B36EE3115B2A9700E3B2D1 /* HtmlEditor */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				74B3720F115DCF8500E3B2D1 /* Store.h */,
+				74B37210115DCF8500E3B2D1 /* Store.m */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -306,6 +313,7 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */,
+				74B371EE115DC8C300E3B2D1 /* libsqlite3.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -577,6 +585,7 @@
 				74B36F8E115B2AAA00E3B2D1 /* FileViewController.m in Sources */,
 				74B36FA4115B2B2A00E3B2D1 /* Project.m in Sources */,
 				74B36FA5115B2B2A00E3B2D1 /* ProjectFile.m in Sources */,
+				74B37211115DCF8500E3B2D1 /* Store.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

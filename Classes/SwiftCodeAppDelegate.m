@@ -12,6 +12,7 @@
 #import "RootViewController.h"
 #import "DetailViewController.h"
 
+#import <sqlite3.h>
 
 @implementation SwiftCodeAppDelegate
 
@@ -21,20 +22,24 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     
-    // Override point for customization after app launch    
+    // Initialize the database.
+    [Store open];
     
     // Add the split view controller's view to the window and display.
     [window addSubview:splitViewController.view];
     [window makeKeyAndVisible];
     
     return YES;
+
 }
 
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Save data if appropriate
+    [Store close];
 }
 
 
@@ -46,7 +51,6 @@
     [window release];
     [super dealloc];
 }
-
 
 @end
 
