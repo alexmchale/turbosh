@@ -93,7 +93,7 @@
     
     if (lastNibble && [lastNibble isEqual:@"loadComplete.html"])
     {
-        [UIView commitAnimations];
+        //[UIView commitAnimations];
         return NO;
     }
     else

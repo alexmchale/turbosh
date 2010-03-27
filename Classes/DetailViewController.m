@@ -8,7 +8,8 @@
 
 #import "DetailViewController.h"
 #import "RootViewController.h"
-
+#import "QuartzCore/CAAnimation.h"
+#import "QuartzCore/CAMediaTimingFunction.h"
 
 @interface DetailViewController ()
 @property (nonatomic, retain) UIPopoverController *popoverController;
@@ -29,6 +30,21 @@
     CGRect fr1 = self.view.frame;
     controller.view.frame = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);
     
+    // remove the current view and replace with myView1
+	[currentController.view removeFromSuperview];
+	[self.view insertSubview:controller.view atIndex:0];
+	
+	// set up an animation for the transition between the views
+	CATransition *animation = [CATransition animation];
+	[animation setDuration:0.5];
+	[animation setType:kCATransitionFade];
+	//[animation setSubtype:kCATransitionFromTop];
+	[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+	
+	[[self.view layer] addAnimation:animation forKey:@"SwitchToView1"];
+    
+    /*
+    
     [UIView beginAnimations:@"View Flip" context:nil];
     [UIView setAnimationDuration:1.25];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
@@ -45,8 +61,10 @@
     [controller viewDidAppear:YES];
     
     //[UIView commitAnimations];
-    
+    */
+     
     self.currentController = controller;
+     
     
     [popoverController dismissPopoverAnimated:YES];
 }
