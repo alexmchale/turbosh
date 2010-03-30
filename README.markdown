@@ -1,4 +1,6 @@
-## SwiftCode ##
+# SwiftCode #
+
+## Description ##
 
 *SwiftCode* is a development environment for the iPad.
 
