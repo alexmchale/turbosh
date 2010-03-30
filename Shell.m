@@ -6,27 +6,20 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 
 @implementation Shell
 
-@synthesize hostname, port, username, password;
-@synthesize timer;
+@synthesize project, timer;
 
-- (id) initWithCredentials:(NSString *)h
-                      port:(NSInteger)n
-                  username:(NSString *)u
-                  password:(NSString *)p {
-    
+- (id) initWithProject:(Project *)proj {
+
     self = [self init];
-    
+
     running = true;
     queue = [[NSMutableArray alloc] init];
     failures = 0;
-    
-    self.hostname = h;
-    self.port = n;
-    self.username = u;
-    self.password = p;
-    
+
+    self.project = proj;
+
     return self;
-    
+
 }
 
 #pragma mark Connection Management
@@ -35,7 +28,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 - (void) start {
     if (timer == nil) {
         if ([self connect]) {
-            self.timer = [NSTimer timerWithTimeInterval:0.001 target:self selector:@selector(pump:) userInfo:nil repeats:YES];    
+            self.timer = [NSTimer timerWithTimeInterval:0.001 target:self selector:@selector(pump:) userInfo:nil repeats:YES];
             [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
         }
     }
@@ -46,7 +39,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     if (timer != nil) {
         [timer invalidate];
         self.timer = nil;
-        
+
         [self disconnect];
     }
 }
@@ -64,39 +57,41 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 
     // Set host parameters.
     sin.sin_family = AF_INET;
-    sin.sin_port = htons(port);
-    sin.sin_addr.s_addr = inet_addr([hostname UTF8String]);
-    
+    sin.sin_port = htons([self.project.sshPort intValue]);
+    sin.sin_addr.s_addr = inet_addr([self.project.sshHostname UTF8String]);
+
     // Establish the TCP connection.
     if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) != 0) {
         fprintf(stderr, "failed to connect %d\n", errno);
         return false;
     }
-    
+
     // Begin a new SSH session.
     if (!(session = libssh2_session_init())) {
         return false;
     }
 
     // Configure LIBSSH2 for non-blocking communications.
-    libssh2_session_set_blocking(session, 0);    
+    libssh2_session_set_blocking(session, 0);
 
     // Establish the SSH connection.
     while ((rc = libssh2_session_startup(session, sock)) == LIBSSH2_ERROR_EAGAIN)
-        continue;    
+        continue;
     if (rc) {
         fprintf(stderr, "Failure establishing SSH session: %d\n", rc);
         return nil;
     }
 
     // Authenticate using the configured password.
-    while ((rc = libssh2_userauth_password(session, [username UTF8String], [password UTF8String])) == LIBSSH2_ERROR_EAGAIN)
+	const char *user = [project.sshUsername UTF8String];
+	const char *pass = [project.sshPassword UTF8String];
+    while ((rc = libssh2_userauth_password(session, user, pass)) == LIBSSH2_ERROR_EAGAIN)
         continue;
     if (rc) {
         fprintf(stderr, "Authentication by password failed.\n");
         return false;
     }
-    
+
     return true;
 }
 
@@ -104,7 +99,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 - (void) disconnect {
     libssh2_session_disconnect(session, "Normal Shutdown, Thank you for playing");
     libssh2_session_free(session);
-        
+
     close(sock);
 }
 
@@ -129,21 +124,21 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     NSMutableData *data = [[NSMutableData alloc] init];
     NSMutableArray *files = nil;
     NSString *findCmd = [NSString stringWithFormat:@"find %@ -type %c -print0", [self escapedPath], type];
-    
+
     if ([self dispatchCommand:findCmd storeAt:data]) {
         char *bytes = (char *)[data bytes];
         long offset = 0;
         files = [NSMutableArray array];
-        
+
         while (offset < [data length]) {
             NSString *file = [NSString stringWithUTF8String:&bytes[offset]];
             [files addObject:file];
             offset += [file length] + 1;
         }
     }
-    
+
     [data release];
-    
+
     return files;
 }
 
@@ -158,60 +153,60 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     LIBSSH2_CHANNEL *channel;
     int bytecount = 0;
     int rc;
-    
-    /* Exec non-blocking on the remove host */ 
+
+    /* Exec non-blocking on the remove host */
     while((channel = libssh2_channel_open_session(session)) == NULL &&
           libssh2_session_last_error(session,NULL,NULL,0) == LIBSSH2_ERROR_EAGAIN) {
         waitsocket(sock, session);
     }
-    
+
     if (channel == NULL) {
         fprintf(stderr,"Error\n");
         return false;
     }
-    
+
     while((rc = libssh2_channel_exec(channel, [command UTF8String])) == LIBSSH2_ERROR_EAGAIN) {
         waitsocket(sock, session);
     }
-    
+
     if (rc) {
         fprintf(stderr, "error %d while executing command: %s\n", rc, [command UTF8String]);
         return false;
     }
-    
+
     for (;;) {
-        /* loop until we block */ 
+        /* loop until we block */
         int rc;
         do
         {
             char buffer[0x4000];
             rc = libssh2_channel_read(channel, buffer, sizeof(buffer));
-            
+
             if (rc > 0) {
                 [output appendBytes:buffer length:rc];
             }
         } while (rc > 0);
-        
+
         if (rc != LIBSSH2_ERROR_EAGAIN)
             break;
-        
+
         waitsocket(sock, session);
     }
-    
+
     int exitcode = 127;
-    
+
     while((rc = libssh2_channel_close(channel)) == LIBSSH2_ERROR_EAGAIN)
         waitsocket(sock, session);
-    
+
     if (!rc) {
         exitcode = libssh2_channel_get_exit_status( channel );
     }
-    
+
     printf("\nEXIT: %d bytecount: %d\n", exitcode, bytecount);
-    
-    libssh2_channel_free(channel);    
+
+    libssh2_channel_free(channel);
     channel = NULL;
-    
+
     return true;
 }
 
@@ -223,26 +218,26 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)
     fd_set *writefd = NULL;
     fd_set *readfd = NULL;
     int dir;
-    
+
     timeout.tv_sec = 10;
     timeout.tv_usec = 0;
-    
+
     FD_ZERO(&fd);
-    
+
     FD_SET(socket_fd, &fd);
-    
-    /* now make sure we wait in the correct direction */ 
+
+    /* now make sure we wait in the correct direction */
     dir = libssh2_session_block_directions(session);
-    
-    
+
+
     if(dir & LIBSSH2_SESSION_BLOCK_INBOUND)
         readfd = &fd;
-    
+
     if(dir & LIBSSH2_SESSION_BLOCK_OUTBOUND)
         writefd = &fd;
-    
+
     rc = select(socket_fd + 1, readfd, writefd, NULL, &timeout);
-    
+
     return rc;
 }
 

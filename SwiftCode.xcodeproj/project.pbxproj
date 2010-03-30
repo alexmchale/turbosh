@@ -41,7 +41,6 @@
 		74AE5E72115E783B006CA577 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AE5E71115E783B006CA577 /* Utils.m */; };
 		74AE5E87115E7BFC006CA577 /* ProjectSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AE5E85115E7BFC006CA577 /* ProjectSettingsController.m */; };
 		74AE5E88115E7BFC006CA577 /* ProjectSettingsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74AE5E86115E7BFC006CA577 /* ProjectSettingsController.xib */; };
-		74AE5F0B115EDFE6006CA577 /* CoreData.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 74AE5F0A115EDFE6006CA577 /* CoreData.xcdatamodel */; };
 		74AE612E1160399C006CA577 /* Shell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AE612D1160399C006CA577 /* Shell.m */; };
 		74B36E98115B146D00E3B2D1 /* ContentPaneSwitcher.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74B36E97115B146D00E3B2D1 /* ContentPaneSwitcher.xib */; };
 		74B36E9F115B28FF00E3B2D1 /* SwitchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B36E9D115B28FF00E3B2D1 /* SwitchController.m */; };
@@ -215,7 +214,6 @@
 		74AE5E84115E7BFC006CA577 /* ProjectSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectSettingsController.h; sourceTree = "<group>"; };
 		74AE5E85115E7BFC006CA577 /* ProjectSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectSettingsController.m; sourceTree = "<group>"; };
 		74AE5E86115E7BFC006CA577 /* ProjectSettingsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProjectSettingsController.xib; sourceTree = "<group>"; };
-		74AE5F0A115EDFE6006CA577 /* CoreData.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = CoreData.xcdatamodel; sourceTree = "<group>"; };
 		74AE612C1160399C006CA577 /* Shell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shell.h; sourceTree = "<group>"; };
 		74AE612D1160399C006CA577 /* Shell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shell.m; sourceTree = "<group>"; };
 		74B36E97115B146D00E3B2D1 /* ContentPaneSwitcher.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContentPaneSwitcher.xib; sourceTree = "<group>"; };
@@ -403,7 +401,6 @@
 				2804203B108E9BAB000629CD /* DetailView.xib */,
 				8D1107310486CEB800E47090 /* SwiftCode-Info.plist */,
 				74B36E97115B146D00E3B2D1 /* ContentPaneSwitcher.xib */,
-				74AE5F0A115EDFE6006CA577 /* CoreData.xcdatamodel */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -785,7 +782,6 @@
 				74B37211115DCF8500E3B2D1 /* Store.m in Sources */,
 				74AE5E72115E783B006CA577 /* Utils.m in Sources */,
 				74AE5E87115E7BFC006CA577 /* ProjectSettingsController.m in Sources */,
-				74AE5F0B115EDFE6006CA577 /* CoreData.xcdatamodel in Sources */,
 				74AE612E1160399C006CA577 /* Shell.m in Sources */,
 				747EB84711613806002D8CD8 /* agent.c in Sources */,
 				747EB84811613806002D8CD8 /* channel.c in Sources */,

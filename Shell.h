@@ -1,12 +1,11 @@
 #import <Foundation/Foundation.h>
 #import <libssh2.h>
 
+@class Project;
+
 @interface Shell : NSObject 
 {
-    NSString *hostname;
-    NSInteger port;
-    NSString *username;
-    NSString *password;
+	Project *project;
     
     bool running;
     NSMutableArray *queue;
@@ -17,19 +16,11 @@
     LIBSSH2_SESSION *session;
 }
 
-@property (nonatomic, retain) NSString *hostname;
-@property NSInteger port;
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) NSString *password;
+@property (nonatomic, retain) Project *project;
 
 @property (nonatomic, retain) NSTimer *timer;
 
-- (id) initWithCredentials:(NSString *)h
-                      port:(NSInteger)n
-                  username:(NSString *)u
-                  password:(NSString *)p;
-
-- (NSArray *) fetchFileList;
+- (id) initWithProject:(Project *)proj;
 
 - (bool) connect;
 - (void) disconnect;

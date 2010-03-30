@@ -21,4 +21,16 @@ NSString *md5(NSString *str) {
 			];
 }
 
++ (NSString *) getUrl:(NSURL *)url {
+	NSURLResponse *resp;
+	NSError *error;
+	
+	NSURLRequest *req = [NSURLRequest requestWithURL:url];
+	NSData *data = [NSURLConnection sendSynchronousRequest:req returningResponse:&resp error:&error];
+	
+	if (data == nil) return nil;
+	
+	return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+}
+
 @end

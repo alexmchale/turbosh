@@ -6,4 +6,6 @@ NSString *md5(NSString *str);
 {
 }
 
++ (NSString *) getUrl:(NSURL *)url;
+
 @end
