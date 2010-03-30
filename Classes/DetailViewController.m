@@ -21,20 +21,37 @@
 
 @synthesize toolbar, popoverController, currentController;
 
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+    }
+    
+    return self;
+}
+
 #pragma mark -
 #pragma mark Managing the detail item
 
 - (void)switchTo:(UIViewController *)controller
 {
+    // Adjust the incoming controller's view to match the available size.
     NSInteger toolbarHeight = toolbar.frame.size.height;
     CGRect fr1 = self.view.frame;
     controller.view.frame = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);
     
-    // remove the current view and replace with myView1
+    // Remove all controls from the toolbar except the popover button.
+    if ([[toolbar items] count] > 0) {
+        UIBarButtonItem *pb = [[toolbar items] objectAtIndex:0];
+        [toolbar setItems:[NSArray arrayWithObjects:pb, nil]];
+    } else {
+        [toolbar setItems:[NSArray array]];
+    }
+    [controller viewSwitcher:self configureToolbar:toolbar];
+    
+    // Remove the current view and replace with the new one.
 	[currentController.view removeFromSuperview];
 	[self.view insertSubview:controller.view atIndex:0];
 	
-	// set up an animation for the transition between the views
+	// Set up an animation for the transition between the views.
 	CATransition *animation = [CATransition animation];
 	[animation setDuration:0.5];
 	[animation setType:kCATransitionFade];
@@ -43,36 +60,18 @@
 	
 	[[self.view layer] addAnimation:animation forKey:@"SwitchToView1"];
     
-    /*
-    
-    [UIView beginAnimations:@"View Flip" context:nil];
-    [UIView setAnimationDuration:1.25];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    
-    [UIView setAnimationTransition:UIViewAnimationTransitionCurlUp
-                           forView:self.view
-                             cache:NO];
-    
-    [controller viewWillAppear:YES];
-    [currentController viewWillDisappear:YES];
-    [currentController.view removeFromSuperview];    
-    [self.view insertSubview:controller.view atIndex:0];
-    [currentController viewDidDisappear:YES];
-    [controller viewDidAppear:YES];
-    
-    //[UIView commitAnimations];
-    */
-     
     self.currentController = controller;
      
-    
     [popoverController dismissPopoverAnimated:YES];
 }
 
 #pragma mark -
 #pragma mark Split view support
 
-- (void)splitViewController: (UISplitViewController*)svc willHideViewController:(UIViewController *)aViewController withBarButtonItem:(UIBarButtonItem*)barButtonItem forPopoverController: (UIPopoverController*)pc {
+- (void) splitViewController:(UISplitViewController*)svc 
+      willHideViewController:(UIViewController *)aViewController
+           withBarButtonItem:(UIBarButtonItem*)barButtonItem
+        forPopoverController:(UIPopoverController*)pc {
     
     barButtonItem.title = @"Root List";
     NSMutableArray *items = [[toolbar items] mutableCopy];
@@ -80,11 +79,13 @@
     [toolbar setItems:items animated:YES];
     [items release];
     self.popoverController = pc;
+
 }
 
-
 // Called when the view is shown again in the split view, invalidating the button and popover controller.
-- (void)splitViewController: (UISplitViewController*)svc willShowViewController:(UIViewController *)aViewController invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
+- (void) splitViewController:(UISplitViewController*)svc
+      willShowViewController:(UIViewController *)aViewController
+   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem {
     
     NSMutableArray *items = [[toolbar items] mutableCopy];
     [items removeObjectAtIndex:0];
@@ -106,6 +107,12 @@
 #pragma mark -
 #pragma mark View lifecycle
 
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    NSInteger toolbarHeight = toolbar.frame.size.height;
+    CGRect fr1 = self.view.frame;
+    currentController.view.frame = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);    
+}
+
 /*
  // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
@@ -113,11 +120,10 @@
 }
  */
 
-/*
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 }
-*/
+
 /*
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
