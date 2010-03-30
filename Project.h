@@ -5,17 +5,11 @@
 
 @interface Project : NSObject 
 {
-    NSInteger identifier;
-    
+    NSNumber *num;
     NSString *name;
-    NSArray *fileIds;
 }
 
-@property NSInteger identifier;
+@property (nonatomic, retain) NSNumber *num;
 @property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSArray *fileIds;
-
-- (ProjectFile *)fileAtIndex:(NSInteger)index;
-- (NSInteger)fileCount;
 
 @end

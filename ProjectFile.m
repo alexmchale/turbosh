@@ -5,9 +5,18 @@
 @synthesize proj;
 @synthesize filename;
 
-- (NSString *)content
-{
+- (id) initByProject:(Project *)myProject filename:(NSString *)myFilename {
+    self.proj = myProject;
+    self.filename = myFilename;
+    
+    return self;
+}
+
+- (NSString *)content {
     return @"";
+}
+
+- (void) setContent:(NSString *)content {
 }
 
 @end
