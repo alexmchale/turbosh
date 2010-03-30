@@ -50,25 +50,41 @@
     return YES;
 }
 
-
-#pragma mark -
 #pragma mark Table view data source
 
+typedef enum {
+    MST_FILES,
+    MST_TASKS,
+    MST_PROJECTS,    
+    MST_COUNT
+} MenuSectionType;
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
-    // Return the number of sections.
-    return 1;
+    return MST_COUNT;
 }
 
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    switch (section) {
+        case MST_FILES:     return @"Files";
+        case MST_TASKS:     return @"Tasks";
+        case MST_PROJECTS:  return @"Projects";
+        default:            return @"";
+    }
+}
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
-    return 10;
+    switch (section) {
+        case MST_FILES:     return [Store fileCount:[Store currentProject]];
+        case MST_TASKS:     return 0;
+        case MST_PROJECTS:  return [Store projectCount];
+        default:            return 0;
+    }
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"CellIdentifier";
+    static NSString *CellIdentifier = @"MenuCellIdentifier";
+    id item;
     
     // Dequeue or create a cell of the appropriate type.
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -77,51 +93,23 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
-    // Configure the cell.
-    cell.textLabel.text = [NSString stringWithFormat:@"Row %d", indexPath.row];
-    return cell;
-}
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    switch (indexPath.section) {
+        case MST_FILES:
+            break;
+            
+        case MST_TASKS:
+            break;
+            
+        case MST_PROJECTS:
+            item = [Store projectAtOffset:indexPath.row];
+            assert(item != nil);
+            cell.textLabel.text = [item name];
+            break;
+    }
     
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    return cell;
+
 }
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 
 #pragma mark -
 #pragma mark Table view delegate
@@ -140,6 +128,8 @@
     FileViewController *fvc = [[[FileViewController alloc] initWithNibName:nil bundle:nil] autorelease];
     
     [detailViewController switchTo:fvc];
+    
+    [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
