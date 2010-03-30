@@ -10,8 +10,22 @@
 * Use *SSH* to compile and run the software on a remote server.
 * Support *syntax highlighting* and *autoindentation*.
 * Local files exist on the iPad and are synchronized.  Works off-line.
+* The destination folder may be considered volitale.  Perhaps recommend that it
+  is a clone of the real repository.
 
-## Workflow ##
+## Workflow (Straight Copy) ##
+
+* Create a new project.
+  * Assign it a name.
+  * Assign your SSH credentials - hostname, port, username, password, path.
+  * The path is the folder to use on the remote server.
+* Select files to manage from the remote server.
+* Those files will be downloaded to SwiftCode.
+* They will be uploaded back to the server when it is updated.
+* The server will be periodically checked to see if a new version is available.
+* A large question is how to merge the two files if they differ.
+
+## Workflow (Local Git) ##
 
 * Create a new project.
   * Assign your git url and password or key.
