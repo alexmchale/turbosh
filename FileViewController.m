@@ -4,8 +4,9 @@
 
 @synthesize webView, file;
 
- // The designated initializer.  Override if you create the controller programmatically and want to p
- // erform customization that is not appropriate for viewDidLoad.
+// The designated initializer.  Override if you create the controller
+// programmatically and want to perform customization that is not
+// appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
     }
