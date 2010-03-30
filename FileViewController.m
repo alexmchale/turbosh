@@ -43,12 +43,12 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-
+    [super viewWillAppear:animated];
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
-    123;
+    [super viewDidAppear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -56,6 +56,13 @@
     return YES;
 }
 
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+#pragma mark Memory Management
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -64,16 +71,29 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-}
-
-
 - (void)dealloc {
     [super dealloc];
+}
+
+#pragma mark Toolbar Management
+
+- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {   
+    UIBarItem *spacer = [[[UIBarButtonItem alloc]
+                          initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                          target:nil action:nil] autorelease];
+    UIBarItem *edit = [[[UIBarButtonItem alloc] 
+                          initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
+                          target:self action:@selector(startEdit)] autorelease];
+
+    NSMutableArray *items = [[[toolbar items] mutableCopy] autorelease];
+    [items addObject:spacer];
+    [items addObject:edit];
+    [toolbar setItems:items animated:YES];
+}
+
+#pragma mark File Editor Interface
+
+- (void) startEdit {
 }
 
 @end

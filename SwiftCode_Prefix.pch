@@ -9,6 +9,10 @@
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
     #import <sqlite3.h>
+    #import <CommonCrypto/CommonDigest.h>
+
+    #import "Utils.h"
+    #import "Shell.h"
 
     #import "Store.h"
     #import "Project.h"
@@ -16,5 +20,7 @@
 
     #import "SwitchController.h"
     #import "FileViewController.h"
+    #import "ProjectSettingsController.h"
+    #import "DetailViewController.h"
 
 #endif
