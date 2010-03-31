@@ -2,6 +2,7 @@
 
 @implementation ProjectSettingsController
 
+@synthesize myTableView;
 @synthesize proj;
 @synthesize projectName;
 @synthesize sshHost, sshPort, sshUser, sshPass, sshPath;
@@ -240,9 +241,8 @@
     [newProject retain];
     
     // Now update the fields in this form for the new project.
-}
-
-- (void) saveProject {
+    
+    [myTableView reloadData];
 }
 
 #pragma mark Toolbar Management

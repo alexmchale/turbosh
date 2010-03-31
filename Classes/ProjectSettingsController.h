@@ -3,16 +3,19 @@
 @interface ProjectSettingsController : UIViewController
 	<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 {
+    UITableView IBOutlet *myTableView;
     Project *proj;
 	
-	UITextField *projectName;
+    UITextField *projectName;
 	
-	UITextField *sshHost;
-	UITextField *sshPort;
-	UITextField *sshUser;
-	UITextField *sshPass;
-	UITextField *sshPath;
+    UITextField *sshHost;
+    UITextField *sshPort;
+    UITextField *sshUser;
+    UITextField *sshPass;
+    UITextField *sshPath;
 }
+
+@property (nonatomic, retain) IBOutlet UITableView *myTableView;
 
 @property (nonatomic, retain) Project *proj;
 
