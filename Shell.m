@@ -210,6 +210,52 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     return true;
 }
 
+// Download the file at path.
+- (NSData *) downloadFile:(NSString *)filePath {
+    LIBSSH2_CHANNEL *channel;
+    struct stat fileinfo;
+    NSInteger downloaded = 0;
+    NSMutableData *data = [NSMutableData data];
+    int rc;
+    
+    fprintf(stderr, "downloading: %s\n", [filePath UTF8String]);
+    
+    libssh2_session_set_blocking(session, 1);
+    
+    if (!(channel = libssh2_scp_recv(session, [filePath UTF8String], &fileinfo))) {
+        char *errMsg;
+        int errLen;
+        libssh2_session_last_error(session, &errMsg, &errLen, 0);
+        fprintf(stderr, "unable to open a session: %s\n", errMsg);
+        return nil;
+    }
+    
+    while (downloaded < fileinfo.st_size) {
+        char mem[1024];
+        int packetSize = sizeof(mem);
+        int remaining = fileinfo.st_size - downloaded;
+        
+        if (remaining < packetSize) packetSize = remaining;
+        
+        rc = libssh2_channel_read(channel, mem, packetSize);
+        
+        if (rc >= 0) {
+            [data appendBytes:mem length:rc];
+            downloaded += rc;
+        } else if (rc != LIBSSH2_ERROR_EAGAIN) {
+            data = nil;
+            break;
+        }
+    }
+    
+    fprintf(stderr, "downloaded %d bytes with %d in data\n", downloaded, [data length]);
+    
+    libssh2_channel_free(channel);
+    channel = NULL;
+    
+    return data;
+}
+
 static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)
 {
     struct timeval timeout;

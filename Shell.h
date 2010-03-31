@@ -30,6 +30,7 @@
 - (NSArray *) findFilesOfType:(char)type;
 
 - (bool) dispatchCommand:(NSString *)command storeAt:(NSMutableData *)output;
+- (NSData *) downloadFile:(NSString *)filePath;
 
 - (NSString *) escapedPath;
 
