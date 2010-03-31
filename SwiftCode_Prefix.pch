@@ -10,6 +10,8 @@
     #import <UIKit/UIKit.h>
     #import <sqlite3.h>
     #import <CommonCrypto/CommonDigest.h>
+    
+    #import "SwiftCodeAppDelegate.h"
 
     #import "Utils.h"
     #import "Shell.h"
@@ -18,7 +20,6 @@
     #import "Project.h"
     #import "ProjectFile.h"
 
-    #import "SwitchController.h"
     #import "FileViewController.h"
     #import "ProjectSettingsController.h"
     #import "DetailViewController.h"

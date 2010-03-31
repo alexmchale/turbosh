@@ -137,7 +137,7 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
               ") VALUES (?, ?, ?, ?, ?, ?, ?)";
     assert(sqlite3_prepare_v2(db, s, -1, &t, NULL) == SQLITE_OK);
 
-    bind_integer(t, 1, project.num, false);
+    bind_integer(t, 1, project.num, true);
     bind_string(t, 2, project.name, false);
     bind_string(t, 3, project.sshHostname, true);
     bind_integer(t, 4, project.sshPort, true);

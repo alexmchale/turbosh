@@ -114,22 +114,34 @@ typedef enum {
 #pragma mark -
 #pragma mark Table view delegate
 
-- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     
-    /*
-     When a row is selected, set the detail view controller's detail item to the item associated with the selected row.
-     */
-//    detailViewController.detailItem = [NSString stringWithFormat:@"Row %d", indexPath.row];
-//    
-//    DetailViewController *dvc = [[DetailViewController alloc] initWithNibName:nil bundle:nil];
-//    [detailViewController presentModalViewController:dvc animated:YES];
-//    [dvc release];
+    Project *p;
+    SwiftCodeAppDelegate *d = [[UIApplication sharedApplication] delegate];
+    FileViewController *fvc;
     
-    FileViewController *fvc = [[[FileViewController alloc] initWithNibName:nil bundle:nil] autorelease];
-    
-    [detailViewController switchTo:fvc];
+    switch (indexPath.section) {
+        case MST_FILES:
+            fvc = [[[FileViewController alloc] initWithNibName:nil bundle:nil] autorelease];
+            [detailViewController switchTo:fvc];
+            break;
+            
+        case MST_TASKS:
+            break;
+            
+        case MST_PROJECTS:
+            p = [Store projectAtOffset:indexPath.row];
+            [Store setCurrentProject:p];
+            d.projectSettingsController.proj = p;
+            [detailViewController switchTo:d.projectSettingsController];
+            break;
+            
+        default: assert(false);
+    }
     
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
+
 }
 
 

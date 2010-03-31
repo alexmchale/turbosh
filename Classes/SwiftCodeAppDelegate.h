@@ -2,6 +2,7 @@
 
 @class RootViewController;
 @class DetailViewController;
+@class ProjectSettingsController;
 
 @interface SwiftCodeAppDelegate : NSObject <UIApplicationDelegate>
 {

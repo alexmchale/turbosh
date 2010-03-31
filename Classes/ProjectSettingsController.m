@@ -19,15 +19,7 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Overriden to allow any orientation.
     return YES;
-}
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
 - (void)viewDidUnload {
@@ -42,24 +34,48 @@
 
 #pragma mark Table view data source
 
+typedef enum {
+    TS_PROJECT_MAIN,
+    TS_SSH_CREDENTIALS,
+    TS_SECTION_COUNT
+} TableSections;
+
+typedef enum {
+    TM_NAME,
+    TM_ROW_COUNT
+} TableMain;
+
+typedef enum {
+    TC_HOSTNAME,
+    TC_PORT,
+    TC_USERNAME,
+    TC_PASSWORD,
+    TC_PATH,
+    TC_ROW_COUNT
+} TableCredentials;
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {
-    // Return the number of sections.
-    return 1;
+    return TS_SECTION_COUNT;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"Project";
+    switch (section) {
+        case TS_PROJECT_MAIN:       return @"Project";
+        case TS_SSH_CREDENTIALS:    return @"SSH Credentials";
+        default:                    return nil;
+    }
 }
-
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
-    return 10;
+    switch (section) {
+        case TS_PROJECT_MAIN:               return TM_ROW_COUNT;
+        case TS_SSH_CREDENTIALS:            return TC_ROW_COUNT;
+        default:                            return 0;
+    }
 }
 
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{    
     static NSString *CellIdentifier = @"CellIdentifier";
     
     // Dequeue or create a cell of the appropriate type.
@@ -91,18 +107,38 @@
     //FileViewController *fvc = [[[FileViewController alloc] initWithNibName:nil bundle:nil] autorelease];
     
     //[detailViewController switchTo:fvc];
+    
+    [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark Project Management
 
 - (void) setProject:(Project *)newProject {
+    // Store the project in this form.
+    
     proj = newProject;
     [newProject retain];
+    
+    // Now update the fields in this form for the new project.
+}
+
+- (void) saveProject {
 }
 
 #pragma mark Toolbar Management
 
-- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {   
+- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
+    UIBarItem *spacer = [[[UIBarButtonItem alloc]
+                          initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                          target:nil action:nil] autorelease];
+    UIBarItem *save = [[[UIBarButtonItem alloc]
+                        initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+                        target:self action:@selector(saveProject)] autorelease];
+    
+    NSMutableArray *items = [[[toolbar items] mutableCopy] autorelease];
+    [items addObject:spacer];
+    [items addObject:save];
+    [toolbar setItems:items animated:YES];
 }
 
 @end

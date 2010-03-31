@@ -43,7 +43,6 @@
 		74AE5E88115E7BFC006CA577 /* ProjectSettingsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74AE5E86115E7BFC006CA577 /* ProjectSettingsController.xib */; };
 		74AE612E1160399C006CA577 /* Shell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AE612D1160399C006CA577 /* Shell.m */; };
 		74B36E98115B146D00E3B2D1 /* ContentPaneSwitcher.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74B36E97115B146D00E3B2D1 /* ContentPaneSwitcher.xib */; };
-		74B36E9F115B28FF00E3B2D1 /* SwitchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B36E9D115B28FF00E3B2D1 /* SwitchController.m */; };
 		74B36EA0115B28FF00E3B2D1 /* SwitchController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74B36E9E115B28FF00E3B2D1 /* SwitchController.xib */; };
 		74B36F39115B2A9800E3B2D1 /* editor.html in Resources */ = {isa = PBXBuildFile; fileRef = 74B36EE4115B2A9700E3B2D1 /* editor.html */; };
 		74B36F3A115B2A9800E3B2D1 /* jquery-1.4.2.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 74B36EE5115B2A9800E3B2D1 /* jquery-1.4.2.min.js */; };
@@ -217,8 +216,6 @@
 		74AE612C1160399C006CA577 /* Shell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shell.h; sourceTree = "<group>"; };
 		74AE612D1160399C006CA577 /* Shell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shell.m; sourceTree = "<group>"; };
 		74B36E97115B146D00E3B2D1 /* ContentPaneSwitcher.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContentPaneSwitcher.xib; sourceTree = "<group>"; };
-		74B36E9C115B28FF00E3B2D1 /* SwitchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchController.h; sourceTree = "<group>"; };
-		74B36E9D115B28FF00E3B2D1 /* SwitchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchController.m; sourceTree = "<group>"; };
 		74B36E9E115B28FF00E3B2D1 /* SwitchController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SwitchController.xib; path = Classes/SwitchController.xib; sourceTree = "<group>"; };
 		74B36EE4115B2A9700E3B2D1 /* editor.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = editor.html; sourceTree = "<group>"; };
 		74B36EE5115B2A9800E3B2D1 /* jquery-1.4.2.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jquery-1.4.2.min.js"; sourceTree = "<group>"; };
@@ -345,8 +342,6 @@
 				28042008108E984D000629CD /* RootViewController.m */,
 				28042009108E984D000629CD /* DetailViewController.h */,
 				2804200A108E984D000629CD /* DetailViewController.m */,
-				74B36E9C115B28FF00E3B2D1 /* SwitchController.h */,
-				74B36E9D115B28FF00E3B2D1 /* SwitchController.m */,
 				74AE5E84115E7BFC006CA577 /* ProjectSettingsController.h */,
 				74AE5E85115E7BFC006CA577 /* ProjectSettingsController.m */,
 				74AE5E86115E7BFC006CA577 /* ProjectSettingsController.xib */,
@@ -775,7 +770,6 @@
 				1D3623260D0F684500981E51 /* SwiftCodeAppDelegate.m in Sources */,
 				2804200B108E984D000629CD /* RootViewController.m in Sources */,
 				2804200C108E984D000629CD /* DetailViewController.m in Sources */,
-				74B36E9F115B28FF00E3B2D1 /* SwitchController.m in Sources */,
 				74B36F8E115B2AAA00E3B2D1 /* FileViewController.m in Sources */,
 				74B36FA4115B2B2A00E3B2D1 /* Project.m in Sources */,
 				74B36FA5115B2B2A00E3B2D1 /* ProjectFile.m in Sources */,
