@@ -3,12 +3,35 @@
 @implementation ProjectSettingsController
 
 @synthesize proj;
+@synthesize projectName;
+@synthesize sshHost, sshPort, sshUser, sshPass, sshPath;
 
 #pragma mark View Initialization
 
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
+		projectName = [[UITextField alloc] init];
+		
+		sshHost = [[UITextField alloc] init];
+		sshHost.autocorrectionType = UITextAutocorrectionTypeNo;
+		sshHost.autocapitalizationType = UITextAutocapitalizationTypeNone;
+		
+		sshPort = [[UITextField alloc] init];
+		sshPort.keyboardType = UIKeyboardTypeNumberPad;
+		
+		sshUser = [[UITextField alloc] init];
+		sshUser.autocorrectionType = UITextAutocorrectionTypeNo;
+		sshUser.autocapitalizationType = UITextAutocapitalizationTypeNone;
+		
+		sshPass = [[UITextField alloc] init];
+		sshPass.secureTextEntry = YES;
+		sshPass.autocorrectionType = UITextAutocorrectionTypeNo;
+		sshPass.autocapitalizationType = UITextAutocapitalizationTypeNone;
+		
+		sshPath = [[UITextField alloc] init];
+		sshPath.autocorrectionType = UITextAutocorrectionTypeNo;
+		sshPath.autocapitalizationType = UITextAutocapitalizationTypeNone;
     }
     return self;
 }
@@ -74,22 +97,52 @@ typedef enum {
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{    
-    static NSString *CellIdentifier = @"CellIdentifier";
+- (UITableViewCell *) cellFor:(UITableView *)tableView
+						field:(UITextField *)field
+						 name:(NSString *)name
+						value:(NSString *)value
+{
+    static NSString *CellIdentifier = @"ProjectSettingsTextFieldCellIdentifier";
     
     // Dequeue or create a cell of the appropriate type.
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+									   reuseIdentifier:CellIdentifier] autorelease];
     }
+	
+	CGRect tableFrame = tableView.frame;
+	CGRect cellFrame = cell.frame;
+	int yOffset = 10;
+	int height = cell.frame.size.height - (2 * yOffset);
+	
+	UILabel *label = [[[UILabel alloc] init] autorelease];
+	label.text = name;
+	label.frame = CGRectMake(10, yOffset, 90, height);
+	label.font = [UIFont boldSystemFontOfSize:14.0];
+	label.textAlignment = UITextAlignmentRight;
+	label.backgroundColor = [UIColor clearColor];
+//	label.backgroundColor = cell.backgroundColor;
+	
+	field.text = value;
+	field.frame = CGRectMake(110, yOffset, tableFrame.size.width - 250, height);
+	field.textColor = [UIColor colorWithRed:0.243 green:0.306 blue:0.435 alpha:1.0];
+	
+	[cell.contentView addSubview:label];
+	[cell.contentView addSubview:field];
+	
+	return cell;
+}
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{    
+	UITableViewCell *cell = nil;
+	
     switch (indexPath.section) {
         case TS_PROJECT_MAIN:
             switch (indexPath.row) {
                 case TM_NAME:
-                    cell.textLabel.text = @"Name";
-                    cell.detailTextLabel.text = proj.name;
+					cell = [self cellFor:tableView field:projectName name:@"Name" value:proj.name];
                     break;
                     
                 default: assert(false);
@@ -99,28 +152,23 @@ typedef enum {
         case TS_SSH_CREDENTIALS:
             switch (indexPath.row) {
                 case TC_HOSTNAME:
-                    cell.textLabel.text = @"Hostname";
-                    cell.detailTextLabel.text = proj.sshHostname;
+					cell = [self cellFor:tableView field:sshHost name:@"Hostname" value:proj.sshHostname];
                     break;
                     
                 case TC_PORT:
-                    cell.textLabel.text = @"Port";
-                    cell.detailTextLabel.text = @"";
+					cell = [self cellFor:tableView field:sshPort name:@"Port" value:[proj.sshPort stringValue]];
                     break;
                     
                 case TC_USERNAME:
-                    cell.textLabel.text = @"Username";
-                    cell.detailTextLabel.text = proj.sshUsername;
+					cell = [self cellFor:tableView field:sshUser name:@"Username" value:proj.sshUsername];
                     break;
                     
                 case TC_PASSWORD:
-                    cell.textLabel.text = @"Password";
-                    cell.detailTextLabel.text = proj.sshPassword;
+					cell = [self cellFor:tableView field:sshPass name:@"Password" value:proj.sshPassword];
                     break;
                     
                 case TC_PATH:
-                    cell.textLabel.text = @"Path";
-                    cell.detailTextLabel.text = proj.sshPath;
+					cell = [self cellFor:tableView field:sshPath name:@"Path" value:proj.sshPath];
                     break;
                     
                 default: assert(false);
@@ -135,14 +183,6 @@ typedef enum {
 
 #pragma mark Table view delegate
 
-- (void) engageEditField:(NSString *)fieldName value:(NSString *)fieldValue
-{
-    EditFieldController *etfc = [[[EditFieldController alloc] initWithNibName:nil bundle:nil] autorelease];
-    etfc.returnTo = self;
-    SwiftCodeAppDelegate *d = [[UIApplication sharedApplication] delegate];
-    [d.detailViewController switchTo:etfc];
-}
-
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -151,7 +191,7 @@ typedef enum {
         case TS_PROJECT_MAIN:
             switch (indexPath.row) {
                 case TM_NAME:
-                    [self engageEditField:@"Name" value:proj.name];
+					[projectName becomeFirstResponder];
                     break;
                     
                 default: assert(false);
@@ -161,23 +201,23 @@ typedef enum {
         case TS_SSH_CREDENTIALS:
             switch (indexPath.row) {
                 case TC_HOSTNAME:
-                    [self engageEditField:@"Hostname" value:proj.sshHostname];
+					[sshHost becomeFirstResponder];
                     break;
                     
                 case TC_PORT:
-                    [self engageEditField:@"Port" value:[proj.sshPort stringValue]];
+					[sshPort becomeFirstResponder];
                     break;
                     
                 case TC_USERNAME:
-                    [self engageEditField:@"Username" value:proj.sshUsername];
+					[sshUser becomeFirstResponder];
                     break;
                     
                 case TC_PASSWORD:
-                    [self engageEditField:@"Password" value:proj.sshPassword];
+					[sshPass becomeFirstResponder];
                     break;
                     
                 case TC_PATH:
-                    [self engageEditField:@"Path" value:proj.sshPath];
+					[sshPath becomeFirstResponder];
                     break;
                     
                 default: assert(false);

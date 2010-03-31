@@ -153,7 +153,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     LIBSSH2_CHANNEL *channel;
     int bytecount = 0;
     int rc;
-
+	
     /* Exec non-blocking on the remove host */
     while((channel = libssh2_channel_open_session(session)) == NULL &&
           libssh2_session_last_error(session,NULL,NULL,0) == LIBSSH2_ERROR_EAGAIN) {
