@@ -39,6 +39,14 @@ sqlite3 *db;
                    "ssh_path TEXT"
                    ")";
         assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
+        
+        tableSql = "CREATE TABLE files ("
+                   "id INTEGER NOT NULL PRIMARY KEY ON CONFLICT REPLACE AUTOINCREMENT, "
+                   "project_id INTEGER NOT NULL, "
+                   "path TEXT NOT NULL, "
+                   "content BLOB, "
+                   "UNIQUE (project_id, path) ON CONFLICT REPLACE)";
+        assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
 
         [self setValue:@"1" forKey:@"version"];
         assert([@"1" isEqual:[self stringValue:@"version"]]);
