@@ -81,34 +81,112 @@ typedef enum {
     // Dequeue or create a cell of the appropriate type.
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:CellIdentifier] autorelease];
     }
-    
-    // Configure the cell.
-    cell.textLabel.text = [NSString stringWithFormat:@"Row %d", indexPath.row];
+
+    switch (indexPath.section) {
+        case TS_PROJECT_MAIN:
+            switch (indexPath.row) {
+                case TM_NAME:
+                    cell.textLabel.text = @"Name";
+                    cell.detailTextLabel.text = proj.name;
+                    break;
+                    
+                default: assert(false);
+            }
+            break;
+            
+        case TS_SSH_CREDENTIALS:
+            switch (indexPath.row) {
+                case TC_HOSTNAME:
+                    cell.textLabel.text = @"Hostname";
+                    cell.detailTextLabel.text = proj.sshHostname;
+                    break;
+                    
+                case TC_PORT:
+                    cell.textLabel.text = @"Port";
+                    cell.detailTextLabel.text = @"";
+                    break;
+                    
+                case TC_USERNAME:
+                    cell.textLabel.text = @"Username";
+                    cell.detailTextLabel.text = proj.sshUsername;
+                    break;
+                    
+                case TC_PASSWORD:
+                    cell.textLabel.text = @"Password";
+                    cell.detailTextLabel.text = proj.sshPassword;
+                    break;
+                    
+                case TC_PATH:
+                    cell.textLabel.text = @"Path";
+                    cell.detailTextLabel.text = proj.sshPath;
+                    break;
+                    
+                default: assert(false);
+            }
+            break;
+            
+        default: assert(false);
+    }
+
     return cell;
 }
 
 #pragma mark Table view delegate
 
+- (void) engageEditField:(NSString *)fieldName value:(NSString *)fieldValue
+{
+    EditFieldController *etfc = [[[EditFieldController alloc] initWithNibName:nil bundle:nil] autorelease];
+    etfc.returnTo = self;
+    SwiftCodeAppDelegate *d = [[UIApplication sharedApplication] delegate];
+    [d.detailViewController switchTo:etfc];
+}
+
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    /*
-     When a row is selected, set the detail view controller's detail item to the item associated with the selected row.
-     */
-    //    detailViewController.detailItem = [NSString stringWithFormat:@"Row %d", indexPath.row];
-    //    
-    //    DetailViewController *dvc = [[DetailViewController alloc] initWithNibName:nil bundle:nil];
-    //    [detailViewController presentModalViewController:dvc animated:YES];
-    //    [dvc release];
-    
-
-    //FileViewController *fvc = [[[FileViewController alloc] initWithNibName:nil bundle:nil] autorelease];
-    
-    //[detailViewController switchTo:fvc];
-    
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    switch (indexPath.section) {
+        case TS_PROJECT_MAIN:
+            switch (indexPath.row) {
+                case TM_NAME:
+                    [self engageEditField:@"Name" value:proj.name];
+                    break;
+                    
+                default: assert(false);
+            }
+            break;
+            
+        case TS_SSH_CREDENTIALS:
+            switch (indexPath.row) {
+                case TC_HOSTNAME:
+                    [self engageEditField:@"Hostname" value:proj.sshHostname];
+                    break;
+                    
+                case TC_PORT:
+                    [self engageEditField:@"Port" value:[proj.sshPort stringValue]];
+                    break;
+                    
+                case TC_USERNAME:
+                    [self engageEditField:@"Username" value:proj.sshUsername];
+                    break;
+                    
+                case TC_PASSWORD:
+                    [self engageEditField:@"Password" value:proj.sshPassword];
+                    break;
+                    
+                case TC_PATH:
+                    [self engageEditField:@"Path" value:proj.sshPath];
+                    break;
+                    
+                default: assert(false);
+            }
+            break;
+            
+        default: assert(false);
+    }
+    
 }
 
 #pragma mark Project Management
@@ -128,17 +206,17 @@ typedef enum {
 #pragma mark Toolbar Management
 
 - (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
-    UIBarItem *spacer = [[[UIBarButtonItem alloc]
-                          initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                          target:nil action:nil] autorelease];
-    UIBarItem *save = [[[UIBarButtonItem alloc]
-                        initWithBarButtonSystemItem:UIBarButtonSystemItemSave
-                        target:self action:@selector(saveProject)] autorelease];
-    
-    NSMutableArray *items = [[[toolbar items] mutableCopy] autorelease];
-    [items addObject:spacer];
-    [items addObject:save];
-    [toolbar setItems:items animated:YES];
+//    UIBarItem *spacer = [[[UIBarButtonItem alloc]
+//                          initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+//                          target:nil action:nil] autorelease];
+//    UIBarItem *save = [[[UIBarButtonItem alloc]
+//                        initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+//                        target:self action:@selector(saveProject)] autorelease];
+//    
+//    NSMutableArray *items = [[[toolbar items] mutableCopy] autorelease];
+//    [items addObject:spacer];
+//    [items addObject:save];
+//    [toolbar setItems:items animated:YES];
 }
 
 @end
