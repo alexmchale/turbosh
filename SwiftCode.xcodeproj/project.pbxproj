@@ -212,7 +212,7 @@
 		74AE5E71115E783B006CA577 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		74AE5E84115E7BFC006CA577 /* ProjectSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectSettingsController.h; sourceTree = "<group>"; };
 		74AE5E85115E7BFC006CA577 /* ProjectSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectSettingsController.m; sourceTree = "<group>"; };
-		74AE5E86115E7BFC006CA577 /* ProjectSettingsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProjectSettingsController.xib; sourceTree = "<group>"; };
+		74AE5E86115E7BFC006CA577 /* ProjectSettingsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ProjectSettingsController.xib; path = Classes/ProjectSettingsController.xib; sourceTree = "<group>"; };
 		74AE612C1160399C006CA577 /* Shell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shell.h; sourceTree = "<group>"; };
 		74AE612D1160399C006CA577 /* Shell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shell.m; sourceTree = "<group>"; };
 		74B36E97115B146D00E3B2D1 /* ContentPaneSwitcher.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContentPaneSwitcher.xib; sourceTree = "<group>"; };
@@ -344,7 +344,6 @@
 				2804200A108E984D000629CD /* DetailViewController.m */,
 				74AE5E84115E7BFC006CA577 /* ProjectSettingsController.h */,
 				74AE5E85115E7BFC006CA577 /* ProjectSettingsController.m */,
-				74AE5E86115E7BFC006CA577 /* ProjectSettingsController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -357,23 +356,31 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+		1D6F1BC01163E44D0000B47D /* Storehouse */ = {
 			isa = PBXGroup;
 			children = (
-				747EC1DF1161810C002D8CD8 /* Shell */,
-				74AE5E6C115E77CC006CA577 /* Monkey Patches */,
 				74B36FA0115B2B2A00E3B2D1 /* Project.h */,
 				74B36FA1115B2B2A00E3B2D1 /* Project.m */,
 				74B36FA2115B2B2A00E3B2D1 /* ProjectFile.h */,
 				74B36FA3115B2B2A00E3B2D1 /* ProjectFile.m */,
+				74B3720F115DCF8500E3B2D1 /* Store.h */,
+				74B37210115DCF8500E3B2D1 /* Store.m */,
+			);
+			name = Storehouse;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				1D6F1BC01163E44D0000B47D /* Storehouse */,
+				747EC1DF1161810C002D8CD8 /* Shell */,
+				74AE5E6C115E77CC006CA577 /* Monkey Patches */,
 				74B36EE3115B2A9700E3B2D1 /* HtmlEditor */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				74B3720F115DCF8500E3B2D1 /* Store.h */,
-				74B37210115DCF8500E3B2D1 /* Store.m */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -390,6 +397,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				74AE5E86115E7BFC006CA577 /* ProjectSettingsController.xib */,
 				74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */,
 				74B36E9E115B28FF00E3B2D1 /* SwitchController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
