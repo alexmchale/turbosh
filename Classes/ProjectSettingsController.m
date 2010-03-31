@@ -92,15 +92,15 @@ typedef enum {
     switch (section) {
         case TS_PROJECT_MAIN:       return @"Project";
         case TS_SSH_CREDENTIALS:    return @"SSH Credentials";
-        default:                    return nil;
+        default:                    assert(false);
     }
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case TS_PROJECT_MAIN:               return TM_ROW_COUNT;
-        case TS_SSH_CREDENTIALS:            return TC_ROW_COUNT;
-        default:                            return 0;
+        case TS_PROJECT_MAIN:       return TM_ROW_COUNT;
+        case TS_SSH_CREDENTIALS:    return TC_ROW_COUNT;
+        default:                    assert(false);
     }
 }
 
@@ -119,7 +119,6 @@ typedef enum {
     }
 	
 	CGRect tableFrame = tableView.frame;
-	CGRect cellFrame = cell.frame;
 	int yOffset = 10;
 	int height = cell.frame.size.height - (2 * yOffset);
 	
@@ -129,7 +128,6 @@ typedef enum {
 	label.font = [UIFont boldSystemFontOfSize:14.0];
 	label.textAlignment = UITextAlignmentRight;
 	label.backgroundColor = [UIColor clearColor];
-//	label.backgroundColor = cell.backgroundColor;
 	
 	field.text = value;
 	field.frame = CGRectMake(110, yOffset, tableFrame.size.width - 250, height);
