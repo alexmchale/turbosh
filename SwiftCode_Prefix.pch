@@ -10,7 +10,9 @@
     #import <UIKit/UIKit.h>
     #import <sqlite3.h>
     #import <CommonCrypto/CommonDigest.h>
-    
+
+    #import "MBProgressHUD.h"
+
     #import "SwiftCodeAppDelegate.h"
 
     #import "Utils.h"

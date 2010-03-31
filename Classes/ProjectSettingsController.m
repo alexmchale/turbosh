@@ -6,6 +6,7 @@
 @synthesize proj;
 @synthesize projectName;
 @synthesize sshHost, sshPort, sshUser, sshPass, sshPath;
+@synthesize spinner;
 
 #pragma mark View Initialization
 
@@ -41,6 +42,9 @@
 		sshPath.autocorrectionType = UITextAutocorrectionTypeNo;
 		sshPath.autocapitalizationType = UITextAutocapitalizationTypeNone;
 		sshPath.delegate = self;
+        
+        spinner = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:spinner];
     }
     return self;
 }
@@ -48,6 +52,8 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self.view addSubview:spinner];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -74,6 +80,7 @@
     switch (section) {
         case TS_PROJECT_MAIN:       return @"Project";
         case TS_SSH_CREDENTIALS:    return @"SSH Credentials";
+        case TS_FILES:              return @"";
         default:                    assert(false);
     }
 }
@@ -82,6 +89,7 @@
     switch (section) {
         case TS_PROJECT_MAIN:       return TM_ROW_COUNT;
         case TS_SSH_CREDENTIALS:    return TC_ROW_COUNT;
+        case TS_FILES:              return TF_ROW_COUNT;
         default:                    assert(false);
     }
 }
@@ -162,6 +170,18 @@
             }
             break;
             
+        case TS_FILES:
+            cell = [tableView dequeueReusableCellWithIdentifier:@"FilesCell"];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                               reuseIdentifier:@"FilesCell"] autorelease];
+            }
+            
+            cell.textLabel.text = @"Synchronized Files";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            
+            break;
+            
         default: assert(false);
     }
 
@@ -170,7 +190,8 @@
 
 #pragma mark Table view delegate
 
-- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
     
@@ -209,6 +230,18 @@
                     
                 default: assert(false);
             }
+            break;
+            
+        case TS_FILES:
+            //spinner.labelText = @"Loading";
+            //[spinner show:true];
+            
+            // Retrieve current file list.
+            
+            // Show an error if that failed.  Continue otherwise.
+            
+            // Show a modal vc that will allow the user to select which files should synchronize.
+            
             break;
             
         default: assert(false);

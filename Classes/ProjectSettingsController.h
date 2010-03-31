@@ -13,6 +13,8 @@
     UITextField *sshUser;
     UITextField *sshPass;
     UITextField *sshPath;
+    
+    MBProgressHUD *spinner;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
@@ -27,9 +29,12 @@
 @property (nonatomic, retain) UITextField *sshPass;
 @property (nonatomic, retain) UITextField *sshPath;
 
+@property (nonatomic, retain) MBProgressHUD *spinner;
+
 typedef enum {
     TS_PROJECT_MAIN,
     TS_SSH_CREDENTIALS,
+    TS_FILES,
     TS_SECTION_COUNT
 } TableSections;
 
@@ -46,5 +51,10 @@ typedef enum {
     TC_PATH,
     TC_ROW_COUNT
 } TableCredentials;
+
+typedef enum {
+    TF_MANAGE,
+    TF_ROW_COUNT
+} TableFiles;
 
 @end
