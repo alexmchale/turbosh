@@ -13,7 +13,8 @@
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
 		projectName = [[UITextField alloc] init];
-		projectName.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
+		projectName.autocorrectionType = UITextAutocorrectionTypeNo;
+		projectName.autocapitalizationType = UITextAutocapitalizationTypeNone;
 		projectName.delegate = self;
 		
 		sshHost = [[UITextField alloc] init];
