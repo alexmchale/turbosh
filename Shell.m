@@ -132,6 +132,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 
         while (offset < [data length]) {
             NSString *file = [NSString stringWithUTF8String:&bytes[offset]];
+            file = [file substringFromIndex:[project.sshPath length]];
             [files addObject:file];
             offset += [file length] + 1;
         }
@@ -143,7 +144,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 }
 
 - (NSString *) escapedPath {
-    return @"'/home/alexmchale/src/commerce-bank'";
+    return [project.sshPath stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
 }
 
 #pragma mark Connection Drivers
