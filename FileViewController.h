@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 #import "ProjectFile.h"
 
-@interface FileViewController : UIViewController <UIWebViewDelegate>
+@interface FileViewController : UIViewController <UIWebViewDelegate, ContentPaneDelegate>
 {
     UIWebView *webView;
     ProjectFile *file;

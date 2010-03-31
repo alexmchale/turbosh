@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ProjectSettingsController : UIViewController
-	<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
+	<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ContentPaneDelegate>
 {
     UITableView IBOutlet *myTableView;
     Project *proj;

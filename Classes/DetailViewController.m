@@ -31,7 +31,7 @@
 #pragma mark -
 #pragma mark Managing the detail item
 
-- (void)switchTo:(UIViewController *)controller
+- (void)switchTo:(UIViewController<ContentPaneDelegate> *)controller
 {
     // Adjust the incoming controller's view to match the available size.
     NSInteger toolbarHeight = toolbar.frame.size.height;

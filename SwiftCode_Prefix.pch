@@ -20,8 +20,8 @@
     #import "Project.h"
     #import "ProjectFile.h"
 
+    #import "DetailViewController.h"
     #import "FileViewController.h"
     #import "ProjectSettingsController.h"
-    #import "DetailViewController.h"
 
 #endif

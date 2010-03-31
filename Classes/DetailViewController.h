@@ -1,25 +1,25 @@
-//
-//  DetailViewController.h
-//  SwiftCode
-//
-//  Created by Alex McHale on 3/24/10.
-//  Copyright __MyCompanyName__ 2010. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
-@interface DetailViewController : UIViewController <UIPopoverControllerDelegate, UISplitViewControllerDelegate> {
+@class DetailViewController;
+
+@protocol ContentPaneDelegate
+- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar;
+@end
+
+@interface DetailViewController : UIViewController
+        <UIPopoverControllerDelegate, UISplitViewControllerDelegate>
+{
     
     UIPopoverController *popoverController;
     UIToolbar *toolbar;
     
-    UIViewController *currentController;
+    UIViewController<ContentPaneDelegate> *currentController;
     
 }
 
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 
-@property (nonatomic, retain) UIViewController *currentController;
+@property (nonatomic, retain) UIViewController<ContentPaneDelegate> *currentController;
 
 - (void) switchTo:(UIViewController *)controller;
 
