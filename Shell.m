@@ -58,7 +58,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     // Set host parameters.
     sin.sin_family = AF_INET;
     sin.sin_port = htons([self.project.sshPort intValue]);
-    sin.sin_addr.s_addr = inet_addr([self.project.sshHostname UTF8String]);
+    sin.sin_addr.s_addr = inet_addr([self.project.sshHost UTF8String]);
 
     // Establish the TCP connection.
     if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) != 0) {
@@ -83,8 +83,8 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     }
 
     // Authenticate using the configured password.
-	const char *user = [project.sshUsername UTF8String];
-	const char *pass = [project.sshPassword UTF8String];
+	const char *user = [project.sshUser UTF8String];
+	const char *pass = [project.sshPass UTF8String];
     while ((rc = libssh2_userauth_password(session, user, pass)) == LIBSSH2_ERROR_EAGAIN)
         continue;
     if (rc) {

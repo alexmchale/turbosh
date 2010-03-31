@@ -104,10 +104,10 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
     switch (sqlite3_step(t)) {
         case SQLITE_ROW:
             project.name = get_string(t, 0);
-            project.sshHostname = get_string(t, 1);
+            project.sshHost = get_string(t, 1);
             project.sshPort = get_integer(t, 2);
-            project.sshUsername = get_string(t, 3);
-            project.sshPassword = get_string(t, 4);
+            project.sshUser = get_string(t, 3);
+            project.sshPass = get_string(t, 4);
             project.sshPath = get_string(t, 5);
 
             found = TRUE;
@@ -139,10 +139,10 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
 
     bind_integer(t, 1, project.num, true);
     bind_string(t, 2, project.name, false);
-    bind_string(t, 3, project.sshHostname, true);
+    bind_string(t, 3, project.sshHost, true);
     bind_integer(t, 4, project.sshPort, true);
-    bind_string(t, 5, project.sshUsername, true);
-    bind_string(t, 6, project.sshPassword, true);
+    bind_string(t, 5, project.sshUser, true);
+    bind_string(t, 6, project.sshPass, true);
     bind_string(t, 7, project.sshPath, true);
 
     assert(sqlite3_step(t) == SQLITE_DONE);

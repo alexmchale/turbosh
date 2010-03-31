@@ -3,6 +3,6 @@
 @implementation Project
 
 @synthesize num, name;
-@synthesize sshHostname, sshPort, sshUsername, sshPassword, sshPath;
+@synthesize sshHost, sshPort, sshUser, sshPass, sshPath;
 
 @end

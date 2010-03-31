@@ -12,26 +12,33 @@
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
 		projectName = [[UITextField alloc] init];
+		projectName.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
+		projectName.delegate = self;
 		
 		sshHost = [[UITextField alloc] init];
 		sshHost.autocorrectionType = UITextAutocorrectionTypeNo;
 		sshHost.autocapitalizationType = UITextAutocapitalizationTypeNone;
+		sshHost.delegate = self;
 		
 		sshPort = [[UITextField alloc] init];
 		sshPort.keyboardType = UIKeyboardTypeNumberPad;
+		sshPort.delegate = self;
 		
 		sshUser = [[UITextField alloc] init];
 		sshUser.autocorrectionType = UITextAutocorrectionTypeNo;
 		sshUser.autocapitalizationType = UITextAutocapitalizationTypeNone;
+		sshUser.delegate = self;
 		
 		sshPass = [[UITextField alloc] init];
 		sshPass.secureTextEntry = YES;
 		sshPass.autocorrectionType = UITextAutocorrectionTypeNo;
 		sshPass.autocapitalizationType = UITextAutocapitalizationTypeNone;
+		sshPass.delegate = self;
 		
 		sshPath = [[UITextField alloc] init];
 		sshPath.autocorrectionType = UITextAutocorrectionTypeNo;
 		sshPath.autocapitalizationType = UITextAutocapitalizationTypeNone;
+		sshPath.delegate = self;
     }
     return self;
 }
@@ -152,7 +159,7 @@ typedef enum {
         case TS_SSH_CREDENTIALS:
             switch (indexPath.row) {
                 case TC_HOSTNAME:
-					cell = [self cellFor:tableView field:sshHost name:@"Hostname" value:proj.sshHostname];
+					cell = [self cellFor:tableView field:sshHost name:@"Hostname" value:proj.sshHost];
                     break;
                     
                 case TC_PORT:
@@ -160,11 +167,11 @@ typedef enum {
                     break;
                     
                 case TC_USERNAME:
-					cell = [self cellFor:tableView field:sshUser name:@"Username" value:proj.sshUsername];
+					cell = [self cellFor:tableView field:sshUser name:@"Username" value:proj.sshUser];
                     break;
                     
                 case TC_PASSWORD:
-					cell = [self cellFor:tableView field:sshPass name:@"Password" value:proj.sshPassword];
+					cell = [self cellFor:tableView field:sshPass name:@"Password" value:proj.sshPass];
                     break;
                     
                 case TC_PATH:
@@ -227,6 +234,23 @@ typedef enum {
         default: assert(false);
     }
     
+}
+
+#pragma mark Text Field Delegate
+
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
+	NSNumberFormatter *nf = [[[NSNumberFormatter alloc] init] autorelease];
+	
+	if (textField == projectName) proj.name = textField.text;
+	
+	if (textField == sshHost) proj.sshHost = textField.text;
+	if (textField == sshPort) proj.sshPort = [nf numberFromString:textField.text];
+	if (textField == sshUser) proj.sshUser = textField.text;
+	if (textField == sshPass) proj.sshPass = textField.text;
+	if (textField == sshPath) proj.sshPath = textField.text;
+	
+	[Store storeProject:proj];
 }
 
 #pragma mark Project Management
