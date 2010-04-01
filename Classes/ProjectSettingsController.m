@@ -228,12 +228,13 @@
             
         case TS_FILES:
         {
-            ProjectFileSelector *pfs = [[[ProjectFileSelector alloc] 
+            ProjectFileSelector *pfs = [[ProjectFileSelector alloc] 
                                          initWithNibName:@"ProjectFileSelector"
-                                         bundle:nil] autorelease];
+                                         bundle:nil];
             pfs.project = proj;
             
             [SwiftCodeAppDelegate switchTo:pfs];
+            [pfs release];
          
         }   break;
             

@@ -41,24 +41,29 @@
     
     self.allFiles = [Shell fetchProjectFileList:project];
     self.syncFiles = [NSMutableArray array];
-    //self.syncFiles = [Store synchronizedFiles:project];
     [myTableView reloadData];
     
     [hud hide:YES];
     [hud removeFromSuperview];
+    
+    if (allFiles == nil) {
+        UIAlertView *alert =
+            [[UIAlertView alloc]
+             initWithTitle:@"Connection Failed"
+             message:@"Could not connect."
+             delegate:self
+             cancelButtonTitle:@"Okay"
+             otherButtonTitles:nil];
+        
+        [alert show];
+        [alert release];
+    }
 }
 
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+- (void) viewDidDisappear:(BOOL)animated {
+    self.allFiles = nil;
+    self.syncFiles = nil;
 }
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
-
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Override to allow orientations other than the default portrait orientation.
@@ -166,8 +171,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];    
 }
 
-
-#pragma mark -
 #pragma mark Memory management
 
 - (void)didReceiveMemoryWarning {
@@ -178,8 +181,6 @@
 }
 
 - (void)viewDidUnload {
-    self.allFiles = nil;
-    self.syncFiles = nil;
     self.cancelButton = nil;
     self.spacer = nil;
     self.saveButton = nil;
@@ -194,6 +195,13 @@
     [cancelButton release];
     [spacer release];
     [saveButton release];
+}
+
+#pragma mark Alert View Delegate
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [SwiftCodeAppDelegate editProject:project];
 }
 
 #pragma mark Toolbar Management

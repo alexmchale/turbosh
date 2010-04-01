@@ -48,6 +48,11 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 - (bool) connect {
     struct sockaddr_in sin;
     int rc;
+    
+    if (!project || !project.sshHost || !project.sshPort ||
+        !project.sshUser || !project.sshPass || !project.sshPath) {
+        return false;
+    }
 
     // Create the new socket.
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {

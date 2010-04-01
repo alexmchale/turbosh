@@ -1,11 +1,3 @@
-//
-//  DetailViewController.m
-//  SwiftCode
-//
-//  Created by Alex McHale on 3/24/10.
-//  Copyright __MyCompanyName__ 2010. All rights reserved.
-//
-
 #import "DetailViewController.h"
 #import "RootViewController.h"
 #import "QuartzCore/CAAnimation.h"
@@ -19,7 +11,7 @@
 
 @implementation DetailViewController
 
-@synthesize toolbar, popoverController, currentController;
+@synthesize toolbar, popoverController;
 
 #pragma mark Switcher View Manager
 
@@ -60,12 +52,13 @@
 	
 	[[self.view layer] addAnimation:animation forKey:@"SwitchToView1"];
     
-    self.currentController = controller;
+    [controller retain];
+    [currentController release];
+    currentController = controller;
      
     [popoverController dismissPopoverAnimated:YES];
 }
 
-#pragma mark -
 #pragma mark Split view support
 
 - (void) splitViewController:(UISplitViewController*)svc 
@@ -94,8 +87,6 @@
     self.popoverController = nil;
 }
 
-
-#pragma mark -
 #pragma mark Rotation support
 
 // Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
@@ -104,60 +95,21 @@
 }
 
 
-#pragma mark -
 #pragma mark View lifecycle
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     NSInteger toolbarHeight = toolbar.frame.size.height;
     CGRect fr1 = self.view.frame;
-    currentController.view.frame = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);    
+    CGRect fr2 = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);
+    currentController.view.frame = fr2;    
 }
-
-/*
- // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
- */
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
 
 - (void)viewDidUnload {
     self.popoverController = nil;
     self.toolbar = nil;
-    self.currentController = nil;
 }
 
-
-#pragma mark -
 #pragma mark Memory management
-
-/*
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
-*/
 
 - (void)dealloc {
     [popoverController release];

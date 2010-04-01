@@ -18,7 +18,6 @@
 }
 
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
-@property (nonatomic, retain) UIViewController<ContentPaneDelegate> *currentController;
 
 - (void) switchTo:(UIViewController *)controller;
 

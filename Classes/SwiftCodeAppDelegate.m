@@ -16,15 +16,16 @@
 + (void) editProject:(Project *)project
 {
     SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    ProjectSettingsController *psc = delegate.projectSettingsController;
     
-    if (psc == nil) {
-        psc = [[[ProjectSettingsController alloc] initWithNibName:nil bundle:nil] autorelease];
+    if (delegate.projectSettingsController == nil) {
+        ProjectSettingsController *psc = 
+            [[ProjectSettingsController alloc] initWithNibName:nil bundle:nil];
         delegate.projectSettingsController = psc;
+        [psc release];
     }
     
-    psc.proj = project;
-    [self switchTo:psc];
+    delegate.projectSettingsController.proj = project;
+    [self switchTo:delegate.projectSettingsController];
 }
 
 #pragma mark -
