@@ -3,6 +3,7 @@
 @class RootViewController;
 @class DetailViewController;
 @class ProjectSettingsController;
+@class Project;
 
 @interface SwiftCodeAppDelegate : NSObject <UIApplicationDelegate>
 {
@@ -25,5 +26,8 @@
 @property (nonatomic, retain) IBOutlet DetailViewController *detailViewController;
 
 @property (nonatomic, retain) ProjectSettingsController *projectSettingsController;
+
++ (void) switchTo:(UIViewController *)controller;
++ (void) editProject:(Project *)project;
 
 @end

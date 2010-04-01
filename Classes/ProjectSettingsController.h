@@ -13,8 +13,6 @@
     UITextField *sshUser;
     UITextField *sshPass;
     UITextField *sshPath;
-    
-    MBProgressHUD *spinner;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
@@ -28,8 +26,6 @@
 @property (nonatomic, retain) UITextField *sshUser;
 @property (nonatomic, retain) UITextField *sshPass;
 @property (nonatomic, retain) UITextField *sshPath;
-
-@property (nonatomic, retain) MBProgressHUD *spinner;
 
 typedef enum {
     TS_PROJECT_MAIN,

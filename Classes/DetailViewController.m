@@ -21,15 +21,7 @@
 
 @synthesize toolbar, popoverController, currentController;
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-    }
-    
-    return self;
-}
-
-#pragma mark -
-#pragma mark Managing the detail item
+#pragma mark Switcher View Manager
 
 - (void)switchTo:(UIViewController<ContentPaneDelegate> *)controller
 {
@@ -47,9 +39,17 @@
     }
     [controller viewSwitcher:self configureToolbar:toolbar];
     
+    // View will appear / disappear.
+    [controller viewWillAppear:YES];
+    [currentController viewWillDisappear:YES];
+    
     // Remove the current view and replace with the new one.
 	[currentController.view removeFromSuperview];
 	[self.view insertSubview:controller.view atIndex:0];
+    
+    // View did appear / disappear.
+    [controller viewDidAppear:YES];
+    [currentController viewDidDisappear:YES];    
 	
 	// Set up an animation for the transition between the views.
 	CATransition *animation = [CATransition animation];
@@ -141,9 +141,9 @@
 */
 
 - (void)viewDidUnload {
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
     self.popoverController = nil;
+    self.toolbar = nil;
+    self.currentController = nil;
 }
 
 

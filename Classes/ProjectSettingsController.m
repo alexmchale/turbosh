@@ -6,7 +6,6 @@
 @synthesize proj;
 @synthesize projectName;
 @synthesize sshHost, sshPort, sshUser, sshPass, sshPath;
-@synthesize spinner;
 
 #pragma mark View Initialization
 
@@ -42,9 +41,6 @@
 		sshPath.autocorrectionType = UITextAutocorrectionTypeNo;
 		sshPath.autocapitalizationType = UITextAutocapitalizationTypeNone;
 		sshPath.delegate = self;
-        
-        spinner = [[MBProgressHUD alloc] initWithView:self.view];
-        [self.view addSubview:spinner];
     }
     return self;
 }
@@ -52,8 +48,6 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    [self.view addSubview:spinner];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -233,16 +227,15 @@
             break;
             
         case TS_FILES:
-            //spinner.labelText = @"Loading";
-            //[spinner show:true];
+        {
+            ProjectFileSelector *pfs = [[[ProjectFileSelector alloc] 
+                                         initWithNibName:@"ProjectFileSelector"
+                                         bundle:nil] autorelease];
+            pfs.project = proj;
             
-            // Retrieve current file list.
-            
-            // Show an error if that failed.  Continue otherwise.
-            
-            // Show a modal vc that will allow the user to select which files should synchronize.
-            
-            break;
+            [SwiftCodeAppDelegate switchTo:pfs];
+         
+        }   break;
             
         default: assert(false);
     }

@@ -76,7 +76,9 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 
     // Establish the SSH connection.
     while ((rc = libssh2_session_startup(session, sock)) == LIBSSH2_ERROR_EAGAIN)
-        continue;
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
+        //continue;
+    
     if (rc) {
         fprintf(stderr, "Failure establishing SSH session: %d\n", rc);
         return nil;
@@ -85,8 +87,9 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     // Authenticate using the configured password.
 	const char *user = [project.sshUser UTF8String];
 	const char *pass = [project.sshPass UTF8String];
-    while ((rc = libssh2_userauth_password(session, user, pass)) == LIBSSH2_ERROR_EAGAIN)
-        continue;
+    while ((rc = libssh2_userauth_password(session, user, pass)) == LIBSSH2_ERROR_EAGAIN)        
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
+        //continue;
     if (rc) {
         fprintf(stderr, "Authentication by password failed.\n");
         return false;
@@ -124,6 +127,8 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     NSMutableData *data = [[NSMutableData alloc] init];
     NSMutableArray *files = nil;
     NSString *findCmd = [NSString stringWithFormat:@"find %@ -type %c -print0", [self escapedPath], type];
+    
+    fprintf(stderr, "find cmd: %s\n", [findCmd UTF8String]);
 
     if ([self dispatchCommand:findCmd storeAt:data]) {
         char *bytes = (char *)[data bytes];
@@ -132,9 +137,10 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 
         while (offset < [data length]) {
             NSString *file = [NSString stringWithUTF8String:&bytes[offset]];
-            file = [file substringFromIndex:[project.sshPath length]];
+            int pathLength = [project.sshPath length];
+            file = [file substringFromIndex:pathLength];
             [files addObject:file];
-            offset += [file length] + 1;
+            offset += pathLength + [file length] + 1;
         }
     }
 
@@ -158,7 +164,8 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     /* Exec non-blocking on the remove host */
     while((channel = libssh2_channel_open_session(session)) == NULL &&
           libssh2_session_last_error(session,NULL,NULL,0) == LIBSSH2_ERROR_EAGAIN) {
-        waitsocket(sock, session);
+        //waitsocket(sock, session);
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
     }
 
     if (channel == NULL) {
@@ -167,7 +174,8 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     }
 
     while((rc = libssh2_channel_exec(channel, [command UTF8String])) == LIBSSH2_ERROR_EAGAIN) {
-        waitsocket(sock, session);
+        //waitsocket(sock, session);
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
     }
 
     if (rc) {
@@ -191,13 +199,15 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
         if (rc != LIBSSH2_ERROR_EAGAIN)
             break;
 
-        waitsocket(sock, session);
+        //waitsocket(sock, session);
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
     }
 
     int exitcode = 127;
 
     while((rc = libssh2_channel_close(channel)) == LIBSSH2_ERROR_EAGAIN)
-        waitsocket(sock, session);
+        //waitsocket(sock, session);
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
 
     if (!rc) {
         exitcode = libssh2_channel_get_exit_status( channel );
@@ -255,6 +265,23 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     channel = NULL;
     
     return data;
+}
+
+#pragma mark Wrapper Tasks
+
++ (NSArray *) fetchProjectFileList:(Project *)p
+{
+    Shell *s = [[Shell alloc] initWithProject:p];
+    NSArray *f = nil;
+    
+    if ([s connect]) {
+        f = [s files];
+        [s disconnect];
+    }
+    
+    [s release];
+    
+    return f;
 }
 
 static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)

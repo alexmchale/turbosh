@@ -34,4 +34,6 @@
 
 - (NSString *) escapedPath;
 
++ (NSArray *) fetchProjectFileList:(Project *)p;
+
 @end

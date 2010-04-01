@@ -7,6 +7,26 @@
 
 @synthesize window, splitViewController, rootViewController, detailViewController, projectSettingsController;
 
++ (void) switchTo:(UIViewController *)controller
+{
+    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    [delegate.detailViewController switchTo:controller];
+}
+
++ (void) editProject:(Project *)project
+{
+    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    ProjectSettingsController *psc = delegate.projectSettingsController;
+    
+    if (psc == nil) {
+        psc = [[[ProjectSettingsController alloc] initWithNibName:nil bundle:nil] autorelease];
+        delegate.projectSettingsController = psc;
+    }
+    
+    psc.proj = project;
+    [self switchTo:psc];
+}
+
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -21,9 +41,7 @@
     [window makeKeyAndVisible];
 
     // Select that last used project and update the DVC to show it.
-    self.projectSettingsController = [[[ProjectSettingsController alloc] initWithNibName:nil bundle:nil] autorelease];
-    projectSettingsController.proj = [Store currentProject];
-    [detailViewController switchTo:projectSettingsController];
+    [SwiftCodeAppDelegate editProject:[Store currentProject]];
 
     return YES;
 
