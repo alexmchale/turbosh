@@ -244,8 +244,43 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
 }
 
 + (BOOL) loadProjectFile:(ProjectFile *)file {
-    assert(false);
-    return false;
+    assert(file.num != nil);
+    
+    char *s = "SELECT project_id, path "
+              "FROM files "
+              "WHERE id=?";
+    
+    BOOL found = FALSE;
+    sqlite3_stmt *t;
+    assert(sqlite3_prepare_v2(db, s, -1, &t, NULL) == SQLITE_OK);
+    assert(sqlite3_bind_int(t, 1, [file.num intValue]) == SQLITE_OK);
+    
+    switch (sqlite3_step(t)) {
+        case SQLITE_ROW:
+        {
+            NSNumber *loadedProjectId = get_integer(t, 1);
+            if (file.project != nil)
+                assert([file.project.num isEqualToNumber:loadedProjectId]);
+            else
+                file.project = [Store findProjectByNum:[loadedProjectId intValue]];
+            assert(file.project != nil);
+            
+            file.filename = get_string(t, 2);
+            
+            found = TRUE;
+        }   break;
+            
+        case SQLITE_DONE:
+            found = FALSE;
+            break;
+            
+        default:
+            assert(1 != 1);
+    }
+    
+    assert(sqlite3_finalize(t) == SQLITE_OK);
+    
+    return found;
 }
 
 + (void) storeProjectFile:(ProjectFile *)file {
