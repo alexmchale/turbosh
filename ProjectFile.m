@@ -3,7 +3,7 @@
 @implementation ProjectFile
 
 @synthesize num;
-@synthesize proj;
+@synthesize project;
 @synthesize filename;
 
 - (id) initByNumber:(NSNumber *)number {
@@ -18,7 +18,7 @@
 - (id) initByProject:(Project *)myProject filename:(NSString *)myFilename {
     self.num = [Store projectFileNumber:myProject filename:myFilename];
     
-    self.proj = myProject;
+    self.project = myProject;
     self.filename = myFilename;
     
     return self;

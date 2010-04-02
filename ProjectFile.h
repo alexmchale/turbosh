@@ -6,15 +6,16 @@
 @interface ProjectFile : NSObject
 {
     NSNumber *num;
-    Project *proj;
+    Project *project;
     NSString *filename;
 }
 
 @property (nonatomic, retain) NSNumber *num;
-@property (nonatomic, retain) Project *proj;
+@property (nonatomic, retain) Project *project;
 @property (nonatomic, retain) NSString *filename;
 
 - (ProjectFile *)initByNumber:(NSNumber *)number;
+- (id) initByProject:(Project *)myProject filename:(NSString *)myFilename;
 - (NSString *)content;
 
 @end

@@ -9,7 +9,12 @@
 
 - (void) saveAction {
     for (NSString *filename in syncFiles) {
-        fprintf(stderr, "sync: %s\n", [filename UTF8String]);
+        ProjectFile *file = [Store projectFile:project filename:filename];
+        
+        if (file == nil) {
+            file = [[[ProjectFile alloc] initByProject:project filename:filename] autorelease];
+            [Store storeProjectFile:file];
+        }
     }
     
     [SwiftCodeAppDelegate editProject:project];

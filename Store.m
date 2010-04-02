@@ -218,7 +218,7 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
     assert(project.num != nil);
     
     sqlite3_stmt *stmt;
-    const char *sql = "SELECT name FROM files WHERE project_id=?";
+    const char *sql = "SELECT path FROM files WHERE project_id=?";
     assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
     assert(sqlite3_bind_int(stmt, 1, [project.num intValue]) == SQLITE_OK);
 
@@ -244,15 +244,20 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
 }
 
 + (BOOL) loadProjectFile:(ProjectFile *)file {
+    assert(false);
     return false;
 }
 
 + (void) storeProjectFile:(ProjectFile *)file {
+    assert(file.project != nil);
+    
     sqlite3_stmt *stmt;
-    const char *sql = "INSERT INTO files (project_id, filename) VALUES (?, ?)";
+    const char *sql = "INSERT INTO files (project_id, path) VALUES (?, ?)";
     assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
-    bind_integer(stmt, 1, file.num, true);
+    bind_integer(stmt, 1, file.project.num, true);
     bind_string(stmt, 2, file.filename, false);
+    fprintf(stderr, "num: %d\n", [file.project.num intValue]);
+    fprintf(stderr, "nam: %s\n", [file.filename UTF8String]);
     assert(sqlite3_step(stmt) == SQLITE_DONE);
     assert(sqlite3_finalize(stmt) == SQLITE_OK);
 }
@@ -264,7 +269,7 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
     
     NSNumber *num = nil;
     sqlite3_stmt *stmt;
-    const char *sql = "SELECT id FROM files WHERE project_id=? AND filename=?";
+    const char *sql = "SELECT id FROM files WHERE project_id=? AND path=?";
     assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
     assert(sqlite3_bind_int(stmt, 1, [project.num intValue]) == SQLITE_OK);
     assert(sqlite3_bind_text(stmt, 2, [filename UTF8String], -1, SQLITE_TRANSIENT) == SQLITE_OK);
