@@ -212,6 +212,81 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
     return 0;
 }
 
++ (NSArray *) filenames:(Project *)project {
+    NSMutableArray *filenames = [NSMutableArray array];
+    
+    assert(project.num != nil);
+    
+    sqlite3_stmt *stmt;
+    const char *sql = "SELECT name FROM files WHERE project_id=?";
+    assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
+    assert(sqlite3_bind_int(stmt, 1, [project.num intValue]) == SQLITE_OK);
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        const char *cFilename = (char *)sqlite3_column_text(stmt, 1);
+        if (cFilename != NULL) {
+            NSString *filename = [NSString stringWithUTF8String:cFilename];
+            [filenames addObject:filename];
+        }
+    }
+    
+    assert(sqlite3_finalize(stmt) == SQLITE_OK);
+    
+    return filenames;
+}
+
++ (void) deleteProjectFile:(ProjectFile *)file {
+    assert(file.num != nil);
+    const NSString *nsSql = [NSString stringWithFormat:@"DELETE FROM files WHERE id=%@", file.num];
+    const char *sql = [nsSql UTF8String];
+    assert(sqlite3_exec(db, sql, NULL, NULL, NULL) == SQLITE_OK);
+    file.num = nil;
+}
+
++ (BOOL) loadProjectFile:(ProjectFile *)file {
+    return false;
+}
+
++ (void) storeProjectFile:(ProjectFile *)file {
+    sqlite3_stmt *stmt;
+    const char *sql = "INSERT INTO files (project_id, filename) VALUES (?, ?)";
+    assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
+    bind_integer(stmt, 1, file.num, true);
+    bind_string(stmt, 2, file.filename, false);
+    assert(sqlite3_step(stmt) == SQLITE_DONE);
+    assert(sqlite3_finalize(stmt) == SQLITE_OK);
+}
+
++ (NSNumber *) projectFileNumber:(Project *)project
+                        filename:(NSString *)filename
+{
+    assert(project.num != nil);
+    
+    NSNumber *num = nil;
+    sqlite3_stmt *stmt;
+    const char *sql = "SELECT id FROM files WHERE project_id=? AND filename=?";
+    assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
+    assert(sqlite3_bind_int(stmt, 1, [project.num intValue]) == SQLITE_OK);
+    assert(sqlite3_bind_text(stmt, 2, [filename UTF8String], -1, SQLITE_TRANSIENT) == SQLITE_OK);
+    
+    if (sqlite3_step(stmt) == SQLITE_ROW)
+        num = [NSNumber numberWithInt:sqlite3_column_int(stmt, 0)];
+    
+    assert(sqlite3_finalize(stmt) == SQLITE_OK);
+    
+    return num;
+}
+
++ (ProjectFile *) projectFile:(Project *)project
+                     filename:(NSString *)filename
+{
+    NSNumber *num = [self projectFileNumber:project filename:filename];
+    
+    if (num == nil) return nil;
+    
+    return [[[ProjectFile alloc] initByNumber:num] autorelease];
+}
+
 #pragma mark Key-Value
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key {

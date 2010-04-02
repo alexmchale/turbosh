@@ -1,6 +1,12 @@
 #import <Foundation/Foundation.h>
 #import <libssh2.h>
 
+typedef enum {
+    SCR_SUCCESS,
+    SCR_CONNECTION_FAILED,
+    SCR_COMMAND_FAILED
+} ShellCommandResult;
+
 @class Project;
 
 @interface Shell : NSObject 

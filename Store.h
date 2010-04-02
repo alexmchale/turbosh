@@ -2,6 +2,7 @@
 #import <sqlite3.h>
 
 @class Project;
+@class ProjectFile;
 
 @interface Store : NSObject 
 {
@@ -19,6 +20,11 @@
 + (Project *) projectAtOffset:(NSInteger)offset;
 
 + (NSInteger) fileCount:(Project *)project;
++ (NSArray *) filenames:(Project *)project;
++ (BOOL) loadProjectFile:(ProjectFile *)file;
++ (void) storeProjectFile:(ProjectFile *)file;
++ (NSNumber *) projectFileNumber:(Project *)project filename:(NSString *)filename;
++ (ProjectFile *) projectFile:(Project *)project filename:(NSString *)filename;
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key;
 + (void) setIntValue:(NSInteger)value forKey:(NSString *)key;

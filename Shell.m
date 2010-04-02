@@ -131,9 +131,11 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 - (NSArray *) findFilesOfType:(char)type {
     NSMutableData *data = [[NSMutableData alloc] init];
     NSMutableArray *files = nil;
+    NSString *testCmd = [NSString stringWithFormat:@"test -d %@", [self escapedPath]];
     NSString *findCmd = [NSString stringWithFormat:@"find %@ -type %c -print0", [self escapedPath], type];
+    NSString *cmd = [NSString stringWithFormat:@"%@ && %@", testCmd, findCmd];
     
-    fprintf(stderr, "find cmd: %s\n", [findCmd UTF8String]);
+    fprintf(stderr, "find cmd: %s\n", [cmd UTF8String]);
 
     if ([self dispatchCommand:findCmd storeAt:data]) {
         char *bytes = (char *)[data bytes];
@@ -223,7 +225,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     libssh2_channel_free(channel);
     channel = NULL;
 
-    return true;
+    return exitcode == 0;
 }
 
 // Download the file at path.

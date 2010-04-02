@@ -8,6 +8,10 @@
 #pragma mark Button Actions
 
 - (void) saveAction {
+    for (NSString *filename in syncFiles) {
+        fprintf(stderr, "sync: %s\n", [filename UTF8String]);
+    }
+    
     [SwiftCodeAppDelegate editProject:project];
 }
 
@@ -34,23 +38,41 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    NSString *error = nil;
+    
     MBProgressHUD *hud = [[[MBProgressHUD alloc] initWithView:self.view] autorelease];
     hud.labelText = @"Loading Files";
     [self.view addSubview:hud];
     [hud show:YES];
     
-    self.allFiles = [Shell fetchProjectFileList:project];
-    self.syncFiles = [NSMutableArray array];
-    [myTableView reloadData];
+    Shell *shell = [[Shell alloc] initWithProject:project];
+    
+    if ([shell connect]) {    
+        self.allFiles = [shell files];
+        
+        if (self.allFiles) {
+            self.syncFiles = [NSMutableArray arrayWithArray:[Store filenames:project]];
+            [myTableView reloadData];
+        } else {
+            error = @"Failed to get list of files.";
+        }
+    } else {
+        error = @"Failed to connect to server.";
+    }
+    
+    if (error) {
+        self.allFiles = nil;
+        self.syncFiles = nil;
+    }
     
     [hud hide:YES];
     [hud removeFromSuperview];
     
-    if (allFiles == nil) {
+    if (allFiles == nil || error != nil) {
         UIAlertView *alert =
             [[UIAlertView alloc]
              initWithTitle:@"Connection Failed"
-             message:@"Could not connect."
+             message:error
              delegate:self
              cancelButtonTitle:@"Okay"
              otherButtonTitles:nil];
