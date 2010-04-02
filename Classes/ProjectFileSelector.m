@@ -2,7 +2,7 @@
 
 @implementation ProjectFileSelector
 
-@synthesize myTableView, project, allFiles, syncFiles;
+@synthesize myTableView, project, allFiles, syncFiles, removedFiles;
 @synthesize cancelButton, spacer, saveButton;
 
 #pragma mark Button Actions
@@ -14,6 +14,14 @@
         if (file == nil) {
             file = [[[ProjectFile alloc] initByProject:project filename:filename] autorelease];
             [Store storeProjectFile:file];
+        }
+    }
+    
+    for (NSString *filename in removedFiles) {
+        ProjectFile *file = [Store projectFile:project filename:filename];
+
+        if (file != nil) {
+            [Store deleteProjectFile:file];
         }
     }
     
@@ -57,6 +65,7 @@
         
         if (self.allFiles) {
             self.syncFiles = [NSMutableArray arrayWithArray:[Store filenames:project]];
+            self.removedFiles = [NSMutableArray array];
             [myTableView reloadData];
         } else {
             error = @"Failed to get list of files.";
@@ -90,6 +99,7 @@
 - (void) viewDidDisappear:(BOOL)animated {
     self.allFiles = nil;
     self.syncFiles = nil;
+    self.removedFiles = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -188,10 +198,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *file = [self.allFiles objectAtIndex:indexPath.row];
     
-    if ([syncFiles containsObject:file])
+    if ([syncFiles containsObject:file]) {
+        [removedFiles addObject:file];
         [syncFiles removeObject:file];
-    else
+    } else {
         [syncFiles addObject:file];
+        [removedFiles removeObject:file];
+    }
     
     [tableView reloadData];
     
@@ -219,6 +232,7 @@
     [project release];
     [allFiles release];
     [syncFiles release];
+    [removedFiles release];
     [cancelButton release];
     [spacer release];
     [saveButton release];

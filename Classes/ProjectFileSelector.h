@@ -9,6 +9,7 @@
     
     NSArray *allFiles;
     NSMutableArray *syncFiles;
+    NSMutableArray *removedFiles;
     
     UIBarButtonItem *cancelButton;
     UIBarButtonItem *spacer;
@@ -19,6 +20,7 @@
 @property (nonatomic, retain) Project *project;
 @property (nonatomic, retain) NSArray *allFiles;
 @property (nonatomic, retain) NSMutableArray *syncFiles;
+@property (nonatomic, retain) NSMutableArray *removedFiles;
 @property (nonatomic, retain) UIBarButtonItem *cancelButton;
 @property (nonatomic, retain) UIBarButtonItem *spacer;
 @property (nonatomic, retain) UIBarButtonItem *saveButton;

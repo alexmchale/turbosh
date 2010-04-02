@@ -223,11 +223,10 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
     assert(sqlite3_bind_int(stmt, 1, [project.num intValue]) == SQLITE_OK);
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        const char *cFilename = (char *)sqlite3_column_text(stmt, 1);
-        if (cFilename != NULL) {
-            NSString *filename = [NSString stringWithUTF8String:cFilename];
-            [filenames addObject:filename];
-        }
+        const char *cFilename = (char *)sqlite3_column_text(stmt, 0);
+        assert(cFilename != NULL);
+        NSString *filename = [NSString stringWithUTF8String:cFilename];
+        [filenames addObject:filename];
     }
     
     assert(sqlite3_finalize(stmt) == SQLITE_OK);
@@ -258,14 +257,14 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
     switch (sqlite3_step(t)) {
         case SQLITE_ROW:
         {
-            NSNumber *loadedProjectId = get_integer(t, 1);
+            NSNumber *loadedProjectId = get_integer(t, 0);
             if (file.project != nil)
                 assert([file.project.num isEqualToNumber:loadedProjectId]);
             else
                 file.project = [Store findProjectByNum:[loadedProjectId intValue]];
             assert(file.project != nil);
             
-            file.filename = get_string(t, 2);
+            file.filename = get_string(t, 1);
             
             found = TRUE;
         }   break;
@@ -287,12 +286,11 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
     assert(file.project != nil);
     
     sqlite3_stmt *stmt;
-    const char *sql = "INSERT INTO files (project_id, path) VALUES (?, ?)";
+    const char *sql = "INSERT INTO files (id, project_id, path) VALUES (?, ?, ?)";
     assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
-    bind_integer(stmt, 1, file.project.num, true);
-    bind_string(stmt, 2, file.filename, false);
-    fprintf(stderr, "num: %d\n", [file.project.num intValue]);
-    fprintf(stderr, "nam: %s\n", [file.filename UTF8String]);
+    bind_integer(stmt, 1, file.num, true);
+    bind_integer(stmt, 2, file.project.num, false);
+    bind_string(stmt, 3, file.filename, false);
     assert(sqlite3_step(stmt) == SQLITE_DONE);
     assert(sqlite3_finalize(stmt) == SQLITE_OK);
 }
