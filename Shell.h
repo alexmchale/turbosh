@@ -8,6 +8,7 @@ typedef enum {
 } ShellCommandResult;
 
 @class Project;
+@class ProjectFile;
 
 @interface Shell : NSObject 
 {
@@ -34,6 +35,7 @@ typedef enum {
 - (NSArray *) directories;
 - (NSArray *) files;
 - (NSArray *) findFilesOfType:(char)type;
+- (NSString *) remoteMd5:(ProjectFile *)file;
 
 - (bool) dispatchCommand:(NSString *)command storeAt:(NSMutableData *)output;
 - (NSData *) downloadFile:(NSString *)filePath;

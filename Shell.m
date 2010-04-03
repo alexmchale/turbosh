@@ -127,6 +127,12 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     return [self findFilesOfType:'f'];
 }
 
+static bool excluded_filename(NSString *filename) {
+    static NSString *exclRegex = @"\\.git|\\.svn|\\.hg";
+    const NSRange range = [filename rangeOfRegex:exclRegex];
+    return range.location != NSNotFound;
+}
+
 // Executes and parses a find command on the remote server.
 - (NSArray *) findFilesOfType:(char)type {
     NSMutableData *data = [[NSMutableData alloc] init];
@@ -144,9 +150,11 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 
         while (offset < [data length]) {
             NSString *file = [NSString stringWithUTF8String:&bytes[offset]];
-            int pathLength = [project.sshPath length];
+            int pathLength = [project.sshPath length] + 1;
             file = [file substringFromIndex:pathLength];
-            [files addObject:file];
+            
+            if (!excluded_filename(file)) [files addObject:file];
+            
             offset += pathLength + [file length] + 1;
         }
     }
@@ -220,7 +228,8 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
         exitcode = libssh2_channel_get_exit_status( channel );
     }
 
-    printf("\nEXIT: %d bytecount: %d\n", exitcode, bytecount);
+    printf("\nCMD:  %s\n", [command UTF8String]);
+    printf("EXIT: %d bytecount: %d\n", exitcode, bytecount);
 
     libssh2_channel_free(channel);
     channel = NULL;
@@ -272,6 +281,27 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     channel = NULL;
     
     return data;
+}
+
++ (BOOL) retrieveFile:(ProjectFile *)file
+{
+    return false;
+}
+
+- (NSString *) remoteMd5:(ProjectFile *)file
+{
+    NSString *md5Cmd = [NSString stringWithFormat:@"md5 %@ || md5sum %@", [file escapedPath], [file escapedPath]];
+    NSMutableData *md5CmdResult = [NSMutableData data];
+    bool md5Success = [self dispatchCommand:md5Cmd storeAt:md5CmdResult];
+    
+    if (!md5Success) return nil;
+    if ([md5CmdResult length] < 32) return nil;
+    
+    NSString *md5String = [NSString stringWithCString:[md5CmdResult bytes] length:[md5CmdResult length]];
+    NSString *md5Regex = @"[0-9a-fA-F]{32}";
+    NSString *md5Match = [md5String stringByMatching:md5Regex];
+    
+    return md5Match;
 }
 
 #pragma mark Wrapper Tasks

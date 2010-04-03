@@ -45,6 +45,8 @@ sqlite3 *db;
                    "project_id INTEGER NOT NULL, "
                    "path TEXT NOT NULL, "
                    "content BLOB, "
+                   "remote_md5 TEXT, "
+                   "local_md5 TEXT, "
                    "UNIQUE (project_id, path) ON CONFLICT REPLACE)";
         assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
 
@@ -57,7 +59,7 @@ sqlite3 *db;
     assert(sqlite3_close(db) == SQLITE_OK);
 }
 
-#pragma mark Project
+#pragma mark SQLite Utils
 
 static NSString *get_string(sqlite3_stmt *stmt, int column) {
     char *cString = (char *)sqlite3_column_text(stmt, column);
@@ -93,6 +95,8 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
     else
         assert(sqlite3_bind_null(stmt, column) == SQLITE_OK);
 }
+
+#pragma mark Project
 
 + (BOOL) loadProject:(Project *)project {
     assert(project != nil);
@@ -245,9 +249,9 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
 + (BOOL) loadProjectFile:(ProjectFile *)file {
     assert(file.num != nil);
     
-    char *s = "SELECT project_id, path "
-              "FROM files "
-              "WHERE id=?";
+    const char *s = "SELECT project_id, path "
+                    "FROM files "
+                    "WHERE id=?";
     
     BOOL found = FALSE;
     sqlite3_stmt *t;
@@ -293,6 +297,14 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
     bind_string(stmt, 3, file.filename, false);
     assert(sqlite3_step(stmt) == SQLITE_DONE);
     assert(sqlite3_finalize(stmt) == SQLITE_OK);
+}
+
++ (void) storeLocal:(ProjectFile *)file content:(NSData *)content
+{
+}
+
++ (void) storeRemote:(ProjectFile *)file content:(NSData *)content
+{
 }
 
 + (NSNumber *) projectFileNumber:(Project *)project

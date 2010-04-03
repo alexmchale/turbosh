@@ -4,7 +4,7 @@
 
 @synthesize num;
 @synthesize project;
-@synthesize filename;
+@synthesize filename, localMd5, remoteMd5;
 
 - (id) initByNumber:(NSNumber *)number {
     assert(number != nil);
@@ -24,11 +24,29 @@
     return self;
 }
 
+- (NSString *) escapedPath {
+    NSString *root = project.sshPath;
+    NSString *path = [NSString stringWithFormat:@"%@/%@", root, filename];
+    
+    return [path stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+}
+
 - (NSString *)content {
     return @"";
 }
 
 - (void) setContent:(NSString *)content {
+}
+
+- (void) dealloc
+{
+    [super dealloc];
+    
+    [num release];
+    [project release];
+    [filename release];
+    [localMd5 release];
+    [remoteMd5 release];
 }
 
 @end
