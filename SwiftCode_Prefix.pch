@@ -12,6 +12,7 @@
     #import <CommonCrypto/CommonDigest.h>
 
     #import "MBProgressHUD.h"
+    #import "RegexKitLite.h"
 
     #import "SwiftCodeAppDelegate.h"
 
