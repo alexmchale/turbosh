@@ -212,7 +212,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 
 + (Project *) projectAtOffset:(NSInteger)offset {
     Project *p = [[[Project alloc] init] autorelease];
-    NSInteger num = [self scalarInt:@"id" onTable:@"projects" offset:offset];
+    NSInteger num = [self scalarInt:@"id" onTable:@"projects" offset:offset orderBy:@"name"];
 
     if (num == 0) return nil;
 
@@ -230,7 +230,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     if (project.num == nil) return 0;
     
     NSString *idcl = [NSString stringWithFormat:@"project_id=%d", [project.num intValue]];
-    return [self scalarInt:@"COUNT(id)" onTable:@"files" where:idcl offset:0];
+    return [self scalarInt:@"COUNT(id)" onTable:@"files" where:idcl offset:0 orderBy:@"id"];
 }
 
 + (NSArray *) filenames:(Project *)project {
@@ -375,6 +375,17 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     return [[[ProjectFile alloc] initByNumber:num] autorelease];
 }
 
++ (ProjectFile *) projectFile:(Project *)project atOffset:(NSInteger)offset
+{
+    assert(project != nil);
+    assert(project.num != nil);
+    
+    NSString *wherecl = [NSString stringWithFormat:@"project_id=%d", [project.num intValue]];
+    NSInteger idint = [self scalarInt:@"id" onTable:@"files" where:wherecl offset:offset orderBy:@"path"];
+    NSNumber *num = [NSNumber numberWithInt:idint];
+    return [[[ProjectFile alloc] initByNumber:num] autorelease];
+}
+
 #pragma mark Key-Value
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key {
@@ -432,11 +443,12 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 + (NSString *) scalar:(NSString *)col
               onTable:(NSString *)tab
                 where:(NSString *)where
-               offset:(NSInteger)offset {
+               offset:(NSInteger)offset
+              orderBy:(NSString *)order {
 
     sqlite3_stmt *t;
-    NSString *f = @"SELECT %@ FROM %@ WHERE %@ LIMIT 1 OFFSET %d";
-    NSString *s = [NSString stringWithFormat:f, col, tab, where, offset];
+    NSString *f = @"SELECT %@ FROM %@ WHERE %@ ORDER BY %@ LIMIT 1 OFFSET %d";
+    NSString *s = [NSString stringWithFormat:f, col, tab, where, order, offset];
     NSString *v = nil;
 
     assert(sqlite3_prepare_v2(db, [s UTF8String], -1, &t, NULL) == SQLITE_OK);
@@ -453,20 +465,21 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 + (NSInteger) scalarInt:(NSString *)col
                 onTable:(NSString *)tab
                   where:(NSString *)where
-                 offset:(NSInteger)offset {
+                 offset:(NSInteger)offset
+                orderBy:(NSString *)order {
 
-    NSString *v = [self scalar:col onTable:tab where:where offset:offset];
+    NSString *v = [self scalar:col onTable:tab where:where offset:offset orderBy:order];
 
     return (v == nil) ? 0 : [v intValue];
 
 }
 
 + (NSInteger) scalarInt:(NSString *)col onTable:(NSString *)tab {
-    return [self scalarInt:col onTable:tab where:@"1=1" offset:0];
+    return [self scalarInt:col onTable:tab where:@"1=1" offset:0 orderBy:@"id"];
 }
 
-+ (NSInteger) scalarInt:(NSString *)col onTable:(NSString *)tab offset:(NSInteger)offset {
-    return [self scalarInt:col onTable:tab where:@"1=1" offset:offset];
++ (NSInteger) scalarInt:(NSString *)col onTable:(NSString *)tab offset:(NSInteger)offset orderBy:(NSString *)order {
+    return [self scalarInt:col onTable:tab where:@"1=1" offset:offset orderBy:order];
 }
 
 @end

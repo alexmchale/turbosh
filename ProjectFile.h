@@ -23,5 +23,6 @@
 - (NSString *)content;
 - (NSString *)fullpath;
 - (NSString *)escapedPath;
+- (NSString *)condensedPath;
 
 @end

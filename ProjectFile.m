@@ -24,6 +24,24 @@
     return self;
 }
 
+- (NSString *) condensedPath {
+    assert(filename != nil);
+    
+    NSArray *segments = [filename componentsSeparatedByString:@"/"];
+    NSMutableArray *esegs = [NSMutableArray arrayWithArray:segments];
+    
+    for (int i = 0; i < [esegs count] - 1; ++i) {
+        NSString *a = [esegs objectAtIndex:i];
+        
+        if ([[esegs objectAtIndex:i] length] > 0) {
+            NSString *b = [a substringToIndex:1];
+            [esegs replaceObjectAtIndex:i withObject:b];
+        }
+    }
+    
+    return [esegs componentsJoinedByString:@"/"];
+}
+
 - (NSString *) fullpath {
     NSString *root = project.sshPath;
     assert(root);

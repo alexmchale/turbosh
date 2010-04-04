@@ -95,6 +95,9 @@ typedef enum {
     
     switch (indexPath.section) {
         case MST_FILES:
+            item = [Store projectFile:[Store currentProject] atOffset:indexPath.row];
+            assert(item != nil);
+            cell.textLabel.text = [item condensedPath];
             break;
             
         case MST_TASKS:
