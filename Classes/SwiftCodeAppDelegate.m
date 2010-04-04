@@ -5,7 +5,8 @@
 
 @implementation SwiftCodeAppDelegate
 
-@synthesize window, splitViewController, rootViewController, detailViewController, projectSettingsController;
+@synthesize window, splitViewController, rootViewController, detailViewController;
+@synthesize projectSettingsController, fileViewController;
 
 + (void) switchTo:(UIViewController *)controller
 {
@@ -26,6 +27,21 @@
     
     delegate.projectSettingsController.proj = project;
     [self switchTo:delegate.projectSettingsController];
+}
+
++ (void) editFile:(ProjectFile *)file
+{
+    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    
+    if (delegate.fileViewController == nil) {
+        FileViewController *psc = 
+            [[FileViewController alloc] initWithNibName:nil bundle:nil];
+        delegate.fileViewController = psc;
+        [psc release];
+    }
+    
+    delegate.fileViewController.file = file;
+    [self switchTo:delegate.fileViewController];
 }
 
 #pragma mark -

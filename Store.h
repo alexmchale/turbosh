@@ -27,6 +27,7 @@
 + (NSNumber *) projectFileNumber:(Project *)project filename:(NSString *)filename;
 + (ProjectFile *) projectFile:(Project *)project filename:(NSString *)filename;
 + (ProjectFile *) projectFile:(Project *)project atOffset:(NSInteger)offset;
++ (NSString *) fileContent:(ProjectFile *)file;
 + (void) storeLocal:(ProjectFile *)file content:(NSData *)content;
 + (void) storeRemote:(ProjectFile *)file content:(NSData *)content;
 
@@ -36,6 +37,7 @@
 + (NSString *) stringValue:(NSString *)key;
 + (NSInteger) intValue:(NSString *)key;
 
++ (NSString *) scalar:(NSString *)col onTable:(NSString *)tab where:(NSString *)where offset:(NSInteger)offset orderBy:(NSString *)order;
 + (NSInteger) scalarInt:(NSString *)col onTable:(NSString *)tab;
 + (NSInteger) scalarInt:(NSString *)col onTable:(NSString *)tab offset:(NSInteger)offset orderBy:(NSString *)order;
 + (NSInteger) scalarInt:(NSString *)col

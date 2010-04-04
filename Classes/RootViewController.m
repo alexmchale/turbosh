@@ -122,13 +122,14 @@ typedef enum {
     
     Project *p;
     SwiftCodeAppDelegate *d = [[UIApplication sharedApplication] delegate];
-    FileViewController *fvc;
     
     switch (indexPath.section) {
         case MST_FILES:
-            fvc = [[[FileViewController alloc] initWithNibName:nil bundle:nil] autorelease];
-            [detailViewController switchTo:fvc];
-            break;
+        {
+            Project *p = [Store currentProject];
+            ProjectFile *f = [Store projectFile:p atOffset:indexPath.row];
+            [SwiftCodeAppDelegate editFile:f];
+        }   break;
             
         case MST_TASKS:
             break;

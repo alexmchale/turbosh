@@ -53,7 +53,11 @@
 }
 
 - (NSString *)content {
-    return @"";
+    return [Store fileContent:self];
+}
+
+- (NSString *)contentType {
+    return @"ruby";
 }
 
 - (void) setContent:(NSString *)content {

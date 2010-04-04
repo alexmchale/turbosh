@@ -22,16 +22,13 @@
     NSURL *htmlURL = [NSURL fileURLWithPath:[bundle pathForResource:@"editor" ofType:@"html" inDirectory:NO]];
     NSString *html = [[[NSString alloc] initWithContentsOfURL:htmlURL] autorelease];
 
-    NSString *t = @"html";
-    NSString *c = [Utils getUrl:htmlURL];
+    NSString *t = [file contentType];
+    NSString *c = [file content];
 
     c = [c stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
     c = [c stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
     html = [html stringByReplacingOccurrencesOfString:@"___LANGUAGE___" withString:t];
     html = [html stringByReplacingOccurrencesOfString:@"___CONTENT___" withString:c];
-
-    // ___LANGUAGE___
-    // ___CONTENT___
 
     [webView loadHTMLString:html baseURL:baseURL];
 
@@ -74,6 +71,8 @@
 
 - (void)dealloc {
     [super dealloc];
+    [webView release];
+    [file release];
 }
 
 #pragma mark Toolbar Management

@@ -3,7 +3,9 @@
 @class RootViewController;
 @class DetailViewController;
 @class ProjectSettingsController;
+@class FileViewController;
 @class Project;
+@class ProjectFile;
 
 @interface SwiftCodeAppDelegate : NSObject <UIApplicationDelegate>
 {
@@ -16,7 +18,7 @@
     DetailViewController *detailViewController;
     
     ProjectSettingsController *projectSettingsController;
-    
+    FileViewController *fileViewController;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
@@ -26,8 +28,10 @@
 @property (nonatomic, retain) IBOutlet DetailViewController *detailViewController;
 
 @property (nonatomic, retain) ProjectSettingsController *projectSettingsController;
+@property (nonatomic, retain) FileViewController *fileViewController;
 
 + (void) switchTo:(UIViewController *)controller;
 + (void) editProject:(Project *)project;
++ (void) editFile:(ProjectFile *)file;
 
 @end

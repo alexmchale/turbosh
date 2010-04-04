@@ -345,6 +345,14 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     assert(sqlite3_finalize(stmt) == SQLITE_OK);
 }
 
++ (NSString *) fileContent:(ProjectFile *)file
+{
+    assert(file.num != nil);
+    NSInteger num = [file.num intValue];
+    NSString *fileid = [NSString stringWithFormat:@"id=%d", num];
+    return [self scalar:@"content" onTable:@"files" where:fileid offset:0 orderBy:@"id"];
+}
+
 + (NSNumber *) projectFileNumber:(Project *)project
                         filename:(NSString *)filename
 {

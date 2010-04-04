@@ -21,6 +21,7 @@
 - (ProjectFile *)initByNumber:(NSNumber *)number;
 - (id) initByProject:(Project *)myProject filename:(NSString *)myFilename;
 - (NSString *)content;
+- (NSString *)contentType;
 - (NSString *)fullpath;
 - (NSString *)escapedPath;
 - (NSString *)condensedPath;
