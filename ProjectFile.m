@@ -24,11 +24,14 @@
     return self;
 }
 
-- (NSString *) escapedPath {
+- (NSString *) fullpath {
     NSString *root = project.sshPath;
-    NSString *path = [NSString stringWithFormat:@"%@/%@", root, filename];
-    
-    return [path stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+    assert(root);
+    return [NSString stringWithFormat:@"%@/%@", root, filename];
+}
+
+- (NSString *) escapedPath {
+    return [[self fullpath] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
 }
 
 - (NSString *)content {

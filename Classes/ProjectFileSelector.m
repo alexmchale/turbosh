@@ -3,11 +3,17 @@
 @implementation ProjectFileSelector
 
 @synthesize myTableView, project, allFiles, syncFiles, removedFiles;
+@synthesize myToolbar, savedToolbarItems;
 @synthesize cancelButton, spacer, saveButton;
 
 #pragma mark Button Actions
 
 - (void) saveAction {
+    MBProgressHUD *hud = [[[MBProgressHUD alloc] initWithView:self.view] autorelease];
+    hud.labelText = @"Downloading Files";
+    [self.view addSubview:hud];
+    [hud show:YES];
+    
     for (NSString *filename in syncFiles) {
         ProjectFile *file = [Store projectFile:project filename:filename];
         
@@ -25,10 +31,32 @@
         }
     }
     
+    Shell *s = [[Shell alloc] initWithProject:project];
+    assert([s connect]);
+    for (NSString *filename in syncFiles) {
+        ProjectFile *file = [Store projectFile:project filename:filename];
+        assert(file);
+        NSString *md5 = [s remoteMd5:file];
+        assert(md5);
+        if (![md5 isEqual:[file remoteMd5]]) {
+            NSData *data = [s downloadFile:[file fullpath]];
+            [Store storeRemote:file content:data];
+        }
+    }
+    [s disconnect];
+    [s release];
+    
+    [hud hide:YES];
+    [hud removeFromSuperview];
+    
+    [myToolbar setItems:savedToolbarItems];
+    
     [SwiftCodeAppDelegate editProject:project];
 }
 
 - (void) cancelAction {
+    [myToolbar setItems:savedToolbarItems];
+    
     [SwiftCodeAppDelegate editProject:project];
 }
 
@@ -224,6 +252,8 @@
     self.cancelButton = nil;
     self.spacer = nil;
     self.saveButton = nil;
+    self.myToolbar = nil;
+    self.savedToolbarItems = nil;
 }
 
 - (void)dealloc {
@@ -236,6 +266,8 @@
     [cancelButton release];
     [spacer release];
     [saveButton release];
+    [myToolbar release];
+    [savedToolbarItems release];
 }
 
 #pragma mark Alert View Delegate
@@ -248,6 +280,9 @@
 #pragma mark Toolbar Management
 
 - (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
+    self.myToolbar = toolbar;
+    self.savedToolbarItems = [toolbar items];
+    
     cancelButton =
         [[UIBarButtonItem alloc]
          initWithBarButtonSystemItem:UIBarButtonSystemItemCancel

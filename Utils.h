@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-NSString *md5(NSString *str);
+NSString *hex_md5(NSData *str);
 
 @interface Utils : NSObject 
 {

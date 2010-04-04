@@ -4,6 +4,8 @@
     <ContentPaneDelegate, UIAlertViewDelegate>
 {
     UITableView *myTableView;
+    UIToolbar *myToolbar;
+    NSArray *savedToolbarItems;
     
     Project *project;
     
@@ -17,6 +19,8 @@
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
+@property (nonatomic, retain) UIToolbar *myToolbar;
+@property (nonatomic, retain) NSArray *savedToolbarItems;
 @property (nonatomic, retain) Project *project;
 @property (nonatomic, retain) NSArray *allFiles;
 @property (nonatomic, retain) NSMutableArray *syncFiles;

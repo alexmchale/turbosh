@@ -61,6 +61,10 @@ sqlite3 *db;
 
 #pragma mark SQLite Utils
 
+static void bind_prepare(sqlite3_stmt **stmt, const char *sql) {
+    assert(sqlite3_prepare_v2(db, sql, -1, stmt, NULL) == SQLITE_OK);
+}
+
 static NSString *get_string(sqlite3_stmt *stmt, int column) {
     char *cString = (char *)sqlite3_column_text(stmt, column);
 
@@ -78,7 +82,7 @@ static NSNumber *get_integer(sqlite3_stmt *stmt, int column) {
         return nil;
 }
 
-static void bind_string(sqlite3_stmt *stmt, int column, NSString *s, bool allowNull) {
+static void bind_string(sqlite3_stmt *stmt, int column, const NSString *s, bool allowNull) {
     assert(allowNull || s);
 
     if (s != nil)
@@ -92,6 +96,15 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
 
     if (n != nil)
         assert(sqlite3_bind_int(stmt, column, [n intValue]) == SQLITE_OK);
+    else
+        assert(sqlite3_bind_null(stmt, column) == SQLITE_OK);
+}
+
+static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull) {
+    assert(allowNull || d);
+    
+    if (d != nil)
+        assert(sqlite3_bind_blob(stmt, column, [d bytes], [d length], SQLITE_TRANSIENT) == SQLITE_OK);
     else
         assert(sqlite3_bind_null(stmt, column) == SQLITE_OK);
 }
@@ -213,7 +226,11 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
 #pragma mark ProjectFile
 
 + (NSInteger) fileCount:(Project *)project {
-    return 0;
+    assert(project != nil);
+    if (project.num == nil) return 0;
+    
+    NSString *idcl = [NSString stringWithFormat:@"project_id=%d", [project.num intValue]];
+    return [self scalarInt:@"COUNT(id)" onTable:@"files" where:idcl offset:0];
 }
 
 + (NSArray *) filenames:(Project *)project {
@@ -301,10 +318,31 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
 
 + (void) storeLocal:(ProjectFile *)file content:(NSData *)content
 {
+    const NSString *md5 = hex_md5(content);
+    
+    sqlite3_stmt *stmt;
+    const char *sql = "UPDATE FILES SET local_md5=?, content=? WHERE id=?";
+    bind_prepare(&stmt, sql);
+    bind_string(stmt, 1, md5, false);
+    bind_data(stmt, 2, content, false);
+    bind_integer(stmt, 3, file.num, false);
+    assert(sqlite3_step(stmt) == SQLITE_DONE);
+    assert(sqlite3_finalize(stmt) == SQLITE_OK);
 }
 
 + (void) storeRemote:(ProjectFile *)file content:(NSData *)content
 {
+    const NSString *md5 = hex_md5(content);
+    
+    sqlite3_stmt *stmt;
+    const char *sql = "UPDATE FILES SET local_md5=?, remote_md5=?, content=? WHERE id=?";
+    bind_prepare(&stmt, sql);
+    bind_string(stmt, 1, md5, false);
+    bind_string(stmt, 2, md5, false);
+    bind_data(stmt, 3, content, false);
+    bind_integer(stmt, 4, file.num, false);
+    assert(sqlite3_step(stmt) == SQLITE_DONE);
+    assert(sqlite3_finalize(stmt) == SQLITE_OK);
 }
 
 + (NSNumber *) projectFileNumber:(Project *)project

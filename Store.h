@@ -26,6 +26,8 @@
 + (void) storeProjectFile:(ProjectFile *)file;
 + (NSNumber *) projectFileNumber:(Project *)project filename:(NSString *)filename;
 + (ProjectFile *) projectFile:(Project *)project filename:(NSString *)filename;
++ (void) storeLocal:(ProjectFile *)file content:(NSData *)content;
++ (void) storeRemote:(ProjectFile *)file content:(NSData *)content;
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key;
 + (void) setIntValue:(NSInteger)value forKey:(NSString *)key;
@@ -35,5 +37,9 @@
 
 + (NSInteger) scalarInt:(NSString *)col onTable:(NSString *)tab;
 + (NSInteger) scalarInt:(NSString *)col onTable:(NSString *)tab offset:(NSInteger)offset;
++ (NSInteger) scalarInt:(NSString *)col
+                onTable:(NSString *)tab
+                  where:(NSString *)where
+                 offset:(NSInteger)offset;
 
 @end

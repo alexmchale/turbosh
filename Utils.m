@@ -2,11 +2,12 @@
 
 @implementation Utils
 
-NSString *md5(NSString *str) {
-	const char *cStr = [str UTF8String];    
+NSString *hex_md5(NSData *nsData) {
 	unsigned char result[CC_MD5_DIGEST_LENGTH];
+    const char *cData = [nsData bytes];
+    const int cDataLen = [nsData length];
     
-	CC_MD5(cStr, strlen(cStr), result);
+	CC_MD5(cData, cDataLen, result);
     
 	return [NSString 
 			stringWithFormat: @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
