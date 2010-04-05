@@ -9,7 +9,7 @@
 #pragma mark Button Actions
 
 - (void) saveAction {
-    ProjectFile *file = [ProjectFile alloc];
+    ProjectFile *file = [[ProjectFile alloc] init];
     
     MBProgressHUD *hud = [[[MBProgressHUD alloc] initWithView:self.view] autorelease];
     hud.labelText = @"Downloading Files";
@@ -17,20 +17,20 @@
     [hud show:YES];
     
     for (NSString *filename in syncFiles) {
-        [file initByProject:project filename:filename];
+        [file loadByProject:project filename:filename];
         
         if (file.num == nil) [Store storeProjectFile:file];
     }
     
     for (NSString *filename in removedFiles) {
-        [file initByProject:project filename:filename];
+        [file loadByProject:project filename:filename];
         [Store deleteProjectFile:file];
     }
     
     Shell *s = [[Shell alloc] initWithProject:project];
     assert([s connect]);
     for (NSString *filename in syncFiles) {
-        [file initByProject:project filename:filename];
+        [file loadByProject:project filename:filename];
         assert(file.num != nil);
         NSString *md5 = [s remoteMd5:file];        
         assert(md5);

@@ -97,7 +97,7 @@ typedef enum {
     switch (indexPath.section) {
         case MST_FILES:
             [project loadCurrent];
-            [file initByNumber:[Store projectFile:project atOffset:indexPath.row]];
+            [file loadByNumber:[Store projectFile:project atOffset:indexPath.row]];
             cell.textLabel.text = [file condensedPath];
             break;
             

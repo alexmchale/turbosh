@@ -6,10 +6,10 @@
 @synthesize project;
 @synthesize filename, localMd5, remoteMd5;
 
-#pragma mark Initializers
+#pragma mark Data Loaders
 
-- (id) initByNumber:(NSNumber *)number {
-    assert(self = [self init]);
+- (id) loadByNumber:(NSNumber *)number 
+{
     assert(number != nil);
     
     self.num = number;
@@ -17,13 +17,14 @@
     self.filename = nil;
     self.localMd5 = nil;
     self.remoteMd5 = nil;
+    
     [Store loadProjectFile:self];
     
     return self;
 }
 
-- (id) initByProject:(Project *)myProject filename:(NSString *)myFilename {
-    assert(self = [self init]);
+- (id) loadByProject:(Project *)myProject filename:(NSString *)myFilename
+{
     assert(myProject != nil);
     assert(myProject.num != nil);
     assert(myFilename != nil);
@@ -39,6 +40,34 @@
     assert([filename isEqual:myFilename]);
     
     return self;
+}
+
+#pragma mark Memory Management
+
+- (id) init
+{
+    assert(self = [super init]);
+    
+    num = nil;
+    project = nil;
+    filename = nil;
+    localMd5 = nil;
+    remoteMd5 = nil;
+    
+    return self;
+}
+
+- (void) dealloc
+{
+    [super dealloc];
+    
+    [num release];
+    [project release];
+    [filename release];
+    [localMd5 release];
+    [remoteMd5 release];
+    
+    num = nil;
 }
 
 #pragma mark Path Accessors
@@ -99,19 +128,6 @@
 }
 
 - (void) setContent:(NSString *)content {
-}
-
-#pragma mark Memory
-
-- (void) dealloc
-{
-    [super dealloc];
-    
-    [num release];
-    [project release];
-    [filename release];
-    [localMd5 release];
-    [remoteMd5 release];
 }
 
 @end

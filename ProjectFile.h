@@ -18,8 +18,8 @@
 @property (nonatomic, retain) NSString *remoteMd5;
 @property (nonatomic, retain) NSString *localMd5;
 
-- (id) initByNumber:(NSNumber *)number;
-- (id) initByProject:(Project *)myProject filename:(NSString *)myFilename;
+- (id) loadByNumber:(NSNumber *)number;
+- (id) loadByProject:(Project *)myProject filename:(NSString *)myFilename;
 
 - (NSString *)content;
 - (NSString *)contentType;
