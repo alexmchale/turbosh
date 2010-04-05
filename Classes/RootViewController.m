@@ -74,7 +74,7 @@ typedef enum {
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case MST_FILES:     return [Store fileCount:[Store currentProject]];
+        case MST_FILES:     return [Store fileCountForCurrentProject];
         case MST_TASKS:     return 0;
         case MST_PROJECTS:  return [Store projectCount];
         default:            return 0;
@@ -84,7 +84,8 @@ typedef enum {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"MenuCellIdentifier";
-    id item;
+    Project *project = [Project alloc];
+    ProjectFile *file = [ProjectFile alloc];
     
     // Dequeue or create a cell of the appropriate type.
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -95,20 +96,22 @@ typedef enum {
     
     switch (indexPath.section) {
         case MST_FILES:
-            item = [Store projectFile:[Store currentProject] atOffset:indexPath.row];
-            assert(item != nil);
-            cell.textLabel.text = [item condensedPath];
+            [project initCurrent];
+            [file initByNumber:[Store projectFile:project atOffset:indexPath.row]];
+            cell.textLabel.text = [file condensedPath];
             break;
             
         case MST_TASKS:
             break;
             
         case MST_PROJECTS:
-            item = [Store projectAtOffset:indexPath.row];
-            assert(item != nil);
-            cell.textLabel.text = [item name];
+            [project initByOffset:indexPath.row];
+            cell.textLabel.text = project.name;
             break;
     }
+
+    [file release];
+    [project release];
     
     return cell;
 
@@ -119,33 +122,39 @@ typedef enum {
 
 - (void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    Project *p;
     SwiftCodeAppDelegate *d = [[UIApplication sharedApplication] delegate];
     
     switch (indexPath.section) {
         case MST_FILES:
         {
-            Project *p = [Store currentProject];
-            ProjectFile *f = [Store projectFile:p atOffset:indexPath.row];
+            Project *p = [[Project alloc] initCurrent];
+            ProjectFile *f = [[ProjectFile alloc] init];
+            f.num = [Store projectFile:p atOffset:indexPath.row];
+            assert([Store loadProjectFile:f]);
             [SwiftCodeAppDelegate editFile:f];
+            [f release];
+            [p release];
         }   break;
             
         case MST_TASKS:
             break;
             
         case MST_PROJECTS:
-            p = [Store projectAtOffset:indexPath.row];
+        {
+            Project *p = [[Project alloc] init];
+            p.num = [Store projectNumAtOffset:indexPath.row];
+            assert([Store loadProject:p]);            
             [Store setCurrentProject:p];
             d.projectSettingsController.proj = p;
+            [p release];
+            
             [detailViewController switchTo:d.projectSettingsController];
-            break;
+        }   break;
             
         default: assert(false);
     }
     
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
-
 }
 
 

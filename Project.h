@@ -22,4 +22,7 @@
 @property (nonatomic, retain) NSString *sshPass;
 @property (nonatomic, retain) NSString *sshPath;
 
+- (id) initCurrent;
+- (id) initByOffset:(NSInteger)offset;
+
 @end

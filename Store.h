@@ -13,20 +13,19 @@
 
 + (BOOL) loadProject:(Project *)project;
 + (void) storeProject:(Project *)project;
-+ (Project *) currentProject;
++ (NSInteger) currentProjectNum;
 + (void) setCurrentProject:(Project *)project;
-+ (Project *) findProjectByNum:(NSInteger)num;
 + (NSInteger) projectCount;
-+ (Project *) projectAtOffset:(NSInteger)offset;
++ (NSNumber *) projectNumAtOffset:(NSInteger)offset;
 
++ (NSNumber *) projectFile:(Project *)project atOffset:(NSInteger)offset;
++ (NSInteger) fileCountForCurrentProject;
 + (NSInteger) fileCount:(Project *)project;
 + (NSArray *) filenames:(Project *)project;
 + (void) deleteProjectFile:(ProjectFile *)file;
 + (BOOL) loadProjectFile:(ProjectFile *)file;
 + (void) storeProjectFile:(ProjectFile *)file;
 + (NSNumber *) projectFileNumber:(Project *)project filename:(NSString *)filename;
-+ (ProjectFile *) projectFile:(Project *)project filename:(NSString *)filename;
-+ (ProjectFile *) projectFile:(Project *)project atOffset:(NSInteger)offset;
 + (NSString *) fileContent:(ProjectFile *)file;
 + (void) storeLocal:(ProjectFile *)file content:(NSData *)content;
 + (void) storeRemote:(ProjectFile *)file content:(NSData *)content;

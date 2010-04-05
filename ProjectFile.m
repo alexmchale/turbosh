@@ -6,23 +6,39 @@
 @synthesize project;
 @synthesize filename, localMd5, remoteMd5;
 
+#pragma mark Initializers
+
 - (id) initByNumber:(NSNumber *)number {
     assert(number != nil);
     
     self.num = number;
+    self.project = nil;
+    self.filename = nil;
+    self.localMd5 = nil;
+    self.remoteMd5 = nil;
     [Store loadProjectFile:self];
     
     return self;
 }
 
 - (id) initByProject:(Project *)myProject filename:(NSString *)myFilename {
-    self.num = [Store projectFileNumber:myProject filename:myFilename];
+    assert(myProject != nil);
+    assert(myProject.num != nil);
+    assert(myFilename != nil);
     
+    self.num = [Store projectFileNumber:myProject filename:myFilename];
     self.project = myProject;
     self.filename = myFilename;
+    self.localMd5 = nil;
+    self.remoteMd5 = nil;
+    [Store loadProjectFile:self];
+    
+    assert([filename isEqual:myFilename]);
     
     return self;
 }
+
+#pragma mark Path Accessors
 
 - (NSString *) condensedPath {
     assert(filename != nil);
@@ -52,16 +68,37 @@
     return [[self fullpath] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
 }
 
-- (NSString *)content {
+#pragma mark Content
+
+- (NSString *) content {
     return [Store fileContent:self];
 }
 
-- (NSString *)contentType {
-    return @"ruby";
+- (NSString *) contentType {
+    NSDictionary *types = [NSDictionary dictionaryWithObjectsAndKeys:
+        @"ruby", @"rb",
+        @"javascript", @"js",
+        nil
+    ];
+
+    NSString *ext = [self extension];
+    NSString *type = [types objectForKey:ext];
+    
+    return type ? type : ext;
+}
+
+- (NSString *) extension {
+    NSArray *segments = [filename componentsSeparatedByString:@"."];
+    
+    if (!segments || [segments count] < 2) return @"";
+
+    return [segments lastObject];
 }
 
 - (void) setContent:(NSString *)content {
 }
+
+#pragma mark Memory
 
 - (void) dealloc
 {

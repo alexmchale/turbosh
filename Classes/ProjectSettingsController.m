@@ -106,7 +106,7 @@
 	int yOffset = 10;
 	int height = cell.frame.size.height - (2 * yOffset);
 	
-	UILabel *label = [[[UILabel alloc] init] autorelease];
+	UILabel *label = [[UILabel alloc] init];
 	label.text = name;
 	label.frame = CGRectMake(10, yOffset, 90, height);
 	label.font = [UIFont boldSystemFontOfSize:14.0];
@@ -119,6 +119,8 @@
 	
 	[cell.contentView addSubview:label];
 	[cell.contentView addSubview:field];
+    
+    [label release];
 	
 	return cell;
 }
@@ -247,7 +249,7 @@
 
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {
-	NSNumberFormatter *nf = [[[NSNumberFormatter alloc] init] autorelease];
+	NSNumberFormatter *nf = [[NSNumberFormatter alloc] init];
 	
 	if (textField == projectName) proj.name = textField.text;
 	
@@ -256,6 +258,8 @@
 	if (textField == sshUser) proj.sshUser = textField.text;
 	if (textField == sshPass) proj.sshPass = textField.text;
 	if (textField == sshPath) proj.sshPath = textField.text;
+    
+    [nf release];
 	
 	[Store storeProject:proj];
 }
@@ -276,17 +280,6 @@
 #pragma mark Toolbar Management
 
 - (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
-//    UIBarItem *spacer = [[[UIBarButtonItem alloc]
-//                          initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-//                          target:nil action:nil] autorelease];
-//    UIBarItem *save = [[[UIBarButtonItem alloc]
-//                        initWithBarButtonSystemItem:UIBarButtonSystemItemSave
-//                        target:self action:@selector(saveProject)] autorelease];
-//    
-//    NSMutableArray *items = [[[toolbar items] mutableCopy] autorelease];
-//    [items addObject:spacer];
-//    [items addObject:save];
-//    [toolbar setItems:items animated:YES];
 }
 
 @end

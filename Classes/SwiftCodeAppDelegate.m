@@ -25,7 +25,9 @@
         [psc release];
     }
     
+    delegate.rootViewController.title = project.name;
     delegate.projectSettingsController.proj = project;
+    
     [self switchTo:delegate.projectSettingsController];
 }
 
@@ -58,7 +60,9 @@
     [window makeKeyAndVisible];
 
     // Select that last used project and update the DVC to show it.
-    [SwiftCodeAppDelegate editProject:[Store currentProject]];
+    Project *currentProject = [[Project alloc] initCurrent];
+    [SwiftCodeAppDelegate editProject:currentProject];
+    [currentProject release];
 
     return YES;
 

@@ -9,35 +9,32 @@
 #pragma mark Button Actions
 
 - (void) saveAction {
+    ProjectFile *file = [ProjectFile alloc];
+    
     MBProgressHUD *hud = [[[MBProgressHUD alloc] initWithView:self.view] autorelease];
     hud.labelText = @"Downloading Files";
     [self.view addSubview:hud];
     [hud show:YES];
     
     for (NSString *filename in syncFiles) {
-        ProjectFile *file = [Store projectFile:project filename:filename];
+        [file initByProject:project filename:filename];
         
-        if (file == nil) {
-            file = [[[ProjectFile alloc] initByProject:project filename:filename] autorelease];
-            [Store storeProjectFile:file];
-        }
+        if (file.num == nil) [Store storeProjectFile:file];
     }
     
     for (NSString *filename in removedFiles) {
-        ProjectFile *file = [Store projectFile:project filename:filename];
-
-        if (file != nil) {
-            [Store deleteProjectFile:file];
-        }
+        [file initByProject:project filename:filename];
+        [Store deleteProjectFile:file];
     }
     
     Shell *s = [[Shell alloc] initWithProject:project];
     assert([s connect]);
     for (NSString *filename in syncFiles) {
-        ProjectFile *file = [Store projectFile:project filename:filename];
-        assert(file);
-        NSString *md5 = [s remoteMd5:file];
+        [file initByProject:project filename:filename];
+        assert(file.num != nil);
+        NSString *md5 = [s remoteMd5:file];        
         assert(md5);
+        
         if (![md5 isEqual:[file remoteMd5]]) {
             NSData *data = [s downloadFile:[file fullpath]];
             [Store storeRemote:file content:data];
@@ -48,6 +45,8 @@
     
     [hud hide:YES];
     [hud removeFromSuperview];
+    
+    [file release];
     
     [myToolbar setItems:savedToolbarItems];
     
@@ -179,48 +178,6 @@
     return cell;
 }
 
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-
-#pragma mark -
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

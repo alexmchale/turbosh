@@ -18,12 +18,14 @@
 @property (nonatomic, retain) NSString *remoteMd5;
 @property (nonatomic, retain) NSString *localMd5;
 
-- (ProjectFile *)initByNumber:(NSNumber *)number;
+- (id) initByNumber:(NSNumber *)number;
 - (id) initByProject:(Project *)myProject filename:(NSString *)myFilename;
+
 - (NSString *)content;
 - (NSString *)contentType;
 - (NSString *)fullpath;
 - (NSString *)escapedPath;
 - (NSString *)condensedPath;
+- (NSString *)extension;
 
 @end
