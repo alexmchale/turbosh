@@ -13,7 +13,7 @@
 
 + (BOOL) loadProject:(Project *)project;
 + (void) storeProject:(Project *)project;
-+ (NSInteger) currentProjectNum;
++ (NSNumber *) currentProjectNum;
 + (void) setCurrentProject:(Project *)project;
 + (NSInteger) projectCount;
 + (NSNumber *) projectNumAtOffset:(NSInteger)offset;

@@ -176,11 +176,11 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     project.num = [NSNumber numberWithInt:sqlite3_last_insert_rowid(db)];
 }
 
-+ (NSInteger) currentProjectNum
++ (NSNumber *) currentProjectNum
 {
     NSInteger num = [self intValue:@"current.project"];
     
-    if (num > 0) return num;
+    if (num > 0) return [NSNumber numberWithInt:num];
     
     // No project is marked as current.  Create a new one.
     
@@ -189,10 +189,10 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     [self storeProject:proj];
     [self setCurrentProject:proj];
     assert(proj.num != nil);
-    num = [proj.num integerValue];
+    NSNumber *number = [NSNumber numberWithInt:[proj.num intValue]];
     [proj release];
 
-    return num;
+    return number;
 }
 
 + (void) setCurrentProject:(Project *)project {
@@ -226,7 +226,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 }
 
 + (NSInteger) fileCountForCurrentProject {
-    Project *proj = [[Project alloc] initCurrent];
+    Project *proj = [[[Project alloc] init] loadCurrent];
     NSInteger count = [self fileCount:proj];
     [proj release];
     

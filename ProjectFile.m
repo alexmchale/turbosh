@@ -9,6 +9,7 @@
 #pragma mark Initializers
 
 - (id) initByNumber:(NSNumber *)number {
+    assert(self = [self init]);
     assert(number != nil);
     
     self.num = number;
@@ -22,6 +23,7 @@
 }
 
 - (id) initByProject:(Project *)myProject filename:(NSString *)myFilename {
+    assert(self = [self init]);
     assert(myProject != nil);
     assert(myProject.num != nil);
     assert(myFilename != nil);
@@ -31,7 +33,8 @@
     self.filename = myFilename;
     self.localMd5 = nil;
     self.remoteMd5 = nil;
-    [Store loadProjectFile:self];
+    
+    if (self.num) [Store loadProjectFile:self];
     
     assert([filename isEqual:myFilename]);
     

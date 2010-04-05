@@ -5,24 +5,35 @@
 @synthesize num, name;
 @synthesize sshHost, sshPort, sshUser, sshPass, sshPath;
 
-#pragma mark Memory
+#pragma mark Data Loaders
 
-- (id) initCurrent {
-    if (self = [self init]) {
-        self.num = [NSNumber numberWithInt:[Store currentProjectNum]];
-
-        assert([Store loadProject:self]);
-    }
+- (id) loadCurrent {
+    self.num = [Store currentProjectNum];
+    assert([Store loadProject:self]);
     
     return self;
 }
 
-- (id) initByOffset:(NSInteger)offset {
-    if (self = [self init]) {
-        self.num = [Store projectNumAtOffset:offset];
-        
-        assert([Store loadProject:self]);
-    }
+- (id) loadByOffset:(NSInteger)offset {
+    self.num = [Store projectNumAtOffset:offset];
+    assert([Store loadProject:self]);
+    
+    return self;
+}
+
+#pragma mark Memory Management
+
+- (id) init
+{
+    assert(self = [super init]);
+    
+    num = nil;
+    name = nil;
+    sshHost = nil;
+    sshPort = nil;
+    sshUser = nil;
+    sshPass = nil;
+    sshPath = nil;
     
     return self;
 }

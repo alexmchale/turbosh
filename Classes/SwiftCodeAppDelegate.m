@@ -60,7 +60,7 @@
     [window makeKeyAndVisible];
 
     // Select that last used project and update the DVC to show it.
-    Project *currentProject = [[Project alloc] initCurrent];
+    Project *currentProject = [[[Project alloc] init] loadCurrent];
     [SwiftCodeAppDelegate editProject:currentProject];
     [currentProject release];
 

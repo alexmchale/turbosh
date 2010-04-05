@@ -84,8 +84,8 @@ typedef enum {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"MenuCellIdentifier";
-    Project *project = [Project alloc];
-    ProjectFile *file = [ProjectFile alloc];
+    Project *project = [[Project alloc] init];
+    ProjectFile *file = [[ProjectFile alloc] init];
     
     // Dequeue or create a cell of the appropriate type.
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -96,7 +96,7 @@ typedef enum {
     
     switch (indexPath.section) {
         case MST_FILES:
-            [project initCurrent];
+            [project loadCurrent];
             [file initByNumber:[Store projectFile:project atOffset:indexPath.row]];
             cell.textLabel.text = [file condensedPath];
             break;
@@ -105,7 +105,7 @@ typedef enum {
             break;
             
         case MST_PROJECTS:
-            [project initByOffset:indexPath.row];
+            [project loadByOffset:indexPath.row];
             cell.textLabel.text = project.name;
             break;
     }
@@ -127,7 +127,7 @@ typedef enum {
     switch (indexPath.section) {
         case MST_FILES:
         {
-            Project *p = [[Project alloc] initCurrent];
+            Project *p = [[[Project alloc] init] loadCurrent];
             ProjectFile *f = [[ProjectFile alloc] init];
             f.num = [Store projectFile:p atOffset:indexPath.row];
             assert([Store loadProjectFile:f]);
