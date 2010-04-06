@@ -41,8 +41,9 @@
         delegate.fileViewController = psc;
         [psc release];
     }
-    
+
     delegate.fileViewController.file = file;
+    
     [self switchTo:delegate.fileViewController];
 }
 

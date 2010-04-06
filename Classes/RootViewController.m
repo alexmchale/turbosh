@@ -97,7 +97,7 @@ typedef enum {
     switch (indexPath.section) {
         case MST_FILES:
             [project loadCurrent];
-            [file loadByNumber:[Store projectFile:project atOffset:indexPath.row]];
+            [file loadByNumber:[Store projectFileNumber:project atOffset:indexPath.row]];
             cell.textLabel.text = [file condensedPath];
             break;
             
@@ -129,7 +129,7 @@ typedef enum {
         {
             Project *p = [[[Project alloc] init] loadCurrent];
             ProjectFile *f = [[ProjectFile alloc] init];
-            f.num = [Store projectFile:p atOffset:indexPath.row];
+            f.num = [Store projectFileNumber:p atOffset:indexPath.row];
             f.project = p;
             assert([Store loadProjectFile:f]);
             [SwiftCodeAppDelegate editFile:f];

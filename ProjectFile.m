@@ -46,6 +46,8 @@
 
 - (id) init
 {
+    NSLog(@"init file %p", self);
+    
     assert(self = [super init]);
     
     num = nil;
@@ -59,7 +61,7 @@
 
 - (void) dealloc
 {
-    [super dealloc];
+    NSLog(@"dealloc file %p with project %p", self, project);
     
     [num release];
     [project release];
@@ -67,7 +69,17 @@
     [localMd5 release];
     [remoteMd5 release];
     
-    num = nil;
+    [super dealloc];
+}
+
+-(oneway void)release {
+    NSLog(@"Releasing %p, next count = %d", self, [self retainCount]-1);
+    [super release];
+}
+
+-(id)retain {
+    NSLog(@"Retaining %p, next count = %d", self, [self retainCount]+1);
+    return [super retain];
 }
 
 #pragma mark Path Accessors
@@ -125,9 +137,6 @@
     if (!segments || [segments count] < 2) return @"";
 
     return [segments lastObject];
-}
-
-- (void) setContent:(NSString *)content {
 }
 
 @end

@@ -19,31 +19,31 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    NSBundle *bundle = [NSBundle mainBundle];
-    NSURL *baseURL = [NSURL fileURLWithPath:[bundle resourcePath]];
-    NSURL *htmlURL = [NSURL fileURLWithPath:[bundle pathForResource:@"editor" ofType:@"html" inDirectory:NO]];
-    NSString *html = [[[NSString alloc] initWithContentsOfURL:htmlURL] autorelease];
-
-    NSString *t = [file contentType];
-    NSString *c = [file content];
-
-    c = [c stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
-    c = [c stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
-    html = [html stringByReplacingOccurrencesOfString:@"___LANGUAGE___" withString:t];
-    html = [html stringByReplacingOccurrencesOfString:@"___CONTENT___" withString:c];
-
-    [webView loadHTMLString:html baseURL:baseURL];
-
     self.navigationItem.rightBarButtonItem =
-    [[[UIBarButtonItem alloc]
-      initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
-      target:self
-      action:@selector(editDocument:)] autorelease];
+        [[[UIBarButtonItem alloc]
+          initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
+          target:self
+          action:@selector(editDocument:)] autorelease];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSURL *baseURL = [NSURL fileURLWithPath:[bundle resourcePath]];
+    NSURL *htmlURL = [NSURL fileURLWithPath:[bundle pathForResource:@"editor" ofType:@"html" inDirectory:NO]];
+    NSString *html = [[[NSString alloc] initWithContentsOfURL:htmlURL] autorelease];
+    
+    NSString *t = [file contentType];
+    NSString *c = [file content];
+    
+    c = [c stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
+    c = [c stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
+    html = [html stringByReplacingOccurrencesOfString:@"___LANGUAGE___" withString:t];
+    html = [html stringByReplacingOccurrencesOfString:@"___CONTENT___" withString:c];
+    
+    [webView loadHTMLString:html baseURL:baseURL];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -87,10 +87,11 @@
                           initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
                           target:self action:@selector(startEdit)] autorelease];
 
-    NSMutableArray *items = [[[toolbar items] mutableCopy] autorelease];
+    NSMutableArray *items = [[toolbar items] mutableCopy];
     [items addObject:spacer];
     [items addObject:edit];
     [toolbar setItems:items animated:YES];
+    [items release];
 }
 
 #pragma mark File Editor Interface

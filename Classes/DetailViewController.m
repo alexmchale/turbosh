@@ -7,8 +7,6 @@
 @property (nonatomic, retain) UIPopoverController *popoverController;
 @end
 
-
-
 @implementation DetailViewController
 
 @synthesize toolbar, popoverController;

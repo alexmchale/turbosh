@@ -293,11 +293,16 @@ static bool excluded_filename(NSString *filename) {
     NSString *md5Cmd = [NSString stringWithFormat:@"md5 %@ || md5sum %@", [file escapedPath], [file escapedPath]];
     NSMutableData *md5CmdResult = [NSMutableData data];
     bool md5Success = [self dispatchCommand:md5Cmd storeAt:md5CmdResult];
-    
+        
     if (!md5Success) return nil;
     if ([md5CmdResult length] < 32) return nil;
     
-    NSString *md5String = [NSString stringWithCString:[md5CmdResult bytes] length:[md5CmdResult length]];
+    char *cString = malloc([md5CmdResult length] + 1);
+    memcpy(cString, [md5CmdResult bytes], [md5CmdResult length]);
+    cString[[md5CmdResult length]] = '\0';
+    NSString *md5String = [NSString stringWithUTF8String:cString];
+    free(cString);
+    
     NSString *md5Regex = @"[0-9a-fA-F]{32}";
     NSString *md5Match = [md5String stringByMatching:md5Regex];
     

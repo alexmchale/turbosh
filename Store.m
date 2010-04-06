@@ -244,10 +244,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     assert(sqlite3_bind_int(stmt, 1, [project.num intValue]) == SQLITE_OK);
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        const char *cFilename = (char *)sqlite3_column_text(stmt, 0);
-        assert(cFilename != NULL);
-        NSString *filename = [NSString stringWithUTF8String:cFilename];
-        [filenames addObject:filename];
+        [filenames addObject:get_string(stmt, 0)];
     }
     
     assert(sqlite3_finalize(stmt) == SQLITE_OK);
@@ -288,9 +285,9 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
                 assert([Store loadProject:project]);
                 file.project = project;
                 [project release];
-            } else {
-                assert([file.project.num isEqualToNumber:loadedProjectId]);
             }
+            
+            assert([file.project.num isEqualToNumber:loadedProjectId]);
             
             file.filename = get_string(t, 1);
             file.remoteMd5 = get_string(t, 2);
@@ -375,23 +372,24 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     assert(sqlite3_bind_text(stmt, 2, [filename UTF8String], -1, SQLITE_TRANSIENT) == SQLITE_OK);
     
     if (sqlite3_step(stmt) == SQLITE_ROW)
-        num = [NSNumber numberWithInt:sqlite3_column_int(stmt, 0)];
+        num = get_integer(stmt, 0);
     
     assert(sqlite3_finalize(stmt) == SQLITE_OK);
     
     return num;
 }
 
-+ (NSNumber *) projectFile:(Project *)project atOffset:(NSInteger)offset
++ (NSNumber *) projectFileNumber:(Project *)project atOffset:(NSInteger)offset
 {
     assert(project != nil);
     assert(project.num != nil);
     
     NSString *wherecl = [NSString stringWithFormat:@"project_id=%d", [project.num intValue]];
     NSInteger idint = [self scalarInt:@"id" onTable:@"files" where:wherecl offset:offset orderBy:@"path"];
-    NSNumber *num = [NSNumber numberWithInt:idint];
-
-    return num;
+    
+    assert(idint > 0);
+    
+    return [NSNumber numberWithInt:idint];
 }
 
 #pragma mark Key-Value
@@ -412,7 +410,6 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 }
 
 + (NSString *) stringValue:(NSString *)key {
-    char *cValue = NULL;
     NSString *value = nil;
 
     sqlite3_stmt *selStmt;
@@ -422,9 +419,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 
     switch(sqlite3_step(selStmt)) {
     case SQLITE_ROW:
-        cValue = (char *)sqlite3_column_text(selStmt, 0);
-        if (cValue != NULL)
-            value = [NSString stringWithUTF8String:cValue];
+        value = get_string(selStmt, 0);
         break;
 
     case SQLITE_DONE:
@@ -462,7 +457,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     assert(sqlite3_prepare_v2(db, [s UTF8String], -1, &t, NULL) == SQLITE_OK);
 
     if (sqlite3_step(t) == SQLITE_ROW)
-        v = [NSString stringWithUTF8String:(char *)sqlite3_column_text(t, 0)];
+        v = get_string(t, 0);
 
     assert(sqlite3_finalize(t) == SQLITE_OK);
 

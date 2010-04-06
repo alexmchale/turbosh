@@ -25,6 +25,8 @@
 
 - (id) init
 {
+    NSLog(@"init project %p", self);
+    
     assert(self = [super init]);
     
     num = nil;
@@ -39,7 +41,7 @@
 }
 
 - (void) dealloc {
-    [super dealloc];
+    NSLog(@"dealloc project %p", self);
     
     [num release];
     [name release];
@@ -48,6 +50,17 @@
     [sshUser release];
     [sshPass release];
     [sshPath release];
+    
+    [super dealloc];
+}
+
+-(oneway void)release {
+    NSLog(@"Releasing %p, next count = %d", self, [self retainCount]-1);
+    [super release];
+}
+-(id)retain {
+    NSLog(@"Retaining %p, next count = %d", self, [self retainCount]+1);
+    return [super retain];
 }
 
 @end
