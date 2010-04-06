@@ -91,7 +91,12 @@
 
 - (void)dealloc {
     [splitViewController release];
+    [rootViewController release];
+    [detailViewController release];
+    [projectSettingsController release];
+    [fileViewController release];
     [window release];
+    
     [super dealloc];
 }
 

@@ -177,6 +177,7 @@ typedef enum {
 
 - (void)dealloc {
     [detailViewController release];
+    
     [super dealloc];
 }
 

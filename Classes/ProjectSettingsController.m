@@ -61,6 +61,15 @@
 }
 
 - (void)dealloc {
+    [myTableView release];
+    [proj release];
+    [projectName release];
+    [sshHost release];
+    [sshPort release];
+    [sshUser release];
+    [sshPass release];
+    [sshPath release];
+    
     [super dealloc];
 }
 

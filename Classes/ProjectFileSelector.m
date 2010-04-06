@@ -214,7 +214,6 @@
 }
 
 - (void)dealloc {
-    [super dealloc];
     [myTableView release];
     [project release];
     [allFiles release];
@@ -225,6 +224,8 @@
     [saveButton release];
     [myToolbar release];
     [savedToolbarItems release];
+
+    [super dealloc];
 }
 
 #pragma mark Alert View Delegate

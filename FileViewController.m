@@ -72,9 +72,10 @@
 }
 
 - (void)dealloc {
-    [super dealloc];
     [webView release];
     [file release];
+    
+    [super dealloc];
 }
 
 #pragma mark Toolbar Management

@@ -215,6 +215,7 @@
 	[minShowTimer release];
 	[showStarted release];
 	[customView release];
+    
     [super dealloc];
 }
 

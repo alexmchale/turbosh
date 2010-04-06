@@ -113,6 +113,7 @@
     [popoverController release];
     [toolbar release];
     [currentController release];
+    
     [super dealloc];
 }
 
