@@ -130,6 +130,7 @@ typedef enum {
             Project *p = [[[Project alloc] init] loadCurrent];
             ProjectFile *f = [[ProjectFile alloc] init];
             f.num = [Store projectFile:p atOffset:indexPath.row];
+            f.project = p;
             assert([Store loadProjectFile:f]);
             [SwiftCodeAppDelegate editFile:f];
             [f release];
