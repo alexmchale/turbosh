@@ -97,7 +97,18 @@
 
 #pragma mark File Editor Interface
 
-- (void) startEdit {
+- (void) startEdit
+{
+    NSString *r = [webView stringByEvaluatingJavaScriptFromString:@"getCurrentScrollPosition()"];
+    NSInteger y = [r integerValue];
+    
+    FileEditController *fec = [[FileEditController alloc] init];
+    
+    fec.text = file.content;
+    fec.startingRect = CGRectMake(0, y, webView.frame.size.width, webView.frame.size.height);
+    [SwiftCodeAppDelegate switchTo:fec];
+    
+    [fec release];
 }
 
 @end

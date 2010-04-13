@@ -27,5 +27,6 @@
     #import "FileViewController.h"
     #import "ProjectSettingsController.h"
     #import "ProjectFileSelector.h"
+    #import "FileEditController.h"
 
 #endif

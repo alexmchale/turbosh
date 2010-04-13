@@ -42,9 +42,16 @@
         [psc release];
     }
 
-    delegate.fileViewController.file = file;
+    if (file) delegate.fileViewController.file = file;
     
     [self switchTo:delegate.fileViewController];
+}
+
++ (ProjectFile *) currentFile
+{
+    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    
+    return [delegate.fileViewController file];
 }
 
 #pragma mark -
