@@ -217,6 +217,21 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 
 #pragma mark ProjectFile
 
++ (NSNumber *) currentFileNum
+{
+    NSInteger num = [self intValue:@"current.file"];
+    
+    return (num > 0) ? [NSNumber numberWithInt:num] : nil;
+}
+
++ (void) setCurrentFile:(ProjectFile *)file
+{
+    if (file != nil)
+        [self setIntValue:[file.num intValue] forKey:@"current.file"];
+    else
+        [self setIntValue:0 forKey:@"current.file"];
+}
+
 + (NSInteger) fileCount:(Project *)project {
     assert(project != nil);
     if (project.num == nil) return 0;

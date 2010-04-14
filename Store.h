@@ -18,6 +18,8 @@
 + (NSInteger) projectCount;
 + (NSNumber *) projectNumAtOffset:(NSInteger)offset;
 
++ (NSNumber *) currentFileNum;
++ (void) setCurrentFile:(ProjectFile *)file;
 + (NSNumber *) projectFileNumber:(Project *)project atOffset:(NSInteger)offset;
 + (NSInteger) fileCountForCurrentProject;
 + (NSInteger) fileCount:(Project *)project;

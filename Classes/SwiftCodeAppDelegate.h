@@ -33,5 +33,6 @@
 + (void) switchTo:(UIViewController *)controller;
 + (void) editProject:(Project *)project;
 + (void) editFile:(ProjectFile *)file;
++ (void) editCurrentFile;
 
 @end

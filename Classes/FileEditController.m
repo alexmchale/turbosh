@@ -11,13 +11,23 @@
 - (void) cancelAction
 {
     [myToolbar setItems:savedToolbarItems];
+    [SwiftCodeAppDelegate editCurrentFile];
 }
 
 - (void) saveAction
 {
     self.text = textView.text;
     
+    NSData *content = [text dataUsingEncoding:NSASCIIStringEncoding];
+    
+    ProjectFile *file = [[ProjectFile alloc] init];
+    file.num = [Store currentFileNum];
+    [Store loadProjectFile:file];
+    [Store storeLocal:file content:content];    
+    [file release];
+    
     [myToolbar setItems:savedToolbarItems];
+    [SwiftCodeAppDelegate editCurrentFile];
 }
 
 #pragma mark View Events

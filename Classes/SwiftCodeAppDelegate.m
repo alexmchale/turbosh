@@ -42,9 +42,21 @@
         [psc release];
     }
 
-    if (file) delegate.fileViewController.file = file;
+    if (file != nil) {
+        delegate.fileViewController.file = file;
+        [Store setCurrentFile:file];
+    }
     
     [self switchTo:delegate.fileViewController];
+}
+
++ (void) editCurrentFile
+{
+    ProjectFile *file = [[ProjectFile alloc] init];
+    file.num = [Store currentFileNum];
+    [Store loadProjectFile:file];
+    [self editFile:file];
+    [file release];
 }
 
 + (ProjectFile *) currentFile
