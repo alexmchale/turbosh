@@ -11,6 +11,7 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1D6F1C3B1163F72E0000B47D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */; };
+		1DB6EDA711766EAF00FFC659 /* Synchronizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DB6EDA611766EAF00FFC659 /* Synchronizer.m */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2804200B108E984D000629CD /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28042008108E984D000629CD /* RootViewController.m */; };
 		2804200C108E984D000629CD /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2804200A108E984D000629CD /* DetailViewController.m */; };
@@ -173,6 +174,8 @@
 		1D6058910D05DD3D006BFB54 /* SwiftCode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftCode.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D6F1C391163F72D0000B47D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		1DB6EDA511766EAF00FFC659 /* Synchronizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Synchronizer.h; sourceTree = "<group>"; };
+		1DB6EDA611766EAF00FFC659 /* Synchronizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Synchronizer.m; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28042007108E984D000629CD /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		28042008108E984D000629CD /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
@@ -390,6 +393,8 @@
 				74B36FA3115B2B2A00E3B2D1 /* ProjectFile.m */,
 				74B3720F115DCF8500E3B2D1 /* Store.h */,
 				74B37210115DCF8500E3B2D1 /* Store.m */,
+				1DB6EDA511766EAF00FFC659 /* Synchronizer.h */,
+				1DB6EDA611766EAF00FFC659 /* Synchronizer.m */,
 			);
 			name = Storehouse;
 			sourceTree = "<group>";
@@ -841,6 +846,7 @@
 				74610D8911642BB000CF7B04 /* ProjectFileSelector.m in Sources */,
 				74D740211166E28C0010A592 /* RegexKitLite.m in Sources */,
 				74A5ACE711709E05006A48A3 /* FileEditController.m in Sources */,
+				1DB6EDA711766EAF00FFC659 /* Synchronizer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

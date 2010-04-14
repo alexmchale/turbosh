@@ -83,6 +83,10 @@
     Project *currentProject = [[[Project alloc] init] loadCurrent];
     [SwiftCodeAppDelegate editProject:currentProject];
     [currentProject release];
+    
+    // Start the file synchronizer.
+    Synchronizer *sync = [[Synchronizer alloc] init];                                                    
+    [sync release];
 
     return YES;
 

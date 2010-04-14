@@ -22,6 +22,7 @@
     #import "Store.h"
     #import "Project.h"
     #import "ProjectFile.h"
+    #import "Synchronizer.h"
 
     #import "DetailViewController.h"
     #import "FileViewController.h"
