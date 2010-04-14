@@ -283,9 +283,49 @@ static bool excluded_filename(NSString *filename) {
     return data;
 }
 
-+ (BOOL) retrieveFile:(ProjectFile *)file
+- (bool) uploadFile:(ProjectFile *)file
 {
-    return false;
+    LIBSSH2_CHANNEL *channel;
+    const char *filePath = [[file fullpath] UTF8String];
+    const NSData *contentData = [[file content] dataUsingEncoding:NSASCIIStringEncoding];
+    const char *content = [contentData bytes];
+    const int length = [contentData length];
+    int sent = 0;
+    
+    fprintf(stderr, "uploading: %s\n", filePath);
+    
+    libssh2_session_set_blocking(session, 1);
+    
+    if (!(channel = libssh2_scp_send(session, filePath, 0777, length))) {
+        char *errmsg;
+        int errlen;
+        int err = libssh2_session_last_error(session, &errmsg, &errlen, 0);
+        
+        fprintf(stderr, "Unable to open a session: (%d) %s\n", err, errmsg);
+        return false;
+    }
+
+    while (sent < length) {
+        int packetSize = libssh2_channel_write(channel, &content[sent], 4096);
+        
+        if (packetSize < 0) {
+            fprintf(stderr, "error sending %s: %d\n", filePath, packetSize);
+            return false;
+        }
+        
+        sent += packetSize;
+    }
+    
+    libssh2_channel_send_eof(channel);
+    libssh2_channel_wait_eof(channel);
+    libssh2_channel_wait_closed(channel);
+    
+    libssh2_channel_free(channel);
+    channel = NULL;
+    
+    fprintf(stderr, "sent %s with %d bytes\n", filePath, length);
+    
+    return true;
 }
 
 - (NSString *) remoteMd5:(ProjectFile *)file

@@ -39,6 +39,7 @@ typedef enum {
 
 - (bool) dispatchCommand:(NSString *)command storeAt:(NSMutableData *)output;
 - (NSData *) downloadFile:(NSString *)filePath;
+- (bool) uploadFile:(ProjectFile *)file;
 
 - (NSString *) escapedPath;
 
