@@ -85,7 +85,8 @@
     [currentProject release];
     
     // Start the file synchronizer.
-    Synchronizer *sync = [[Synchronizer alloc] init];                                                    
+    Synchronizer *sync = [[Synchronizer alloc] init];
+    [[NSRunLoop mainRunLoop] addTimer:sync.timer forMode:NSDefaultRunLoopMode];
     [sync release];
 
     return YES;
