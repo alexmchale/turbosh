@@ -39,7 +39,7 @@ sqlite3 *db;
                    "ssh_path TEXT"
                    ")";
         assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
-        
+
         tableSql = "CREATE TABLE files ("
                    "id INTEGER NOT NULL PRIMARY KEY ON CONFLICT REPLACE AUTOINCREMENT, "
                    "project_id INTEGER NOT NULL, "
@@ -102,7 +102,7 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
 
 static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull) {
     assert(allowNull || d);
-    
+
     if (d != nil)
         assert(sqlite3_bind_blob(stmt, column, [d bytes], [d length], SQLITE_TRANSIENT) == SQLITE_OK);
     else
@@ -179,11 +179,11 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 + (NSNumber *) currentProjectNum
 {
     NSInteger num = [self intValue:@"current.project"];
-    
+
     if (num > 0) return [NSNumber numberWithInt:num];
-    
+
     // No project is marked as current.  Create a new one.
-    
+
     Project *proj = [[Project alloc] init];
     proj.name = @"My Project";
     [self storeProject:proj];
@@ -209,9 +209,9 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 + (NSNumber *) projectNumAtOffset:(NSInteger)offset
 {
     NSInteger num = [self scalarInt:@"id" onTable:@"projects" offset:offset orderBy:@"name"];
-    
+
     if (num == 0) return nil;
-    
+
     return [NSNumber numberWithInt:num];
 }
 
@@ -220,7 +220,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 + (NSNumber *) currentFileNum
 {
     NSInteger num = [self intValue:@"current.file"];
-    
+
     return (num > 0) ? [NSNumber numberWithInt:num] : nil;
 }
 
@@ -235,7 +235,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 + (NSInteger) fileCount:(Project *)project {
     assert(project != nil);
     if (project.num == nil) return 0;
-    
+
     NSString *idcl = [NSString stringWithFormat:@"project_id=%d", [project.num intValue]];
     return [self scalarInt:@"COUNT(id)" onTable:@"files" where:idcl offset:0 orderBy:@"id"];
 }
@@ -244,15 +244,15 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     Project *proj = [[[Project alloc] init] loadCurrent];
     NSInteger count = [self fileCount:proj];
     [proj release];
-    
+
     return count;
 }
 
 + (NSArray *) filenames:(Project *)project {
     NSMutableArray *filenames = [NSMutableArray array];
-    
+
     assert(project.num != nil);
-    
+
     sqlite3_stmt *stmt;
     const char *sql = "SELECT path FROM files WHERE project_id=?";
     assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
@@ -261,9 +261,9 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         [filenames addObject:get_string(stmt, 0)];
     }
-    
+
     assert(sqlite3_finalize(stmt) == SQLITE_OK);
-    
+
     return filenames;
 }
 
@@ -277,56 +277,56 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 
 + (BOOL) loadProjectFile:(ProjectFile *)file {
     assert(file.num != nil);
-    
+
     const char *s = "SELECT project_id, path, remote_md5, local_md5 "
                     "FROM files "
                     "WHERE id=?";
-    
+
     BOOL found = FALSE;
     sqlite3_stmt *t;
     assert(sqlite3_prepare_v2(db, s, -1, &t, NULL) == SQLITE_OK);
     assert(sqlite3_bind_int(t, 1, [file.num intValue]) == SQLITE_OK);
-    
+
     switch (sqlite3_step(t)) {
         case SQLITE_ROW:
         {
             NSNumber *loadedProjectId = get_integer(t, 0);
-            
+
             if (file.project == nil) {
                 assert(loadedProjectId != nil);
-                
+
                 Project *project = [[Project alloc] init];
                 project.num = loadedProjectId;
                 assert([Store loadProject:project]);
                 file.project = project;
                 [project release];
             }
-            
+
             assert([file.project.num isEqualToNumber:loadedProjectId]);
-            
+
             file.filename = get_string(t, 1);
             file.remoteMd5 = get_string(t, 2);
             file.localMd5 = get_string(t, 3);
-            
+
             found = TRUE;
         }   break;
-            
+
         case SQLITE_DONE:
             found = FALSE;
             break;
-            
+
         default:
             assert(1 != 1);
     }
-    
+
     assert(sqlite3_finalize(t) == SQLITE_OK);
-    
+
     return found;
 }
 
 + (void) storeProjectFile:(ProjectFile *)file {
     assert(file.project != nil);
-    
+
     sqlite3_stmt *stmt;
     const char *sql = "INSERT INTO files (id, project_id, path) VALUES (?, ?, ?)";
     assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
@@ -340,7 +340,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 + (void) storeLocal:(ProjectFile *)file content:(NSData *)content
 {
     const NSString *md5 = hex_md5(content);
-    
+
     sqlite3_stmt *stmt;
     const char *sql = "UPDATE FILES SET local_md5=?, content=? WHERE id=?";
     bind_prepare(&stmt, sql);
@@ -354,7 +354,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 + (void) storeRemote:(ProjectFile *)file content:(NSData *)content
 {
     const NSString *md5 = hex_md5(content);
-    
+
     sqlite3_stmt *stmt;
     const char *sql = "UPDATE FILES SET local_md5=?, remote_md5=?, content=? WHERE id=?";
     bind_prepare(&stmt, sql);
@@ -378,19 +378,19 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
                         filename:(NSString *)filename
 {
     assert(project.num != nil);
-    
+
     NSNumber *num = nil;
     sqlite3_stmt *stmt;
     const char *sql = "SELECT id FROM files WHERE project_id=? AND path=?";
     assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
     assert(sqlite3_bind_int(stmt, 1, [project.num intValue]) == SQLITE_OK);
     assert(sqlite3_bind_text(stmt, 2, [filename UTF8String], -1, SQLITE_TRANSIENT) == SQLITE_OK);
-    
+
     if (sqlite3_step(stmt) == SQLITE_ROW)
         num = get_integer(stmt, 0);
-    
+
     assert(sqlite3_finalize(stmt) == SQLITE_OK);
-    
+
     return num;
 }
 
@@ -398,12 +398,12 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 {
     assert(project != nil);
     assert(project.num != nil);
-    
+
     NSString *wherecl = [NSString stringWithFormat:@"project_id=%d", [project.num intValue]];
     NSInteger idint = [self scalarInt:@"id" onTable:@"files" where:wherecl offset:offset orderBy:@"path"];
-    
+
     assert(idint > 0);
-    
+
     return [NSNumber numberWithInt:idint];
 }
 

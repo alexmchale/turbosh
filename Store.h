@@ -4,7 +4,7 @@
 @class Project;
 @class ProjectFile;
 
-@interface Store : NSObject 
+@interface Store : NSObject
 {
 }
 

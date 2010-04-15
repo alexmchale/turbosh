@@ -10,14 +10,14 @@ typedef enum {
 @class Project;
 @class ProjectFile;
 
-@interface Shell : NSObject 
+@interface Shell : NSObject
 {
 	Project *project;
-    
+
     bool running;
     NSMutableArray *queue;
     int failures;
-    
+
     NSTimer *timer;
     int sock;
     LIBSSH2_SESSION *session;

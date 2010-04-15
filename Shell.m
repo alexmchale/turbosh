@@ -48,7 +48,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 - (bool) connect {
     struct sockaddr_in sin;
     int rc;
-    
+
     if (!project || !project.sshHost || !project.sshPort ||
         !project.sshUser || !project.sshPass || !project.sshPath) {
         return false;
@@ -83,7 +83,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     while ((rc = libssh2_session_startup(session, sock)) == LIBSSH2_ERROR_EAGAIN)
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
         //continue;
-    
+
     if (rc) {
         fprintf(stderr, "Failure establishing SSH session: %d\n", rc);
         return nil;
@@ -92,7 +92,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     // Authenticate using the configured password.
 	const char *user = [project.sshUser UTF8String];
 	const char *pass = [project.sshPass UTF8String];
-    while ((rc = libssh2_userauth_password(session, user, pass)) == LIBSSH2_ERROR_EAGAIN)        
+    while ((rc = libssh2_userauth_password(session, user, pass)) == LIBSSH2_ERROR_EAGAIN)
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
         //continue;
     if (rc) {
@@ -140,7 +140,7 @@ static bool excluded_filename(NSString *filename) {
     NSString *testCmd = [NSString stringWithFormat:@"test -d %@", [self escapedPath]];
     NSString *findCmd = [NSString stringWithFormat:@"find %@ -type %c -print0", [self escapedPath], type];
     NSString *cmd = [NSString stringWithFormat:@"%@ && %@", testCmd, findCmd];
-    
+
     fprintf(stderr, "find cmd: %s\n", [cmd UTF8String]);
 
     if ([self dispatchCommand:findCmd storeAt:data]) {
@@ -152,9 +152,9 @@ static bool excluded_filename(NSString *filename) {
             NSString *file = [NSString stringWithUTF8String:&bytes[offset]];
             int pathLength = [project.sshPath length] + 1;
             file = [file substringFromIndex:pathLength];
-            
+
             if (!excluded_filename(file)) [files addObject:file];
-            
+
             offset += pathLength + [file length] + 1;
         }
     }
@@ -175,7 +175,7 @@ static bool excluded_filename(NSString *filename) {
     LIBSSH2_CHANNEL *channel;
     int bytecount = 0;
     int rc;
-	
+
     /* Exec non-blocking on the remove host */
     while((channel = libssh2_channel_open_session(session)) == NULL &&
           libssh2_session_last_error(session,NULL,NULL,0) == LIBSSH2_ERROR_EAGAIN) {
@@ -244,11 +244,11 @@ static bool excluded_filename(NSString *filename) {
     NSInteger downloaded = 0;
     NSMutableData *data = [NSMutableData data];
     int rc;
-    
+
     fprintf(stderr, "downloading: %s\n", [filePath UTF8String]);
-    
+
     libssh2_session_set_blocking(session, 1);
-    
+
     if (!(channel = libssh2_scp_recv(session, [filePath UTF8String], &fileinfo))) {
         char *errMsg;
         int errLen;
@@ -256,16 +256,16 @@ static bool excluded_filename(NSString *filename) {
         fprintf(stderr, "unable to open a session: %s\n", errMsg);
         return nil;
     }
-    
+
     while (downloaded < fileinfo.st_size) {
         char mem[1024];
         int packetSize = sizeof(mem);
         int remaining = fileinfo.st_size - downloaded;
-        
+
         if (remaining < packetSize) packetSize = remaining;
-        
+
         rc = libssh2_channel_read(channel, mem, packetSize);
-        
+
         if (rc >= 0) {
             [data appendBytes:mem length:rc];
             downloaded += rc;
@@ -274,12 +274,12 @@ static bool excluded_filename(NSString *filename) {
             break;
         }
     }
-    
+
     fprintf(stderr, "downloaded %d bytes with %d in data\n", downloaded, [data length]);
-    
+
     libssh2_channel_free(channel);
     channel = NULL;
-    
+
     return data;
 }
 
@@ -291,40 +291,40 @@ static bool excluded_filename(NSString *filename) {
     const char *content = [contentData bytes];
     const int length = [contentData length];
     int sent = 0;
-    
+
     fprintf(stderr, "uploading: %s\n", filePath);
-    
+
     libssh2_session_set_blocking(session, 1);
-    
+
     if (!(channel = libssh2_scp_send(session, filePath, 0777, length))) {
         char *errmsg;
         int errlen;
         int err = libssh2_session_last_error(session, &errmsg, &errlen, 0);
-        
+
         fprintf(stderr, "Unable to open a session: (%d) %s\n", err, errmsg);
         return false;
     }
 
     while (sent < length) {
         int packetSize = libssh2_channel_write(channel, &content[sent], 4096);
-        
+
         if (packetSize < 0) {
             fprintf(stderr, "error sending %s: %d\n", filePath, packetSize);
             return false;
         }
-        
+
         sent += packetSize;
     }
-    
+
     libssh2_channel_send_eof(channel);
     libssh2_channel_wait_eof(channel);
     libssh2_channel_wait_closed(channel);
-    
+
     libssh2_channel_free(channel);
     channel = NULL;
-    
+
     fprintf(stderr, "sent %s with %d bytes\n", filePath, length);
-    
+
     return true;
 }
 
@@ -333,19 +333,19 @@ static bool excluded_filename(NSString *filename) {
     NSString *md5Cmd = [NSString stringWithFormat:@"md5 %@ || md5sum %@", [file escapedPath], [file escapedPath]];
     NSMutableData *md5CmdResult = [NSMutableData data];
     bool md5Success = [self dispatchCommand:md5Cmd storeAt:md5CmdResult];
-        
+
     if (!md5Success) return nil;
     if ([md5CmdResult length] < 32) return nil;
-    
+
     char *cString = malloc([md5CmdResult length] + 1);
     memcpy(cString, [md5CmdResult bytes], [md5CmdResult length]);
     cString[[md5CmdResult length]] = '\0';
     NSString *md5String = [NSString stringWithUTF8String:cString];
     free(cString);
-    
+
     NSString *md5Regex = @"[0-9a-fA-F]{32}";
     NSString *md5Match = [md5String stringByMatching:md5Regex];
-    
+
     return md5Match;
 }
 
@@ -355,14 +355,14 @@ static bool excluded_filename(NSString *filename) {
 {
     Shell *s = [[Shell alloc] initWithProject:p];
     NSArray *f = nil;
-    
+
     if ([s connect]) {
         f = [s files];
         [s disconnect];
     }
-    
+
     [s release];
-    
+
     return f;
 }
 
