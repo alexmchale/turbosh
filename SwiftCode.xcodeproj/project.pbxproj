@@ -12,6 +12,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1D6F1C3B1163F72E0000B47D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */; };
 		1DB6EDA711766EAF00FFC659 /* Synchronizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DB6EDA611766EAF00FFC659 /* Synchronizer.m */; };
+		1DF12F9411789A18008927B0 /* CommandDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF12F9311789A18008927B0 /* CommandDispatcher.m */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2804200B108E984D000629CD /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28042008108E984D000629CD /* RootViewController.m */; };
 		2804200C108E984D000629CD /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2804200A108E984D000629CD /* DetailViewController.m */; };
@@ -176,6 +177,8 @@
 		1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		1DB6EDA511766EAF00FFC659 /* Synchronizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Synchronizer.h; sourceTree = "<group>"; };
 		1DB6EDA611766EAF00FFC659 /* Synchronizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Synchronizer.m; sourceTree = "<group>"; };
+		1DF12F9211789A18008927B0 /* CommandDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandDispatcher.h; sourceTree = "<group>"; };
+		1DF12F9311789A18008927B0 /* CommandDispatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandDispatcher.m; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28042007108E984D000629CD /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		28042008108E984D000629CD /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
@@ -516,6 +519,8 @@
 			children = (
 				74AE612C1160399C006CA577 /* Shell.h */,
 				74AE612D1160399C006CA577 /* Shell.m */,
+				1DF12F9211789A18008927B0 /* CommandDispatcher.h */,
+				1DF12F9311789A18008927B0 /* CommandDispatcher.m */,
 				747EB7F311613732002D8CD8 /* SSH */,
 				747EC12C11614E31002D8CD8 /* openssl.xcodeproj */,
 			);
@@ -847,6 +852,7 @@
 				74D740211166E28C0010A592 /* RegexKitLite.m in Sources */,
 				74A5ACE711709E05006A48A3 /* FileEditController.m in Sources */,
 				1DB6EDA711766EAF00FFC659 /* Synchronizer.m in Sources */,
+				1DF12F9411789A18008927B0 /* CommandDispatcher.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
