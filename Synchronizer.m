@@ -34,16 +34,18 @@
 {
     struct sockaddr_in sin;
 
+    // Verify that the current project has a server configured.
     if (!project || !project.sshHost || !project.sshPort ||
-            !project.sshUser || !project.sshPass || !project.sshPath) {
-        state = SS_DISCONNECT;
+            !project.sshUser || !project.sshPass || !project.sshPath ||
+            [project.sshHost length] == 0) {
+        state = SS_SELECT_PROJECT;
         return;
     }
 
     // Create the new socket.
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         fprintf(stderr, "failed to create socket %d\n", errno);
-        state = SS_DISCONNECT;
+        state = SS_SELECT_PROJECT;
         return;
     }
 
@@ -59,7 +61,11 @@
         return;
     }
 
-    state = SS_SELECT_FILE;
+    state = SS_ESTABLISH_SSH;
+}
+
+- (void) establishSsh
+{
 }
 
 - (void) selectFile
@@ -110,9 +116,15 @@
 {
 }
 
+- (void) terminateSsh
+{
+}
+
 - (void) disconnect
 {
     close(sock);
+
+    state = SS_SELECT_PROJECT;
 }
 
 - (void) step
@@ -122,6 +134,7 @@
     switch (state) {
         case SS_SELECT_PROJECT:         return [self selectProject];
         case SS_CONNECT_TO_SERVER:      return [self connectToServer];
+        case SS_ESTABLISH_SSH:          return [self establishSsh];
         case SS_SELECT_FILE:            return [self selectFile];
         case SS_INITIATE_HASH:          return [self initiateHash];
         case SS_CONTINUE_HASH:          return [self continueHash];
@@ -133,6 +146,7 @@
         case SS_INITIATE_DOWNLOAD:      return [self initiateDownload];
         case SS_CONTINUE_DOWNLOAD:      return [self continueDownload];
         case SS_COMPLETE_DOWNLOAD:      return [self completeDownload];
+        case SS_TERMINATE_SSH:          return [self terminateSsh];
         case SS_DISCONNECT:             return [self disconnect];
     }
 }
