@@ -48,7 +48,7 @@ typedef enum {
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
         case MST_FILES:     return @"Files";
-        case MST_TASKS:     return @"Tasks";
+        case MST_TASKS:     return @""; //return @"Tasks";
         case MST_PROJECTS:  return @"Projects";
         default:            return @"";
     }
