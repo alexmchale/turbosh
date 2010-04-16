@@ -66,12 +66,43 @@
 
 - (void) establishSsh
 {
+    if (session == NULL) {
+        // Begin a new SSH session.
+
+        session = libssh2_session_init();
+
+        if (session == NULL) {
+            state = SS_DISCONNECT;
+            return;
+        }
+
+        // Configure LIBSSH2 for non-blocking communications.
+        libssh2_session_set_blocking(session, 0);
+    }
+
+    // Establish the SSH connection.
+    int rc = libssh2_session_startup(session, sock);
+
+    if (rc == LIBSSH2_ERROR_EAGAIN) return;
+
+    if (rc != 0) {
+        fprintf(stderr, "Failure establishing SSH session: %d\n", rc);
+        state = SS_TERMINATE_SSH;
+        return;
+    }
+
+    state = SS_AUTHENTICATE_SSH;
+}
+
+- (void) authenticateSsh
+{
+    state = SS_TERMINATE_SSH;
 }
 
 - (void) selectFile
 {
     if (file == nil) {
-        state = SS_DISCONNECT;
+        state = SS_TERMINATE_SSH;
         return;
     }
 }
@@ -118,11 +149,19 @@
 
 - (void) terminateSsh
 {
+    if (session != NULL) {
+        libssh2_session_disconnect(session, "Normal Shutdown, Thank you for playing");
+        libssh2_session_free(session);
+        session = NULL;
+    }
+
+    state = SS_DISCONNECT;
 }
 
 - (void) disconnect
 {
     close(sock);
+    sock = 0;
 
     state = SS_SELECT_PROJECT;
 }
@@ -135,6 +174,7 @@
         case SS_SELECT_PROJECT:         return [self selectProject];
         case SS_CONNECT_TO_SERVER:      return [self connectToServer];
         case SS_ESTABLISH_SSH:          return [self establishSsh];
+        case SS_AUTHENTICATE_SSH:       return [self authenticateSsh];
         case SS_SELECT_FILE:            return [self selectFile];
         case SS_INITIATE_HASH:          return [self initiateHash];
         case SS_CONTINUE_HASH:          return [self continueHash];
@@ -166,6 +206,9 @@
 
     project = nil;
     file = nil;
+
+    sock = 0;
+    session = NULL;
 
     return self;
 }

@@ -5,6 +5,7 @@ enum SyncState
     SS_SELECT_PROJECT,
     SS_CONNECT_TO_SERVER,
     SS_ESTABLISH_SSH,
+    SS_AUTHENTICATE_SSH,
     SS_SELECT_FILE,
     SS_INITIATE_HASH,
     SS_CONTINUE_HASH,
@@ -35,6 +36,7 @@ enum SyncState
     NSData *localContent;
 
     int sock;
+    LIBSSH2_SESSION *session;
 }
 
 @property (nonatomic, retain) NSTimer *timer;
