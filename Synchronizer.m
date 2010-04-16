@@ -96,7 +96,21 @@
 
 - (void) authenticateSsh
 {
-    state = SS_TERMINATE_SSH;
+    // Authenticate using the configured password.
+    const char *user = [project.sshUser UTF8String];
+    const char *pass = [project.sshPass UTF8String];
+
+    int rc = libssh2_userauth_password(session, user, pass);
+
+    if (rc == LIBSSH2_ERROR_EAGAIN) return;
+
+    if (rc != 0) {
+        fprintf(stderr, "Authentication by password failed.\n");
+        state = SS_TERMINATE_SSH;
+        return;
+    }
+
+    state = SS_SELECT_FILE;
 }
 
 - (void) selectFile
