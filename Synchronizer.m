@@ -1,5 +1,6 @@
 #import "Synchronizer.h"
 #import <libssh2.h>
+#import <arpa/inet.h>
 
 #define SYNCHRONIZE_DELAY_SECONDS 0.25
 
@@ -13,28 +14,60 @@
 - (void) selectProject
 {
     NSNumber *num = [Store projectNumAfterNum:project.num];
-    
+
     self.file = nil;
     self.project = nil;
-    
+
     if (num == nil) return;
-    
+
     self.project = [[Project alloc] init];
     [project release];
-    
+
     self.project.num = num;
-    
+
     assert([Store loadProject:project]);
-    
+
     state = SS_CONNECT_TO_SERVER;
 }
 
 - (void) connectToServer
 {
+    struct sockaddr_in sin;
+
+    if (!project || !project.sshHost || !project.sshPort ||
+            !project.sshUser || !project.sshPass || !project.sshPath) {
+        state = SS_DISCONNECT;
+        return;
+    }
+
+    // Create the new socket.
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+        fprintf(stderr, "failed to create socket %d\n", errno);
+        state = SS_DISCONNECT;
+        return;
+    }
+
+    // Set host parameters.
+    sin.sin_family = AF_INET;
+    sin.sin_port = htons([self.project.sshPort intValue]);
+    sin.sin_addr.s_addr = inet_addr([self.project.sshHost UTF8String]);
+
+    // Establish the TCP connection.
+    if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) != 0) {
+        fprintf(stderr, "failed to connect %d\n", errno);
+        state = SS_DISCONNECT;
+        return;
+    }
+
+    state = SS_SELECT_FILE;
 }
 
 - (void) selectFile
 {
+    if (file == nil) {
+        state = SS_DISCONNECT;
+        return;
+    }
 }
 
 - (void) initiateHash
@@ -77,10 +110,15 @@
 {
 }
 
+- (void) disconnect
+{
+    close(sock);
+}
+
 - (void) step
 {
     if (project == nil) state = SS_SELECT_PROJECT;
-    
+
     switch (state) {
         case SS_SELECT_PROJECT:         return [self selectProject];
         case SS_CONNECT_TO_SERVER:      return [self connectToServer];
@@ -95,6 +133,7 @@
         case SS_INITIATE_DOWNLOAD:      return [self initiateDownload];
         case SS_CONTINUE_DOWNLOAD:      return [self continueDownload];
         case SS_COMPLETE_DOWNLOAD:      return [self completeDownload];
+        case SS_DISCONNECT:             return [self disconnect];
     }
 }
 
@@ -110,10 +149,10 @@
                                   userInfo:nil
                                    repeats:YES];
     [timer retain];
-    
+
     project = nil;
     file = nil;
-    
+
     return self;
 }
 
@@ -122,7 +161,7 @@
     [timer release];
     [project release];
     [file release];
-    
+
     [super dealloc];
 }
 

@@ -22,16 +22,18 @@ enum SyncState
 @interface Synchronizer : NSObject
 {
     enum SyncState state;
-    
+
     NSTimer *timer;
-    
+
     Project *project;
     ProjectFile *file;
-    
+
     NSString *localHash;
     NSString *remoteHash;
-    
+
     NSData *localContent;
+
+    int sock;
 }
 
 @property (nonatomic, retain) NSTimer *timer;
