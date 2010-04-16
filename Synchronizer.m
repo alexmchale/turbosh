@@ -17,6 +17,7 @@
 
     self.file = nil;
     self.project = nil;
+    nextFileOffset = 0;
 
     if (num == nil) return;
 
@@ -115,14 +116,25 @@
 
 - (void) selectFile
 {
-    if (file == nil) {
+    self.file = [[ProjectFile alloc] init];
+    [file release];
+
+    self.file.num = [Store projectFileNumber:project atOffset:nextFileOffset];
+    self.file.project = project;
+
+    if (file.num == nil) {
         state = SS_TERMINATE_SSH;
         return;
     }
+
+    assert([Store loadProjectFile:file]);
+
+    state = SS_INITIATE_HASH;
 }
 
 - (void) initiateHash
 {
+    state = SS_TERMINATE_SSH;
 }
 
 - (void) continueHash

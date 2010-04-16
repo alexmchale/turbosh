@@ -29,6 +29,7 @@ enum SyncState
 
     Project *project;
     ProjectFile *file;
+    NSInteger nextFileOffset;
 
     NSString *localHash;
     NSString *remoteHash;
