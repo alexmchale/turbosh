@@ -1,7 +1,7 @@
 #import "Synchronizer.h"
+#import <libssh2.h>
 
 #define SYNCHRONIZE_DELAY_SECONDS 0.25
-
 
 @implementation Synchronizer
 
@@ -12,6 +12,21 @@
 
 - (void) selectProject
 {
+    NSNumber *num = [Store projectNumAfterNum:project.num];
+    
+    self.file = nil;
+    self.project = nil;
+    
+    if (num == nil) return;
+    
+    self.project = [[Project alloc] init];
+    [project release];
+    
+    self.project.num = num;
+    
+    assert([Store loadProject:project]);
+    
+    state = SS_CONNECT_TO_SERVER;
 }
 
 - (void) connectToServer

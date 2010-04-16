@@ -215,6 +215,14 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     return [NSNumber numberWithInt:num];
 }
 
++ (NSNumber *) projectNumAfterNum:(NSNumber *)num
+{
+    NSString *where = [NSString stringWithFormat:@"id>%d", [num intValue]];
+    NSInteger nextNum = [self scalarInt:@"id" onTable:@"projects" where:where offset:0 orderBy:@"id"];
+    
+    return (nextNum > 0) ? [NSNumber numberWithInt:nextNum] : nil;
+}
+
 #pragma mark ProjectFile
 
 + (NSNumber *) currentFileNum
