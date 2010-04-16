@@ -20,30 +20,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     self.clearsSelectionOnViewWillAppear = NO;
     self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
-}
 
-/*
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+    self.view.backgroundColor = [UIColor colorWithRed:0.90 green:0.90 blue:0.90 alpha:1.0];
 }
-*/
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
 
 // Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -55,7 +37,7 @@
 typedef enum {
     MST_FILES,
     MST_TASKS,
-    MST_PROJECTS,    
+    MST_PROJECTS,
     MST_COUNT
 } MenuSectionType;
 
@@ -82,28 +64,28 @@ typedef enum {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     static NSString *CellIdentifier = @"MenuCellIdentifier";
     Project *project = [[Project alloc] init];
     ProjectFile *file = [[ProjectFile alloc] init];
-    
+
     // Dequeue or create a cell of the appropriate type.
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
-    
+
     switch (indexPath.section) {
         case MST_FILES:
             [project loadCurrent];
             [file loadByNumber:[Store projectFileNumber:project atOffset:indexPath.row]];
             cell.textLabel.text = [file condensedPath];
             break;
-            
+
         case MST_TASKS:
             break;
-            
+
         case MST_PROJECTS:
             [project loadByOffset:indexPath.row];
             cell.textLabel.text = project.name;
@@ -112,7 +94,7 @@ typedef enum {
 
     [file release];
     [project release];
-    
+
     return cell;
 
 }
@@ -123,7 +105,7 @@ typedef enum {
 - (void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     SwiftCodeAppDelegate *d = [[UIApplication sharedApplication] delegate];
-    
+
     switch (indexPath.section) {
         case MST_FILES:
         {
@@ -136,25 +118,25 @@ typedef enum {
             [f release];
             [p release];
         }   break;
-            
+
         case MST_TASKS:
             break;
-            
+
         case MST_PROJECTS:
         {
             Project *p = [[Project alloc] init];
             p.num = [Store projectNumAtOffset:indexPath.row];
-            assert([Store loadProject:p]);            
+            assert([Store loadProject:p]);
             [Store setCurrentProject:p];
             d.projectSettingsController.proj = p;
             [p release];
-            
+
             [detailViewController switchTo:d.projectSettingsController];
         }   break;
-            
+
         default: assert(false);
     }
-    
+
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -165,7 +147,7 @@ typedef enum {
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
+
     // Relinquish ownership any cached data, images, etc. that aren't in use.
 }
 
@@ -177,7 +159,7 @@ typedef enum {
 
 - (void)dealloc {
     [detailViewController release];
-    
+
     [super dealloc];
 }
 
