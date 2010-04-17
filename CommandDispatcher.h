@@ -6,7 +6,7 @@
 {
     LIBSSH2_SESSION *session;
     LIBSSH2_CHANNEL *channel;
-    char *command;
+    NSString *command;
 
     int step;
     int exitCode;
@@ -15,7 +15,7 @@
     NSMutableData *stderrResponse;
 }
 
-- (id) initWithSession:(LIBSSH2_SESSION *)session command:(const char *)command;
+- (id) initWithSession:(LIBSSH2_SESSION *)session command:(NSString *)command;
 - (bool) step;
 - (int) exitCode;
 - (NSData *) stdoutResponse;

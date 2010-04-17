@@ -18,6 +18,7 @@
 
     #import "Utils.h"
     #import "Shell.h"
+    #import "CommandDispatcher.h"
 
     #import "Store.h"
     #import "Project.h"

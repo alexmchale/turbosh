@@ -16,18 +16,8 @@ sqlite3 *db;
     if (isNewDatabase) {
         char *tableSql;
 
-        tableSql = "CREATE TABLE idseq (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT)";
-        assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
-
         tableSql = "CREATE TABLE kv (k TEXT NOT NULL PRIMARY KEY ON CONFLICT REPLACE, v BLOB)";
         assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
-
-        /*
-        tableSql = "CREATE TABLE kvs (k TEXT NOT NULL, v BLOB)";
-        assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
-        tableSql = "CREATE UNIQUE INDEX kvs_idx (k, v)";
-        assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
-        */
 
         tableSql = "CREATE TABLE projects ("
                    "id INTEGER NOT NULL PRIMARY KEY ON CONFLICT REPLACE AUTOINCREMENT, "
@@ -51,7 +41,7 @@ sqlite3 *db;
         assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
 
         [self setValue:@"1" forKey:@"version"];
-        assert([@"1" isEqual:[self stringValue:@"version"]]);
+        assert(1 == [self intValue:@"version"]);
     }
 }
 
@@ -219,7 +209,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 {
     NSString *where = [NSString stringWithFormat:@"id>%d", [num intValue]];
     NSInteger nextNum = [self scalarInt:@"id" onTable:@"projects" where:where offset:0 orderBy:@"id"];
-    
+
     return (nextNum > 0) ? [NSNumber numberWithInt:nextNum] : nil;
 }
 
@@ -410,9 +400,7 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     NSString *wherecl = [NSString stringWithFormat:@"project_id=%d", [project.num intValue]];
     NSInteger idint = [self scalarInt:@"id" onTable:@"files" where:wherecl offset:offset orderBy:@"path"];
 
-    assert(idint > 0);
-
-    return [NSNumber numberWithInt:idint];
+    return (idint > 0) ? [NSNumber numberWithInt:idint] : nil;
 }
 
 #pragma mark Key-Value
