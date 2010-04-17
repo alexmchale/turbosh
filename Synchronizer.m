@@ -8,6 +8,7 @@
 
 @synthesize timer;
 @synthesize project, file;
+@synthesize dispatcher;
 
 #pragma mark Synchronizer
 
@@ -122,6 +123,8 @@
     self.file.num = [Store projectFileNumber:project atOffset:nextFileOffset];
     self.file.project = project;
 
+    nextFileOffset++;
+
     if (file.num == nil) {
         state = SS_TERMINATE_SSH;
         return;
@@ -134,19 +137,74 @@
 
 - (void) initiateHash
 {
-    state = SS_TERMINATE_SSH;
+    NSString *md5f = @"md5 %@ || md5sum %@";
+    NSString *md5Cmd = [NSString stringWithFormat:md5f, [file escapedPath], [file escapedPath]];
+
+    self.dispatcher = [[CommandDispatcher alloc] initWithSession:session command:md5Cmd];
+
+    state = SS_CONTINUE_HASH;
 }
 
 - (void) continueHash
 {
+    if (![dispatcher step]) state = SS_COMPLETE_HASH;
 }
 
 - (void) completeHash
 {
+    switch ([dispatcher exitCode]) {
+        case INT32_MAX:
+            // The connection failed and the command did not execute.
+            state = SS_TERMINATE_SSH;
+            break;
+
+        case 0:
+            // The command succeeded.
+            state = SS_TEST_IF_CHANGED;
+            break;
+
+        default:
+            // The command ran but the file could not be hashed.
+            state = SS_FILE_IS_MISSING;
+            break;
+    }
+}
+
+- (void) fileIsMissing
+{
+    // Prompt the user to delete or upload.
+    assert(false);
 }
 
 - (void) testIfChanged
 {
+    NSData *md5Data = [dispatcher stdoutResponse];
+    NSString *remoteMd5 = [[NSString alloc] initWithData:md5Data encoding:NSASCIIStringEncoding];
+    NSString *md5Regex = @"[0-9a-fA-F]{32}";
+    NSString *f = file.filename;
+    NSString *l5 = file.localMd5;
+    NSString *r5 = file.remoteMd5;
+    NSString *md5 = [[remoteMd5 stringByMatching:md5Regex] uppercaseString];
+
+    bool lEl = [file.localMd5 isEqualToString:file.remoteMd5];
+    bool lEr = [file.localMd5 isEqualToString:md5];
+    bool rEr = [file.remoteMd5 isEqualToString:md5];
+
+    [remoteMd5 release];
+
+    if (rEr && lEr) {
+        // The file is unchanged.  Move to the next one.
+        state = SS_SELECT_FILE;
+    } else if (rEr && !lEr) {
+        // The file did not change on the server, but it did locally.
+        state = SS_INITIATE_UPLOAD;
+    } else if (lEl && !rEr) {
+        // The file changed on the server but not locally.
+        state = SS_INITIATE_DOWNLOAD;
+    } else {
+        // The file changed in both locations.  Prompt the user what to do.
+        assert(false);
+    }
 }
 
 - (void) initiateUpload
@@ -205,6 +263,7 @@
         case SS_INITIATE_HASH:          return [self initiateHash];
         case SS_CONTINUE_HASH:          return [self continueHash];
         case SS_COMPLETE_HASH:          return [self completeHash];
+        case SS_FILE_IS_MISSING:        return [self fileIsMissing];
         case SS_TEST_IF_CHANGED:        return [self testIfChanged];
         case SS_INITIATE_UPLOAD:        return [self initiateUpload];
         case SS_CONTINUE_UPLOAD:        return [self continueUpload];
@@ -232,6 +291,7 @@
 
     project = nil;
     file = nil;
+    dispatcher = nil;
 
     sock = 0;
     session = NULL;
@@ -244,6 +304,7 @@
     [timer release];
     [project release];
     [file release];
+    [dispatcher release];
 
     [super dealloc];
 }

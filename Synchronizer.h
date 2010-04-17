@@ -10,6 +10,7 @@ enum SyncState
     SS_INITIATE_HASH,
     SS_CONTINUE_HASH,
     SS_COMPLETE_HASH,
+    SS_FILE_IS_MISSING,
     SS_TEST_IF_CHANGED,
     SS_INITIATE_UPLOAD,
     SS_CONTINUE_UPLOAD,
@@ -38,11 +39,13 @@ enum SyncState
 
     int sock;
     LIBSSH2_SESSION *session;
+    CommandDispatcher *dispatcher;
 }
 
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, retain) Project *project;
 @property (nonatomic, retain) ProjectFile *file;
+@property (nonatomic, retain) CommandDispatcher *dispatcher;
 
 - (void) step;
 
