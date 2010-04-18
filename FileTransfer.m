@@ -164,14 +164,7 @@
             return true;
 
         default:
-            if (success) {
-                if (isUpload) {
-                    file.remoteMd5 = hex_md5(content);
-                    [Store storeProjectFile:file];
-                } else {
-                    [Store storeRemote:file content:content];
-                }
-            }
+            if (success) [Store storeRemote:file content:content];
 
             return [self close];
     }
