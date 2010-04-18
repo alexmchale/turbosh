@@ -19,6 +19,7 @@
     #import "Utils.h"
     #import "Shell.h"
     #import "CommandDispatcher.h"
+    #import "FileUploader.h"
 
     #import "Store.h"
     #import "Project.h"

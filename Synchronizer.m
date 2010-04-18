@@ -8,7 +8,7 @@
 
 @synthesize timer;
 @synthesize project, file;
-@synthesize dispatcher;
+@synthesize dispatcher, uploader;
 
 #pragma mark Synchronizer
 
@@ -188,10 +188,14 @@
     bool rEr = [file.remoteMd5 isEqualToString:md5];
 
     [remoteMd5 release];
+    self.dispatcher = nil;
 
     if (rEr && lEr) {
         // The file is unchanged.  Move to the next one.
         state = SS_SELECT_FILE;
+    } else if (file.remoteMd5 == nil) {
+        // The file has never existed locally.  Download it.
+        state = SS_INITIATE_DOWNLOAD;
     } else if (rEr && !lEr) {
         // The file did not change on the server, but it did locally.
         state = SS_INITIATE_UPLOAD;
@@ -206,18 +210,32 @@
 
 - (void) initiateUpload
 {
+    fprintf(stderr, "uploading %s\n", [file.filename UTF8String]);
+
+    self.uploader = [[FileUploader alloc] initWithSession:session file:file];
+    [uploader release];
+
+    state = SS_CONTINUE_UPLOAD;
 }
 
 - (void) continueUpload
 {
+    if (![uploader step]) state = SS_COMPLETE_UPLOAD;
 }
 
 - (void) completeUpload
 {
+    if ([uploader succeeded])
+        state = SS_SELECT_FILE;
+    else
+        state = SS_TERMINATE_SSH;
+
+    self.uploader = nil;
 }
 
 - (void) initiateDownload
 {
+    state = SS_TERMINATE_SSH;
 }
 
 - (void) continueDownload
@@ -289,6 +307,7 @@
     project = nil;
     file = nil;
     dispatcher = nil;
+    uploader = nil;
 
     sock = 0;
     session = NULL;

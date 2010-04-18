@@ -40,12 +40,14 @@ enum SyncState
     int sock;
     LIBSSH2_SESSION *session;
     CommandDispatcher *dispatcher;
+    FileUploader *uploader;
 }
 
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, retain) Project *project;
 @property (nonatomic, retain) ProjectFile *file;
 @property (nonatomic, retain) CommandDispatcher *dispatcher;
+@property (nonatomic, retain) FileUploader *uploader;
 
 - (void) step;
 
