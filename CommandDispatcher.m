@@ -61,6 +61,7 @@
         case 1:
             // Dispatch the command to the server.
 
+            fprintf(stderr, "exec: %s\n", [command UTF8String]);
             rc = libssh2_channel_exec(channel, [command UTF8String]);
 
             if (rc == LIBSSH2_ERROR_EAGAIN) return true;
