@@ -53,7 +53,6 @@
     const void *contentPtr;
     int blockSize;
     static char buffer[0x4000];
-    struct stat sb;
 
     if (isUpload && content == nil) {
         success = false;
@@ -156,7 +155,7 @@
                 rc = libssh2_channel_wait_closed(channel);
 
                 if (rc == LIBSSH2_ERROR_EAGAIN) return true;
-                if (rc != LIBSSH2_ERROR_NONE) return [self close];
+                if (rc < 0) return [self close];
             }
 
             success = true;

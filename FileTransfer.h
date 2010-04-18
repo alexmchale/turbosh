@@ -8,6 +8,7 @@
     ProjectFile *file;
     NSMutableData *content;
     int offset;
+    struct stat sb;
 
     int step;
     bool success;
