@@ -8,7 +8,7 @@
 
 @synthesize timer;
 @synthesize project, file;
-@synthesize dispatcher, uploader;
+@synthesize dispatcher, transfer;
 
 #pragma mark Synchronizer
 
@@ -212,38 +212,35 @@
 {
     fprintf(stderr, "uploading %s\n", [file.filename UTF8String]);
 
-    self.uploader = [[FileUploader alloc] initWithSession:session file:file];
-    [uploader release];
+    self.transfer = [[FileTransfer alloc] initWithSession:session upload:file];
+    [transfer release];
 
-    state = SS_CONTINUE_UPLOAD;
-}
-
-- (void) continueUpload
-{
-    if (![uploader step]) state = SS_COMPLETE_UPLOAD;
-}
-
-- (void) completeUpload
-{
-    if ([uploader succeeded])
-        state = SS_SELECT_FILE;
-    else
-        state = SS_TERMINATE_SSH;
-
-    self.uploader = nil;
+    state = SS_CONTINUE_TRANSFER;
 }
 
 - (void) initiateDownload
 {
-    state = SS_TERMINATE_SSH;
+    fprintf(stderr, "downloading %s\n", [file.filename UTF8String]);
+
+    self.transfer = [[FileTransfer alloc] initWithSession:session download:file];
+    [transfer release];
+
+    state = SS_CONTINUE_TRANSFER;
 }
 
-- (void) continueDownload
+- (void) continueTransfer
 {
+    if (![transfer step]) state = SS_COMPLETE_TRANSFER;
 }
 
-- (void) completeDownload
+- (void) completeTransfer
 {
+    if ([transfer succeeded])
+        state = SS_SELECT_FILE;
+    else
+        state = SS_TERMINATE_SSH;
+
+    self.transfer = nil;
 }
 
 - (void) terminateSsh
@@ -281,11 +278,9 @@
         case SS_FILE_IS_MISSING:        return [self fileIsMissing];
         case SS_TEST_IF_CHANGED:        return [self testIfChanged];
         case SS_INITIATE_UPLOAD:        return [self initiateUpload];
-        case SS_CONTINUE_UPLOAD:        return [self continueUpload];
-        case SS_COMPLETE_UPLOAD:        return [self completeUpload];
         case SS_INITIATE_DOWNLOAD:      return [self initiateDownload];
-        case SS_CONTINUE_DOWNLOAD:      return [self continueDownload];
-        case SS_COMPLETE_DOWNLOAD:      return [self completeDownload];
+        case SS_CONTINUE_TRANSFER:      return [self continueTransfer];
+        case SS_COMPLETE_TRANSFER:      return [self completeTransfer];
         case SS_TERMINATE_SSH:          return [self terminateSsh];
         case SS_DISCONNECT:             return [self disconnect];
     }
@@ -307,7 +302,7 @@
     project = nil;
     file = nil;
     dispatcher = nil;
-    uploader = nil;
+    transfer = nil;
 
     sock = 0;
     session = NULL;
@@ -321,6 +316,7 @@
     [project release];
     [file release];
     [dispatcher release];
+    [transfer release];
 
     [super dealloc];
 }
