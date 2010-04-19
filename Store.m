@@ -2,15 +2,20 @@
 
 @implementation Store
 
-NSString *path;
-sqlite3 *db;
+static NSString *path;
+static sqlite3 *db;
 
 #pragma mark Connection
 
 + (void) open {
-    path = [[[NSBundle mainBundle] resourcePath] stringByAppendingFormat:@"/database.sqlite"];
-    bool isNewDatabase = ![[NSFileManager defaultManager] fileExistsAtPath:path];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    path = [documentsPath stringByAppendingPathComponent:@"database.sqlite"];
+
     assert(sqlite3_initialize() == SQLITE_OK);
+
+    bool isNewDatabase = ![fileManager fileExistsAtPath:path];
+    if (isNewDatabase) assert([fileManager createFileAtPath:path contents:nil attributes:nil]);
     assert(sqlite3_open([path UTF8String], &db) == SQLITE_OK);
 
     if (isNewDatabase) {
