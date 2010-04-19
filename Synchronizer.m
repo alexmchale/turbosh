@@ -2,7 +2,7 @@
 #import <libssh2.h>
 #import <arpa/inet.h>
 
-#define SYNCHRONIZE_DELAY_SECONDS 0.25
+#define SYNCHRONIZE_DELAY_SECONDS 0.05
 
 @implementation Synchronizer
 
@@ -20,7 +20,10 @@
     self.project = nil;
     nextFileOffset = 0;
 
-    if (num == nil) return;
+    if (num == nil) {
+        state = SS_IDLE;
+        return;
+    }
 
     self.project = [[Project alloc] init];
     [project release];
@@ -262,9 +265,22 @@
     state = SS_SELECT_PROJECT;
 }
 
+- (void) idle
+{
+    self.project = nil;
+    self.file = nil;
+    self.dispatcher = nil;
+    self.transfer = nil;
+
+    if (startup) {
+        startup = false;
+        state = SS_SELECT_PROJECT;
+    }
+}
+
 - (void) step
 {
-    if (project == nil) state = SS_SELECT_PROJECT;
+    if (project == nil && state != SS_IDLE) state = SS_SELECT_PROJECT;
 
     switch (state) {
         case SS_SELECT_PROJECT:         return [self selectProject];
@@ -283,7 +299,13 @@
         case SS_COMPLETE_TRANSFER:      return [self completeTransfer];
         case SS_TERMINATE_SSH:          return [self terminateSsh];
         case SS_DISCONNECT:             return [self disconnect];
+        case SS_IDLE:                   return [self idle];
     }
+}
+
+- (void) synchronize
+{
+    startup = true;
 }
 
 #pragma mark Memory Management
@@ -299,10 +321,13 @@
                                    repeats:YES];
     [timer retain];
 
+    state = SS_SELECT_PROJECT;
+
     project = nil;
     file = nil;
     dispatcher = nil;
     transfer = nil;
+    startup = false;
 
     sock = 0;
     session = NULL;

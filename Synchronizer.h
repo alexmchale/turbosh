@@ -17,7 +17,8 @@ enum SyncState
     SS_CONTINUE_TRANSFER,
     SS_COMPLETE_TRANSFER,
     SS_TERMINATE_SSH,
-    SS_DISCONNECT
+    SS_DISCONNECT,
+    SS_IDLE
 };
 
 @interface Synchronizer : NSObject
@@ -39,6 +40,8 @@ enum SyncState
     LIBSSH2_SESSION *session;
     CommandDispatcher *dispatcher;
     FileTransfer *transfer;
+
+    bool startup;
 }
 
 @property (nonatomic, retain) NSTimer *timer;
@@ -48,5 +51,6 @@ enum SyncState
 @property (nonatomic, retain) FileTransfer *transfer;
 
 - (void) step;
+- (void) synchronize;
 
 @end
