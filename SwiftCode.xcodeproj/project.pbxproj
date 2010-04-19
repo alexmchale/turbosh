@@ -140,6 +140,7 @@
 		74B37176115CF37D00E3B2D1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B37175115CF37D00E3B2D1 /* QuartzCore.framework */; };
 		74B371EF115DC8C300E3B2D1 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B371EE115DC8C300E3B2D1 /* libsqlite3.dylib */; };
 		74B37211115DCF8500E3B2D1 /* Store.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B37210115DCF8500E3B2D1 /* Store.m */; };
+		74B3D575117AB92B00021611 /* FileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B3D574117AB92B00021611 /* FileTransfer.m */; };
 		74D740211166E28C0010A592 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D740201166E28C0010A592 /* RegexKitLite.m */; };
 		74D7403A11674C2E0010A592 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D7403911674C2E0010A592 /* libicucore.dylib */; };
 /* End PBXBuildFile section */
@@ -331,6 +332,8 @@
 		74B371EE115DC8C300E3B2D1 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		74B3720F115DCF8500E3B2D1 /* Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Store.h; sourceTree = "<group>"; };
 		74B37210115DCF8500E3B2D1 /* Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Store.m; sourceTree = "<group>"; };
+		74B3D573117AB92B00021611 /* FileTransfer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileTransfer.h; sourceTree = "<group>"; };
+		74B3D574117AB92B00021611 /* FileTransfer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileTransfer.m; sourceTree = "<group>"; };
 		74D7401F1166E28C0010A592 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		74D740201166E28C0010A592 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		74D7403911674C2E0010A592 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -521,6 +524,8 @@
 				74AE612D1160399C006CA577 /* Shell.m */,
 				1DF12F9211789A18008927B0 /* CommandDispatcher.h */,
 				1DF12F9311789A18008927B0 /* CommandDispatcher.m */,
+				74B3D573117AB92B00021611 /* FileTransfer.h */,
+				74B3D574117AB92B00021611 /* FileTransfer.m */,
 				747EB7F311613732002D8CD8 /* SSH */,
 				747EC12C11614E31002D8CD8 /* openssl.xcodeproj */,
 			);
@@ -853,6 +858,7 @@
 				74A5ACE711709E05006A48A3 /* FileEditController.m in Sources */,
 				1DB6EDA711766EAF00FFC659 /* Synchronizer.m in Sources */,
 				1DF12F9411789A18008927B0 /* CommandDispatcher.m in Sources */,
+				74B3D575117AB92B00021611 /* FileTransfer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

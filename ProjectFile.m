@@ -8,18 +8,18 @@
 
 #pragma mark Data Loaders
 
-- (id) loadByNumber:(NSNumber *)number 
+- (id) loadByNumber:(NSNumber *)number
 {
     assert(number != nil);
-    
+
     self.num = number;
     self.project = nil;
     self.filename = nil;
     self.localMd5 = nil;
     self.remoteMd5 = nil;
-    
+
     [Store loadProjectFile:self];
-    
+
     return self;
 }
 
@@ -28,17 +28,17 @@
     assert(myProject != nil);
     assert(myProject.num != nil);
     assert(myFilename != nil);
-    
+
     self.num = [Store projectFileNumber:myProject filename:myFilename];
     self.project = myProject;
     self.filename = myFilename;
     self.localMd5 = nil;
     self.remoteMd5 = nil;
-    
+
     if (self.num) [Store loadProjectFile:self];
-    
+
     assert([filename isEqual:myFilename]);
-    
+
     return self;
 }
 
@@ -46,59 +46,45 @@
 
 - (id) init
 {
-    NSLog(@"init file %p", self);
-    
     assert(self = [super init]);
-    
+
     num = nil;
     project = nil;
     filename = nil;
     localMd5 = nil;
     remoteMd5 = nil;
-    
+
     return self;
 }
 
 - (void) dealloc
 {
-    NSLog(@"dealloc file %p with project %p", self, project);
-    
     [num release];
     [project release];
     [filename release];
     [localMd5 release];
     [remoteMd5 release];
-    
+
     [super dealloc];
-}
-
--(oneway void)release {
-    NSLog(@"Releasing %p, next count = %d", self, [self retainCount]-1);
-    [super release];
-}
-
--(id)retain {
-    NSLog(@"Retaining %p, next count = %d", self, [self retainCount]+1);
-    return [super retain];
 }
 
 #pragma mark Path Accessors
 
 - (NSString *) condensedPath {
     assert(filename != nil);
-    
+
     NSArray *segments = [filename componentsSeparatedByString:@"/"];
     NSMutableArray *esegs = [NSMutableArray arrayWithArray:segments];
-    
+
     for (int i = 0; i < [esegs count] - 1; ++i) {
         NSString *a = [esegs objectAtIndex:i];
-        
+
         if ([[esegs objectAtIndex:i] length] > 0) {
             NSString *b = [a substringToIndex:1];
             [esegs replaceObjectAtIndex:i withObject:b];
         }
     }
-    
+
     return [esegs componentsJoinedByString:@"/"];
 }
 
@@ -127,13 +113,13 @@
 
     NSString *ext = [self extension];
     NSString *type = [types objectForKey:ext];
-    
+
     return type ? type : ext;
 }
 
 - (NSString *) extension {
     NSArray *segments = [filename componentsSeparatedByString:@"."];
-    
+
     if (!segments || [segments count] < 2) return @"";
 
     return [segments lastObject];

@@ -2,12 +2,16 @@
 
 @implementation CommandDispatcher
 
-- (id) initWithSession:(LIBSSH2_SESSION *)newSession command:(char *)newCommand
+- (id) initWithSession:(LIBSSH2_SESSION *)newSession command:(NSString *)newCommand
 {
     assert(self = [super init]);
 
     session = newSession;
+
     command = newCommand;
+    [command retain];
+
+    libssh2_session_set_blocking(session, 0);
 
     exitCode = 0;
 
@@ -21,6 +25,7 @@
 {
     [self close];
 
+    [command release];
     [stdoutResponse release];
     [stderrResponse release];
 
@@ -31,6 +36,7 @@
 {
     static char buffer[0x4000];
     int rc;
+    char *errmsg;
 
     switch (step)
     {
@@ -38,11 +44,15 @@
             // Establish a command channel.
 
             channel = libssh2_channel_open_session(session);
-            rc = libssh2_session_last_error(session, NULL, NULL, 0);
-            exitCode = 127;
+            rc = libssh2_session_last_error(session, &errmsg, NULL, 0);
+            exitCode = INT32_MAX;
 
-            if (rc == LIBSSH2_ERROR_EAGAIN) return true;
-            if (channel == NULL || rc != LIBSSH2_ERROR_NONE) return [self close];
+            if (channel == NULL && rc == LIBSSH2_ERROR_EAGAIN) return true;
+
+            if (channel == NULL) {
+                fprintf(stderr, "command (%s) error (%d): %s\n", [command UTF8String], rc, errmsg);
+                return [self close];
+            }
 
             step++;
 
@@ -51,10 +61,12 @@
         case 1:
             // Dispatch the command to the server.
 
-            rc = libssh2_channel_exec(channel, command);
+            rc = libssh2_channel_exec(channel, [command UTF8String]);
 
             if (rc == LIBSSH2_ERROR_EAGAIN) return true;
             if (rc != LIBSSH2_ERROR_NONE) return [self close];
+
+            fprintf(stderr, "exec: %s\n", [command UTF8String]);
 
             step++;
 

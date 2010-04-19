@@ -1,6 +1,9 @@
 #import "Shell.h"
 #import <libssh2.h>
-#import <arpa/inet.h>
+#include <netdb.h>
+#include <resolv.h>
+#include <errno.h>
+#include <arpa/inet.h>
 
 static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 
@@ -60,10 +63,18 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
         return false;
     }
 
+    // Resolve the address of the server.
+    struct hostent *host = gethostbyname([project.sshHost UTF8String]);
+    in_addr_t ip;
+    if (host && host->h_addr_list[0] != NULL)
+        memcpy(&ip, host->h_addr_list[0], sizeof(in_addr_t));
+    else
+        ip = inet_addr([project.sshHost UTF8String]);
+
     // Set host parameters.
     sin.sin_family = AF_INET;
     sin.sin_port = htons([self.project.sshPort intValue]);
-    sin.sin_addr.s_addr = inet_addr([self.project.sshHost UTF8String]);
+    sin.sin_addr.s_addr = ip;
 
     // Establish the TCP connection.
     if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) != 0) {

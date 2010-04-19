@@ -10,15 +10,15 @@ enum SyncState
     SS_INITIATE_HASH,
     SS_CONTINUE_HASH,
     SS_COMPLETE_HASH,
+    SS_FILE_IS_MISSING,
     SS_TEST_IF_CHANGED,
     SS_INITIATE_UPLOAD,
-    SS_CONTINUE_UPLOAD,
-    SS_COMPLETE_UPLOAD,
     SS_INITIATE_DOWNLOAD,
-    SS_CONTINUE_DOWNLOAD,
-    SS_COMPLETE_DOWNLOAD,
+    SS_CONTINUE_TRANSFER,
+    SS_COMPLETE_TRANSFER,
     SS_TERMINATE_SSH,
-    SS_DISCONNECT
+    SS_DISCONNECT,
+    SS_IDLE
 };
 
 @interface Synchronizer : NSObject
@@ -38,12 +38,19 @@ enum SyncState
 
     int sock;
     LIBSSH2_SESSION *session;
+    CommandDispatcher *dispatcher;
+    FileTransfer *transfer;
+
+    bool startup;
 }
 
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, retain) Project *project;
 @property (nonatomic, retain) ProjectFile *file;
+@property (nonatomic, retain) CommandDispatcher *dispatcher;
+@property (nonatomic, retain) FileTransfer *transfer;
 
 - (void) step;
+- (void) synchronize;
 
 @end

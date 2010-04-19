@@ -17,17 +17,19 @@
 - (void) saveAction
 {
     self.text = textView.text;
-    
+
     NSData *content = [text dataUsingEncoding:NSASCIIStringEncoding];
-    
+
     ProjectFile *file = [[ProjectFile alloc] init];
     file.num = [Store currentFileNum];
     [Store loadProjectFile:file];
-    [Store storeLocal:file content:content];    
+    [Store storeLocal:file content:content];
     [file release];
-    
+
     [myToolbar setItems:savedToolbarItems];
     [SwiftCodeAppDelegate editCurrentFile];
+
+    [SwiftCodeAppDelegate sync];
 }
 
 #pragma mark View Events
@@ -39,7 +41,7 @@
 }
 
 - (void) viewDidAppear:(BOOL)animated
-{    
+{
     [textView scrollRectToVisible:startingRect animated:NO];
 }
 
@@ -58,14 +60,14 @@
 {
     [text release];
     [textView release];
-    
+
     [myToolbar release];
     [savedToolbarItems release];
-    
+
     [cancelButton release];
     [spacer release];
     [saveButton release];
-    
+
     [super dealloc];
 }
 
@@ -73,25 +75,25 @@
 {
     self.myToolbar = toolbar;
     self.savedToolbarItems = [toolbar items];
-    
+
     cancelButton =
         [[UIBarButtonItem alloc]
          initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
          target:self
          action:@selector(cancelAction)];
-    
+
     spacer =
         [[UIBarButtonItem alloc]
          initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
          target:nil
          action:nil];
-    
+
     saveButton =
         [[UIBarButtonItem alloc]
          initWithBarButtonSystemItem:UIBarButtonSystemItemSave
          target:self
          action:@selector(saveAction)];
-    
+
     NSMutableArray *a = [NSMutableArray arrayWithObjects:cancelButton, spacer, saveButton, nil];
     [toolbar setItems:a];
 }

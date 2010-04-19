@@ -7,6 +7,7 @@
 
 @synthesize window, splitViewController, rootViewController, detailViewController;
 @synthesize projectSettingsController, fileViewController;
+@synthesize synchronizer;
 
 + (void) switchTo:(UIViewController *)controller
 {
@@ -17,26 +18,26 @@
 + (void) editProject:(Project *)project
 {
     SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    
+
     if (delegate.projectSettingsController == nil) {
-        ProjectSettingsController *psc = 
+        ProjectSettingsController *psc =
             [[ProjectSettingsController alloc] initWithNibName:nil bundle:nil];
         delegate.projectSettingsController = psc;
         [psc release];
     }
-    
+
     delegate.rootViewController.title = project.name;
     delegate.projectSettingsController.proj = project;
-    
+
     [self switchTo:delegate.projectSettingsController];
 }
 
 + (void) editFile:(ProjectFile *)file
 {
     SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    
+
     if (delegate.fileViewController == nil) {
-        FileViewController *psc = 
+        FileViewController *psc =
             [[FileViewController alloc] initWithNibName:nil bundle:nil];
         delegate.fileViewController = psc;
         [psc release];
@@ -46,7 +47,7 @@
         delegate.fileViewController.file = file;
         [Store setCurrentFile:file];
     }
-    
+
     [self switchTo:delegate.fileViewController];
 }
 
@@ -62,8 +63,14 @@
 + (ProjectFile *) currentFile
 {
     SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    
+
     return [delegate.fileViewController file];
+}
+
++ (void) sync
+{
+    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    [delegate.synchronizer synchronize];
 }
 
 #pragma mark -
@@ -74,7 +81,7 @@
 
     // Initialize the database.
     [Store open];
-    
+
     // Add the split view controller's view to the window and display.
     [window addSubview:splitViewController.view];
     [window makeKeyAndVisible];
@@ -83,11 +90,10 @@
     Project *currentProject = [[[Project alloc] init] loadCurrent];
     [SwiftCodeAppDelegate editProject:currentProject];
     [currentProject release];
-    
+
     // Start the file synchronizer.
-    Synchronizer *sync = [[Synchronizer alloc] init];
-    [[NSRunLoop mainRunLoop] addTimer:sync.timer forMode:NSDefaultRunLoopMode];
-    [sync release];
+    synchronizer = [[Synchronizer alloc] init];
+    [[NSRunLoop mainRunLoop] addTimer:synchronizer.timer forMode:NSDefaultRunLoopMode];
 
     return YES;
 
@@ -120,7 +126,7 @@
     [projectSettingsController release];
     [fileViewController release];
     [window release];
-    
+
     [super dealloc];
 }
 
