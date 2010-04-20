@@ -104,6 +104,14 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
         assert(sqlite3_bind_null(stmt, column) == SQLITE_OK);
 }
 
+static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
+    while (rowCount-- > 0)
+        assert(sqlite3_step(stmt) == SQLITE_ROW);
+
+    assert(sqlite3_step(stmt) == SQLITE_DONE);
+    assert(sqlite3_finalize(stmt) == SQLITE_OK);
+}
+
 #pragma mark Project
 
 + (BOOL) loadProject:(Project *)project {
@@ -406,6 +414,74 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
     NSInteger idint = [self scalarInt:@"id" onTable:@"files" where:wherecl offset:offset orderBy:@"path"];
 
     return (idint > 0) ? [NSNumber numberWithInt:idint] : nil;
+}
+
+#pragma mark ProjectTask
+
++ (bool) loadTask:(ProjectTask *)task
+{
+    assert(task.num != nil);
+
+    const char *s = "SELECT project_id, name, script "
+                    "FROM tasks "
+                    "WHERE id=?";
+
+    BOOL found = FALSE;
+    sqlite3_stmt *t;
+    assert(sqlite3_prepare_v2(db, s, -1, &t, NULL) == SQLITE_OK);
+    assert(sqlite3_bind_int(t, 1, [task.num intValue]) == SQLITE_OK);
+
+    switch (sqlite3_step(t)) {
+        case SQLITE_ROW:
+        {
+            NSNumber *loadedProjectId = get_integer(t, 0);
+
+            if (task.project == nil) {
+                assert(loadedProjectId != nil);
+
+                Project *project = [[Project alloc] init];
+                project.num = loadedProjectId;
+                assert([Store loadProject:project]);
+                task.project = project;
+                [project release];
+            }
+
+            assert([task.project.num isEqualToNumber:loadedProjectId]);
+
+            task.name = get_string(t, 1);
+            task.script = get_string(t, 2);
+
+            found = TRUE;
+        }   break;
+
+        case SQLITE_DONE:
+            found = FALSE;
+            break;
+
+        default:
+            assert(1 != 1);
+    }
+
+    assert(sqlite3_finalize(t) == SQLITE_OK);
+
+    return found;
+
+}
+
++ (void) storeTask:(ProjectTask *)task
+{
+    assert(task.project.num);
+
+    sqlite3_stmt *stmt;
+    const char *sql = "INSERT INTO tasks (id, project_id, name, script) VALUES (?, ?, ?, ?)";
+    bind_prepare(&stmt, sql);
+
+    bind_integer(stmt, 1, task.num, true);
+    bind_integer(stmt, 2, task.project.num, false);
+    bind_string(stmt, 3, task.name, false);
+    bind_string(stmt, 4, task.script, false);
+
+    bind_finalize(stmt, 0);
 }
 
 #pragma mark Key-Value

@@ -19,6 +19,29 @@
     return self;
 }
 
+- (id) initAsNumber:(NSNumber *)newNum
+{
+    assert(self = [self init]);
+
+    self.num = newNum;
+
+    if (self.num) assert([Store loadTask:self]);
+
+    return self;
+}
+
+- (id) initAsNumber:(NSNumber *)newNum forProject:(Project *)myProject
+{
+    assert(self = [self init]);
+
+    self.num = newNum;
+    self.project = myProject;
+
+    if (self.num) assert([Store loadTask:self]);
+
+    return self;
+}
+
 - (void) dealloc
 {
     [num release];

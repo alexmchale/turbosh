@@ -400,12 +400,12 @@
 				74B36FA1115B2B2A00E3B2D1 /* Project.m */,
 				74B36FA2115B2B2A00E3B2D1 /* ProjectFile.h */,
 				74B36FA3115B2B2A00E3B2D1 /* ProjectFile.m */,
+				1DA64163117DEFE300B6D438 /* ProjectTask.h */,
+				1DA64164117DEFE300B6D438 /* ProjectTask.m */,
 				74B3720F115DCF8500E3B2D1 /* Store.h */,
 				74B37210115DCF8500E3B2D1 /* Store.m */,
 				1DB6EDA511766EAF00FFC659 /* Synchronizer.h */,
 				1DB6EDA611766EAF00FFC659 /* Synchronizer.m */,
-				1DA64163117DEFE300B6D438 /* ProjectTask.h */,
-				1DA64164117DEFE300B6D438 /* ProjectTask.m */,
 			);
 			name = Storehouse;
 			sourceTree = "<group>";
