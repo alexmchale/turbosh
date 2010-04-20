@@ -10,31 +10,31 @@
 
 - (void) saveAction {
     ProjectFile *file = [[ProjectFile alloc] init];
-    
+
     MBProgressHUD *hud = [[[MBProgressHUD alloc] initWithView:self.view] autorelease];
     hud.labelText = @"Downloading Files";
     [self.view addSubview:hud];
     [hud show:YES];
-    
+
     for (NSString *filename in syncFiles) {
         [file loadByProject:project filename:filename];
-        
+
         if (file.num == nil) [Store storeProjectFile:file];
     }
-    
+
     for (NSString *filename in removedFiles) {
         [file loadByProject:project filename:filename];
         [Store deleteProjectFile:file];
     }
-    
+
     Shell *s = [[Shell alloc] initWithProject:project];
     assert([s connect]);
     for (NSString *filename in syncFiles) {
         [file loadByProject:project filename:filename];
         assert(file.num != nil);
-        NSString *md5 = [s remoteMd5:file];        
+        NSString *md5 = [s remoteMd5:file];
         assert(md5);
-        
+
         if (![md5 isEqual:[file remoteMd5]]) {
             NSData *data = [s downloadFile:[file fullpath]];
             [Store storeRemote:file content:data];
@@ -42,20 +42,22 @@
     }
     [s disconnect];
     [s release];
-    
+
     [hud hide:YES];
     [hud removeFromSuperview];
-    
+
     [file release];
-    
+
     [myToolbar setItems:savedToolbarItems];
-    
+
+    [SwiftCodeAppDelegate reloadList];
+
     [SwiftCodeAppDelegate editProject:project];
 }
 
 - (void) cancelAction {
     [myToolbar setItems:savedToolbarItems];
-    
+
     [SwiftCodeAppDelegate editProject:project];
 }
 
@@ -66,7 +68,7 @@
 
     // Uncomment the following line to preserve selection between presentations.
     self.clearsSelectionOnViewWillAppear = NO;
- 
+
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
@@ -77,19 +79,19 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+
     NSString *error = nil;
-    
+
     MBProgressHUD *hud = [[[MBProgressHUD alloc] initWithView:self.view] autorelease];
     hud.labelText = @"Loading Files";
     [self.view addSubview:hud];
     [hud show:YES];
-    
+
     Shell *shell = [[Shell alloc] initWithProject:project];
-    
-    if ([shell connect]) {    
+
+    if ([shell connect]) {
         self.allFiles = [shell files];
-        
+
         if (self.allFiles) {
             self.syncFiles = [NSMutableArray arrayWithArray:[Store filenames:project]];
             self.removedFiles = [NSMutableArray array];
@@ -100,15 +102,15 @@
     } else {
         error = @"Failed to connect to server.";
     }
-    
+
     if (error) {
         self.allFiles = nil;
         self.syncFiles = nil;
     }
-    
+
     [hud hide:YES];
     [hud removeFromSuperview];
-    
+
     if (allFiles == nil || error != nil) {
         UIAlertView *alert =
             [[UIAlertView alloc]
@@ -117,7 +119,7 @@
              delegate:self
              cancelButtonTitle:@"Okay"
              otherButtonTitles:nil];
-        
+
         [alert show];
         [alert release];
     }
@@ -155,26 +157,26 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     static NSString *CellIdentifier = @"Cell";
-    
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
-    
+
     // Configure the cell...
     assert(allFiles);
     NSString *file = [allFiles objectAtIndex:indexPath.row];
     assert(file);
-           
+
     cell.textLabel.text = file;
-    
+
     if ([syncFiles containsObject:file])
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     else
         cell.accessoryType = UITableViewCellAccessoryNone;
-    
+
     return cell;
 }
 
@@ -182,7 +184,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *file = [self.allFiles objectAtIndex:indexPath.row];
-    
+
     if ([syncFiles containsObject:file]) {
         [removedFiles addObject:file];
         [syncFiles removeObject:file];
@@ -190,10 +192,10 @@
         [syncFiles addObject:file];
         [removedFiles removeObject:file];
     }
-    
+
     [tableView reloadData];
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];    
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark Memory management
@@ -201,7 +203,7 @@
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    
+
     // Relinquish ownership any cached data, images, etc that aren't in use.
 }
 
@@ -240,26 +242,26 @@
 - (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
     self.myToolbar = toolbar;
     self.savedToolbarItems = [toolbar items];
-    
+
     cancelButton =
         [[UIBarButtonItem alloc]
          initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
          target:self
          action:@selector(cancelAction)];
-    
+
     spacer =
         [[UIBarButtonItem alloc]
          initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
          target:nil
          action:nil];
-    
+
     saveButton =
         [[UIBarButtonItem alloc]
          initWithBarButtonSystemItem:UIBarButtonSystemItemSave
          target:self
          action:@selector(saveAction)];
-    
-    NSMutableArray *a = [NSMutableArray arrayWithObjects:cancelButton, spacer, saveButton, nil];
+
+    NSArray *a = [NSArray arrayWithObjects:cancelButton, spacer, saveButton, nil];
     [toolbar setItems:a];
 }
 
