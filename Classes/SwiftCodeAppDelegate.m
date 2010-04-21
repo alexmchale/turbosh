@@ -73,6 +73,12 @@
     [delegate.synchronizer synchronize];
 }
 
++ (void) reloadList
+{
+    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    [delegate.rootViewController.tableView reloadData];
+}
+
 #pragma mark -
 #pragma mark Application lifecycle
 

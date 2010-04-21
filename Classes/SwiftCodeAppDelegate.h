@@ -39,5 +39,6 @@
 + (void) editFile:(ProjectFile *)file;
 + (void) editCurrentFile;
 + (void) sync;
++ (void) reloadList;
 
 @end

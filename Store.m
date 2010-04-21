@@ -45,6 +45,14 @@ static sqlite3 *db;
                    "UNIQUE (project_id, path) ON CONFLICT REPLACE)";
         assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
 
+        tableSql = "CREATE TABLE tasks ("
+                   "id INTEGER NOT NULL PRIMARY KEY ON CONFLICT REPLACE AUTOINCREMENT, "
+                   "project_id INTEGER NOT NULL, "
+                   "name TEXT NOT NULL, "
+                   "script TEXT NOT NULL"
+                   ")";
+        assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
+
         [self setValue:@"1" forKey:@"version"];
         assert(1 == [self intValue:@"version"]);
     }
