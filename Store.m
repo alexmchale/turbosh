@@ -482,6 +482,9 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     bind_string(stmt, 4, task.script, false);
 
     bind_finalize(stmt, 0);
+
+    task.num = [NSNumber numberWithInt:sqlite3_last_insert_rowid(db)];
+    assert([task.num intValue] > 0);
 }
 
 #pragma mark Key-Value
