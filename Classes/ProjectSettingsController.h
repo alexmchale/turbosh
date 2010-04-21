@@ -5,9 +5,9 @@
 {
     UITableView IBOutlet *myTableView;
     Project *proj;
-	
+
     UITextField *projectName;
-	
+
     UITextField *sshHost;
     UITextField *sshPort;
     UITextField *sshUser;
@@ -31,6 +31,7 @@ typedef enum {
     TS_PROJECT_MAIN,
     TS_SSH_CREDENTIALS,
     TS_FILES,
+    TS_ADD_REM,
     TS_SECTION_COUNT
 } TableSections;
 
@@ -52,5 +53,11 @@ typedef enum {
     TF_MANAGE,
     TF_ROW_COUNT
 } TableFiles;
+
+typedef enum {
+    TAR_ADD_PROJECT,
+    TAR_REM_PROJECT,
+    TAR_ROW_COUNT
+} TableAddRem;
 
 @end
