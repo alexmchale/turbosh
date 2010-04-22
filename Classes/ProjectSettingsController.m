@@ -123,6 +123,7 @@
         case TS_PROJECT_MAIN:       return @"Project";
         case TS_SSH_CREDENTIALS:    return @"SSH Credentials";
         case TS_FILES:              return @"";
+        case TS_TASKS:              return @"";
         case TS_ADD_REM:            return @"";
         default:                    assert(false);
     }
@@ -133,6 +134,7 @@
         case TS_PROJECT_MAIN:       return TM_ROW_COUNT;
         case TS_SSH_CREDENTIALS:    return TC_ROW_COUNT;
         case TS_FILES:              return TF_ROW_COUNT;
+        case TS_TASKS:              return TT_ROW_COUNT;
         case TS_ADD_REM:            return proj.num ? TAR_ROW_COUNT : 0;
         default:                    assert(false);
     }
@@ -228,6 +230,18 @@
             }
 
             cell.textLabel.text = @"Synchronized Files";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+            break;
+
+        case TS_TASKS:
+            cell = [tableView dequeueReusableCellWithIdentifier:@"TasksCell"];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                               reuseIdentifier:@"TasksCell"] autorelease];
+            }
+
+            cell.textLabel.text = @"Task Executables";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
             break;

@@ -33,6 +33,7 @@ typedef enum {
     TS_PROJECT_MAIN,
     TS_SSH_CREDENTIALS,
     TS_FILES,
+    TS_TASKS,
     TS_ADD_REM,
     TS_SECTION_COUNT
 } TableSections;
@@ -55,6 +56,11 @@ typedef enum {
     TF_MANAGE,
     TF_ROW_COUNT
 } TableFiles;
+
+typedef enum {
+    TT_MANAGE,
+    TT_ROW_COUNT
+} TableTasks;
 
 typedef enum {
     TAR_ADD_PROJECT,
