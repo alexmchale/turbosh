@@ -32,6 +32,12 @@
     [SwiftCodeAppDelegate sync];
 }
 
+#pragma mark Edit Events
+
+- (void) textViewDidChange:(UITextView *)textView
+{
+}
+
 #pragma mark View Events
 
 - (void) viewWillAppear:(BOOL)animated
