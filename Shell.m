@@ -154,7 +154,39 @@ static bool excluded_filename(NSString *filename) {
 
     fprintf(stderr, "find cmd: %s\n", [cmd UTF8String]);
 
-    if ([self dispatchCommand:findCmd storeAt:data]) {
+    if ([self dispatchCommand:cmd storeAt:data]) {
+        char *bytes = (char *)[data bytes];
+        long offset = 0;
+        files = [NSMutableArray array];
+
+        while (offset < [data length]) {
+            NSString *file = [NSString stringWithUTF8String:&bytes[offset]];
+            int pathLength = [project.sshPath length] + 1;
+            file = [file substringFromIndex:pathLength];
+
+            if (!excluded_filename(file)) [files addObject:file];
+
+            offset += pathLength + [file length] + 1;
+        }
+    }
+
+    [data release];
+
+    return files;
+}
+
+// Finds executables in the project path.
+- (NSArray *) findExecutables {
+    NSMutableData *data = [[NSMutableData alloc] init];
+    NSMutableArray *files = nil;
+    NSString *ep = [self escapedPath];
+    NSString *testCmd = [NSString stringWithFormat:@"test -d %@", ep];
+    NSString *findCmd = [NSString stringWithFormat:@"find %@ -type f -perm -100 -print0", ep];
+    NSString *cmd = [NSString stringWithFormat:@"%@ && %@", testCmd, findCmd];
+
+    fprintf(stderr, "find cmd: %s\n", [cmd UTF8String]);
+
+    if ([self dispatchCommand:cmd storeAt:data]) {
         char *bytes = (char *)[data bytes];
         long offset = 0;
         files = [NSMutableArray array];
