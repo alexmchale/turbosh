@@ -11,13 +11,14 @@
 
 - (void) addNewProject
 {
-    self.proj = [[Project alloc] init];
-    [proj release];
+    Project *nextProject = [[Project alloc] init];
 
-    proj.name = @"New Project";
-    [Store storeProject:proj];
+    nextProject.name = @"New Project";
+    [Store storeProject:nextProject];
 
-    [SwiftCodeAppDelegate editProject:proj];
+    [SwiftCodeAppDelegate editProject:nextProject];
+
+    [nextProject release];
 }
 
 - (void) removeThisProject
@@ -29,13 +30,14 @@
     if ([Store projectCount] == 0) {
         [self addNewProject];
     } else {
-        self.proj = [[Project alloc] init];
-        [proj release];
+        Project *nextProject = [[Project alloc] init];
 
-        proj.num = [Store projectNumAtOffset:0];
-        [Store loadProject:proj];
+        nextProject.num = [Store projectNumAtOffset:0];
+        assert([Store loadProject:nextProject]);
 
-        [SwiftCodeAppDelegate editProject:proj];
+        [SwiftCodeAppDelegate editProject:nextProject];
+
+        [nextProject release];
     }
 
 }
@@ -45,6 +47,8 @@
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
+        proj = nil;
+
 		projectName = [[UITextField alloc] init];
 		projectName.autocorrectionType = UITextAutocorrectionTypeNo;
 		projectName.autocapitalizationType = UITextAutocapitalizationTypeNone;
@@ -87,17 +91,12 @@
 {
     [super viewWillAppear:animated];
 
+    [SwiftCodeAppDelegate reloadList];
     [myTableView reloadData];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (void)dealloc {
@@ -338,21 +337,36 @@
 
 #pragma mark Text Field Delegate
 
-- (void) textFieldDidEndEditing:(UITextField *)textField
+- (void) saveForm
 {
+    if (!proj) return;
+
 	NSNumberFormatter *nf = [[NSNumberFormatter alloc] init];
 
-	if (textField == projectName) proj.name = textField.text;
+    proj.name = projectName.text;
 
-	if (textField == sshHost) proj.sshHost = textField.text;
-	if (textField == sshPort) proj.sshPort = [nf numberFromString:textField.text];
-	if (textField == sshUser) proj.sshUser = textField.text;
-	if (textField == sshPass) proj.sshPass = textField.text;
-	if (textField == sshPath) proj.sshPath = textField.text;
+    proj.sshHost = sshHost.text;
+
+    NSString *portString = [sshPort.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    if (!portString || [@"" isEqualToString:portString])
+        proj.sshPort = [NSNumber numberWithInt:22];
+    else
+        proj.sshPort = [nf numberFromString:portString];
+
+    proj.sshUser = sshUser.text;
+    proj.sshPass = sshPass.text;
+    proj.sshPath = sshPath.text;
+
+    [Store storeProject:proj];
 
     [nf release];
+}
 
-	[Store storeProject:proj];
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
+    [self saveForm];
+
+    if (textField == projectName) [SwiftCodeAppDelegate reloadList];
 }
 
 #pragma mark Project Management

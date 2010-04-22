@@ -30,7 +30,7 @@
     num = nil;
     name = nil;
     sshHost = nil;
-    sshPort = nil;
+    sshPort = [[NSNumber alloc] initWithInt:22];
     sshUser = nil;
     sshPass = nil;
     sshPath = nil;

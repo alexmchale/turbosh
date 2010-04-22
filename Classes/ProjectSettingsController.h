@@ -27,6 +27,8 @@
 @property (nonatomic, retain) UITextField *sshPass;
 @property (nonatomic, retain) UITextField *sshPath;
 
+- (void) saveForm;
+
 typedef enum {
     TS_PROJECT_MAIN,
     TS_SSH_CREDENTIALS,
