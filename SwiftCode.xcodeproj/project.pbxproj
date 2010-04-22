@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D2F30171180E89E00D6F839 /* ProjectTaskSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F30151180E89E00D6F839 /* ProjectTaskSelector.m */; };
+		1D2F30181180E89E00D6F839 /* ProjectTaskSelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D2F30161180E89E00D6F839 /* ProjectTaskSelector.xib */; };
 		1D3623260D0F684500981E51 /* SwiftCodeAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* SwiftCodeAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -172,6 +174,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1D2F30141180E89E00D6F839 /* ProjectTaskSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectTaskSelector.h; sourceTree = "<group>"; };
+		1D2F30151180E89E00D6F839 /* ProjectTaskSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectTaskSelector.m; sourceTree = "<group>"; };
+		1D2F30161180E89E00D6F839 /* ProjectTaskSelector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ProjectTaskSelector.xib; path = Classes/ProjectTaskSelector.xib; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* SwiftCodeAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftCodeAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* SwiftCodeAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftCodeAppDelegate.m; sourceTree = "<group>"; };
@@ -381,6 +386,8 @@
 				74AE5E85115E7BFC006CA577 /* ProjectSettingsController.m */,
 				74610D8611642BB000CF7B04 /* ProjectFileSelector.h */,
 				74610D8711642BB000CF7B04 /* ProjectFileSelector.m */,
+				1D2F30141180E89E00D6F839 /* ProjectTaskSelector.h */,
+				1D2F30151180E89E00D6F839 /* ProjectTaskSelector.m */,
 				74A5ACE411709E05006A48A3 /* FileEditController.h */,
 				74A5ACE511709E05006A48A3 /* FileEditController.m */,
 			);
@@ -444,8 +451,9 @@
 			children = (
 				7476797E11806AEF005F4493 /* Icon.png */,
 				74A5ACE611709E05006A48A3 /* FileEditController.xib */,
-				74610D8811642BB000CF7B04 /* ProjectFileSelector.xib */,
 				74AE5E86115E7BFC006CA577 /* ProjectSettingsController.xib */,
+				74610D8811642BB000CF7B04 /* ProjectFileSelector.xib */,
+				1D2F30161180E89E00D6F839 /* ProjectTaskSelector.xib */,
 				74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */,
 				74B36E9E115B28FF00E3B2D1 /* SwitchController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
@@ -820,6 +828,7 @@
 				74610D8A11642BB000CF7B04 /* ProjectFileSelector.xib in Resources */,
 				74A5ACE811709E05006A48A3 /* FileEditController.xib in Resources */,
 				7476797F11806AEF005F4493 /* Icon.png in Resources */,
+				1D2F30181180E89E00D6F839 /* ProjectTaskSelector.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -869,6 +878,7 @@
 				1DF12F9411789A18008927B0 /* CommandDispatcher.m in Sources */,
 				74B3D575117AB92B00021611 /* FileTransfer.m in Sources */,
 				1DA64165117DEFE300B6D438 /* ProjectTask.m in Sources */,
+				1D2F30171180E89E00D6F839 /* ProjectTaskSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

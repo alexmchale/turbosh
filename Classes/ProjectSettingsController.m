@@ -329,6 +329,18 @@
 
         }   break;
 
+        case TS_TASKS:
+        {
+            ProjectTaskSelector *pts = [[ProjectTaskSelector alloc]
+                                        initWithNibName:@"ProjectTaskSelector"
+                                        bundle:nil];
+            pts.project = proj;
+
+            [SwiftCodeAppDelegate switchTo:pts];
+            [pts release];
+
+        }   break;
+
         case TS_ADD_REM:
         {
             switch (indexPath.row) {
