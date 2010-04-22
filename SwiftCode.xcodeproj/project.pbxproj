@@ -22,6 +22,7 @@
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		74610D8911642BB000CF7B04 /* ProjectFileSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 74610D8711642BB000CF7B04 /* ProjectFileSelector.m */; };
 		74610D8A11642BB000CF7B04 /* ProjectFileSelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74610D8811642BB000CF7B04 /* ProjectFileSelector.xib */; };
+		7476797F11806AEF005F4493 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7476797E11806AEF005F4493 /* Icon.png */; };
 		747EB84711613806002D8CD8 /* agent.c in Sources */ = {isa = PBXBuildFile; fileRef = 747EB82A11613806002D8CD8 /* agent.c */; };
 		747EB84811613806002D8CD8 /* channel.c in Sources */ = {isa = PBXBuildFile; fileRef = 747EB82B11613806002D8CD8 /* channel.c */; };
 		747EB84911613806002D8CD8 /* comp.c in Sources */ = {isa = PBXBuildFile; fileRef = 747EB82D11613806002D8CD8 /* comp.c */; };
@@ -196,6 +197,7 @@
 		74610D8611642BB000CF7B04 /* ProjectFileSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectFileSelector.h; sourceTree = "<group>"; };
 		74610D8711642BB000CF7B04 /* ProjectFileSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectFileSelector.m; sourceTree = "<group>"; };
 		74610D8811642BB000CF7B04 /* ProjectFileSelector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ProjectFileSelector.xib; path = Classes/ProjectFileSelector.xib; sourceTree = "<group>"; };
+		7476797E11806AEF005F4493 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		747EB82A11613806002D8CD8 /* agent.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = agent.c; path = SSH/libssh2/agent.c; sourceTree = "<group>"; };
 		747EB82B11613806002D8CD8 /* channel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = channel.c; path = SSH/libssh2/channel.c; sourceTree = "<group>"; };
 		747EB82C11613806002D8CD8 /* channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = channel.h; path = SSH/libssh2/channel.h; sourceTree = "<group>"; };
@@ -440,6 +442,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7476797E11806AEF005F4493 /* Icon.png */,
 				74A5ACE611709E05006A48A3 /* FileEditController.xib */,
 				74610D8811642BB000CF7B04 /* ProjectFileSelector.xib */,
 				74AE5E86115E7BFC006CA577 /* ProjectSettingsController.xib */,
@@ -816,6 +819,7 @@
 				74AE5E88115E7BFC006CA577 /* ProjectSettingsController.xib in Resources */,
 				74610D8A11642BB000CF7B04 /* ProjectFileSelector.xib in Resources */,
 				74A5ACE811709E05006A48A3 /* FileEditController.xib in Resources */,
+				7476797F11806AEF005F4493 /* Icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
