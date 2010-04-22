@@ -134,27 +134,31 @@
 									   reuseIdentifier:CellIdentifier] autorelease];
     }
 
-	CGRect tableFrame = tableView.frame;
-	int yOffset = 10;
-	int height = cell.frame.size.height - (2 * yOffset);
+    for (UIView *view in cell.contentView.subviews) {
+        [view removeFromSuperview];
+    }
 
-	UILabel *label = [[UILabel alloc] init];
-	label.text = name;
-	label.frame = CGRectMake(10, yOffset, 90, height);
-	label.font = [UIFont boldSystemFontOfSize:14.0];
-	label.textAlignment = UITextAlignmentRight;
-	label.backgroundColor = [UIColor clearColor];
+    CGRect tableFrame = tableView.frame;
+    int yOffset = 10;
+    int height = cell.frame.size.height - (2 * yOffset);
 
-	field.text = value;
-	field.frame = CGRectMake(110, yOffset, tableFrame.size.width - 250, height);
-	field.textColor = [UIColor colorWithRed:0.243 green:0.306 blue:0.435 alpha:1.0];
+    UILabel *label = [[UILabel alloc] init];
+    label.text = name;
+    label.frame = CGRectMake(10, yOffset, 90, height);
+    label.font = [UIFont boldSystemFontOfSize:14.0];
+    label.textAlignment = UITextAlignmentRight;
+    label.backgroundColor = [UIColor clearColor];
 
-	[cell.contentView addSubview:label];
-	[cell.contentView addSubview:field];
+    field.text = value;
+    field.frame = CGRectMake(110, yOffset, tableFrame.size.width - 250, height);
+    field.textColor = [UIColor colorWithRed:0.243 green:0.306 blue:0.435 alpha:1.0];
+
+    [cell.contentView addSubview:label];
+    [cell.contentView addSubview:field];
 
     [label release];
 
-	return cell;
+    return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
