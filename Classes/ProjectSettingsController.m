@@ -11,14 +11,33 @@
 
 - (void) addNewProject
 {
-    Project *newProject = [[Project alloc] init];
-    newProject.name = @"New Project";
-    [SwiftCodeAppDelegate editProject:newProject];
-    [newProject release];
+    self.proj = [[Project alloc] init];
+    [proj release];
+
+    proj.name = @"New Project";
+    [Store storeProject:proj];
+
+    [SwiftCodeAppDelegate editProject:proj];
 }
 
 - (void) removeThisProject
 {
+    assert(proj);
+
+    [Store deleteProject:proj];
+
+    if ([Store projectCount] == 0) {
+        [self addNewProject];
+    } else {
+        self.proj = [[Project alloc] init];
+        [proj release];
+
+        proj.num = [Store projectNumAtOffset:0];
+        [Store loadProject:proj];
+
+        [SwiftCodeAppDelegate editProject:proj];
+    }
+
 }
 
 #pragma mark View Initialization

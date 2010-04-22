@@ -26,7 +26,7 @@ static sqlite3 *db;
 
         tableSql = "CREATE TABLE projects ("
                    "id INTEGER NOT NULL PRIMARY KEY ON CONFLICT REPLACE AUTOINCREMENT, "
-                   "name TEXT NOT NULL UNIQUE, "
+                   "name TEXT NOT NULL, "
                    "ssh_hostname TEXT, "
                    "ssh_port INTEGER, "
                    "ssh_username TEXT, "
@@ -187,6 +187,29 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     project.num = [NSNumber numberWithInt:sqlite3_last_insert_rowid(db)];
 }
 
++ (void) deleteProject:(Project *)project
+{
+    assert(project.num);
+
+    sqlite3_stmt *t;
+    char *s;
+
+    s = "DELETE FROM projects WHERE id=?";
+    bind_prepare(&t, s);
+    bind_integer(t, 1, project.num, false);
+    bind_finalize(t, 0);
+
+    s = "DELETE FROM files WHERE project_id=?";
+    bind_prepare(&t, s);
+    bind_integer(t, 1, project.num, false);
+    bind_finalize(t, 0);
+
+    s = "DELETE FROM tasks WHERE project_id=?";
+    bind_prepare(&t, s);
+    bind_integer(t, 1, project.num, false);
+    bind_finalize(t, 0);
+}
+
 + (NSNumber *) currentProjectNum
 {
     NSInteger num = [self intValue:@"current.project"];
@@ -196,7 +219,7 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     // No project is marked as current.  Create a new one.
 
     Project *proj = [[Project alloc] init];
-    proj.name = @"My Project";
+    proj.name = @"New Project";
     [self storeProject:proj];
     [self setCurrentProject:proj];
     assert(proj.num != nil);

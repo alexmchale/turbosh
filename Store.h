@@ -14,6 +14,7 @@
 
 + (BOOL) loadProject:(Project *)project;
 + (void) storeProject:(Project *)project;
++ (void) deleteProject:(Project *)project;
 + (NSNumber *) currentProjectNum;
 + (void) setCurrentProject:(Project *)project;
 + (NSInteger) projectCount;

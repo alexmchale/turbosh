@@ -29,6 +29,8 @@
     delegate.rootViewController.title = project.name;
     delegate.projectSettingsController.proj = project;
 
+    [Store setCurrentProject:project];
+
     [self switchTo:delegate.projectSettingsController];
 }
 
