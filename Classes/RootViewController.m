@@ -1,19 +1,9 @@
-//
-//  RootViewController.m
-//  SwiftCode
-//
-//  Created by Alex McHale on 3/24/10.
-//  Copyright __MyCompanyName__ 2010. All rights reserved.
-//
-
 #import "RootViewController.h"
 #import "DetailViewController.h"
-
 
 @implementation RootViewController
 
 @synthesize detailViewController;
-
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -47,8 +37,8 @@ typedef enum {
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
-        case MST_FILES:     return @"Files";
-        case MST_TASKS:     return @""; //return @"Tasks";
+        case MST_FILES:     return [Store fileCountForCurrentProject] ? @"Files" : @"";
+        case MST_TASKS:     return [Store taskCountForCurrentProject] ? @"Tasks" : @"";
         case MST_PROJECTS:  return @"Projects";
         default:            return @"";
     }
@@ -57,7 +47,7 @@ typedef enum {
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
         case MST_FILES:     return [Store fileCountForCurrentProject];
-        case MST_TASKS:     return 0;
+        case MST_TASKS:     return [Store taskCountForCurrentProject];
         case MST_PROJECTS:  return [Store projectCount];
         default:            return 0;
     }

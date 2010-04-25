@@ -21,6 +21,12 @@
     return self;
 }
 
+#pragma mark Field Accessors
+
+//- (NSArray *) tasks {
+//    return [Store projectTasks:self];
+//}
+
 #pragma mark Memory Management
 
 - (id) init

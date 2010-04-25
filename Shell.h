@@ -34,6 +34,7 @@ typedef enum {
 
 - (NSArray *) directories;
 - (NSArray *) files;
+- (NSArray *) executables;
 - (NSArray *) findFilesOfType:(char)type;
 - (NSString *) remoteMd5:(ProjectFile *)file;
 

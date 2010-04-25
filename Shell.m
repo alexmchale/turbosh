@@ -176,7 +176,7 @@ static bool excluded_filename(NSString *filename) {
 }
 
 // Finds executables in the project path.
-- (NSArray *) findExecutables {
+- (NSArray *) executables {
     NSMutableData *data = [[NSMutableData alloc] init];
     NSMutableArray *files = nil;
     NSString *ep = [self escapedPath];

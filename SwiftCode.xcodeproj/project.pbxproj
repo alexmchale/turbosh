@@ -13,7 +13,6 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1D6F1C3B1163F72E0000B47D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */; };
-		1DA64165117DEFE300B6D438 /* ProjectTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DA64164117DEFE300B6D438 /* ProjectTask.m */; };
 		1DB6EDA711766EAF00FFC659 /* Synchronizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DB6EDA611766EAF00FFC659 /* Synchronizer.m */; };
 		1DF12F9411789A18008927B0 /* CommandDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF12F9311789A18008927B0 /* CommandDispatcher.m */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -183,8 +182,6 @@
 		1D6058910D05DD3D006BFB54 /* SwiftCode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftCode.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D6F1C391163F72D0000B47D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		1DA64163117DEFE300B6D438 /* ProjectTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectTask.h; sourceTree = "<group>"; };
-		1DA64164117DEFE300B6D438 /* ProjectTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectTask.m; sourceTree = "<group>"; };
 		1DB6EDA511766EAF00FFC659 /* Synchronizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Synchronizer.h; sourceTree = "<group>"; };
 		1DB6EDA611766EAF00FFC659 /* Synchronizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Synchronizer.m; sourceTree = "<group>"; };
 		1DF12F9211789A18008927B0 /* CommandDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandDispatcher.h; sourceTree = "<group>"; };
@@ -409,8 +406,6 @@
 				74B36FA1115B2B2A00E3B2D1 /* Project.m */,
 				74B36FA2115B2B2A00E3B2D1 /* ProjectFile.h */,
 				74B36FA3115B2B2A00E3B2D1 /* ProjectFile.m */,
-				1DA64163117DEFE300B6D438 /* ProjectTask.h */,
-				1DA64164117DEFE300B6D438 /* ProjectTask.m */,
 				74B3720F115DCF8500E3B2D1 /* Store.h */,
 				74B37210115DCF8500E3B2D1 /* Store.m */,
 				1DB6EDA511766EAF00FFC659 /* Synchronizer.h */,
@@ -877,7 +872,6 @@
 				1DB6EDA711766EAF00FFC659 /* Synchronizer.m in Sources */,
 				1DF12F9411789A18008927B0 /* CommandDispatcher.m in Sources */,
 				74B3D575117AB92B00021611 /* FileTransfer.m in Sources */,
-				1DA64165117DEFE300B6D438 /* ProjectTask.m in Sources */,
 				1D2F30171180E89E00D6F839 /* ProjectTaskSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

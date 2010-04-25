@@ -90,10 +90,10 @@
     Shell *shell = [[Shell alloc] initWithProject:project];
 
     if ([shell connect]) {
-        self.allFiles = [shell files];
+        self.allFiles = [shell executables];
 
         if (self.allFiles) {
-            self.syncFiles = [NSMutableArray arrayWithArray:[Store filenames:project]];
+            self.syncFiles = [NSMutableArray arrayWithArray:[Store taskNames:project]];
             self.removedFiles = [NSMutableArray array];
             [myTableView reloadData];
         } else {
