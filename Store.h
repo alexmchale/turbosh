@@ -35,8 +35,12 @@
 + (void) storeLocal:(ProjectFile *)file content:(NSData *)content;
 + (void) storeRemote:(ProjectFile *)file content:(NSData *)content;
 
++ (void) storeProjectTask:(ProjectFile *)file;
++ (BOOL) loadProjectTask:(ProjectFile *)file;
 + (NSArray *) taskNames:(Project *)project;
 + (NSInteger) taskCountForCurrentProject;
++ (NSNumber *) projectTaskNumber:(Project *)project filename:(NSString *)filename;
++ (NSNumber *) projectTaskNumber:(Project *)project atOffset:(NSInteger)offset;
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key;
 + (void) setIntValue:(NSInteger)value forKey:(NSString *)key;

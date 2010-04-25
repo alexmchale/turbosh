@@ -43,7 +43,7 @@ static sqlite3 *db;
                    "content BLOB, "
                    "remote_md5 TEXT, "
                    "local_md5 TEXT, "
-                   "UNIQUE (project_id, path) ON CONFLICT REPLACE)";
+                   "UNIQUE (project_id, path, usage) ON CONFLICT REPLACE)";
         assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
 
         [self setValue:@"1" forKey:@"version"];
@@ -316,17 +316,18 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     file.num = nil;
 }
 
-+ (BOOL) loadProjectFile:(ProjectFile *)file {
++ (BOOL) loadProjectFile:(ProjectFile *)file forUsage:(NSString *)usage {
     assert(file.num != nil);
 
     const char *s = "SELECT project_id, path, remote_md5, local_md5 "
                     "FROM files "
-                    "WHERE id=?";
+                    "WHERE id=? AND usage=?";
 
     BOOL found = FALSE;
     sqlite3_stmt *t;
     assert(sqlite3_prepare_v2(db, s, -1, &t, NULL) == SQLITE_OK);
     assert(sqlite3_bind_int(t, 1, [file.num intValue]) == SQLITE_OK);
+    bind_string(t, 2, usage, false);
 
     switch (sqlite3_step(t)) {
         case SQLITE_ROW:
@@ -365,7 +366,11 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     return found;
 }
 
-+ (void) storeProjectFile:(ProjectFile *)file {
++ (BOOL) loadProjectFile:(ProjectFile *)file {
+    return [self loadProjectFile:file forUsage:@"file"];
+}
+
++ (void) storeProjectFile:(ProjectFile *)file forUsage:(NSString *)usage {
     assert(file.project != nil);
 
     sqlite3_stmt *stmt;
@@ -374,9 +379,14 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     bind_integer(stmt, 1, file.num, true);
     bind_integer(stmt, 2, file.project.num, false);
     bind_string(stmt, 3, file.filename, false);
-    bind_string(stmt, 4, @"file", false);
+    bind_string(stmt, 4, usage, false);
     assert(sqlite3_step(stmt) == SQLITE_DONE);
     assert(sqlite3_finalize(stmt) == SQLITE_OK);
+}
+
++ (void) storeProjectFile:(ProjectFile *)file
+{
+    [self storeProjectFile:file forUsage:@"file"];
 }
 
 + (void) storeLocal:(ProjectFile *)file content:(NSData *)content
@@ -418,6 +428,7 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
 
 + (NSNumber *) projectFileNumber:(Project *)project
                         filename:(NSString *)filename
+                         ofUsage:(NSString *)usage
 {
     assert(project.num != nil);
 
@@ -427,7 +438,7 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
     assert(sqlite3_bind_int(stmt, 1, [project.num intValue]) == SQLITE_OK);
     assert(sqlite3_bind_text(stmt, 2, [filename UTF8String], -1, SQLITE_TRANSIENT) == SQLITE_OK);
-    bind_string(stmt, 3, @"file", false);
+    bind_string(stmt, 3, usage, false);
 
     if (sqlite3_step(stmt) == SQLITE_ROW)
         num = get_integer(stmt, 0);
@@ -435,6 +446,12 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     assert(sqlite3_finalize(stmt) == SQLITE_OK);
 
     return num;
+}
+
++ (NSNumber *) projectFileNumber:(Project *)project
+                        filename:(NSString *)filename
+{
+    return [self projectFileNumber:project filename:filename ofUsage:@"file"];
 }
 
 + (NSNumber *) projectFileNumber:(Project *)project atOffset:(NSInteger)offset
@@ -469,6 +486,32 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     [proj release];
 
     return count;
+}
+
++ (void) storeProjectTask:(ProjectFile *)file
+{
+    [self storeProjectFile:file forUsage:@"task"];
+}
+
++ (NSNumber *) projectTaskNumber:(Project *)project
+                        filename:(NSString *)filename
+{
+    return [self projectFileNumber:project filename:filename ofUsage:@"task"];
+}
+
++ (BOOL) loadProjectTask:(ProjectFile *)file {
+    return [self loadProjectFile:file forUsage:@"task"];
+}
+
++ (NSNumber *) projectTaskNumber:(Project *)project atOffset:(NSInteger)offset
+{
+    assert(project != nil);
+    assert(project.num != nil);
+
+    NSString *wherecl = [NSString stringWithFormat:@"project_id=%d AND usage='task'", [project.num intValue]];
+    NSInteger idint = [self scalarInt:@"id" onTable:@"files" where:wherecl offset:offset orderBy:@"path"];
+
+    return (idint > 0) ? [NSNumber numberWithInt:idint] : nil;
 }
 
 #pragma mark Key-Value

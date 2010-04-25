@@ -74,6 +74,11 @@ typedef enum {
             break;
 
         case MST_TASKS:
+            [project loadCurrent];
+            file.num = [Store projectTaskNumber:project atOffset:indexPath.row];
+            file.project = project;
+            assert([Store loadProjectTask:file]);
+            cell.textLabel.text = [file condensedPath];
             break;
 
         case MST_PROJECTS:

@@ -11,47 +11,26 @@
 - (void) saveAction {
     ProjectFile *file = [[ProjectFile alloc] init];
 
-    MBProgressHUD *hud = [[[MBProgressHUD alloc] initWithView:self.view] autorelease];
-    hud.labelText = @"Downloading Files";
-    [self.view addSubview:hud];
-    [hud show:YES];
-
     for (NSString *filename in syncFiles) {
-        [file loadByProject:project filename:filename];
+        file.num = [Store projectTaskNumber:project filename:filename];
+        file.project = project;
+        file.filename = filename;
 
-        if (file.num == nil) [Store storeProjectFile:file];
+        if (!file.num) [Store storeProjectTask:file];
     }
 
     for (NSString *filename in removedFiles) {
-        [file loadByProject:project filename:filename];
-        [Store deleteProjectFile:file];
+        file.num = [Store projectTaskNumber:project filename:filename];
+        file.project = project;
+
+        if (file.num) [Store deleteProjectFile:file];
     }
-
-    Shell *s = [[Shell alloc] initWithProject:project];
-    assert([s connect]);
-    for (NSString *filename in syncFiles) {
-        [file loadByProject:project filename:filename];
-        assert(file.num != nil);
-        NSString *md5 = [s remoteMd5:file];
-        assert(md5);
-
-        if (![md5 isEqual:[file remoteMd5]]) {
-            NSData *data = [s downloadFile:[file fullpath]];
-            [Store storeRemote:file content:data];
-        }
-    }
-    [s disconnect];
-    [s release];
-
-    [hud hide:YES];
-    [hud removeFromSuperview];
 
     [file release];
 
     [myToolbar setItems:savedToolbarItems];
 
     [SwiftCodeAppDelegate reloadList];
-
     [SwiftCodeAppDelegate editProject:project];
 }
 
