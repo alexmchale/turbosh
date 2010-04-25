@@ -32,5 +32,6 @@
     #import "ProjectFileSelector.h"
     #import "ProjectTaskSelector.h"
     #import "FileEditController.h"
+    #import "TaskExecController.h"
 
 #endif

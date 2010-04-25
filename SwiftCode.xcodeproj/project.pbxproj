@@ -146,6 +146,8 @@
 		74B3D575117AB92B00021611 /* FileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B3D574117AB92B00021611 /* FileTransfer.m */; };
 		74D740211166E28C0010A592 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D740201166E28C0010A592 /* RegexKitLite.m */; };
 		74D7403A11674C2E0010A592 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D7403911674C2E0010A592 /* libicucore.dylib */; };
+		74ECA28D1184DF1200458DAF /* TaskExecController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74ECA28B1184DF1200458DAF /* TaskExecController.m */; };
+		74ECA28E1184DF1200458DAF /* TaskExecController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74ECA28C1184DF1200458DAF /* TaskExecController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -344,6 +346,9 @@
 		74D7401F1166E28C0010A592 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		74D740201166E28C0010A592 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		74D7403911674C2E0010A592 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		74ECA28A1184DF1200458DAF /* TaskExecController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskExecController.h; sourceTree = "<group>"; };
+		74ECA28B1184DF1200458DAF /* TaskExecController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskExecController.m; sourceTree = "<group>"; };
+		74ECA28C1184DF1200458DAF /* TaskExecController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TaskExecController.xib; path = Classes/TaskExecController.xib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* SwiftCode-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftCode-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -387,6 +392,8 @@
 				74610D8711642BB000CF7B04 /* ProjectFileSelector.m */,
 				1D2F30141180E89E00D6F839 /* ProjectTaskSelector.h */,
 				1D2F30151180E89E00D6F839 /* ProjectTaskSelector.m */,
+				74ECA28A1184DF1200458DAF /* TaskExecController.h */,
+				74ECA28B1184DF1200458DAF /* TaskExecController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -455,6 +462,7 @@
 				2804203B108E9BAB000629CD /* DetailView.xib */,
 				8D1107310486CEB800E47090 /* SwiftCode-Info.plist */,
 				74B36E97115B146D00E3B2D1 /* ContentPaneSwitcher.xib */,
+				74ECA28C1184DF1200458DAF /* TaskExecController.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -824,6 +832,7 @@
 				74A5ACE811709E05006A48A3 /* FileEditController.xib in Resources */,
 				7476797F11806AEF005F4493 /* Icon.png in Resources */,
 				1D2F30181180E89E00D6F839 /* ProjectTaskSelector.xib in Resources */,
+				74ECA28E1184DF1200458DAF /* TaskExecController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -873,6 +882,7 @@
 				1DF12F9411789A18008927B0 /* CommandDispatcher.m in Sources */,
 				74B3D575117AB92B00021611 /* FileTransfer.m in Sources */,
 				1D2F30171180E89E00D6F839 /* ProjectTaskSelector.m in Sources */,
+				74ECA28D1184DF1200458DAF /* TaskExecController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

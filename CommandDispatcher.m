@@ -37,6 +37,7 @@
     static char buffer[0x4000];
     int rc;
     char *errmsg;
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 
     switch (step)
     {
@@ -79,14 +80,22 @@
 
             if (rc != LIBSSH2_ERROR_EAGAIN) {
                 if (rc < 0) return [self close];
-                if (rc > 0) [stdoutResponse appendBytes:buffer length:rc];
+
+                if (rc > 0) {
+                    [stdoutResponse appendBytes:buffer length:rc];
+                    [nc postNotificationName:@"CommandStdoutUpdate" object:self];
+                }
             }
 
             rc = libssh2_channel_read_stderr(channel, buffer, sizeof(buffer));
 
             if (rc != LIBSSH2_ERROR_EAGAIN) {
                 if (rc < 0) return [self close];
-                if (rc > 0) [stderrResponse appendBytes:buffer length:rc];
+
+                if (rc > 0) {
+                    [stderrResponse appendBytes:buffer length:rc];
+                    [nc postNotificationName:@"CommandStderrUpdate" object:self];
+                }
             }
 
             if (libssh2_channel_eof(channel)) step++;
