@@ -17,6 +17,7 @@
     NSMutableData *stderrResponse;
 }
 
+@property (nonatomic) LIBSSH2_SESSION *session;
 @property (nonatomic, retain) NSNumber *projectNum;
 
 - (id) initWithSession:(LIBSSH2_SESSION *)session command:(NSString *)command;

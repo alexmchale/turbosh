@@ -135,9 +135,11 @@
 
 - (void) executeCommand
 {
+    pendingCommand.session = session;
+
     if (![pendingCommand step]) {
-        state = SS_TERMINATE_SSH;
         self.pendingCommand = nil;
+        state = SS_TERMINATE_SSH;
     }
 }
 

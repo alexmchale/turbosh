@@ -2,6 +2,7 @@
 
 @implementation CommandDispatcher
 
+@synthesize session;
 @synthesize projectNum;
 
 - (id) initWithSession:(LIBSSH2_SESSION *)newSession command:(NSString *)newCommand
@@ -13,8 +14,6 @@
     projectNum = nil;
     command = newCommand;
     [command retain];
-
-    libssh2_session_set_blocking(session, 0);
 
     exitCode = 0;
 
@@ -42,6 +41,10 @@
     int rc;
     char *errmsg;
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+
+    if (session == NULL) return false;
+
+    libssh2_session_set_blocking(session, 0);
 
     switch (step)
     {
@@ -125,6 +128,8 @@
 
 - (bool) close
 {
+    fprintf(stderr, "closing exec at step %d with exit code %d\n", step, exitCode);
+
     if (channel != NULL) {
         libssh2_channel_free(channel);
         channel = NULL;
