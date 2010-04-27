@@ -67,6 +67,23 @@
             return true;
 
         case 1:
+        {
+            // Change directories to the project path.
+
+            NSString *chdir = [NSString stringWithFormat:@"chdir %@", project.sshPath];
+
+            rc = libssh2_channel_exec(channel, [chdir UTF8String]);
+
+            if (rc == LIBSSH2_ERROR_EAGAIN) return true;
+            if (rc != LIBSSH2_ERROR_NONE) return [self close];
+
+            fprintf(stderr, "chdir: %s\n", [command UTF8String]);
+
+            step++;
+
+        }   return true;
+
+        case 1:
             // Dispatch the command to the server.
 
             rc = libssh2_channel_exec(channel, [command UTF8String]);
