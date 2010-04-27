@@ -6,6 +6,7 @@ enum SyncState
     SS_CONNECT_TO_SERVER,
     SS_ESTABLISH_SSH,
     SS_AUTHENTICATE_SSH,
+    SS_EXECUTE_COMMAND,
     SS_SELECT_FILE,
     SS_INITIATE_HASH,
     SS_CONTINUE_HASH,
@@ -41,6 +42,8 @@ enum SyncState
     CommandDispatcher *dispatcher;
     FileTransfer *transfer;
 
+    CommandDispatcher *pendingCommand;
+
     bool startup;
 }
 
@@ -49,6 +52,7 @@ enum SyncState
 @property (nonatomic, retain) ProjectFile *file;
 @property (nonatomic, retain) CommandDispatcher *dispatcher;
 @property (nonatomic, retain) FileTransfer *transfer;
+@property (nonatomic, retain) CommandDispatcher *pendingCommand;
 
 - (void) step;
 - (void) synchronize;

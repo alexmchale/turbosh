@@ -8,12 +8,16 @@
     LIBSSH2_CHANNEL *channel;
     NSString *command;
 
+    NSNumber *projectNum;
+
     int step;
     int exitCode;
 
     NSMutableData *stdoutResponse;
     NSMutableData *stderrResponse;
 }
+
+@property (nonatomic, retain) NSNumber *projectNum;
 
 - (id) initWithSession:(LIBSSH2_SESSION *)session command:(NSString *)command;
 - (bool) step;

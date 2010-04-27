@@ -12,6 +12,7 @@
 @synthesize timer;
 @synthesize project, file;
 @synthesize dispatcher, transfer;
+@synthesize pendingCommand;
 
 #pragma mark Synchronizer
 
@@ -126,7 +127,18 @@
         return;
     }
 
-    state = SS_SELECT_FILE;
+    if (!pendingCommand.projectNum || [project.num isEqualToNumber:pendingCommand.projectNum])
+        state = SS_EXECUTE_COMMAND;
+    else
+        state = SS_SELECT_FILE;
+}
+
+- (void) executeCommand
+{
+    if (![pendingCommand step]) {
+        state = SS_TERMINATE_SSH;
+        self.pendingCommand = nil;
+    }
 }
 
 - (void) selectFile
@@ -286,6 +298,13 @@
     if (startup) {
         startup = false;
         state = SS_SELECT_PROJECT;
+    } else if (pendingCommand.projectNum) {
+        self.project = [[Project alloc] init];
+        project.num = pendingCommand.projectNum;
+        assert([Store loadProject:project]);
+        [project release];
+
+        state = SS_CONNECT_TO_SERVER;
     }
 }
 
@@ -298,6 +317,7 @@
         case SS_CONNECT_TO_SERVER:      return [self connectToServer];
         case SS_ESTABLISH_SSH:          return [self establishSsh];
         case SS_AUTHENTICATE_SSH:       return [self authenticateSsh];
+        case SS_EXECUTE_COMMAND:        return [self executeCommand];
         case SS_SELECT_FILE:            return [self selectFile];
         case SS_INITIATE_HASH:          return [self initiateHash];
         case SS_CONTINUE_HASH:          return [self continueHash];
@@ -311,6 +331,8 @@
         case SS_TERMINATE_SSH:          return [self terminateSsh];
         case SS_DISCONNECT:             return [self disconnect];
         case SS_IDLE:                   return [self idle];
+
+        default: assert(false);
     }
 }
 
@@ -339,6 +361,7 @@
     dispatcher = nil;
     transfer = nil;
     startup = false;
+    pendingCommand = nil;
 
     sock = 0;
     session = NULL;
