@@ -137,6 +137,7 @@
             return true;
 
         case 3:
+        {
             // Close the command channel.
 
             rc = libssh2_channel_close(channel);
@@ -147,7 +148,7 @@
             exitCode = libssh2_channel_get_exit_status(channel);
             step++;
 
-            return [self close];
+        } return [self close];
 
         default: return [self close];
     }

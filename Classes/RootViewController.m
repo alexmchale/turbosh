@@ -115,7 +115,20 @@ typedef enum {
         }   break;
 
         case MST_TASKS:
-            break;
+        {
+            Project *p = [[[Project alloc] init] loadCurrent];
+            ProjectFile *f = [[ProjectFile alloc] init];
+            f.num = [Store projectTaskNumber:p atOffset:indexPath.row];
+            f.project = p;
+            assert([Store loadProjectTask:f]);
+
+            CommandDispatcher *cd = [[CommandDispatcher alloc] initWithProject:p session:NULL command:f.filename];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(up123:) name:@"CommandStdoutUpdate" object:cd];
+            [SwiftCodeAppDelegate queueCommand:cd];
+
+            [f release];
+            [p release];
+        }   break;
 
         case MST_PROJECTS:
         {
@@ -135,6 +148,10 @@ typedef enum {
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+- (void) up123:(NSNotification *)notif
+{
+    NSLog(@"Got notification");
+}
 
 #pragma mark -
 #pragma mark Memory management

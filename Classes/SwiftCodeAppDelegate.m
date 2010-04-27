@@ -75,6 +75,12 @@
     [delegate.synchronizer synchronize];
 }
 
++ (void) queueCommand:(CommandDispatcher *)dispatcher
+{
+    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    [delegate.synchronizer appendCommand:dispatcher];
+}
+
 + (void) reloadList
 {
     SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
@@ -119,7 +125,6 @@
 {
     NSNumber *offset = [notif.userInfo valueForKey:@"offset"];
     NSNumber *length = [notif.userInfo valueForKey:@"length"];
-
 
     NSLog(@"NOTIFIED %@ %@", offset, length);
 }

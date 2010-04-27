@@ -7,6 +7,7 @@
 @class Project;
 @class ProjectFile;
 @class Synchronizer;
+@class CommandDispatcher;
 
 @interface SwiftCodeAppDelegate : NSObject <UIApplicationDelegate>
 {
@@ -39,6 +40,7 @@
 + (void) editFile:(ProjectFile *)file;
 + (void) editCurrentFile;
 + (void) sync;
++ (void) queueCommand:(CommandDispatcher *)dispatcher;
 + (void) reloadList;
 
 @end
