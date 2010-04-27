@@ -42,7 +42,8 @@ enum SyncState
     CommandDispatcher *dispatcher;
     FileTransfer *transfer;
 
-    CommandDispatcher *pendingCommand;
+    CommandDispatcher *currentCommand;
+    NSMutableArray *pendingCommands;
 
     bool startup;
 }
@@ -52,9 +53,10 @@ enum SyncState
 @property (nonatomic, retain) ProjectFile *file;
 @property (nonatomic, retain) CommandDispatcher *dispatcher;
 @property (nonatomic, retain) FileTransfer *transfer;
-@property (nonatomic, retain) CommandDispatcher *pendingCommand;
+@property (nonatomic, retain) CommandDispatcher *currentCommand;
 
 - (void) step;
 - (void) synchronize;
+- (void) appendCommand:(CommandDispatcher *)command;
 
 @end

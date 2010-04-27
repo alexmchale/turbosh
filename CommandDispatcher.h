@@ -22,7 +22,7 @@
 @property (nonatomic, retain) Project *project;
 @property (nonatomic, retain) NSString *pwdCommand;
 
-- (id) initWithSession:(LIBSSH2_SESSION *)session command:(NSString *)command;
+- (id) initWithProject:(Project *)project session:(LIBSSH2_SESSION *)session command:(NSString *)command;
 - (bool) step;
 - (int) exitCode;
 - (NSData *) stdoutResponse;

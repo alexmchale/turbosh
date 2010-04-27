@@ -6,16 +6,24 @@
 @synthesize project;
 @synthesize pwdCommand;
 
-- (id) initWithSession:(LIBSSH2_SESSION *)newSession command:(NSString *)newCommand
+- (id) initWithProject:(Project *)newProject
+               session:(LIBSSH2_SESSION *)newSession
+               command:(NSString *)newCommand
 {
     assert(self = [super init]);
 
     session = newSession;
-    project = nil;
 
-    pwdCommand = nil;
+    project = newProject;
+    [project retain];
+
     command = newCommand;
     [command retain];
+
+    assert(project.sshPath);
+    assert(command);
+
+    pwdCommand = [[NSString alloc] initWithFormat:@"cd %@ && %@", project.sshPath, command];
 
     exitCode = 0;
 
@@ -71,8 +79,6 @@
 
         case 1:
             // Dispatch the command to the server.
-
-            self.pwdCommand = [NSString stringWithFormat:@"cd %@ && %@", project.sshPath, command];
 
             rc = libssh2_channel_exec(channel, [pwdCommand UTF8String]);
 

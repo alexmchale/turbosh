@@ -12,7 +12,7 @@
 @synthesize timer;
 @synthesize project, file;
 @synthesize dispatcher, transfer;
-@synthesize pendingCommand;
+@synthesize currentCommand;
 
 #pragma mark Synchronizer
 
@@ -127,7 +127,7 @@
         return;
     }
 
-    if (!pendingCommand.project || [project.num isEqualToNumber:pendingCommand.project.num])
+    if (currentCommand && [project.num isEqualToNumber:currentCommand.project.num])
         state = SS_EXECUTE_COMMAND;
     else
         state = SS_SELECT_FILE;
@@ -135,10 +135,10 @@
 
 - (void) executeCommand
 {
-    pendingCommand.session = session;
+    currentCommand.session = session;
 
-    if (![pendingCommand step]) {
-        self.pendingCommand = nil;
+    if (![currentCommand step]) {
+        self.currentCommand = nil;
         state = SS_TERMINATE_SSH;
     }
 }
@@ -168,7 +168,8 @@
     NSString *md5f = @"md5 %@ || md5sum %@";
     NSString *md5Cmd = [NSString stringWithFormat:md5f, [file escapedPath], [file escapedPath]];
 
-    self.dispatcher = [[CommandDispatcher alloc] initWithSession:session command:md5Cmd];
+    self.dispatcher = [[CommandDispatcher alloc] initWithProject:project session:session command:md5Cmd];
+    [dispatcher release];
 
     state = SS_CONTINUE_HASH;
 }
@@ -297,11 +298,17 @@
     self.dispatcher = nil;
     self.transfer = nil;
 
+    [currentCommand close];
+    self.currentCommand = nil;
+
     if (startup) {
         startup = false;
         state = SS_SELECT_PROJECT;
-    } else if (pendingCommand.project) {
-        self.project = pendingCommand.project;
+    } else if ([pendingCommands count] > 0) {
+        self.currentCommand = [pendingCommands objectAtIndex:0];
+        self.project = currentCommand.project;
+        [pendingCommands removeObjectAtIndex:0];
+
         state = SS_CONNECT_TO_SERVER;
     }
 }
@@ -339,6 +346,11 @@
     startup = true;
 }
 
+- (void) appendCommand:(CommandDispatcher *)command
+{
+    [pendingCommands addObject:command];
+}
+
 #pragma mark Memory Management
 
 - (id) init
@@ -359,7 +371,9 @@
     dispatcher = nil;
     transfer = nil;
     startup = false;
-    pendingCommand = nil;
+
+    currentCommand = nil;
+    pendingCommands = [[NSMutableArray alloc] init];
 
     sock = 0;
     session = NULL;
@@ -374,6 +388,8 @@
     [file release];
     [dispatcher release];
     [transfer release];
+    [currentCommand release];
+    [pendingCommands release];
 
     [super dealloc];
 }
