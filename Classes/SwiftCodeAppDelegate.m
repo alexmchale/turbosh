@@ -104,14 +104,24 @@
     [[NSRunLoop mainRunLoop] addTimer:synchronizer.timer forMode:NSDefaultRunLoopMode];
 
     // Fire a test command.
-    CommandDispatcher *disp = [[CommandDispatcher alloc] initWithSession:NULL command:@"touch MyTest5"];
-    disp.project = [[[Project alloc] init] loadCurrent];
-    [disp.project release];
-    synchronizer.pendingCommand = disp;
+    Project *project = [[[Project alloc] init] loadCurrent];
+    CommandDispatcher *disp = [[CommandDispatcher alloc] initWithProject:project session:NULL command:@"cat VERSION.yml"];
+    [synchronizer appendCommand:disp];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(up123:) name:@"CommandStdoutUpdate" object:disp];
     [disp release];
+    [project release];
 
     return YES;
 
+}
+
+- (void) up123:(NSNotification *)notif
+{
+    NSNumber *offset = [notif.userInfo valueForKey:@"offset"];
+    NSNumber *length = [notif.userInfo valueForKey:@"length"];
+
+
+    NSLog(@"NOTIFIED %@ %@", offset, length);
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
