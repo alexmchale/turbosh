@@ -127,7 +127,7 @@
         return;
     }
 
-    if (!pendingCommand.projectNum || [project.num isEqualToNumber:pendingCommand.projectNum])
+    if (!pendingCommand.project || [project.num isEqualToNumber:pendingCommand.project.num])
         state = SS_EXECUTE_COMMAND;
     else
         state = SS_SELECT_FILE;
@@ -300,12 +300,8 @@
     if (startup) {
         startup = false;
         state = SS_SELECT_PROJECT;
-    } else if (pendingCommand.projectNum) {
-        self.project = [[Project alloc] init];
-        project.num = pendingCommand.projectNum;
-        assert([Store loadProject:project]);
-        [project release];
-
+    } else if (pendingCommand.project) {
+        self.project = pendingCommand.project;
         state = SS_CONNECT_TO_SERVER;
     }
 }

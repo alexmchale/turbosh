@@ -3,15 +3,15 @@
 @implementation CommandDispatcher
 
 @synthesize session;
-@synthesize projectNum;
+@synthesize project;
 
 - (id) initWithSession:(LIBSSH2_SESSION *)newSession command:(NSString *)newCommand
 {
     assert(self = [super init]);
 
     session = newSession;
+    project = nil;
 
-    projectNum = nil;
     command = newCommand;
     [command retain];
 
@@ -27,7 +27,7 @@
 {
     [self close];
 
-    [projectNum release];
+    [project release];
     [command release];
     [stdoutResponse release];
     [stderrResponse release];

@@ -8,7 +8,7 @@
     LIBSSH2_CHANNEL *channel;
     NSString *command;
 
-    NSNumber *projectNum;
+    Project *project;
 
     int step;
     int exitCode;
@@ -18,7 +18,7 @@
 }
 
 @property (nonatomic) LIBSSH2_SESSION *session;
-@property (nonatomic, retain) NSNumber *projectNum;
+@property (nonatomic, retain) Project *project;
 
 - (id) initWithSession:(LIBSSH2_SESSION *)session command:(NSString *)command;
 - (bool) step;
