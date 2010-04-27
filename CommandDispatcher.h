@@ -7,6 +7,7 @@
     LIBSSH2_SESSION *session;
     LIBSSH2_CHANNEL *channel;
     NSString *command;
+    NSString *pwdCommand;
 
     Project *project;
 
@@ -19,6 +20,7 @@
 
 @property (nonatomic) LIBSSH2_SESSION *session;
 @property (nonatomic, retain) Project *project;
+@property (nonatomic, retain) NSString *pwdCommand;
 
 - (id) initWithSession:(LIBSSH2_SESSION *)session command:(NSString *)command;
 - (bool) step;

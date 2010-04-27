@@ -4,6 +4,7 @@
 
 @synthesize session;
 @synthesize project;
+@synthesize pwdCommand;
 
 - (id) initWithSession:(LIBSSH2_SESSION *)newSession command:(NSString *)newCommand
 {
@@ -12,6 +13,7 @@
     session = newSession;
     project = nil;
 
+    pwdCommand = nil;
     command = newCommand;
     [command retain];
 
@@ -28,6 +30,7 @@
     [self close];
 
     [project release];
+    [pwdCommand release];
     [command release];
     [stdoutResponse release];
     [stderrResponse release];
@@ -67,31 +70,16 @@
             return true;
 
         case 1:
-        {
-            // Change directories to the project path.
-
-            NSString *chdir = [NSString stringWithFormat:@"chdir %@", project.sshPath];
-
-            rc = libssh2_channel_exec(channel, [chdir UTF8String]);
-
-            if (rc == LIBSSH2_ERROR_EAGAIN) return true;
-            if (rc != LIBSSH2_ERROR_NONE) return [self close];
-
-            fprintf(stderr, "chdir: %s\n", [command UTF8String]);
-
-            step++;
-
-        }   return true;
-
-        case 1:
             // Dispatch the command to the server.
 
-            rc = libssh2_channel_exec(channel, [command UTF8String]);
+            self.pwdCommand = [NSString stringWithFormat:@"cd %@ && %@", project.sshPath, command];
+
+            rc = libssh2_channel_exec(channel, [pwdCommand UTF8String]);
 
             if (rc == LIBSSH2_ERROR_EAGAIN) return true;
             if (rc != LIBSSH2_ERROR_NONE) return [self close];
 
-            fprintf(stderr, "exec: %s\n", [command UTF8String]);
+            NSLog(@"Executing: %@", pwdCommand);
 
             step++;
 
@@ -108,6 +96,8 @@
                 if (rc > 0) {
                     [stdoutResponse appendBytes:buffer length:rc];
                     [nc postNotificationName:@"CommandStdoutUpdate" object:self];
+
+                    NSLog(@"cmd(%@) stdout %d bytes", command, rc);
                 }
             }
 
@@ -119,6 +109,8 @@
                 if (rc > 0) {
                     [stderrResponse appendBytes:buffer length:rc];
                     [nc postNotificationName:@"CommandStderrUpdate" object:self];
+
+                    NSLog(@"cmd(%@) stderr %d bytes", command, rc);
                 }
             }
 
@@ -145,7 +137,7 @@
 
 - (bool) close
 {
-    fprintf(stderr, "closing exec at step %d with exit code %d\n", step, exitCode);
+    NSLog(@"cmd(%@) closing at step %d with exit code %d", command, step, exitCode);
 
     if (channel != NULL) {
         libssh2_channel_free(channel);

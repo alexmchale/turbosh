@@ -104,7 +104,7 @@
     [[NSRunLoop mainRunLoop] addTimer:synchronizer.timer forMode:NSDefaultRunLoopMode];
 
     // Fire a test command.
-    CommandDispatcher *disp = [[CommandDispatcher alloc] initWithSession:NULL command:@"touch MyTest3"];
+    CommandDispatcher *disp = [[CommandDispatcher alloc] initWithSession:NULL command:@"touch MyTest5"];
     disp.project = [[[Project alloc] init] loadCurrent];
     [disp.project release];
     synchronizer.pendingCommand = disp;
