@@ -100,14 +100,18 @@
                 if (rc < 0) return [self close];
 
                 if (rc > 0) {
+                    [stdoutResponse appendBytes:buffer length:rc];
+
                     NSNumber *offset = [NSNumber numberWithInt:[stdoutResponse length]];
                     NSNumber *length = [NSNumber numberWithInt:rc];
 
                     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                              offset, @"offset", length, @"length", nil];
+                                              @"stdout", @"type",
+                                              offset, @"offset",
+                                              length, @"length",
+                                              nil];
 
-                    [stdoutResponse appendBytes:buffer length:rc];
-                    [nc postNotificationName:@"CommandStdoutUpdate" object:self userInfo:userInfo];
+                    [nc postNotificationName:@"progress" object:self userInfo:userInfo];
 
                     NSLog(@"cmd(%@) stdout %d bytes", command, rc);
                 }
@@ -119,14 +123,18 @@
                 if (rc < 0) return [self close];
 
                 if (rc > 0) {
+                    [stderrResponse appendBytes:buffer length:rc];
+
                     NSNumber *offset = [NSNumber numberWithInt:[stderrResponse length]];
                     NSNumber *length = [NSNumber numberWithInt:rc];
 
                     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                              offset, @"offset", length, @"length", nil];
+                                              @"stderr", @"type",
+                                              offset, @"offset",
+                                              length, @"length",
+                                              nil];
 
-                    [stderrResponse appendBytes:buffer length:rc];
-                    [nc postNotificationName:@"CommandStderrUpdate" object:self userInfo:userInfo];
+                    [nc postNotificationName:@"progress" object:self userInfo:userInfo];
 
                     NSLog(@"cmd(%@) stderr %d bytes", command, rc);
                 }
@@ -147,6 +155,13 @@
 
             exitCode = libssh2_channel_get_exit_status(channel);
             step++;
+
+            NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      @"exit", @"type",
+                                      [NSNumber numberWithInt:exitCode], @"exit-code",
+                                      nil];
+
+            [nc postNotificationName:@"progress" object:self userInfo:userInfo];
 
         } return [self close];
 
