@@ -2,53 +2,33 @@
 
 @implementation NSString (monkey)
 
-NSString *color_name(int code)
-{
-    return @"ansiRed";
-}
-
 - (NSString *) stringByConvertingAnsiColor
 {
     const char *rs = [self cStringUsingEncoding:NSUTF8StringEncoding];
     char c;
     bool inColor = false;
-    int code = 0;
-    enum { NORM, OPENTAG, CODE } state;
 
+    AnsiCode *ansi = [[AnsiCode alloc] init];
     NSMutableString *ms = [NSMutableString string];
 
     while (c = *rs++) {
-        switch (state) {
-            case NORM:
-                if (c != 27) {
-                    [ms appendFormat:@"%c", c];
-                } else {
-                    state = OPENTAG;
-                }
-                break;
+        if (c == 27) {
+            [ansi start];
 
-            case OPENTAG:
-                if (c == '[') {
-                    state = CODE;
-                    code = 0;
-                }
-                break;
+            while (c = *++rs && [ansi append:c])
+                continue;
 
-            case CODE:
-                if (c == 'm') {
-                    state = NORM;
-                    if (inColor) [ms appendFormat:@"</span>"];
-                    [ms appendFormat:@"<span class='%@'>", color_name(code)];
-                    inColor = true;
-                } else {
-                    code *= 10;
-                    code += c - '0';
-                }
-                break;
+            if (inColor) [ms appendFormat:@"</span>"];
+            inColor = true;
+            [ms appendFormat:@"<span class='%@'>", [ansi cssName]];
+        } else {
+            [ms appendFormat:@"%c", c];
         }
     }
 
     if (inColor) [ms appendString:@"</span>"];
+
+    [ansi release];
 
     return ms;
 }

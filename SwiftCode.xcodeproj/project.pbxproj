@@ -14,6 +14,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1D6F1C3B1163F72E0000B47D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */; };
 		1DB6EDA711766EAF00FFC659 /* Synchronizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DB6EDA611766EAF00FFC659 /* Synchronizer.m */; };
+		1DC63B3A1188B50800DD3842 /* AnsiCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC63B391188B50800DD3842 /* AnsiCode.m */; };
 		1DF12F9411789A18008927B0 /* CommandDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF12F9311789A18008927B0 /* CommandDispatcher.m */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		2804200B108E984D000629CD /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28042008108E984D000629CD /* RootViewController.m */; };
@@ -188,6 +189,8 @@
 		1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		1DB6EDA511766EAF00FFC659 /* Synchronizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Synchronizer.h; sourceTree = "<group>"; };
 		1DB6EDA611766EAF00FFC659 /* Synchronizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Synchronizer.m; sourceTree = "<group>"; };
+		1DC63B381188B50800DD3842 /* AnsiCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnsiCode.h; sourceTree = "<group>"; };
+		1DC63B391188B50800DD3842 /* AnsiCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnsiCode.m; sourceTree = "<group>"; };
 		1DF12F9211789A18008927B0 /* CommandDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandDispatcher.h; sourceTree = "<group>"; };
 		1DF12F9311789A18008927B0 /* CommandDispatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandDispatcher.m; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -685,6 +688,8 @@
 			isa = PBXGroup;
 			children = (
 				74ECA3711187D6F500458DAF /* task-viewer.html */,
+				1DC63B381188B50800DD3842 /* AnsiCode.h */,
+				1DC63B391188B50800DD3842 /* AnsiCode.m */,
 			);
 			name = TaskViewer;
 			sourceTree = "<group>";
@@ -901,6 +906,7 @@
 				1D2F30171180E89E00D6F839 /* ProjectTaskSelector.m in Sources */,
 				74ECA28D1184DF1200458DAF /* TaskExecController.m in Sources */,
 				74ECA3BD1188514B00458DAF /* StringUtil.m in Sources */,
+				1DC63B3A1188B50800DD3842 /* AnsiCode.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
