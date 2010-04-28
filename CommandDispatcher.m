@@ -97,19 +97,23 @@
         case 2:
             // Read the response from the server.
 
-            rc = libssh2_channel_read(channel, buffer, sizeof(buffer));
+            rc = libssh2_channel_read(channel, buffer, sizeof(buffer) - 1);
 
             if (rc != LIBSSH2_ERROR_EAGAIN) {
                 if (rc < 0) return [self close];
 
                 if (rc > 0) {
+                    buffer[rc] = '\0';
+
                     [stdoutResponse appendBytes:buffer length:rc];
 
+                    NSString *str = [NSString stringWithUTF8String:buffer];
                     NSNumber *offset = [NSNumber numberWithInt:[stdoutResponse length]];
                     NSNumber *length = [NSNumber numberWithInt:rc];
 
                     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                               @"stdout", @"type",
+                                              str, @"string",
                                               offset, @"offset",
                                               length, @"length",
                                               nil];
@@ -120,19 +124,23 @@
                 }
             }
 
-            rc = libssh2_channel_read_stderr(channel, buffer, sizeof(buffer));
+            rc = libssh2_channel_read_stderr(channel, buffer, sizeof(buffer) - 1);
 
             if (rc != LIBSSH2_ERROR_EAGAIN) {
                 if (rc < 0) return [self close];
 
                 if (rc > 0) {
+                    buffer[rc] = '\0';
+
                     [stderrResponse appendBytes:buffer length:rc];
 
+                    NSString *str = [NSString stringWithUTF8String:buffer];
                     NSNumber *offset = [NSNumber numberWithInt:[stderrResponse length]];
                     NSNumber *length = [NSNumber numberWithInt:rc];
 
                     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
                                               @"stderr", @"type",
+                                              str, @"string",
                                               offset, @"offset",
                                               length, @"length",
                                               nil];

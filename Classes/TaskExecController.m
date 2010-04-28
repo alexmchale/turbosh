@@ -14,6 +14,7 @@
 - (void) transferProgress:(NSNotification *)notif
 {
     NSLog(@"Task Progress");
+    NSLog(@"%@", [notif.userInfo valueForKey:@"string"]);
 }
 
 - (void) transferFinish:(NSNotification *)notif
@@ -25,6 +26,15 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSURL *baseURL = [NSURL fileURLWithPath:[bundle resourcePath]];
+    NSURL *htmlURL = [NSURL fileURLWithPath:[bundle pathForResource:@"task-viewer" ofType:@"html" inDirectory:NO]];
+    NSString *html = [[[NSString alloc] initWithContentsOfURL:htmlURL] autorelease];
+
+    [webView loadHTMLString:html baseURL:baseURL];
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(transferBegin:)
                                                  name:@"begin" object:dispatcher];

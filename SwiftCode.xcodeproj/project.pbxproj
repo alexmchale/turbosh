@@ -148,6 +148,7 @@
 		74D7403A11674C2E0010A592 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D7403911674C2E0010A592 /* libicucore.dylib */; };
 		74ECA28D1184DF1200458DAF /* TaskExecController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74ECA28B1184DF1200458DAF /* TaskExecController.m */; };
 		74ECA28E1184DF1200458DAF /* TaskExecController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74ECA28C1184DF1200458DAF /* TaskExecController.xib */; };
+		74ECA3721187D6F500458DAF /* task-viewer.html in Resources */ = {isa = PBXBuildFile; fileRef = 74ECA3711187D6F500458DAF /* task-viewer.html */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -349,6 +350,7 @@
 		74ECA28A1184DF1200458DAF /* TaskExecController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskExecController.h; sourceTree = "<group>"; };
 		74ECA28B1184DF1200458DAF /* TaskExecController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskExecController.m; sourceTree = "<group>"; };
 		74ECA28C1184DF1200458DAF /* TaskExecController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TaskExecController.xib; path = Classes/TaskExecController.xib; sourceTree = "<group>"; };
+		74ECA3711187D6F500458DAF /* task-viewer.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "task-viewer.html"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* SwiftCode-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftCode-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -424,6 +426,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				74ECA3701187D6CD00458DAF /* TaskViewer */,
 				1D6F1BC01163E44D0000B47D /* Storehouse */,
 				747EC1DF1161810C002D8CD8 /* Shell */,
 				74AE5E6C115E77CC006CA577 /* Monkey Patches */,
@@ -673,6 +676,14 @@
 			path = lang;
 			sourceTree = "<group>";
 		};
+		74ECA3701187D6CD00458DAF /* TaskViewer */ = {
+			isa = PBXGroup;
+			children = (
+				74ECA3711187D6F500458DAF /* task-viewer.html */,
+			);
+			name = TaskViewer;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -833,6 +844,7 @@
 				7476797F11806AEF005F4493 /* Icon.png in Resources */,
 				1D2F30181180E89E00D6F839 /* ProjectTaskSelector.xib in Resources */,
 				74ECA28E1184DF1200458DAF /* TaskExecController.xib in Resources */,
+				74ECA3721187D6F500458DAF /* task-viewer.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
