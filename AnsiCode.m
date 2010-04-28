@@ -14,7 +14,7 @@
 // Return true if the user should continue feeding characters.
 - (bool) append:(char)c
 {
-    NSLog(@"next: %X", c);
+    NSLog(@"next: %d", c);
 
     // Header characters.  Just continue.
     if (c == 27 || c == '[') return true;

@@ -15,8 +15,10 @@
         if (c == 27) {
             [ansi start];
 
-            while (c = *++rs && [ansi append:c])
-                continue;
+            do {
+                rs++;
+                c = *rs;
+            } while (c && [ansi append:c]);
 
             if (inColor) [ms appendFormat:@"</span>"];
             inColor = true;
