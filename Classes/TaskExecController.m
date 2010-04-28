@@ -26,8 +26,16 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(transferBegin:)
+                                                 name:@"begin" object:dispatcher];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(transferProgress:)
                                                  name:@"progress" object:dispatcher];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(transferFinish:)
+                                                 name:@"finish" object:dispatcher];
 
     [SwiftCodeAppDelegate queueCommand:dispatcher];
 }

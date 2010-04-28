@@ -60,6 +60,7 @@
     switch (step)
     {
         case 0:
+        {
             // Establish a command channel.
 
             channel = libssh2_channel_open_session(session);
@@ -68,6 +69,8 @@
 
             if (channel == NULL && rc == LIBSSH2_ERROR_EAGAIN) return true;
 
+            [nc postNotificationName:@"begin" object:self];
+
             if (channel == NULL) {
                 fprintf(stderr, "command (%s) error (%d): %s\n", [command UTF8String], rc, errmsg);
                 return [self close];
@@ -75,7 +78,7 @@
 
             step++;
 
-            return true;
+        }   return true;
 
         case 1:
             // Dispatch the command to the server.
@@ -156,13 +159,6 @@
             exitCode = libssh2_channel_get_exit_status(channel);
             step++;
 
-            NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                      @"exit", @"type",
-                                      [NSNumber numberWithInt:exitCode], @"exit-code",
-                                      nil];
-
-            [nc postNotificationName:@"progress" object:self userInfo:userInfo];
-
         } return [self close];
 
         default: return [self close];
@@ -172,6 +168,14 @@
 - (bool) close
 {
     NSLog(@"cmd(%@) closing at step %d with exit code %d", command, step, exitCode);
+
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                              [NSNumber numberWithInt:exitCode], @"exit-code",
+                              nil];
+
+    [nc postNotificationName:@"finish" object:self userInfo:userInfo];
 
     if (channel != NULL) {
         libssh2_channel_free(channel);
