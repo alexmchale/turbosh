@@ -2,6 +2,7 @@
 
 @interface NSString (monkey)
 
+- (NSString *) stringByConvertingAnsiColor;
 - (NSString *) stringByQuotingJavascript;
 
 @end

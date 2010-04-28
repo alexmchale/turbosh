@@ -21,7 +21,9 @@
     NSLog(@"Task Progress");
     NSLog(@"%@", [notif.userInfo valueForKey:@"string"]);
 
-    NSString *c = [[notif.userInfo valueForKey:@"string"] stringByQuotingJavascript];
+    NSString *c = [notif.userInfo valueForKey:@"string"];
+    c = [c stringByConvertingAnsiColor];
+    c = [c stringByQuotingJavascript];
     NSString *js = [NSString stringWithFormat:@"printProgress(%@);", c];
 
     NSLog(@"%@", js);

@@ -4,6 +4,8 @@
 
 - (void) start
 {
+    NSLog(@"start ansi");
+
     [codes removeAllObjects];
     bold = false;
     nextValue = 0;
@@ -12,17 +14,23 @@
 // Return true if the user should continue feeding characters.
 - (bool) append:(char)c
 {
+    NSLog(@"next: %X", c);
+
     // Header characters.  Just continue.
     if (c == 27 || c == '[') return true;
 
     // Break characters.  Set the currently read values.
     if (c == ';' || c == 'm') {
+        NSLog(@"code: %d", nextValue);
+
         if (nextValue == 1)
             bold = true;
         else
             [codes addObject:[NSNumber numberWithInt:nextValue]];
 
         nextValue = 0;
+
+        return true;
     }
 
     // This character is the end of the ANSI color code.
