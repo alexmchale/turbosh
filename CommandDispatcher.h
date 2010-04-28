@@ -28,5 +28,6 @@
 - (NSData *) stdoutResponse;
 - (NSData *) stderrResponse;
 - (bool) close;
+- (NSString *) getCommand;
 
 @end

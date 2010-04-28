@@ -9,17 +9,34 @@
 - (void) transferBegin:(NSNotification *)notif
 {
     NSLog(@"Task Begin");
+
+    NSString *c = [[dispatcher getCommand] stringByQuotingJavascript];
+    NSString *js = [NSString stringWithFormat:@"printBegin(%@);", c];
+
+    [webView stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (void) transferProgress:(NSNotification *)notif
 {
     NSLog(@"Task Progress");
     NSLog(@"%@", [notif.userInfo valueForKey:@"string"]);
+
+    NSString *c = [[notif.userInfo valueForKey:@"string"] stringByQuotingJavascript];
+    NSString *js = [NSString stringWithFormat:@"printProgress(%@);", c];
+
+    NSLog(@"%@", js);
+
+    [webView stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (void) transferFinish:(NSNotification *)notif
 {
     NSLog(@"Task Finish");
+
+    NSNumber *c = [notif.userInfo valueForKey:@"exit-code"];
+    NSString *js = [NSString stringWithFormat:@"printFinish('%@');", c];
+
+    [webView stringByEvaluatingJavaScriptFromString:js];
 }
 
 #pragma mark View Management

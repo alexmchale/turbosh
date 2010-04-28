@@ -205,4 +205,8 @@
     return stderrResponse;
 }
 
+- (NSString *) getCommand {
+    return command;
+}
+
 @end

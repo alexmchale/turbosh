@@ -149,6 +149,7 @@
 		74ECA28D1184DF1200458DAF /* TaskExecController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74ECA28B1184DF1200458DAF /* TaskExecController.m */; };
 		74ECA28E1184DF1200458DAF /* TaskExecController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74ECA28C1184DF1200458DAF /* TaskExecController.xib */; };
 		74ECA3721187D6F500458DAF /* task-viewer.html in Resources */ = {isa = PBXBuildFile; fileRef = 74ECA3711187D6F500458DAF /* task-viewer.html */; };
+		74ECA3BD1188514B00458DAF /* StringUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 74ECA3BC1188514B00458DAF /* StringUtil.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -351,6 +352,8 @@
 		74ECA28B1184DF1200458DAF /* TaskExecController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskExecController.m; sourceTree = "<group>"; };
 		74ECA28C1184DF1200458DAF /* TaskExecController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TaskExecController.xib; path = Classes/TaskExecController.xib; sourceTree = "<group>"; };
 		74ECA3711187D6F500458DAF /* task-viewer.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "task-viewer.html"; sourceTree = "<group>"; };
+		74ECA3BB1188514B00458DAF /* StringUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtil.h; sourceTree = "<group>"; };
+		74ECA3BC1188514B00458DAF /* StringUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringUtil.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* SwiftCode-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SwiftCode-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -559,6 +562,8 @@
 			children = (
 				74AE5E70115E783B006CA577 /* Utils.h */,
 				74AE5E71115E783B006CA577 /* Utils.m */,
+				74ECA3BB1188514B00458DAF /* StringUtil.h */,
+				74ECA3BC1188514B00458DAF /* StringUtil.m */,
 			);
 			name = "Monkey Patches";
 			sourceTree = "<group>";
@@ -895,6 +900,7 @@
 				74B3D575117AB92B00021611 /* FileTransfer.m in Sources */,
 				1D2F30171180E89E00D6F839 /* ProjectTaskSelector.m in Sources */,
 				74ECA28D1184DF1200458DAF /* TaskExecController.m in Sources */,
+				74ECA3BD1188514B00458DAF /* StringUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

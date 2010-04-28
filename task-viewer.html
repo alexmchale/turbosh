@@ -20,12 +20,15 @@
 	}
 
     .begin {
+        background-color: green;
     }
 
     .progress {
+        background-color: yellow;
     }
 
     .finish {
+        background-color: red;
     }
 
 </style>
@@ -36,20 +39,22 @@
 
 <body>
 
-<pre id="previewDiv"></pre>
+<div id="previewDiv"></div>
 
 <script type="text/javascript">
 	$(document).ready(function () {
-        alert("hi");
 	});
 
     function printBegin(s) {
+        $("#previewDiv").append('<p class="begin">' + s + '</p>');
     };
 
     function printProgress(s) {
+        $("#previewDiv").append('<p class="progress">' + s + '</p>');
     };
 
     function printFinish(s) {
+        $("#previewDiv").append('<p class="finish">' + s + '</p>');
     };
 </script>
 
