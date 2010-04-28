@@ -1,6 +1,7 @@
 #import <UIKit/UIKit.h>
 
 @interface TaskExecController : UIViewController
+    <ContentPaneDelegate>
 {
     UIWebView *webView;
 

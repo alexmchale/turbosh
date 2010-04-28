@@ -123,8 +123,11 @@ typedef enum {
             assert([Store loadProjectTask:f]);
 
             CommandDispatcher *cd = [[CommandDispatcher alloc] initWithProject:p session:NULL command:f.filename];
-            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(up123:) name:@"CommandStdoutUpdate" object:cd];
-            [SwiftCodeAppDelegate queueCommand:cd];
+            TaskExecController *tec = [[TaskExecController alloc] initWithNibName:@"TaskExecController" bundle:nil];
+            tec.dispatcher = cd;
+            [SwiftCodeAppDelegate switchTo:tec];
+            [tec release];
+            [cd release];
 
             [f release];
             [p release];
