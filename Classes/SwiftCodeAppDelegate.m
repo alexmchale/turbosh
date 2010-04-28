@@ -109,14 +109,6 @@
     synchronizer = [[Synchronizer alloc] init];
     [[NSRunLoop mainRunLoop] addTimer:synchronizer.timer forMode:NSDefaultRunLoopMode];
 
-    // Fire a test command.
-    Project *project = [[[Project alloc] init] loadCurrent];
-    CommandDispatcher *disp = [[CommandDispatcher alloc] initWithProject:project session:NULL command:@"cat VERSION.yml"];
-    [synchronizer appendCommand:disp];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(up123:) name:@"CommandStdoutUpdate" object:disp];
-    [disp release];
-    [project release];
-
     return YES;
 
 }
