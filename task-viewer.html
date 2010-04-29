@@ -9,27 +9,35 @@
 	body {
 		padding: 8px;
 		margin: 0px;
+        background-color: #111;
 	}
 
 	#previewDiv {
 		padding: 0px 0px 0px 0px;
 		margin: 0px 0px 0px 0px;
         font-family: monospace;
-        font-size: 16px;
+        font-size: 14px;
 		height: auto;
 	}
 
     .begin {
-        background-color: green;
+        padding: 10px;
+        background-color: silver;
+        font-weight: bold;
     }
 
     .progress {
-        background-color: yellow;
+        color: white;
     }
 
     .finish {
-        background-color: red;
+        padding: 10px;
+        background-color: silver;
+        font-weight: bold;
     }
+
+    .ansiBrightGreen   { color: green; }
+    .ansiBrightBlue    { color: blue;  }
 
 </style>
 
@@ -39,7 +47,7 @@
 
 <body>
 
-<div id="previewDiv"></div>
+<pre id="previewDiv"></pre>
 
 <script type="text/javascript">
 	$(document).ready(function () {
@@ -54,7 +62,7 @@
     };
 
     function printFinish(s) {
-        $("#previewDiv").append('<p class="finish">' + s + '</p>');
+        $("#previewDiv").append('<p class="finish">Exit Status ' + s + '</p>');
     };
 </script>
 
