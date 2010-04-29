@@ -30,6 +30,10 @@
     stdoutResponse = [[NSMutableData alloc] init];
     stderrResponse = [[NSMutableData alloc] init];
 
+    environ = [[NSMutableDictionary alloc] init];
+
+    [environ setObject:@"BAR" forKey:@"FOO"];
+
     return self;
 }
 
@@ -42,6 +46,8 @@
     [command release];
     [stdoutResponse release];
     [stderrResponse release];
+    [environ release];
+    [environKeys release];
 
     [super dealloc];
 }
@@ -55,6 +61,7 @@
 
     if (session == NULL) return false;
 
+    libssh2_trace(session, 0xFFFFFFFF);
     libssh2_session_set_blocking(session, 0);
 
     switch (step)
@@ -77,10 +84,33 @@
             }
 
             step++;
+            environStep = 0;
+            environKeys = [[environ allKeys] retain];
 
         }   return true;
 
         case 1:
+        {
+            // Send environment parameters to the server.
+
+            if (environStep >= [environKeys count]) {
+                step++;
+                return true;
+            }
+
+            NSString *key = [environKeys objectAtIndex:environStep];
+            NSString *val = [environ objectForKey:key];
+
+            rc = libssh2_channel_setenv(channel, [key UTF8String], [val UTF8String]);
+
+            if (rc == LIBSSH2_ERROR_EAGAIN) return true;
+            if (rc < 0) return [self close];
+
+            environStep++;
+
+        }   return true;
+
+        case 2:
             // Dispatch the command to the server.
 
             rc = libssh2_channel_exec(channel, [pwdCommand UTF8String]);
@@ -94,7 +124,7 @@
 
             return true;
 
-        case 2:
+        case 3:
             // Read the response from the server.
 
             rc = libssh2_channel_read(channel, buffer, sizeof(buffer) - 1);
@@ -155,7 +185,7 @@
 
             return true;
 
-        case 3:
+        case 4:
         {
             // Close the command channel.
 
@@ -188,6 +218,11 @@
     if (channel != NULL) {
         libssh2_channel_free(channel);
         channel = NULL;
+    }
+
+    if (environKeys != nil) {
+        [environKeys release];
+        environKeys = nil;
     }
 
     return false;

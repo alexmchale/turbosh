@@ -16,6 +16,10 @@
 
     NSMutableData *stdoutResponse;
     NSMutableData *stderrResponse;
+
+    NSMutableDictionary *environ;
+    int environStep;
+    NSArray *environKeys;
 }
 
 @property (nonatomic) LIBSSH2_SESSION *session;
