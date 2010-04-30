@@ -39,6 +39,7 @@
 {
     NSString *ns = [self stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
     ns = [ns stringByReplacingOccurrencesOfString:@"\n" withString:@"\\n"];
+    ns = [ns stringByReplacingOccurrencesOfString:@"\r" withString:@""];
     return [NSString stringWithFormat:@"'%@'", ns];
 }
 
