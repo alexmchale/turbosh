@@ -57,14 +57,20 @@
 
     function printBegin(s) {
         $("#previewDiv").append('<p class="begin">' + s + '</p>');
+
+        window.scrollTo(0, document.height);
     };
 
     function printProgress(s) {
         $("#previewDiv").append('<p class="progress">' + s + '</p>');
+
+        window.scrollTo(0, document.height);
     };
 
     function printFinish(s) {
         $("#previewDiv").append('<p class="finish">Exit Status ' + s + '</p>');
+
+        window.scrollTo(0, document.height);
     };
 </script>
 
