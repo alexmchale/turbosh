@@ -110,6 +110,20 @@
         }   return true;
 
         case 2:
+        {
+            // Request a PTY.
+
+            const char *tt = "xterm-color";
+            rc = libssh2_channel_request_pty_ex(channel, tt, strlen(tt), NULL, 0, 80, 20, 0, 0);
+
+            if (rc == LIBSSH2_ERROR_EAGAIN) return true;
+            if (rc != LIBSSH2_ERROR_NONE) return [self close];
+
+            step++;
+
+        }   return true;
+
+        case 3:
             // Dispatch the command to the server.
 
             rc = libssh2_channel_exec(channel, [pwdCommand UTF8String]);
@@ -123,7 +137,9 @@
 
             return true;
 
-        case 3:
+        // TODO: Send EOF here.
+
+        case 4:
             // Read the response from the server.
 
             rc = libssh2_channel_read(channel, buffer, sizeof(buffer) - 1);
@@ -184,7 +200,7 @@
 
             return true;
 
-        case 4:
+        case 5:
         {
             // Close the command channel.
 
