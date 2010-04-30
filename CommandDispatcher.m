@@ -30,9 +30,8 @@
     stdoutResponse = [[NSMutableData alloc] init];
     stderrResponse = [[NSMutableData alloc] init];
 
+    // Do not configure any environment variables for now.  SSHD disallows them by default.
     environ = [[NSMutableDictionary alloc] init];
-
-    [environ setObject:@"BAR" forKey:@"FOO"];
 
     return self;
 }
