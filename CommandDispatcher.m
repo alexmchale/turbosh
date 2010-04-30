@@ -137,9 +137,19 @@
 
             return true;
 
-        // TODO: Send EOF here.
-
         case 4:
+            // Send an EOF to the server to indicate that no input will be provided.
+
+            rc = libssh2_channel_send_eof(channel);
+
+            if (rc == LIBSSH2_ERROR_EAGAIN) return true;
+            if (rc != LIBSSH2_ERROR_NONE) return [self close];
+
+            step++;
+
+            return true;
+
+        case 5:
             // Read the response from the server.
 
             rc = libssh2_channel_read(channel, buffer, sizeof(buffer) - 1);
@@ -200,7 +210,7 @@
 
             return true;
 
-        case 5:
+        case 6:
         {
             // Close the command channel.
 
