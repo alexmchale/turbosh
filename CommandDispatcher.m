@@ -250,6 +250,8 @@
         environKeys = nil;
     }
 
+    step = 0;
+
     return false;
 }
 

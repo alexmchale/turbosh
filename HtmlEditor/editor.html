@@ -18,9 +18,11 @@
 		padding: 8px;
 		margin: 0px 0px 0px 0px;
         font-family: monospace;
-        font-size: 16px;
+        font-size: 14px;
 		height: auto;
         color: white;
+        display: none;
+        background-color: black;
 
         white-space: -moz-pre-wrap; /* Mozilla, supported since 1999 */
         white-space: -pre-wrap; /* Opera 4 - 6 */
@@ -38,15 +40,13 @@
 <body>
 
 <pre id="preview" class="sh____LANGUAGE___">___CONTENT___</pre>
-<input type="hidden" id="startingOffset" value="___STARTING_OFFSET___"/>
 
 <script type="text/javascript">
 	$(document).ready(function () {
         $("#preview").hide();
+        window.scrollTo(0, ___STARTING_OFFSET___);
 		sh_highlightDocument("", ".js");
-        var startingOffset = $("#startingOffset").val();
         $("#preview").show();
-        window.scrollTo(0, $("#startingOffset").val());
 	});
 
     function getCurrentScrollPosition() {

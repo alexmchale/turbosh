@@ -128,7 +128,7 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    textView.font = [UIFont fontWithName:@"Courier New" size:16.0];
+    textView.font = [UIFont fontWithName:@"Courier New" size:14.0];
     textView.text = text;
 }
 
