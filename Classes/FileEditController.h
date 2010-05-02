@@ -11,6 +11,7 @@
     UIBarButtonItem *cancelButton;
     UIBarButtonItem *spacer;
     UIBarButtonItem *saveButton;
+    bool keyboardShown;
 }
 
 @property (nonatomic, retain) IBOutlet UITextView *textView;
