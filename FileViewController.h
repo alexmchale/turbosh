@@ -5,9 +5,11 @@
 {
     UIWebView *webView;
     ProjectFile *file;
+    CGRect startingRect;
 }
 
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 @property (nonatomic, retain) ProjectFile *file;
+@property CGRect startingRect;
 
 @end

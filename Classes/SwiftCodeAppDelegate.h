@@ -38,6 +38,7 @@
 + (void) switchTo:(UIViewController *)controller;
 + (void) editProject:(Project *)project;
 + (void) editFile:(ProjectFile *)file;
++ (void) editFile:(ProjectFile *)file atRect:(CGRect)startingRect;
 + (void) editCurrentFile;
 + (void) sync;
 + (void) queueCommand:(CommandDispatcher *)dispatcher;

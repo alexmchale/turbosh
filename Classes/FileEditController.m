@@ -19,15 +19,15 @@
     self.text = textView.text;
 
     NSData *content = [text dataUsingEncoding:NSASCIIStringEncoding];
+    [myToolbar setItems:savedToolbarItems];
 
     ProjectFile *file = [[ProjectFile alloc] init];
     file.num = [Store currentFileNum];
     [Store loadProjectFile:file];
     [Store storeLocal:file content:content];
+    CGRect f = textView.bounds;
+    [SwiftCodeAppDelegate editFile:file atRect:textView.bounds];
     [file release];
-
-    [myToolbar setItems:savedToolbarItems];
-    [SwiftCodeAppDelegate editCurrentFile];
 
     [SwiftCodeAppDelegate sync];
 }

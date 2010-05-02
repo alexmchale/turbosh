@@ -2,7 +2,7 @@
 
 @implementation FileViewController
 
-@synthesize webView, file;
+@synthesize webView, file, startingRect;
 
 // The designated initializer.  Override if you create the controller
 // programmatically and want to perform customization that is not
@@ -11,7 +11,7 @@
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         file = nil;
     }
-    
+
     return self;
 }
 
@@ -29,20 +29,22 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     NSBundle *bundle = [NSBundle mainBundle];
     NSURL *baseURL = [NSURL fileURLWithPath:[bundle resourcePath]];
     NSURL *htmlURL = [NSURL fileURLWithPath:[bundle pathForResource:@"editor" ofType:@"html" inDirectory:NO]];
     NSString *html = [[[NSString alloc] initWithContentsOfURL:htmlURL] autorelease];
-    
+
     NSString *t = [file contentType];
     NSString *c = [file content];
-    
+    NSString *y = [NSString stringWithFormat:@"%d", (int)startingRect.origin.y];
+
     c = [c stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
     c = [c stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
     html = [html stringByReplacingOccurrencesOfString:@"___LANGUAGE___" withString:t];
     html = [html stringByReplacingOccurrencesOfString:@"___CONTENT___" withString:c];
-    
+    html = [html stringByReplacingOccurrencesOfString:@"___STARTING_OFFSET___" withString:y];
+
     [webView loadHTMLString:html baseURL:baseURL];
 }
 
@@ -74,7 +76,7 @@
 - (void)dealloc {
     [webView release];
     [file release];
-    
+
     [super dealloc];
 }
 
@@ -101,13 +103,13 @@
 {
     NSString *r = [webView stringByEvaluatingJavaScriptFromString:@"getCurrentScrollPosition()"];
     NSInteger y = [r integerValue];
-    
+
     FileEditController *fec = [[FileEditController alloc] init];
-    
+
     fec.text = file.content;
     fec.startingRect = CGRectMake(0, y, webView.frame.size.width, webView.frame.size.height);
     [SwiftCodeAppDelegate switchTo:fec];
-    
+
     [fec release];
 }
 

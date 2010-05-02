@@ -11,14 +11,22 @@
 	body {
 		padding: 0px;
 		margin: 0px;
+        background-color: black;
 	}
 
-	#previewDiv {
+	#preview {
 		padding: 8px;
 		margin: 0px 0px 0px 0px;
         font-family: monospace;
         font-size: 16px;
 		height: auto;
+        color: white;
+
+        white-space: -moz-pre-wrap; /* Mozilla, supported since 1999 */
+        white-space: -pre-wrap; /* Opera 4 - 6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        white-space: pre-wrap; /* CSS3 - Text module (Candidate Recommendation) http://www.w3.org/TR/css3-text/#white-space */
+        word-wrap: break-word; /* IE 5.5+ */
 	}
 
 </style>
@@ -29,39 +37,16 @@
 
 <body>
 
-<pre id="previewDiv" class="sh____LANGUAGE___">___CONTENT___</pre>
+<pre id="preview" class="sh____LANGUAGE___">___CONTENT___</pre>
+<input type="hidden" id="startingOffset" value="___STARTING_OFFSET___"/>
 
 <script type="text/javascript">
 	$(document).ready(function () {
-        function copyText() {
-            var s = input.val();
-
-            //s = s.replace(/\n/g, "<br>");
-			//s = s.replace(/ /g, "&nbsp;");
-
-			$("#previewDiv").html(s);
-        };
-
-		function applyLineNumbers() {
-			var lines = $("#previewDiv").html().split(/\n/);
-			var result = "";
-
-			for (var i = 0; i < lines.length; ++i) {
-				var line = (i + 1).toString();
-				while(line.length < 5) line = " " + line;
-				line += ". ";
-				line += lines[i];
-				line += "\n";
-				result += line;
-			}
-
-			$("#previewDiv").html(result);
-		};
-
-        $("#previewDiv").hide();
+        $("#preview").hide();
 		sh_highlightDocument("", ".js");
-        //applyLineNumbers();
-        $("#previewDiv").show();
+        var startingOffset = $("#startingOffset").val();
+        $("#preview").show();
+        window.scrollTo(0, $("#startingOffset").val());
 	});
 
     function getCurrentScrollPosition() {

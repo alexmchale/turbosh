@@ -36,11 +36,16 @@
 
 + (void) editFile:(ProjectFile *)file
 {
+    [self editFile:file atRect:CGRectMake(0, 0, 0, 0)];
+}
+
++ (void) editFile:(ProjectFile *)file atRect:(CGRect)startingRect
+{
     SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
 
     if (delegate.fileViewController == nil) {
         FileViewController *psc =
-            [[FileViewController alloc] initWithNibName:nil bundle:nil];
+        [[FileViewController alloc] initWithNibName:nil bundle:nil];
         delegate.fileViewController = psc;
         [psc release];
     }
@@ -49,6 +54,8 @@
         delegate.fileViewController.file = file;
         [Store setCurrentFile:file];
     }
+
+    delegate.fileViewController.startingRect = startingRect;
 
     [self switchTo:delegate.fileViewController];
 }
