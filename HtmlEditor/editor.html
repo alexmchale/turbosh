@@ -42,12 +42,12 @@
 <pre id="preview" class="sh____LANGUAGE___">___CONTENT___</pre>
 
 <script type="text/javascript">
-	$(document).ready(function () {
+    $(document).ready(function () {
         $("#preview").hide();
         window.scrollTo(0, ___STARTING_OFFSET___);
-		sh_highlightDocument("", ".js");
+        sh_highlightDocument("", ".js");
         $("#preview").show();
-	});
+    });
 
     function getCurrentScrollPosition() {
         return window.pageYOffset;
