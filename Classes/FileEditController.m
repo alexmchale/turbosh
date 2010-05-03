@@ -4,7 +4,6 @@
 
 @synthesize textView, text, startingRect;
 @synthesize myToolbar, savedToolbarItems;
-@synthesize cancelButton, spacer, saveButton;
 
 #pragma mark Button Actions
 
@@ -130,6 +129,12 @@
 {
     textView.font = [UIFont fontWithName:@"Courier New" size:14.0];
     textView.text = text;
+
+    ProjectFile *file = [[ProjectFile alloc] init];
+    file.num = [Store currentFileNum];
+    [Store loadProjectFile:file];
+    label.title = [file condensedPath];
+    [file release];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -153,25 +158,9 @@
 
 #pragma mark Memory Management
 
-- (void)dealloc
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    [text release];
-    [textView release];
-
-    [myToolbar release];
-    [savedToolbarItems release];
-
-    [cancelButton release];
-    [spacer release];
-    [saveButton release];
-
-    [super dealloc];
-}
-
-- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar
-{
-    self.myToolbar = toolbar;
-    self.savedToolbarItems = [toolbar items];
+    assert(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]);
 
     cancelButton =
         [[UIBarButtonItem alloc]
@@ -185,13 +174,44 @@
          target:nil
          action:nil];
 
+    label =
+        [[UIBarButtonItem alloc]
+         initWithTitle:@""
+         style:UIBarButtonItemStylePlain
+         target:nil
+         action:nil];
+
     saveButton =
         [[UIBarButtonItem alloc]
          initWithBarButtonSystemItem:UIBarButtonSystemItemSave
          target:self
          action:@selector(saveAction)];
 
-    NSMutableArray *a = [NSMutableArray arrayWithObjects:cancelButton, spacer, saveButton, nil];
+    return self;
+}
+
+- (void)dealloc
+{
+    [text release];
+    [textView release];
+
+    [myToolbar release];
+    [savedToolbarItems release];
+
+    [cancelButton release];
+    [spacer release];
+    [saveButton release];
+    [label release];
+
+    [super dealloc];
+}
+
+- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar
+{
+    self.myToolbar = toolbar;
+    self.savedToolbarItems = [toolbar items];
+
+    NSMutableArray *a = [NSMutableArray arrayWithObjects:cancelButton, spacer, label, spacer, saveButton, nil];
     [toolbar setItems:a];
 }
 

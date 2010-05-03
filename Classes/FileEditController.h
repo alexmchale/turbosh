@@ -10,6 +10,7 @@
     NSArray *savedToolbarItems;
     UIBarButtonItem *cancelButton;
     UIBarButtonItem *spacer;
+    UIBarButtonItem *label;
     UIBarButtonItem *saveButton;
     bool keyboardShown;
 }
@@ -19,8 +20,5 @@
 @property CGRect startingRect;
 @property (nonatomic, retain) UIToolbar *myToolbar;
 @property (nonatomic, retain) NSArray *savedToolbarItems;
-@property (nonatomic, retain) UIBarButtonItem *cancelButton;
-@property (nonatomic, retain) UIBarButtonItem *spacer;
-@property (nonatomic, retain) UIBarButtonItem *saveButton;
 
 @end

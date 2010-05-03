@@ -3,6 +3,7 @@
 @implementation FileViewController
 
 @synthesize webView, file, startingRect;
+@synthesize myToolbar, savedToolbar;
 
 // The designated initializer.  Override if you create the controller
 // programmatically and want to perform customization that is not
@@ -10,6 +11,16 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         file = nil;
+
+        label =
+            [[UIBarButtonItem alloc]
+             initWithTitle:@""
+             style:UIBarButtonItemStylePlain
+             target:nil
+             action:nil];
+
+        myToolbar = nil;
+        savedToolbar = nil;
     }
 
     return self;
@@ -46,11 +57,15 @@
     html = [html stringByReplacingOccurrencesOfString:@"___STARTING_OFFSET___" withString:y];
 
     [webView loadHTMLString:html baseURL:baseURL];
+
+    label.title = [file condensedPath];
 }
 
-- (void) viewDidAppear:(BOOL)animated
+- (void) viewWillDisappear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillDisappear:animated];
+
+    [myToolbar setItems:savedToolbar];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -76,6 +91,9 @@
 - (void)dealloc {
     [webView release];
     [file release];
+    [label release];
+    [myToolbar release];
+    [savedToolbar release];
 
     [super dealloc];
 }
@@ -83,6 +101,9 @@
 #pragma mark Toolbar Management
 
 - (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
+    self.myToolbar = toolbar;
+    self.savedToolbar = [toolbar items];
+
     UIBarItem *spacer = [[[UIBarButtonItem alloc]
                           initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                           target:nil action:nil] autorelease];
@@ -90,7 +111,9 @@
                           initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
                           target:self action:@selector(startEdit)] autorelease];
 
-    NSMutableArray *items = [[toolbar items] mutableCopy];
+    NSMutableArray *items = [savedToolbar mutableCopy];
+    [items addObject:spacer];
+    [items addObject:label];
     [items addObject:spacer];
     [items addObject:edit];
     [toolbar setItems:items animated:YES];
