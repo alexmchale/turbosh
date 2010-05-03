@@ -69,6 +69,13 @@
     [SwiftCodeAppDelegate queueCommand:dispatcher];
 }
 
+- (void) viewWillDisappear:(BOOL)animated
+{
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+
+    [nc removeObserver:self];
+}
+
 - (void) viewDidDisappear:(BOOL)animated
 {
     [dispatcher close];

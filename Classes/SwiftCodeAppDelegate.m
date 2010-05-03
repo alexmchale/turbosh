@@ -6,7 +6,7 @@
 @implementation SwiftCodeAppDelegate
 
 @synthesize window, splitViewController, rootViewController, detailViewController;
-@synthesize projectSettingsController, fileViewController;
+@synthesize projectSettingsController, fileViewController, taskExecController;
 @synthesize synchronizer;
 
 + (void) switchTo:(UIViewController *)controller
@@ -74,6 +74,24 @@
     SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
 
     return [delegate.fileViewController file];
+}
+
++ (void) launchTask:(ProjectFile *)f
+{
+    Project *p = f.project;
+    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+
+    if (delegate.taskExecController == nil) {
+        TaskExecController *psc =
+            [[TaskExecController alloc] initWithNibName:@"TaskExecController" bundle:nil];
+        delegate.taskExecController = psc;
+        [psc release];
+    }
+
+    CommandDispatcher *cd = [[CommandDispatcher alloc] initWithProject:p session:NULL command:f.filename];
+    delegate.taskExecController.dispatcher = cd;
+    [SwiftCodeAppDelegate switchTo:delegate.taskExecController];
+    [cd release];
 }
 
 + (void) sync

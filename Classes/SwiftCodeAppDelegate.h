@@ -8,6 +8,7 @@
 @class ProjectFile;
 @class Synchronizer;
 @class CommandDispatcher;
+@class TaskExecController;
 
 @interface SwiftCodeAppDelegate : NSObject <UIApplicationDelegate>
 {
@@ -20,6 +21,7 @@
 
     ProjectSettingsController *projectSettingsController;
     FileViewController *fileViewController;
+    TaskExecController *taskExecController;
 
     Synchronizer *synchronizer;
 }
@@ -32,6 +34,7 @@
 
 @property (nonatomic, retain) ProjectSettingsController *projectSettingsController;
 @property (nonatomic, retain) FileViewController *fileViewController;
+@property (nonatomic, retain) TaskExecController *taskExecController;
 
 @property (readonly) Synchronizer *synchronizer;
 
@@ -40,6 +43,7 @@
 + (void) editFile:(ProjectFile *)file;
 + (void) editFile:(ProjectFile *)file atRect:(CGRect)startingRect;
 + (void) editCurrentFile;
++ (void) launchTask:(ProjectFile *)f;
 + (void) sync;
 + (void) queueCommand:(CommandDispatcher *)dispatcher;
 + (void) reloadList;

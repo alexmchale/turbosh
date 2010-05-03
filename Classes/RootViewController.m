@@ -121,14 +121,7 @@ typedef enum {
             f.num = [Store projectTaskNumber:p atOffset:indexPath.row];
             f.project = p;
             assert([Store loadProjectTask:f]);
-
-            CommandDispatcher *cd = [[CommandDispatcher alloc] initWithProject:p session:NULL command:f.filename];
-            TaskExecController *tec = [[TaskExecController alloc] initWithNibName:@"TaskExecController" bundle:nil];
-            tec.dispatcher = cd;
-            [SwiftCodeAppDelegate switchTo:tec];
-            [tec release];
-            [cd release];
-
+            [SwiftCodeAppDelegate launchTask:f];
             [f release];
             [p release];
         }   break;
