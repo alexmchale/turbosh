@@ -30,16 +30,16 @@
     [controller viewSwitcher:self configureToolbar:toolbar];
 
     // View will appear / disappear.
-    [controller viewWillAppear:YES];
     [currentController viewWillDisappear:YES];
+    [controller viewWillAppear:YES];
 
     // Remove the current view and replace with the new one.
 	[currentController.view removeFromSuperview];
 	[self.view insertSubview:controller.view atIndex:0];
 
     // View did appear / disappear.
-    [controller viewDidAppear:YES];
     [currentController viewDidDisappear:YES];
+    [controller viewDidAppear:YES];
 
 	// Set up an animation for the transition between the views.
 	CATransition *animation = [CATransition animation];
