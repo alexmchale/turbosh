@@ -6,6 +6,7 @@
 @synthesize proj;
 @synthesize projectName;
 @synthesize sshHost, sshPort, sshUser, sshPass, sshPath;
+@synthesize syncStatus;
 
 #pragma mark Action Management
 
@@ -78,6 +79,8 @@
 		sshPath.autocorrectionType = UITextAutocorrectionTypeNo;
 		sshPath.autocapitalizationType = UITextAutocapitalizationTypeNone;
 		sshPath.delegate = self;
+
+        syncStatus = [@"this is my status" retain];
     }
     return self;
 }
@@ -93,6 +96,15 @@
 
     [SwiftCodeAppDelegate reloadList];
     [myTableView reloadData];
+
+    // Listen for sync events.
+}
+
+- (void) viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+
+    // Stop listening for sync events.
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -108,6 +120,7 @@
     [sshUser release];
     [sshPass release];
     [sshPath release];
+    [syncStatus release];
 
     [super dealloc];
 }

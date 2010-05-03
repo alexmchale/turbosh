@@ -13,6 +13,8 @@
     UITextField *sshUser;
     UITextField *sshPass;
     UITextField *sshPath;
+
+    NSString *syncStatus;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
@@ -26,6 +28,8 @@
 @property (nonatomic, retain) UITextField *sshUser;
 @property (nonatomic, retain) UITextField *sshPass;
 @property (nonatomic, retain) UITextField *sshPath;
+
+@property (nonatomic, retain) NSString *syncStatus;
 
 - (void) saveForm;
 
