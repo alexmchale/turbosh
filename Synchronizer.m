@@ -316,6 +316,7 @@
 - (void) step
 {
     if (project == nil && state != SS_IDLE) state = SS_SELECT_PROJECT;
+    if (state != SS_IDLE) NSLog(@"Synchronizer At %d", state);
 
     switch (state) {
         case SS_SELECT_PROJECT:         return [self selectProject];
