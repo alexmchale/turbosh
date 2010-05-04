@@ -144,11 +144,6 @@ typedef enum {
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void) up123:(NSNotification *)notif
-{
-    NSLog(@"Got notification");
-}
-
 #pragma mark -
 #pragma mark Memory management
 
