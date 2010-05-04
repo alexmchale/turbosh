@@ -11,7 +11,7 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
-    self.tableView.backgroundColor = [UIColor blackColor];
+    self.tableView.backgroundColor = [UIColor colorWithRed:0.15 green:0.15 blue:0.15 alpha:1.0];
     self.tableView.separatorColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.0];
     self.tableView.tableHeaderView.backgroundColor = [UIColor redColor];
 }
@@ -56,6 +56,11 @@ typedef enum {
 
 - (UIView *) tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section
 {
+    // Make sure this section has a header.
+    NSString *text = [self tableView:aTableView titleForHeaderInSection:section];
+    if (!text || [text length] == 0) return nil;
+
+    // Build the header view.
     CGRect frame = CGRectMake(0, 0, aTableView.bounds.size.width, 30);
     UIView *headerView = [[[UIView alloc] initWithFrame:frame] autorelease];
 
@@ -65,7 +70,7 @@ typedef enum {
     // Add the label.
     CGRect labelFrame = CGRectMake(10, 3, frame.size.width - 20, 18);
     UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
-    label.text = [self tableView:aTableView titleForHeaderInSection:section];
+    label.text = text;
     label.textColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
     label.backgroundColor = [UIColor clearColor];
     label.font = [UIFont boldSystemFontOfSize:16];
@@ -120,6 +125,8 @@ typedef enum {
     }
 
     cell.textLabel.textColor = [UIColor whiteColor];
+    cell.textLabel.backgroundColor = [UIColor clearColor];
+    cell.contentView.backgroundColor = [UIColor clearColor];
 
     [file release];
     [project release];
