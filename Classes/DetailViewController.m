@@ -59,34 +59,29 @@
 
 #pragma mark Split view support
 
-const NSInteger SPLIT_BUTTON_TAG = 91218;
-
+// Add the popover button to the button bar.
 - (void) splitViewController:(UISplitViewController*)svc
       willHideViewController:(UIViewController *)aViewController
            withBarButtonItem:(UIBarButtonItem*)barButtonItem
         forPopoverController:(UIPopoverController*)pc
 {
     barButtonItem.title = @"Project";
-    barButtonItem.tag = SPLIT_BUTTON_TAG;
 
     NSMutableArray *items = [[toolbar items] mutableCopy];
     [items insertObject:barButtonItem atIndex:0];
     [toolbar setItems:items animated:YES];
     [items release];
+
     self.popoverController = pc;
 }
 
-// Called when the view is shown again in the split view, invalidating the button and popover controller.
+// Remove the popover button from the button bar.
 - (void) splitViewController:(UISplitViewController*)svc
       willShowViewController:(UIViewController *)aViewController
    invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
 {
     NSMutableArray *items = [[toolbar items] mutableCopy];
-
-    id firstItem = [items objectAtIndex:0];
-    if ([firstItem isKindOfClass:[UIBarButtonItem class]] && [firstItem tag] == SPLIT_BUTTON_TAG)
-        [items removeObjectAtIndex:0];
-
+    [items removeObject:barButtonItem];
     [toolbar setItems:items animated:YES];
     [items release];
 
@@ -99,7 +94,6 @@ const NSInteger SPLIT_BUTTON_TAG = 91218;
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
-
 
 #pragma mark View lifecycle
 
