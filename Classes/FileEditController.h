@@ -10,7 +10,6 @@
     NSArray *savedToolbarItems;
     UIBarButtonItem *cancelButton;
     UIBarButtonItem *spacer;
-    UIBarButtonItem *label;
     UIBarButtonItem *saveButton;
     bool keyboardShown;
 }

@@ -6,7 +6,6 @@
     UIWebView *webView;
     ProjectFile *file;
     CGRect startingRect;
-    UIBarButtonItem *label;
 
     UIToolbar *myToolbar;
     NSArray *savedToolbar;

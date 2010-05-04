@@ -9,15 +9,17 @@
 @interface DetailViewController : UIViewController
         <UIPopoverControllerDelegate, UISplitViewControllerDelegate>
 {
-    
+
     UIPopoverController *popoverController;
     UIToolbar *toolbar;
-    
+
     UIViewController<ContentPaneDelegate> *currentController;
-    
+
+    UILabel *label;
 }
 
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
+@property (nonatomic, retain) IBOutlet UILabel *label;
 
 - (void) switchTo:(UIViewController *)controller;
 

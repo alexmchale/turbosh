@@ -133,7 +133,7 @@
     ProjectFile *file = [[ProjectFile alloc] init];
     file.num = [Store currentFileNum];
     [Store loadProjectFile:file];
-    label.title = [file condensedPath];
+    [SwiftCodeAppDelegate setLabelText:[file condensedPath]];
     [file release];
 }
 
@@ -174,13 +174,6 @@
          target:nil
          action:nil];
 
-    label =
-        [[UIBarButtonItem alloc]
-         initWithTitle:@""
-         style:UIBarButtonItemStylePlain
-         target:nil
-         action:nil];
-
     saveButton =
         [[UIBarButtonItem alloc]
          initWithBarButtonSystemItem:UIBarButtonSystemItemSave
@@ -201,7 +194,6 @@
     [cancelButton release];
     [spacer release];
     [saveButton release];
-    [label release];
 
     [super dealloc];
 }
@@ -211,7 +203,7 @@
     self.myToolbar = toolbar;
     self.savedToolbarItems = [toolbar items];
 
-    NSMutableArray *a = [NSMutableArray arrayWithObjects:cancelButton, spacer, label, spacer, saveButton, nil];
+    NSMutableArray *a = [NSMutableArray arrayWithObjects:cancelButton, spacer, saveButton, nil];
     [toolbar setItems:a];
 }
 

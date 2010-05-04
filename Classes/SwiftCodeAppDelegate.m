@@ -15,6 +15,12 @@
     [delegate.detailViewController switchTo:controller];
 }
 
++ (void) setLabelText:(NSString *)text
+{
+    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    delegate.detailViewController.label.text = text;
+}
+
 + (void) editProject:(Project *)project
 {
     SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];

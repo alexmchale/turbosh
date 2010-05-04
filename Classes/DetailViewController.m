@@ -9,7 +9,7 @@
 
 @implementation DetailViewController
 
-@synthesize toolbar, popoverController;
+@synthesize toolbar, popoverController, label;
 
 #pragma mark Switcher View Manager
 
@@ -27,11 +27,13 @@
     } else {
         [toolbar setItems:[NSArray array]];
     }
-    [controller viewSwitcher:self configureToolbar:toolbar];
 
     // View will appear / disappear.
     [currentController viewWillDisappear:YES];
     [controller viewWillAppear:YES];
+
+    // Update the toolbar.
+    [controller viewSwitcher:self configureToolbar:toolbar];
 
     // Remove the current view and replace with the new one.
 	[currentController.view removeFromSuperview];

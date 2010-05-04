@@ -38,6 +38,7 @@
 
 @property (readonly) Synchronizer *synchronizer;
 
++ (void) setLabelText:(NSString *)text;
 + (void) switchTo:(UIViewController *)controller;
 + (void) editProject:(Project *)project;
 + (void) editFile:(ProjectFile *)file;

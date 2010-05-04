@@ -11,14 +11,6 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         file = nil;
-
-        label =
-            [[UIBarButtonItem alloc]
-             initWithTitle:@""
-             style:UIBarButtonItemStylePlain
-             target:nil
-             action:nil];
-
         myToolbar = nil;
         savedToolbar = nil;
     }
@@ -58,7 +50,7 @@
 
     [webView loadHTMLString:html baseURL:baseURL];
 
-    label.title = [file condensedPath];
+    [SwiftCodeAppDelegate setLabelText:[file condensedPath]];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -91,7 +83,6 @@
 - (void)dealloc {
     [webView release];
     [file release];
-    [label release];
     [myToolbar release];
     [savedToolbar release];
 
@@ -113,8 +104,6 @@
 
     NSMutableArray *items = [savedToolbar mutableCopy];
     [items addObject:spacer];
-    [items addObject:label];
-    [items addObject:spacer];
     [items addObject:edit];
     [toolbar setItems:items animated:YES];
     [items release];
@@ -127,10 +116,11 @@
     NSString *r = [webView stringByEvaluatingJavaScriptFromString:@"getCurrentScrollPosition()"];
     NSInteger y = [r integerValue];
 
-    FileEditController *fec = [[FileEditController alloc] init];
+    FileEditController *fec = [[FileEditController alloc] initWithNibName:@"FileEditController" bundle:nil];
 
     fec.text = file.content;
     fec.startingRect = CGRectMake(0, y, webView.frame.size.width, webView.frame.size.height);
+
     [SwiftCodeAppDelegate switchTo:fec];
 
     [fec release];
