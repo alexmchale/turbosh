@@ -1,15 +1,7 @@
-//
-//  main.m
-//  SwiftCode
-//
-//  Created by Alex McHale on 3/24/10.
-//  Copyright __MyCompanyName__ 2010. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
-int main(int argc, char *argv[]) {
-    
+int main(int argc, char *argv[])
+{    
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
     int retVal = UIApplicationMain(argc, argv, nil, nil);
     [pool release];

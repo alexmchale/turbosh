@@ -36,21 +36,21 @@
     [controller viewSwitcher:self configureToolbar:toolbar];
 
     // Remove the current view and replace with the new one.
-	[currentController.view removeFromSuperview];
-	[self.view insertSubview:controller.view atIndex:0];
+    [currentController.view removeFromSuperview];
+    [self.view insertSubview:controller.view atIndex:0];
 
     // View did appear / disappear.
     [currentController viewDidDisappear:YES];
     [controller viewDidAppear:YES];
 
-	// Set up an animation for the transition between the views.
-	CATransition *animation = [CATransition animation];
-	[animation setDuration:0.5];
-	[animation setType:kCATransitionFade];
-	//[animation setSubtype:kCATransitionFromTop];
-	[animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    // Set up an animation for the transition between the views.
+    CATransition *animation = [CATransition animation];
+    [animation setDuration:0.5];
+    [animation setType:kCATransitionFade];
+    //[animation setSubtype:kCATransitionFromTop];
+    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
 
-	[[self.view layer] addAnimation:animation forKey:@"SwitchToView1"];
+    [[self.view layer] addAnimation:animation forKey:@"SwitchToView1"];
 
     [controller retain];
     [currentController release];
