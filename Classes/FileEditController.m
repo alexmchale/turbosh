@@ -10,7 +10,12 @@
 - (void) cancelAction
 {
     [myToolbar setItems:savedToolbarItems];
-    [SwiftCodeAppDelegate editCurrentFile];
+
+    ProjectFile *file = [[ProjectFile alloc] init];
+    file.num = [Store currentFileNum];
+    [Store loadProjectFile:file];
+    [SwiftCodeAppDelegate editFile:file atRect:textView.bounds];
+    [file release];
 }
 
 - (void) saveAction
