@@ -8,6 +8,14 @@
 #pragma mark -
 #pragma mark View lifecycle
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+    self.tableView.backgroundColor = [UIColor blackColor];
+    self.tableView.separatorColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.0];
+    self.tableView.tableHeaderView.backgroundColor = [UIColor redColor];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -35,6 +43,8 @@ typedef enum {
     return MST_COUNT;
 }
 
+#pragma mark Table Header
+
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
         case MST_FILES:     return [Store fileCountForCurrentProject] ? @"Files" : @"";
@@ -42,6 +52,28 @@ typedef enum {
         case MST_PROJECTS:  return @"Projects";
         default:            return @"";
     }
+}
+
+- (UIView *) tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section
+{
+    CGRect frame = CGRectMake(0, 0, aTableView.bounds.size.width, 30);
+    UIView *headerView = [[[UIView alloc] initWithFrame:frame] autorelease];
+
+    // Configure the view.
+    headerView.backgroundColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.0];
+
+    // Add the label.
+    CGRect labelFrame = CGRectMake(10, 3, frame.size.width - 20, 18);
+    UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
+    label.text = [self tableView:aTableView titleForHeaderInSection:section];
+    label.textColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    label.backgroundColor = [UIColor clearColor];
+    label.font = [UIFont boldSystemFontOfSize:16];
+    label.textAlignment = UITextAlignmentRight;
+    [headerView addSubview:label];
+    [label release];
+
+    return headerView;
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
@@ -86,6 +118,8 @@ typedef enum {
             cell.textLabel.text = project.name;
             break;
     }
+
+    cell.textLabel.textColor = [UIColor whiteColor];
 
     [file release];
     [project release];
