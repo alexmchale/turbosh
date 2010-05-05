@@ -21,6 +21,12 @@
     delegate.detailViewController.label.text = text;
 }
 
++ (void) setMenuText:(NSString *)text
+{
+    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    delegate.rootViewController.title = text;
+}
+
 + (void) editProject:(Project *)project
 {
     SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];

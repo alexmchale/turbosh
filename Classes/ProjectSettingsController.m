@@ -485,6 +485,8 @@
 
     [Store storeProject:proj];
 
+    [SwiftCodeAppDelegate setMenuText:proj.name];
+
     [nf release];
 }
 
