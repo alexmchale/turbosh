@@ -66,7 +66,7 @@
                                              selector:@selector(transferFinish:)
                                                  name:@"finish" object:dispatcher];
 
-    [SwiftCodeAppDelegate queueCommand:dispatcher];
+    [TurboShellAppDelegate queueCommand:dispatcher];
 }
 
 - (void) viewWillDisappear:(BOOL)animated

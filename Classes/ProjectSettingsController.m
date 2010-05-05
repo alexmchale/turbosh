@@ -17,7 +17,7 @@
     nextProject.name = @"New Project";
     [Store storeProject:nextProject];
 
-    [SwiftCodeAppDelegate editProject:nextProject];
+    [TurboShellAppDelegate editProject:nextProject];
 
     [nextProject release];
 }
@@ -36,7 +36,7 @@
         nextProject.num = [Store projectNumAtOffset:0];
         assert([Store loadProject:nextProject]);
 
-        [SwiftCodeAppDelegate editProject:nextProject];
+        [TurboShellAppDelegate editProject:nextProject];
 
         [nextProject release];
     }
@@ -115,7 +115,7 @@
             break;
 
         case SS_IDLE:
-            t = @"SwiftCode is currently idle.";
+            t = @"TurboShell is currently idle.";
             break;
 
         default: assert(false);
@@ -175,16 +175,16 @@
 {
     [super viewWillAppear:animated];
 
-    [SwiftCodeAppDelegate reloadList];
+    [TurboShellAppDelegate reloadList];
     [myTableView reloadData];
 
     // Update the title bar.
-    [SwiftCodeAppDelegate setLabelText:@"Project Settings"];
+    [TurboShellAppDelegate setLabelText:@"Project Settings"];
 
     // Listen for sync events.
 
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
-    Synchronizer *sync = [SwiftCodeAppDelegate synchronizer];
+    Synchronizer *sync = [TurboShellAppDelegate synchronizer];
 
     [nc addObserver:self
            selector:@selector(updateStatus:)
@@ -428,7 +428,7 @@
                                          bundle:nil];
             pfs.project = proj;
 
-            [SwiftCodeAppDelegate switchTo:pfs];
+            [TurboShellAppDelegate switchTo:pfs];
             [pfs release];
 
         }   break;
@@ -440,7 +440,7 @@
                                         bundle:nil];
             pts.project = proj;
 
-            [SwiftCodeAppDelegate switchTo:pts];
+            [TurboShellAppDelegate switchTo:pts];
             [pts release];
 
         }   break;
@@ -489,7 +489,7 @@
 
     [Store storeProject:proj];
 
-    [SwiftCodeAppDelegate setMenuText:proj.name];
+    [TurboShellAppDelegate setMenuText:proj.name];
 
     [nf release];
 }
@@ -498,7 +498,7 @@
 {
     [self saveForm];
 
-    if (textField == projectName) [SwiftCodeAppDelegate reloadList];
+    if (textField == projectName) [TurboShellAppDelegate reloadList];
 }
 
 #pragma mark Project Management

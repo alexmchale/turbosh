@@ -14,7 +14,7 @@
     ProjectFile *file = [[ProjectFile alloc] init];
     file.num = [Store currentFileNum];
     [Store loadProjectFile:file];
-    [SwiftCodeAppDelegate editFile:file atRect:textView.bounds];
+    [TurboShellAppDelegate editFile:file atRect:textView.bounds];
     [file release];
 }
 
@@ -29,10 +29,10 @@
     file.num = [Store currentFileNum];
     [Store loadProjectFile:file];
     [Store storeLocal:file content:content];
-    [SwiftCodeAppDelegate editFile:file atRect:textView.bounds];
+    [TurboShellAppDelegate editFile:file atRect:textView.bounds];
     [file release];
 
-    [SwiftCodeAppDelegate sync];
+    [TurboShellAppDelegate sync];
 }
 
 #pragma mark Edit Events
@@ -138,7 +138,7 @@
     ProjectFile *file = [[ProjectFile alloc] init];
     file.num = [Store currentFileNum];
     [Store loadProjectFile:file];
-    [SwiftCodeAppDelegate setLabelText:[file condensedPath]];
+    [TurboShellAppDelegate setLabelText:[file condensedPath]];
     [file release];
 }
 

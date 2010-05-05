@@ -50,7 +50,7 @@
 
     [webView loadHTMLString:html baseURL:baseURL];
 
-    [SwiftCodeAppDelegate setLabelText:[file condensedPath]];
+    [TurboShellAppDelegate setLabelText:[file condensedPath]];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -121,7 +121,7 @@
     fec.text = file.content;
     fec.startingRect = CGRectMake(0, y, webView.frame.size.width, webView.frame.size.height);
 
-    [SwiftCodeAppDelegate switchTo:fec];
+    [TurboShellAppDelegate switchTo:fec];
 
     [fec release];
 }

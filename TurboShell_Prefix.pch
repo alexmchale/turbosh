@@ -17,7 +17,7 @@
     #import "MBProgressHUD.h"
     #import "RegexKitLite.h"
 
-    #import "SwiftCodeAppDelegate.h"
+    #import "TurboShellAppDelegate.h"
 
     #import "Utils.h"
     #import "Shell.h"

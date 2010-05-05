@@ -1,9 +1,9 @@
-#import "SwiftCodeAppDelegate.h"
+#import "TurboShellAppDelegate.h"
 
 #import "RootViewController.h"
 #import "DetailViewController.h"
 
-@implementation SwiftCodeAppDelegate
+@implementation TurboShellAppDelegate
 
 @synthesize window, splitViewController, rootViewController, detailViewController;
 @synthesize projectSettingsController, fileViewController, taskExecController;
@@ -11,25 +11,25 @@
 
 + (void) switchTo:(UIViewController *)controller
 {
-    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    TurboShellAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     [delegate.detailViewController switchTo:controller];
 }
 
 + (void) setLabelText:(NSString *)text
 {
-    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    TurboShellAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     delegate.detailViewController.label.text = text;
 }
 
 + (void) setMenuText:(NSString *)text
 {
-    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    TurboShellAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     delegate.rootViewController.title = text;
 }
 
 + (void) editProject:(Project *)project
 {
-    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    TurboShellAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
 
     if (delegate.projectSettingsController == nil) {
         ProjectSettingsController *psc =
@@ -53,7 +53,7 @@
 
 + (void) editFile:(ProjectFile *)file atRect:(CGRect)startingRect
 {
-    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    TurboShellAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
 
     if (delegate.fileViewController == nil) {
         FileViewController *psc =
@@ -83,7 +83,7 @@
 
 + (ProjectFile *) currentFile
 {
-    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    TurboShellAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
 
     return [delegate.fileViewController file];
 }
@@ -91,7 +91,7 @@
 + (void) launchTask:(ProjectFile *)f
 {
     Project *p = f.project;
-    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    TurboShellAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
 
     if (delegate.taskExecController == nil) {
         TaskExecController *psc =
@@ -102,13 +102,13 @@
 
     CommandDispatcher *cd = [[CommandDispatcher alloc] initWithProject:p session:NULL command:f.filename];
     delegate.taskExecController.dispatcher = cd;
-    [SwiftCodeAppDelegate switchTo:delegate.taskExecController];
+    [TurboShellAppDelegate switchTo:delegate.taskExecController];
     [cd release];
 }
 
 + (Synchronizer *) synchronizer
 {
-    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    TurboShellAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     return delegate.synchronizer;
 }
 
@@ -119,13 +119,13 @@
 
 + (void) queueCommand:(CommandDispatcher *)dispatcher
 {
-    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    TurboShellAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     [delegate.synchronizer appendCommand:dispatcher];
 }
 
 + (void) reloadList
 {
-    SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    TurboShellAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     [delegate.rootViewController.tableView reloadData];
 }
 
@@ -144,7 +144,7 @@
 
     // Select that last used project and update the DVC to show it.
     Project *currentProject = [[[Project alloc] init] loadCurrent];
-    [SwiftCodeAppDelegate editProject:currentProject];
+    [TurboShellAppDelegate editProject:currentProject];
     [currentProject release];
 
     // Start the file synchronizer.

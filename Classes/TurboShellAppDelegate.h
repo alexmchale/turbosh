@@ -10,7 +10,7 @@
 @class CommandDispatcher;
 @class TaskExecController;
 
-@interface SwiftCodeAppDelegate : NSObject <UIApplicationDelegate>
+@interface TurboShellAppDelegate : NSObject <UIApplicationDelegate>
 {
     UIWindow *window;
 

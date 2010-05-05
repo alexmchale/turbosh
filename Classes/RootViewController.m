@@ -148,7 +148,7 @@ typedef enum {
             f.num = [Store projectFileNumber:p atOffset:indexPath.row];
             f.project = p;
             assert([Store loadProjectFile:f]);
-            [SwiftCodeAppDelegate editFile:f];
+            [TurboShellAppDelegate editFile:f];
             [f release];
             [p release];
         }   break;
@@ -160,7 +160,7 @@ typedef enum {
             f.num = [Store projectTaskNumber:p atOffset:indexPath.row];
             f.project = p;
             assert([Store loadProjectTask:f]);
-            [SwiftCodeAppDelegate launchTask:f];
+            [TurboShellAppDelegate launchTask:f];
             [f release];
             [p release];
         }   break;
@@ -170,7 +170,7 @@ typedef enum {
             Project *p = [[Project alloc] init];
             p.num = [Store projectNumAtOffset:indexPath.row];
             assert([Store loadProject:p]);
-            [SwiftCodeAppDelegate editProject:p];
+            [TurboShellAppDelegate editProject:p];
             [p release];
         }   break;
 

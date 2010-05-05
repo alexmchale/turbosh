@@ -1,8 +1,8 @@
-# SwiftCode #
+# TurboShell #
 
 ## Description ##
 
-*SwiftCode* is a development environment for the iPad.
+*TurboShell* is a development environment for the iPad.
 
 ## Features ##
 
@@ -20,7 +20,7 @@
   * Assign your SSH credentials - hostname, port, username, password, path.
   * The path is the folder to use on the remote server.
 * Select files to manage from the remote server.
-* Those files will be downloaded to SwiftCode.
+* Those files will be downloaded to TurboShell.
 * They will be uploaded back to the server when it is updated.
 * The server will be periodically checked to see if a new version is available.
 * A large question is how to merge the two files if they differ.
