@@ -267,7 +267,7 @@
     return stderrResponse;
 }
 
-- (NSString *) getCommand {
+- (NSString *) command {
     return command;
 }
 

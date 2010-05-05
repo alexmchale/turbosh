@@ -48,6 +48,7 @@
     enum SyncState state = [[notif.userInfo valueForKey:@"state"] intValue];
     Project *p = [notif.userInfo valueForKey:@"project"];
     ProjectFile *f = [notif.userInfo valueForKey:@"file"];
+    CommandDispatcher *d = [notif.userInfo valueForKey:@"task"];
     NSString *t;
 
     switch (state) {
@@ -68,7 +69,7 @@
             break;
 
         case SS_EXECUTE_COMMAND:
-            t = [NSString stringWithFormat:@"Executing %@ on %@.", [f condensedPath], [p name]];
+            t = [NSString stringWithFormat:@"Executing %@ on %@.", [d command], [p name]];
             break;
 
         case SS_SELECT_FILE:

@@ -325,6 +325,7 @@
     [userInfo setObject:[NSNumber numberWithInt:state] forKey:@"state"];
     if (project) [userInfo setObject:project forKey:@"project"];
     if (file) [userInfo setObject:file forKey:@"file"];
+    if (state == SS_EXECUTE_COMMAND && currentCommand) [userInfo setObject:currentCommand forKey:@"task"];
     [nc postNotificationName:@"sync-state" object:self userInfo:userInfo];
 
     // Execute the appropriate callback for this state.

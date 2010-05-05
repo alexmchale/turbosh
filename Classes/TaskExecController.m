@@ -10,7 +10,7 @@
 {
     NSLog(@"Task Begin");
 
-    NSString *c = [[dispatcher getCommand] stringByQuotingJavascript];
+    NSString *c = [[dispatcher command] stringByQuotingJavascript];
     NSString *js = [NSString stringWithFormat:@"printBegin(%@);", c];
 
     [webView stringByEvaluatingJavaScriptFromString:js];
