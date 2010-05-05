@@ -140,8 +140,6 @@ typedef enum {
 
 - (void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    SwiftCodeAppDelegate *d = [[UIApplication sharedApplication] delegate];
-
     switch (indexPath.section) {
         case MST_FILES:
         {
@@ -172,11 +170,8 @@ typedef enum {
             Project *p = [[Project alloc] init];
             p.num = [Store projectNumAtOffset:indexPath.row];
             assert([Store loadProject:p]);
-            [Store setCurrentProject:p];
-            d.projectSettingsController.proj = p;
+            [SwiftCodeAppDelegate editProject:p];
             [p release];
-
-            [detailViewController switchTo:d.projectSettingsController];
         }   break;
 
         default: assert(false);
