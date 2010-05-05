@@ -196,15 +196,35 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     bind_prepare(&t, s);
     bind_integer(t, 1, project.num, false);
     bind_finalize(t, 0);
+
+    // Reset the current project if this was the current.
+    if ([project.num isEqualToNumber:[self currentProjectNum]]) {
+        [self setIntValue:0 forKey:@"current.project"];
+        [self currentProjectNum];
+    }
 }
 
 + (NSNumber *) currentProjectNum
 {
     NSInteger num = [self intValue:@"current.project"];
 
-    if (num > 0) return [NSNumber numberWithInt:num];
+    // Verify that the current project still exists.
 
-    // No project is marked as current.  Create a new one.
+    NSString *where = [NSString stringWithFormat:@"id=%d", num];
+    NSString *name = [self scalar:@"name" onTable:@"projects" where:where offset:0 orderBy:@"name"];
+
+    if (num > 0 && name != nil) return [NSNumber numberWithInt:num];
+
+    // No project is marked as current.  Select the first available project.
+
+    NSNumber *newCurrentProjectNum = [self projectNumAtOffset:0];
+
+    if (newCurrentProjectNum != nil) {
+        [self setIntValue:[newCurrentProjectNum intValue] forKey:@"current.project"];
+        return newCurrentProjectNum;
+    }
+
+    // No projects exist.  Create a new one.
 
     Project *proj = [[Project alloc] init];
     proj.name = @"New Project";
