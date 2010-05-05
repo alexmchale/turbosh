@@ -177,6 +177,9 @@
     [SwiftCodeAppDelegate reloadList];
     [myTableView reloadData];
 
+    // Update the title bar.
+    [SwiftCodeAppDelegate setLabelText:@"Project Settings"];
+
     // Listen for sync events.
 
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
