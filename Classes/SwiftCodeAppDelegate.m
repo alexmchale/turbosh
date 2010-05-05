@@ -100,10 +100,15 @@
     [cd release];
 }
 
-+ (void) sync
++ (Synchronizer *) synchronizer
 {
     SwiftCodeAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    [delegate.synchronizer synchronize];
+    return delegate.synchronizer;
+}
+
++ (void) sync
+{
+    [[self synchronizer] synchronize];
 }
 
 + (void) queueCommand:(CommandDispatcher *)dispatcher

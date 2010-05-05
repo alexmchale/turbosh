@@ -315,9 +315,19 @@
 
 - (void) step
 {
+    // Adjust the state if we don't have a project and we're not idle.
     if (project == nil && state != SS_IDLE) state = SS_SELECT_PROJECT;
     if (state != SS_IDLE) NSLog(@"Synchronizer At %d", state);
 
+    // Post a notification of the synchronizer's current state.
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];
+    [userInfo setObject:[NSNumber numberWithInt:state] forKey:@"state"];
+    if (project) [userInfo setObject:project forKey:@"project"];
+    if (file) [userInfo setObject:file forKey:@"file"];
+    [nc postNotificationName:@"sync-state" object:self userInfo:userInfo];
+
+    // Execute the appropriate callback for this state.
     switch (state) {
         case SS_SELECT_PROJECT:         return [self selectProject];
         case SS_CONNECT_TO_SERVER:      return [self connectToServer];

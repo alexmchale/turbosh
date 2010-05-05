@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#import <Synchronizer.h>
 
 @interface ProjectSettingsController : UIViewController
 	<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ContentPaneDelegate>
@@ -14,22 +15,19 @@
     UITextField *sshPass;
     UITextField *sshPath;
 
-    NSString *syncStatus;
+    enum SyncState syncState;
+    UILabel *syncLabel;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
-
 @property (nonatomic, retain) Project *proj;
-
 @property (nonatomic, retain) UITextField *projectName;
-
 @property (nonatomic, retain) UITextField *sshHost;
 @property (nonatomic, retain) UITextField *sshPort;
 @property (nonatomic, retain) UITextField *sshUser;
 @property (nonatomic, retain) UITextField *sshPass;
 @property (nonatomic, retain) UITextField *sshPath;
-
-@property (nonatomic, retain) NSString *syncStatus;
+@property (nonatomic, retain) IBOutlet UILabel *syncLabel;
 
 - (void) saveForm;
 

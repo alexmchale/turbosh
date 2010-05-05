@@ -6,7 +6,7 @@
 @synthesize proj;
 @synthesize projectName;
 @synthesize sshHost, sshPort, sshUser, sshPass, sshPath;
-@synthesize syncStatus;
+@synthesize syncLabel;
 
 #pragma mark Action Management
 
@@ -41,6 +41,86 @@
         [nextProject release];
     }
 
+}
+
+- (void) updateStatus:(NSNotification *)notif
+{
+    enum SyncState state = [[notif.userInfo valueForKey:@"state"] intValue];
+    Project *p = [notif.userInfo valueForKey:@"project"];
+    ProjectFile *f = [notif.userInfo valueForKey:@"file"];
+    NSString *t;
+
+    switch (state) {
+        case SS_SELECT_PROJECT:
+            t = [NSString stringWithFormat:@"Selecting the next project to work on."];
+            break;
+
+        case SS_CONNECT_TO_SERVER:
+            t = [NSString stringWithFormat:@"Connecting to %@.", [p name]];
+            break;
+
+        case SS_ESTABLISH_SSH:
+            t = [NSString stringWithFormat:@"Establishing SSH connection with %@.", [p name]];
+            break;
+
+        case SS_AUTHENTICATE_SSH:
+            t = [NSString stringWithFormat:@"Authenticating SSH with %@.", [p name]];
+            break;
+
+        case SS_EXECUTE_COMMAND:
+            t = [NSString stringWithFormat:@"Executing %@ on %@.", [f condensedPath], [p name]];
+            break;
+
+        case SS_SELECT_FILE:
+            t = [NSString stringWithFormat:@"Selecting next file on %@.", [p name]];
+            break;
+
+        case SS_INITIATE_HASH:
+        case SS_CONTINUE_HASH:
+        case SS_COMPLETE_HASH:
+            t = [NSString stringWithFormat:@"Computing remote MD5 for %@ on %@", [f condensedPath], [p name]];
+            break;
+
+        case SS_FILE_IS_MISSING:
+            t = [NSString stringWithFormat:@"Determined the file %@ is missing on %@.", [f condensedPath], p.name];
+            break;
+
+        case SS_TEST_IF_CHANGED:
+            t = [NSString stringWithFormat:@"Testing if the file %@ on %@ has changed.", [f condensedPath], p.name];
+            break;
+
+        case SS_INITIATE_UPLOAD:
+            t = [NSString stringWithFormat:@"Starting upload of file %@ to %@.", [f condensedPath], p.name];
+            break;
+
+        case SS_INITIATE_DOWNLOAD:
+            t = [NSString stringWithFormat:@"Starting download of file %@ from %@.", [f condensedPath], p.name];
+            break;
+
+        case SS_CONTINUE_TRANSFER:
+            t = [NSString stringWithFormat:@"Continuing transfer of file %@ for %@.", [f condensedPath], p.name];
+            break;
+
+        case SS_COMPLETE_TRANSFER:
+            t = [NSString stringWithFormat:@"Completing transfer of file %@ for %@.", [f condensedPath], p.name];
+            break;
+
+        case SS_TERMINATE_SSH:
+            t = [NSString stringWithFormat:@"Terminating SSH session with %@.", p.name];
+            break;
+
+        case SS_DISCONNECT:
+            t = [NSString stringWithFormat:@"Disconnecting from %@", p.name];
+            break;
+
+        case SS_IDLE:
+            t = @"SwiftCode is currently idle.";
+            break;
+
+        default: assert(false);
+    }
+
+    syncLabel.text = t;
 }
 
 #pragma mark View Initialization
@@ -80,7 +160,7 @@
 		sshPath.autocapitalizationType = UITextAutocapitalizationTypeNone;
 		sshPath.delegate = self;
 
-        syncStatus = [@"this is my status" retain];
+        syncLabel = nil;
     }
     return self;
 }
@@ -98,6 +178,13 @@
     [myTableView reloadData];
 
     // Listen for sync events.
+
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    Synchronizer *sync = [SwiftCodeAppDelegate synchronizer];
+
+    [nc addObserver:self
+           selector:@selector(updateStatus:)
+               name:@"sync-state" object:sync];
 }
 
 - (void) viewDidDisappear:(BOOL)animated
@@ -105,6 +192,7 @@
     [super viewDidDisappear:animated];
 
     // Stop listening for sync events.
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -120,7 +208,6 @@
     [sshUser release];
     [sshPass release];
     [sshPath release];
-    [syncStatus release];
 
     [super dealloc];
 }

@@ -45,6 +45,7 @@
 + (void) editFile:(ProjectFile *)file atRect:(CGRect)startingRect;
 + (void) editCurrentFile;
 + (void) launchTask:(ProjectFile *)f;
++ (Synchronizer *) synchronizer;
 + (void) sync;
 + (void) queueCommand:(CommandDispatcher *)dispatcher;
 + (void) reloadList;
