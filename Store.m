@@ -196,11 +196,6 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     bind_prepare(&t, s);
     bind_integer(t, 1, project.num, false);
     bind_finalize(t, 0);
-
-    s = "DELETE FROM tasks WHERE project_id=?";
-    bind_prepare(&t, s);
-    bind_integer(t, 1, project.num, false);
-    bind_finalize(t, 0);
 }
 
 + (NSNumber *) currentProjectNum
