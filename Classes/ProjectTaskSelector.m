@@ -30,14 +30,14 @@
 
     [myToolbar setItems:savedToolbarItems];
 
-    [TurboShellAppDelegate reloadList];
-    [TurboShellAppDelegate editProject:project];
+    [TurboshAppDelegate reloadList];
+    [TurboshAppDelegate editProject:project];
 }
 
 - (void) cancelAction {
     [myToolbar setItems:savedToolbarItems];
 
-    [TurboShellAppDelegate editProject:project];
+    [TurboshAppDelegate editProject:project];
 }
 
 #pragma mark View lifecycle
@@ -128,7 +128,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"Executables to run from TurboShell";
+    return @"Executables to run from Turbosh";
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -224,7 +224,7 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    [TurboShellAppDelegate editProject:project];
+    [TurboshAppDelegate editProject:project];
 }
 
 #pragma mark Toolbar Management

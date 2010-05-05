@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		1D2F30171180E89E00D6F839 /* ProjectTaskSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D2F30151180E89E00D6F839 /* ProjectTaskSelector.m */; };
 		1D2F30181180E89E00D6F839 /* ProjectTaskSelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D2F30161180E89E00D6F839 /* ProjectTaskSelector.xib */; };
-		1D3623260D0F684500981E51 /* TurboShellAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* TurboShellAppDelegate.m */; };
+		1D3623260D0F684500981E51 /* TurboshAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* TurboshAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1D6F1C3B1163F72E0000B47D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */; };
@@ -180,9 +180,9 @@
 		1D2F30151180E89E00D6F839 /* ProjectTaskSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectTaskSelector.m; sourceTree = "<group>"; };
 		1D2F30161180E89E00D6F839 /* ProjectTaskSelector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ProjectTaskSelector.xib; path = Classes/ProjectTaskSelector.xib; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		1D3623240D0F684500981E51 /* TurboShellAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TurboShellAppDelegate.h; sourceTree = "<group>"; };
-		1D3623250D0F684500981E51 /* TurboShellAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TurboShellAppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* TurboShell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TurboShell.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D3623240D0F684500981E51 /* TurboshAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TurboshAppDelegate.h; sourceTree = "<group>"; };
+		1D3623250D0F684500981E51 /* TurboshAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TurboshAppDelegate.m; sourceTree = "<group>"; };
+		1D6058910D05DD3D006BFB54 /* Turbosh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Turbosh.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D6F1C391163F72D0000B47D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		1DB6EDA511766EAF00FFC659 /* Synchronizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Synchronizer.h; sourceTree = "<group>"; };
@@ -198,7 +198,7 @@
 		2804200A108E984D000629CD /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		2804203B108E9BAB000629CD /* DetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailView.xib; sourceTree = "<group>"; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		28A0AAE50D9B0CCF005BE974 /* TurboShell_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TurboShell_Prefix.pch; sourceTree = "<group>"; };
+		28A0AAE50D9B0CCF005BE974 /* Turbosh_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Turbosh_Prefix.pch; sourceTree = "<group>"; };
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		74610D8611642BB000CF7B04 /* ProjectFileSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectFileSelector.h; sourceTree = "<group>"; };
@@ -353,7 +353,7 @@
 		74ECA3711187D6F500458DAF /* task-viewer.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "task-viewer.html"; sourceTree = "<group>"; };
 		74ECA3BB1188514B00458DAF /* StringUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtil.h; sourceTree = "<group>"; };
 		74ECA3BC1188514B00458DAF /* StringUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringUtil.m; sourceTree = "<group>"; };
-		8D1107310486CEB800E47090 /* TurboShell-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TurboShell-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Turbosh-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Turbosh-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -384,8 +384,8 @@
 				74B36F8C115B2AAA00E3B2D1 /* FileViewController.m */,
 				74A5ACE411709E05006A48A3 /* FileEditController.h */,
 				74A5ACE511709E05006A48A3 /* FileEditController.m */,
-				1D3623240D0F684500981E51 /* TurboShellAppDelegate.h */,
-				1D3623250D0F684500981E51 /* TurboShellAppDelegate.m */,
+				1D3623240D0F684500981E51 /* TurboshAppDelegate.h */,
+				1D3623250D0F684500981E51 /* TurboshAppDelegate.m */,
 				28042007108E984D000629CD /* RootViewController.h */,
 				28042008108E984D000629CD /* RootViewController.m */,
 				28042009108E984D000629CD /* DetailViewController.h */,
@@ -405,7 +405,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* TurboShell.app */,
+				1D6058910D05DD3D006BFB54 /* Turbosh.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -445,7 +445,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				28A0AAE50D9B0CCF005BE974 /* TurboShell_Prefix.pch */,
+				28A0AAE50D9B0CCF005BE974 /* Turbosh_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				74D7401F1166E28C0010A592 /* RegexKitLite.h */,
 				74D740201166E28C0010A592 /* RegexKitLite.m */,
@@ -464,7 +464,7 @@
 				74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
-				8D1107310486CEB800E47090 /* TurboShell-Info.plist */,
+				8D1107310486CEB800E47090 /* Turbosh-Info.plist */,
 				74ECA28C1184DF1200458DAF /* TaskExecController.xib */,
 			);
 			name = Resources;
@@ -691,9 +691,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* TurboShell */ = {
+		1D6058900D05DD3D006BFB54 /* Turbosh */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "TurboShell" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Turbosh" */;
 			buildPhases = (
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
@@ -705,9 +705,9 @@
 				747EC15311614F4A002D8CD8 /* PBXTargetDependency */,
 				747EC15511614F4F002D8CD8 /* PBXTargetDependency */,
 			);
-			name = TurboShell;
-			productName = TurboShell;
-			productReference = 1D6058910D05DD3D006BFB54 /* TurboShell.app */;
+			name = Turbosh;
+			productName = Turbosh;
+			productReference = 1D6058910D05DD3D006BFB54 /* Turbosh.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -715,7 +715,7 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "TurboShell" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Turbosh" */;
 			compatibilityVersion = "Xcode 3.2";
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -735,7 +735,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* TurboShell */,
+				1D6058900D05DD3D006BFB54 /* Turbosh */,
 			);
 		};
 /* End PBXProject section */
@@ -858,7 +858,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
-				1D3623260D0F684500981E51 /* TurboShellAppDelegate.m in Sources */,
+				1D3623260D0F684500981E51 /* TurboshAppDelegate.m in Sources */,
 				2804200B108E984D000629CD /* RootViewController.m in Sources */,
 				2804200C108E984D000629CD /* DetailViewController.m in Sources */,
 				74B36F8E115B2AAA00E3B2D1 /* FileViewController.m in Sources */,
@@ -926,11 +926,11 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TurboShell_Prefix.pch;
+				GCC_PREFIX_HEADER = Turbosh_Prefix.pch;
 				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
-				INFOPLIST_FILE = "TurboShell-Info.plist";
+				INFOPLIST_FILE = "Turbosh-Info.plist";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
-				PRODUCT_NAME = TurboShell;
+				PRODUCT_NAME = Turbosh;
 			};
 			name = Debug;
 		};
@@ -940,11 +940,11 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = TurboShell_Prefix.pch;
+				GCC_PREFIX_HEADER = Turbosh_Prefix.pch;
 				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
-				INFOPLIST_FILE = "TurboShell-Info.plist";
+				INFOPLIST_FILE = "Turbosh-Info.plist";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
-				PRODUCT_NAME = TurboShell;
+				PRODUCT_NAME = Turbosh;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -983,7 +983,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "TurboShell" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Turbosh" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
@@ -992,7 +992,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "TurboShell" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Turbosh" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

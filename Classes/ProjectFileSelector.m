@@ -50,15 +50,15 @@
 
     [myToolbar setItems:savedToolbarItems];
 
-    [TurboShellAppDelegate reloadList];
+    [TurboshAppDelegate reloadList];
 
-    [TurboShellAppDelegate editProject:project];
+    [TurboshAppDelegate editProject:project];
 }
 
 - (void) cancelAction {
     [myToolbar setItems:savedToolbarItems];
 
-    [TurboShellAppDelegate editProject:project];
+    [TurboshAppDelegate editProject:project];
 }
 
 #pragma mark View lifecycle
@@ -234,7 +234,7 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    [TurboShellAppDelegate editProject:project];
+    [TurboshAppDelegate editProject:project];
 }
 
 #pragma mark Toolbar Management

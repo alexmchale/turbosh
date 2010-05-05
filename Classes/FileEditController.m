@@ -14,7 +14,7 @@
     ProjectFile *file = [[ProjectFile alloc] init];
     file.num = [Store currentFileNum];
     [Store loadProjectFile:file];
-    [TurboShellAppDelegate editFile:file atRect:textView.bounds];
+    [TurboshAppDelegate editFile:file atRect:textView.bounds];
     [file release];
 }
 
@@ -29,10 +29,10 @@
     file.num = [Store currentFileNum];
     [Store loadProjectFile:file];
     [Store storeLocal:file content:content];
-    [TurboShellAppDelegate editFile:file atRect:textView.bounds];
+    [TurboshAppDelegate editFile:file atRect:textView.bounds];
     [file release];
 
-    [TurboShellAppDelegate sync];
+    [TurboshAppDelegate sync];
 }
 
 #pragma mark Edit Events
@@ -138,7 +138,7 @@
     ProjectFile *file = [[ProjectFile alloc] init];
     file.num = [Store currentFileNum];
     [Store loadProjectFile:file];
-    [TurboShellAppDelegate setLabelText:[file condensedPath]];
+    [TurboshAppDelegate setLabelText:[file condensedPath]];
     [file release];
 }
 
