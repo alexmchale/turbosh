@@ -2,5 +2,6 @@ enum TagNumbers
 {
     TAG_FIRST = 10101,
 
-    TAG_DELETE_PROJECT
+    TAG_DELETE_PROJECT,
+    TAG_FILE_CONFLICT
 };

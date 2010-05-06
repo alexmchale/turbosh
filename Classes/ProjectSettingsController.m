@@ -114,6 +114,10 @@
             t = [NSString stringWithFormat:@"Disconnecting from %@", p.name];
             break;
 
+        case SS_AWAITING_ANSWER:
+            t = @"Waiting for user input.";
+            break;
+
         case SS_IDLE:
             t = @"Turbosh is currently idle.";
             break;

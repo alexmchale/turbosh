@@ -19,10 +19,12 @@ enum SyncState
     SS_COMPLETE_TRANSFER,
     SS_TERMINATE_SSH,
     SS_DISCONNECT,
+    SS_AWAITING_ANSWER,
     SS_IDLE
 };
 
 @interface Synchronizer : NSObject
+    <UIAlertViewDelegate>
 {
     enum SyncState state;
 

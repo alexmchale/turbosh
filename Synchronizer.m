@@ -233,7 +233,24 @@
         state = SS_INITIATE_DOWNLOAD;
     } else {
         // The file changed in both locations.  Prompt the user what to do.
-        assert(false);
+
+        NSString *tit = @"File Conflict";
+        NSString *msg =
+            [NSString
+             stringWithFormat:@"The file %@ has changed both locally and on the remote server.  What would you like to do?",
+             file.filename];
+
+        UIAlertView *charAlert = [[UIAlertView alloc]
+                                  initWithTitle:tit
+                                  message:msg
+                                  delegate:self
+                                  cancelButtonTitle:@"Upload"
+                                  otherButtonTitles:@"Download", nil];
+        charAlert.tag = TAG_FILE_CONFLICT;
+        [charAlert show];
+        [charAlert autorelease];
+
+        state = SS_AWAITING_ANSWER;
     }
 }
 
@@ -347,6 +364,7 @@
         case SS_COMPLETE_TRANSFER:      return [self completeTransfer];
         case SS_TERMINATE_SSH:          return [self terminateSsh];
         case SS_DISCONNECT:             return [self disconnect];
+        case SS_AWAITING_ANSWER:        return;
         case SS_IDLE:                   return [self idle];
 
         default: assert(false);
@@ -361,6 +379,18 @@
 - (void) appendCommand:(CommandDispatcher *)command
 {
     [pendingCommands addObject:command];
+}
+
+#pragma mark Alert View Delegate
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == TAG_FILE_CONFLICT) {
+        if (buttonIndex == 0)
+            state = SS_INITIATE_UPLOAD;
+        else
+            state = SS_INITIATE_DOWNLOAD;
+    }
 }
 
 #pragma mark Memory Management
