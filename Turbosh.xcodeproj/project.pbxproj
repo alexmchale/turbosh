@@ -344,6 +344,7 @@
 		74B37210115DCF8500E3B2D1 /* Store.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Store.m; sourceTree = "<group>"; };
 		74B3D573117AB92B00021611 /* FileTransfer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileTransfer.h; sourceTree = "<group>"; };
 		74B3D574117AB92B00021611 /* FileTransfer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileTransfer.m; sourceTree = "<group>"; };
+		74B54E391192D45700A4FF6C /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		74D7401F1166E28C0010A592 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		74D740201166E28C0010A592 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		74D7403911674C2E0010A592 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
@@ -449,6 +450,7 @@
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				74D7401F1166E28C0010A592 /* RegexKitLite.h */,
 				74D740201166E28C0010A592 /* RegexKitLite.m */,
+				74B54E391192D45700A4FF6C /* Constants.h */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";

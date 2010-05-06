@@ -2,7 +2,7 @@
 #import <Synchronizer.h>
 
 @interface ProjectSettingsController : UIViewController
-	<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ContentPaneDelegate>
+	<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ContentPaneDelegate, UIActionSheetDelegate>
 {
     UITableView IBOutlet *myTableView;
     Project *proj;

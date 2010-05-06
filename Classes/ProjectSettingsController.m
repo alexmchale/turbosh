@@ -453,8 +453,26 @@
                     break;
 
                 case TAR_REM_PROJECT:
-                    [self removeThisProject];
-                    break;
+                {
+                    NSString *act =
+                        [NSString
+                         stringWithFormat:@"Are you sure you want to remove the project %@ from Turbosh?",
+                         proj.name];
+
+                    UIActionSheet *actionSheet =
+                        [[UIActionSheet alloc]
+                         initWithTitle:act
+                         delegate:self
+                         cancelButtonTitle:@"Nevermind"
+                         destructiveButtonTitle:@"Remove it!"
+                         otherButtonTitles:nil];
+
+                    actionSheet.tag = TAG_DELETE_PROJECT;
+                    actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+                    [actionSheet showInView:self.view];
+
+                    [actionSheet release];
+                }   break;
 
                 default: assert(false);
             }
@@ -463,6 +481,15 @@
         default: assert(false);
     }
 
+}
+
+#pragma mark Action Sheet Delegate
+
+// Action sheet delegate method.
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == TAG_DELETE_PROJECT && buttonIndex == 0)
+        [self removeThisProject];
 }
 
 #pragma mark Text Field Delegate
