@@ -176,15 +176,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1D2F30141180E89E00D6F839 /* ProjectTaskSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectTaskSelector.h; sourceTree = "<group>"; };
-		1D2F30151180E89E00D6F839 /* ProjectTaskSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectTaskSelector.m; sourceTree = "<group>"; };
+		1D2F30141180E89E00D6F839 /* ProjectTaskSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectTaskSelector.h; path = Classes/ProjectTaskSelector.h; sourceTree = "<group>"; };
+		1D2F30151180E89E00D6F839 /* ProjectTaskSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProjectTaskSelector.m; path = Classes/ProjectTaskSelector.m; sourceTree = "<group>"; };
 		1D2F30161180E89E00D6F839 /* ProjectTaskSelector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ProjectTaskSelector.xib; path = Classes/ProjectTaskSelector.xib; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* TurboshAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TurboshAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* TurboshAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TurboshAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* Turbosh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Turbosh.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		1D6F1C391163F72D0000B47D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
-		1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		1D6F1C391163F72D0000B47D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = Classes/MBProgressHUD.h; sourceTree = "<group>"; };
+		1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = Classes/MBProgressHUD.m; sourceTree = "<group>"; };
 		1DB6EDA511766EAF00FFC659 /* Synchronizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Synchronizer.h; sourceTree = "<group>"; };
 		1DB6EDA611766EAF00FFC659 /* Synchronizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Synchronizer.m; sourceTree = "<group>"; };
 		1DC63B381188B50800DD3842 /* AnsiCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnsiCode.h; sourceTree = "<group>"; };
@@ -201,8 +201,8 @@
 		28A0AAE50D9B0CCF005BE974 /* Turbosh_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Turbosh_Prefix.pch; sourceTree = "<group>"; };
 		28AD735F0D9D9599002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		74610D8611642BB000CF7B04 /* ProjectFileSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectFileSelector.h; sourceTree = "<group>"; };
-		74610D8711642BB000CF7B04 /* ProjectFileSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectFileSelector.m; sourceTree = "<group>"; };
+		74610D8611642BB000CF7B04 /* ProjectFileSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectFileSelector.h; path = Classes/ProjectFileSelector.h; sourceTree = "<group>"; };
+		74610D8711642BB000CF7B04 /* ProjectFileSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProjectFileSelector.m; path = Classes/ProjectFileSelector.m; sourceTree = "<group>"; };
 		74610D8811642BB000CF7B04 /* ProjectFileSelector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ProjectFileSelector.xib; path = Classes/ProjectFileSelector.xib; sourceTree = "<group>"; };
 		7476797E11806AEF005F4493 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		747EB82A11613806002D8CD8 /* agent.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = agent.c; path = SSH/libssh2/agent.c; sourceTree = "<group>"; };
@@ -239,18 +239,18 @@
 		747EC14311614EC9002D8CD8 /* libssh2_sftp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libssh2_sftp.h; path = SSH/libssh2/libssh2_sftp.h; sourceTree = "<group>"; };
 		747EC14411614EC9002D8CD8 /* libssh2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libssh2.h; path = SSH/libssh2/libssh2.h; sourceTree = "<group>"; };
 		747EC174116150D8002D8CD8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		74A5ACE411709E05006A48A3 /* FileEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileEditController.h; sourceTree = "<group>"; };
-		74A5ACE511709E05006A48A3 /* FileEditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileEditController.m; sourceTree = "<group>"; };
+		74A5ACE411709E05006A48A3 /* FileEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileEditController.h; path = ../Classes/FileEditController.h; sourceTree = "<group>"; };
+		74A5ACE511709E05006A48A3 /* FileEditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileEditController.m; path = ../Classes/FileEditController.m; sourceTree = "<group>"; };
 		74A5ACE611709E05006A48A3 /* FileEditController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FileEditController.xib; path = Classes/FileEditController.xib; sourceTree = "<group>"; };
 		74AE5E70115E783B006CA577 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		74AE5E71115E783B006CA577 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
-		74AE5E84115E7BFC006CA577 /* ProjectSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectSettingsController.h; sourceTree = "<group>"; };
-		74AE5E85115E7BFC006CA577 /* ProjectSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectSettingsController.m; sourceTree = "<group>"; };
+		74AE5E84115E7BFC006CA577 /* ProjectSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectSettingsController.h; path = Classes/ProjectSettingsController.h; sourceTree = "<group>"; };
+		74AE5E85115E7BFC006CA577 /* ProjectSettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProjectSettingsController.m; path = Classes/ProjectSettingsController.m; sourceTree = "<group>"; };
 		74AE5E86115E7BFC006CA577 /* ProjectSettingsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ProjectSettingsController.xib; path = Classes/ProjectSettingsController.xib; sourceTree = "<group>"; };
 		74AE612C1160399C006CA577 /* Shell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shell.h; sourceTree = "<group>"; };
 		74AE612D1160399C006CA577 /* Shell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shell.m; sourceTree = "<group>"; };
 		74B36EE4115B2A9700E3B2D1 /* editor.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = editor.html; sourceTree = "<group>"; };
-		74B36EE5115B2A9800E3B2D1 /* jquery-1.4.2.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jquery-1.4.2.min.js"; sourceTree = "<group>"; };
+		74B36EE5115B2A9800E3B2D1 /* jquery-1.4.2.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "jquery-1.4.2.min.js"; path = "HtmlEditor/jquery-1.4.2.min.js"; sourceTree = "<group>"; };
 		74B36EE8115B2A9800E3B2D1 /* sh_acid.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = sh_acid.css; sourceTree = "<group>"; };
 		74B36EE9115B2A9800E3B2D1 /* sh_berries-dark.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "sh_berries-dark.css"; sourceTree = "<group>"; };
 		74B36EEA115B2A9800E3B2D1 /* sh_berries-light.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = "sh_berries-light.css"; sourceTree = "<group>"; };
@@ -348,8 +348,8 @@
 		74D7401F1166E28C0010A592 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		74D740201166E28C0010A592 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		74D7403911674C2E0010A592 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
-		74ECA28A1184DF1200458DAF /* TaskExecController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskExecController.h; sourceTree = "<group>"; };
-		74ECA28B1184DF1200458DAF /* TaskExecController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskExecController.m; sourceTree = "<group>"; };
+		74ECA28A1184DF1200458DAF /* TaskExecController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskExecController.h; path = Classes/TaskExecController.h; sourceTree = "<group>"; };
+		74ECA28B1184DF1200458DAF /* TaskExecController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskExecController.m; path = Classes/TaskExecController.m; sourceTree = "<group>"; };
 		74ECA28C1184DF1200458DAF /* TaskExecController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TaskExecController.xib; path = Classes/TaskExecController.xib; sourceTree = "<group>"; };
 		74ECA3711187D6F500458DAF /* task-viewer.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "task-viewer.html"; sourceTree = "<group>"; };
 		74ECA3BB1188514B00458DAF /* StringUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtil.h; sourceTree = "<group>"; };
@@ -376,30 +376,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		080E96DDFE201D6D7F000001 /* Classes */ = {
+		080E96DDFE201D6D7F000001 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				1D6F1C391163F72D0000B47D /* MBProgressHUD.h */,
-				1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */,
-				74B36F8B115B2AAA00E3B2D1 /* FileViewController.h */,
-				74B36F8C115B2AAA00E3B2D1 /* FileViewController.m */,
-				74A5ACE411709E05006A48A3 /* FileEditController.h */,
-				74A5ACE511709E05006A48A3 /* FileEditController.m */,
 				1D3623240D0F684500981E51 /* TurboshAppDelegate.h */,
 				1D3623250D0F684500981E51 /* TurboshAppDelegate.m */,
 				28042007108E984D000629CD /* RootViewController.h */,
 				28042008108E984D000629CD /* RootViewController.m */,
 				28042009108E984D000629CD /* DetailViewController.h */,
 				2804200A108E984D000629CD /* DetailViewController.m */,
-				74AE5E84115E7BFC006CA577 /* ProjectSettingsController.h */,
-				74AE5E85115E7BFC006CA577 /* ProjectSettingsController.m */,
-				74610D8611642BB000CF7B04 /* ProjectFileSelector.h */,
-				74610D8711642BB000CF7B04 /* ProjectFileSelector.m */,
-				1D2F30141180E89E00D6F839 /* ProjectTaskSelector.h */,
-				1D2F30151180E89E00D6F839 /* ProjectTaskSelector.m */,
-				74ECA28A1184DF1200458DAF /* TaskExecController.h */,
-				74ECA28B1184DF1200458DAF /* TaskExecController.m */,
 			);
+			name = Main;
 			path = Classes;
 			sourceTree = "<group>";
 		};
@@ -411,6 +398,42 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		1D0189A21192F74C00A6F2E5 /* Third Party */ = {
+			isa = PBXGroup;
+			children = (
+				1D6F1C391163F72D0000B47D /* MBProgressHUD.h */,
+				1D6F1C3A1163F72E0000B47D /* MBProgressHUD.m */,
+				1D0189A61192F78900A6F2E5 /* RegexKitLite */,
+				74B36EE5115B2A9800E3B2D1 /* jquery-1.4.2.min.js */,
+				74B36EE6115B2A9800E3B2D1 /* shjs-0.6 */,
+				747EB7F311613732002D8CD8 /* SSH */,
+				747EC12C11614E31002D8CD8 /* openssl.xcodeproj */,
+			);
+			name = "Third Party";
+			sourceTree = "<group>";
+		};
+		1D0189A61192F78900A6F2E5 /* RegexKitLite */ = {
+			isa = PBXGroup;
+			children = (
+				74D7401F1166E28C0010A592 /* RegexKitLite.h */,
+				74D740201166E28C0010A592 /* RegexKitLite.m */,
+			);
+			name = RegexKitLite;
+			sourceTree = "<group>";
+		};
+		1D0189BE1192FB4500A6F2E5 /* Project Management */ = {
+			isa = PBXGroup;
+			children = (
+				74610D8611642BB000CF7B04 /* ProjectFileSelector.h */,
+				74610D8711642BB000CF7B04 /* ProjectFileSelector.m */,
+				74AE5E84115E7BFC006CA577 /* ProjectSettingsController.h */,
+				74AE5E85115E7BFC006CA577 /* ProjectSettingsController.m */,
+				1D2F30141180E89E00D6F839 /* ProjectTaskSelector.h */,
+				1D2F30151180E89E00D6F839 /* ProjectTaskSelector.m */,
+			);
+			name = "Project Management";
+			sourceTree = "<group>";
+		};
 		1D6F1BC01163E44D0000B47D /* Storehouse */ = {
 			isa = PBXGroup;
 			children = (
@@ -420,8 +443,6 @@
 				74B36FA3115B2B2A00E3B2D1 /* ProjectFile.m */,
 				74B3720F115DCF8500E3B2D1 /* Store.h */,
 				74B37210115DCF8500E3B2D1 /* Store.m */,
-				1DB6EDA511766EAF00FFC659 /* Synchronizer.h */,
-				1DB6EDA611766EAF00FFC659 /* Synchronizer.m */,
 			);
 			name = Storehouse;
 			sourceTree = "<group>";
@@ -429,15 +450,17 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				74ECA3701187D6CD00458DAF /* TaskViewer */,
+				1D0189BE1192FB4500A6F2E5 /* Project Management */,
 				1D6F1BC01163E44D0000B47D /* Storehouse */,
+				74ECA3701187D6CD00458DAF /* Task Launcher */,
+				74B36EE3115B2A9700E3B2D1 /* File Editor */,
 				747EC1DF1161810C002D8CD8 /* Shell */,
 				74AE5E6C115E77CC006CA577 /* Monkey Patches */,
-				74B36EE3115B2A9700E3B2D1 /* HtmlEditor */,
-				080E96DDFE201D6D7F000001 /* Classes */,
+				080E96DDFE201D6D7F000001 /* Main */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				1D0189A21192F74C00A6F2E5 /* Third Party */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = CustomTemplate;
@@ -448,8 +471,6 @@
 			children = (
 				28A0AAE50D9B0CCF005BE974 /* Turbosh_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
-				74D7401F1166E28C0010A592 /* RegexKitLite.h */,
-				74D740201166E28C0010A592 /* RegexKitLite.m */,
 				74B54E391192D45700A4FF6C /* Constants.h */,
 			);
 			name = "Other Sources";
@@ -544,14 +565,14 @@
 		747EC1DF1161810C002D8CD8 /* Shell */ = {
 			isa = PBXGroup;
 			children = (
+				1DB6EDA511766EAF00FFC659 /* Synchronizer.h */,
+				1DB6EDA611766EAF00FFC659 /* Synchronizer.m */,
 				74AE612C1160399C006CA577 /* Shell.h */,
 				74AE612D1160399C006CA577 /* Shell.m */,
 				1DF12F9211789A18008927B0 /* CommandDispatcher.h */,
 				1DF12F9311789A18008927B0 /* CommandDispatcher.m */,
 				74B3D573117AB92B00021611 /* FileTransfer.h */,
 				74B3D574117AB92B00021611 /* FileTransfer.m */,
-				747EB7F311613732002D8CD8 /* SSH */,
-				747EC12C11614E31002D8CD8 /* openssl.xcodeproj */,
 			);
 			name = Shell;
 			sourceTree = "<group>";
@@ -567,13 +588,16 @@
 			name = "Monkey Patches";
 			sourceTree = "<group>";
 		};
-		74B36EE3115B2A9700E3B2D1 /* HtmlEditor */ = {
+		74B36EE3115B2A9700E3B2D1 /* File Editor */ = {
 			isa = PBXGroup;
 			children = (
+				74A5ACE411709E05006A48A3 /* FileEditController.h */,
+				74A5ACE511709E05006A48A3 /* FileEditController.m */,
+				74B36F8B115B2AAA00E3B2D1 /* FileViewController.h */,
+				74B36F8C115B2AAA00E3B2D1 /* FileViewController.m */,
 				74B36EE4115B2A9700E3B2D1 /* editor.html */,
-				74B36EE5115B2A9800E3B2D1 /* jquery-1.4.2.min.js */,
-				74B36EE6115B2A9800E3B2D1 /* shjs-0.6 */,
 			);
+			name = "File Editor";
 			path = HtmlEditor;
 			sourceTree = "<group>";
 		};
@@ -585,7 +609,8 @@
 				74B36F37115B2A9800E3B2D1 /* sh_main.js */,
 				74B36F38115B2A9800E3B2D1 /* sh_style.css */,
 			);
-			path = "shjs-0.6";
+			name = "shjs-0.6";
+			path = "HtmlEditor/shjs-0.6";
 			sourceTree = "<group>";
 		};
 		74B36EE7115B2A9800E3B2D1 /* css */ = {
@@ -680,14 +705,16 @@
 			path = lang;
 			sourceTree = "<group>";
 		};
-		74ECA3701187D6CD00458DAF /* TaskViewer */ = {
+		74ECA3701187D6CD00458DAF /* Task Launcher */ = {
 			isa = PBXGroup;
 			children = (
+				74ECA28A1184DF1200458DAF /* TaskExecController.h */,
+				74ECA28B1184DF1200458DAF /* TaskExecController.m */,
 				74ECA3711187D6F500458DAF /* task-viewer.html */,
 				1DC63B381188B50800DD3842 /* AnsiCode.h */,
 				1DC63B391188B50800DD3842 /* AnsiCode.m */,
 			);
-			name = TaskViewer;
+			name = "Task Launcher";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
