@@ -26,6 +26,7 @@
 - (NSString *)contentType;
 - (NSString *)fullpath;
 - (NSString *)escapedPath;
+- (NSString *)escapedRelativePath;
 - (NSString *)condensedPath;
 - (NSString *)extension;
 

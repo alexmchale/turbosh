@@ -98,6 +98,10 @@
     return [[self fullpath] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
 }
 
+- (NSString *)escapedRelativePath {
+    return [[self filename] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+}
+
 #pragma mark Content
 
 - (NSString *) content {

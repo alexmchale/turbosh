@@ -166,7 +166,7 @@
 - (void) initiateHash
 {
     NSString *md5f = @"md5 %@ || md5sum %@";
-    NSString *md5Cmd = [NSString stringWithFormat:md5f, [file escapedPath], [file escapedPath]];
+    NSString *md5Cmd = [NSString stringWithFormat:md5f, [file escapedRelativePath], [file escapedRelativePath]];
 
     self.dispatcher = [[CommandDispatcher alloc] initWithProject:project session:session command:md5Cmd];
     [dispatcher release];
