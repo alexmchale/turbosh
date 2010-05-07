@@ -57,7 +57,7 @@
 					</object>
 					<object class="IBUILabel" id="428599646">
 						<reference key="NSNextResponder" ref="442233747"/>
-						<int key="NSvFlags">292</int>
+						<int key="NSvFlags">290</int>
 						<string key="NSFrame">{{219, 11}, {329, 22}}</string>
 						<reference key="NSSuperview" ref="442233747"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
@@ -71,7 +71,7 @@
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<string key="IBUIText">Label</string>
 						<object class="NSFont" key="IBUIFont">
-							<string key="NSName">Helvetica</string>
+							<string key="NSName">Helvetica-Bold</string>
 							<double key="NSSize">18</double>
 							<int key="NSfFlags">16</int>
 						</object>
@@ -180,7 +180,7 @@
 					<string>DetailViewController</string>
 					<string>UIResponder</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{330, 4}, {783, 852}}</string>
+					<string>{{559, 206}, {768, 960}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				</object>

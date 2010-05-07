@@ -67,6 +67,7 @@
                                                  name:@"finish" object:dispatcher];
 
     [TurboshAppDelegate queueCommand:dispatcher];
+    [TurboshAppDelegate setLabelText:@"Task Launcher"];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
