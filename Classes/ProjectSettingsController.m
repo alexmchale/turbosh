@@ -86,6 +86,10 @@
             t = [NSString stringWithFormat:@"Determined the file %@ is missing on %@.", [f condensedPath], p.name];
             break;
 
+        case SS_DELETE_LOCAL_FILE:
+            t = [NSString stringWithFormat:@"Deleting local copy of %@.", [f condensedPath]];
+            break;
+
         case SS_TEST_IF_CHANGED:
             t = [NSString stringWithFormat:@"Testing if the file %@ on %@ has changed.", [f condensedPath], p.name];
             break;

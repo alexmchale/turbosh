@@ -202,7 +202,35 @@
 - (void) fileIsMissing
 {
     // Prompt the user to delete or upload.
-    assert(false);
+
+    NSString *tit = @"File Missing";
+    NSString *msg =
+    [NSString
+     stringWithFormat:@"The file %@ does not exist on the remote server.  What would you like to do?",
+     file.filename];
+
+    UIAlertView *charAlert = [[UIAlertView alloc]
+                              initWithTitle:tit
+                              message:msg
+                              delegate:self
+                              cancelButtonTitle:@"Upload"
+                              otherButtonTitles:@"Delete", nil];
+    charAlert.tag = TAG_FILE_MISSING;
+    [charAlert show];
+    [charAlert autorelease];
+
+    state = SS_AWAITING_ANSWER;
+}
+
+- (void) deleteLocalFile
+{
+    if (file) {
+        [Store deleteProjectFile:file];
+        self.file = nil;
+        [TurboshAppDelegate reloadList];
+
+        state = SS_SELECT_FILE;
+    }
 }
 
 - (void) testIfChanged
@@ -358,6 +386,7 @@
         case SS_COMPLETE_HASH:          return [self completeHash];
         case SS_FILE_IS_MISSING:        return [self fileIsMissing];
         case SS_TEST_IF_CHANGED:        return [self testIfChanged];
+        case SS_DELETE_LOCAL_FILE:      return [self deleteLocalFile];
         case SS_INITIATE_UPLOAD:        return [self initiateUpload];
         case SS_INITIATE_DOWNLOAD:      return [self initiateDownload];
         case SS_CONTINUE_TRANSFER:      return [self continueTransfer];
@@ -385,11 +414,20 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (alertView.tag == TAG_FILE_CONFLICT) {
-        if (buttonIndex == 0)
-            state = SS_INITIATE_UPLOAD;
-        else
-            state = SS_INITIATE_DOWNLOAD;
+    switch (alertView.tag) {
+        case TAG_FILE_CONFLICT:
+            if (buttonIndex == 0)
+                state = SS_INITIATE_UPLOAD;
+            else
+                state = SS_INITIATE_DOWNLOAD;
+            break;
+
+        case TAG_FILE_MISSING:
+            if (buttonIndex == 0)
+                state = SS_INITIATE_UPLOAD;
+            else
+                state = SS_DELETE_LOCAL_FILE;
+            break;
     }
 }
 
