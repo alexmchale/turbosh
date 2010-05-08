@@ -5,6 +5,7 @@
     bool bold;
     NSMutableArray *codes;
     int nextValue;
+    bool completed;
 }
 
 - (void) start;

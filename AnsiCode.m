@@ -7,11 +7,15 @@
     [codes removeAllObjects];
     bold = false;
     nextValue = 0;
+    completed = false;
 }
 
 // Return true if the user should continue feeding characters.
 - (bool) append:(char)c
 {
+    // Check if we already hit an endpoint.
+    if (completed) return false;
+
     // Header characters.  Just continue.
     if (c == 27 || c == '[') return true;
 
@@ -23,12 +27,13 @@
             [codes addObject:[NSNumber numberWithInt:nextValue]];
 
         nextValue = 0;
+        completed = c == 'm';
 
         return true;
     }
 
     // This character is the end of the ANSI color code.
-    if (c == 'm' || !isdigit(c)) return false;
+    if (!isdigit(c)) return false;
 
     nextValue *= 10;
     nextValue += c - '0';
@@ -69,8 +74,6 @@
 
         [name appendString:@" "];
     }
-
-    NSLog(@"Calculated CSS Name: %@", name);
 
     return name;
 }
