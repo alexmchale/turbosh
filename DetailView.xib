@@ -87,11 +87,11 @@
 					<object class="IBUIActivityIndicatorView" id="560998958">
 						<reference key="NSNextResponder" ref="442233747"/>
 						<int key="NSvFlags">-2147483383</int>
-						<string key="NSFrame">{{916, 723}, {37, 37}}</string>
+						<string key="NSFrame">{{920, 728}, {20, 20}}</string>
 						<reference key="NSSuperview" ref="442233747"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<int key="IBUIStyle">0</int>
+						<int key="IBUIStyle">2</int>
 					</object>
 				</object>
 				<string key="NSFrameSize">{960, 768}</string>
@@ -207,7 +207,7 @@
 					<string>DetailViewController</string>
 					<string>UIResponder</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{329, 55}, {960, 768}}</string>
+					<string>{{142, 62}, {960, 768}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
