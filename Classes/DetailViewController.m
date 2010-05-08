@@ -9,7 +9,7 @@
 
 @implementation DetailViewController
 
-@synthesize toolbar, popoverController, label;
+@synthesize toolbar, popoverController, label, spinner;
 
 #pragma mark Switcher View Manager
 
@@ -115,8 +115,10 @@
 
 - (void)dealloc {
     [popoverController release];
-    [toolbar release];
     [currentController release];
+    [toolbar release];
+    [label release];
+    [spinner release];
 
     [super dealloc];
 }

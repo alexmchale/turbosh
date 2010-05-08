@@ -50,5 +50,6 @@
 + (void) sync;
 + (void) queueCommand:(CommandDispatcher *)dispatcher;
 + (void) reloadList;
++ (void) spin:(bool)spinning;
 
 @end

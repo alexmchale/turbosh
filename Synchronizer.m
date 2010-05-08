@@ -364,6 +364,8 @@
     if (project == nil && state != SS_IDLE) state = SS_SELECT_PROJECT;
     if (state != SS_IDLE) NSLog(@"Synchronizer At %d", state);
 
+    [TurboshAppDelegate spin:(state != SS_IDLE)];
+
     // Post a notification of the synchronizer's current state.
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     NSMutableDictionary *userInfo = [[NSMutableDictionary alloc] init];

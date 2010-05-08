@@ -16,10 +16,12 @@
     UIViewController<ContentPaneDelegate> *currentController;
 
     UILabel *label;
+    UIActivityIndicatorView *spinner;
 }
 
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, retain) IBOutlet UILabel *label;
+@property (nonatomic, retain) IBOutlet UIActivityIndicatorView *spinner;
 
 - (void) switchTo:(UIViewController *)controller;
 

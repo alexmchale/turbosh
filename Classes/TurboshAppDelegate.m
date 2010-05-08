@@ -129,6 +129,17 @@
     [delegate.rootViewController.tableView reloadData];
 }
 
++ (void) spin:(bool)spinning
+{
+    TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    UIActivityIndicatorView *spinner = delegate.detailViewController.spinner;
+
+    if (spinning)
+        [spinner startAnimating];
+    else
+        [spinner stopAnimating];
+}
+
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -153,14 +164,6 @@
 
     return YES;
 
-}
-
-- (void) up123:(NSNotification *)notif
-{
-    NSNumber *offset = [notif.userInfo valueForKey:@"offset"];
-    NSNumber *length = [notif.userInfo valueForKey:@"length"];
-
-    NSLog(@"NOTIFIED %@ %@", offset, length);
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
