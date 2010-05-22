@@ -208,7 +208,10 @@ static bool excluded_filename(NSString *filename) {
 }
 
 - (NSString *) escapedPath {
-    return [project.sshPath stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+    if (!project.sshPath || [@"" isEqualToString:project.sshPath])
+        return @".";
+
+    return [project.sshPath stringBySingleQuoting];
 }
 
 #pragma mark Connection Drivers

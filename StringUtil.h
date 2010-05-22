@@ -4,5 +4,6 @@
 
 - (NSString *) stringByConvertingAnsiColor;
 - (NSString *) stringByQuotingJavascript;
+- (NSString *) stringBySingleQuoting;
 
 @end

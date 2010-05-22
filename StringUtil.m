@@ -43,4 +43,10 @@
     return [NSString stringWithFormat:@"'%@'", ns];
 }
 
+- (NSString *) stringBySingleQuoting
+{
+    NSString *ns = [self stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+    return [NSString stringWithFormat:@"'%@'", ns];
+}
+
 @end
