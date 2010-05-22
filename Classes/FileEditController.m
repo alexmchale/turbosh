@@ -22,7 +22,7 @@
 {
     self.text = textView.text;
 
-    NSData *content = [text dataUsingEncoding:NSASCIIStringEncoding];
+    NSData *content = [text dataUsingEncoding:NSUTF8StringEncoding];
     [myToolbar setItems:savedToolbarItems];
 
     ProjectFile *file = [[ProjectFile alloc] init];

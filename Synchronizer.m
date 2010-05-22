@@ -236,7 +236,7 @@
 - (void) testIfChanged
 {
     NSData *md5Data = [dispatcher stdoutResponse];
-    NSString *remoteMd5 = [[NSString alloc] initWithData:md5Data encoding:NSASCIIStringEncoding];
+    NSString *remoteMd5 = [[NSString alloc] initWithData:md5Data encoding:NSUTF8StringEncoding];
     NSString *md5Regex = @"[0-9a-fA-F]{32}";
     NSString *md5 = [[remoteMd5 stringByMatching:md5Regex] uppercaseString];
 

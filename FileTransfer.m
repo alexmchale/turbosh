@@ -13,7 +13,7 @@
     file = f;
     [file retain];
 
-    content = [NSMutableData dataWithData:[[file content] dataUsingEncoding:NSASCIIStringEncoding]];
+    content = [NSMutableData dataWithData:[[file content] dataUsingEncoding:NSUTF8StringEncoding]];
     [content retain];
 
     return self;

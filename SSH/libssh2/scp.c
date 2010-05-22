@@ -616,6 +616,7 @@ scp_recv(LIBSSH2_SESSION * session, const char *path, struct stat * sb)
                     goto scp_recv_error;
                 }
 
+                /*
                 if ((session->scpRecv_response_len > 1) &&
                     (session->
                      scpRecv_response[session->scpRecv_response_len - 1] !=
@@ -633,6 +634,7 @@ scp_recv(LIBSSH2_SESSION * session, const char *path, struct stat * sb)
                                   "Invalid data in SCP response", 0);
                     goto scp_recv_error;
                 }
+                */
 
                 if ((session->scpRecv_response_len < 7)
                     || (session->

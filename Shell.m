@@ -297,13 +297,14 @@ static bool excluded_filename(NSString *filename) {
     struct stat fileinfo;
     NSInteger downloaded = 0;
     NSMutableData *data = [NSMutableData data];
+    const char *cFilename = [filePath UTF8String];
     int rc;
 
-    NSLog(@"Downloading file: %@", filePath);
+    NSLog(@"Downloading file: %@ %s", filePath, cFilename);
 
     libssh2_session_set_blocking(session, 1);
 
-    if (!(channel = libssh2_scp_recv(session, [filePath UTF8String], &fileinfo))) {
+    if (!(channel = libssh2_scp_recv(session, cFilename, &fileinfo))) {
         char *errMsg;
         int errLen;
         libssh2_session_last_error(session, &errMsg, &errLen, 0);
@@ -341,7 +342,7 @@ static bool excluded_filename(NSString *filename) {
 {
     LIBSSH2_CHANNEL *channel;
     const char *filePath = [[file fullpath] UTF8String];
-    const NSData *contentData = [[file content] dataUsingEncoding:NSASCIIStringEncoding];
+    const NSData *contentData = [[file content] dataUsingEncoding:NSUTF8StringEncoding];
     const char *content = [contentData bytes];
     const int length = [contentData length];
     int sent = 0;
