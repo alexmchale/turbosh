@@ -234,6 +234,7 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    [myToolbar setItems:savedToolbarItems];
     [TurboshAppDelegate editProject:project];
 }
 
