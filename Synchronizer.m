@@ -53,7 +53,7 @@
 
     // Create the new socket.
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-        fprintf(stderr, "failed to create socket %d\n", errno);
+        NSLog(@"Failed to create socket %d", errno);
         state = SS_SELECT_PROJECT;
         return;
     }
@@ -73,7 +73,7 @@
 
     // Establish the TCP connection.
     if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) != 0) {
-        fprintf(stderr, "failed to connect %d\n", errno);
+        NSLog(@"Failed to connect %d", errno);
         state = SS_DISCONNECT;
         return;
     }
@@ -103,7 +103,7 @@
     if (rc == LIBSSH2_ERROR_EAGAIN) return;
 
     if (rc != 0) {
-        fprintf(stderr, "Failure establishing SSH session: %d\n", rc);
+        NSLog(@"Failure establishing SSH session: %d", rc);
         state = SS_TERMINATE_SSH;
         return;
     }
@@ -122,7 +122,7 @@
     if (rc == LIBSSH2_ERROR_EAGAIN) return;
 
     if (rc != 0) {
-        fprintf(stderr, "Authentication by password failed.\n");
+        NSLog(@"Authentication by password failed.");
         state = SS_TERMINATE_SSH;
         return;
     }
@@ -284,7 +284,7 @@
 
 - (void) initiateUpload
 {
-    fprintf(stderr, "uploading %s\n", [file.filename UTF8String]);
+    NSLog(@"Uploading %@", file.filename);
 
     self.transfer = [[FileTransfer alloc] initWithSession:session upload:file];
     [transfer release];
@@ -294,7 +294,7 @@
 
 - (void) initiateDownload
 {
-    fprintf(stderr, "downloading %s\n", [file.filename UTF8String]);
+    NSLog(@"Downloading %@", file.filename);
 
     self.transfer = [[FileTransfer alloc] initWithSession:session download:file];
     [transfer release];

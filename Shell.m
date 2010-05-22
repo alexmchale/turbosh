@@ -59,7 +59,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 
     // Create the new socket.
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-        fprintf(stderr, "failed to create socket %d\n", errno);
+        NSLog(@"Failed to create socket %d", errno);
         return false;
     }
 
@@ -78,7 +78,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 
     // Establish the TCP connection.
     if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) != 0) {
-        fprintf(stderr, "failed to connect %d\n", errno);
+        NSLog(@"Failed to connect %d", errno);
         return false;
     }
 
@@ -96,7 +96,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
         //continue;
 
     if (rc) {
-        fprintf(stderr, "Failure establishing SSH session: %d\n", rc);
+        NSLog(@"Failure establishing SSH session: %d", rc);
         return nil;
     }
 
@@ -107,7 +107,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
         //continue;
     if (rc) {
-        fprintf(stderr, "Authentication by password failed.\n");
+        NSLog(@"Authentication by password failed.");
         return false;
     }
 
@@ -152,7 +152,7 @@ static bool excluded_filename(NSString *filename) {
     NSString *findCmd = [NSString stringWithFormat:@"find %@ -type %c -print0", [self escapedPath], type];
     NSString *cmd = [NSString stringWithFormat:@"%@ && %@", testCmd, findCmd];
 
-    fprintf(stderr, "find cmd: %s\n", [cmd UTF8String]);
+    NSLog(@"Find command: %@", cmd);
 
     if ([self dispatchCommand:cmd storeAt:data]) {
         char *bytes = (char *)[data bytes];
@@ -184,7 +184,7 @@ static bool excluded_filename(NSString *filename) {
     NSString *findCmd = [NSString stringWithFormat:@"find %@ -type f -perm -100 -print0", ep];
     NSString *cmd = [NSString stringWithFormat:@"%@ && %@", testCmd, findCmd];
 
-    fprintf(stderr, "find cmd: %s\n", [cmd UTF8String]);
+    NSLog(@"Find Command: %@", cmd);
 
     if ([self dispatchCommand:cmd storeAt:data]) {
         char *bytes = (char *)[data bytes];
@@ -227,7 +227,7 @@ static bool excluded_filename(NSString *filename) {
     }
 
     if (channel == NULL) {
-        fprintf(stderr,"Error\n");
+        NSLog(@"Error dispatching command: %@", command);
         return false;
     }
 
@@ -237,7 +237,7 @@ static bool excluded_filename(NSString *filename) {
     }
 
     if (rc) {
-        fprintf(stderr, "error %d while executing command: %s\n", rc, [command UTF8String]);
+        NSLog(@"Error %d while executing command: %@", rc, command);
         return false;
     }
 
@@ -271,8 +271,8 @@ static bool excluded_filename(NSString *filename) {
         exitcode = libssh2_channel_get_exit_status( channel );
     }
 
-    printf("\nCMD:  %s\n", [command UTF8String]);
-    printf("EXIT: %d bytecount: %d\n", exitcode, bytecount);
+    NSLog(@"Executed command: %@", command);
+    NSLog(@"Exit code %d with byte count %d", exitcode, bytecount);
 
     libssh2_channel_free(channel);
     channel = NULL;
@@ -288,7 +288,7 @@ static bool excluded_filename(NSString *filename) {
     NSMutableData *data = [NSMutableData data];
     int rc;
 
-    fprintf(stderr, "downloading: %s\n", [filePath UTF8String]);
+    NSLog(@"Downloading file: %@", filePath);
 
     libssh2_session_set_blocking(session, 1);
 
@@ -296,7 +296,7 @@ static bool excluded_filename(NSString *filename) {
         char *errMsg;
         int errLen;
         libssh2_session_last_error(session, &errMsg, &errLen, 0);
-        fprintf(stderr, "unable to open a session: %s\n", errMsg);
+        NSLog(@"Unable to open download session: %@", [NSString stringWithUTF8String:errMsg]);
         return nil;
     }
 
@@ -318,7 +318,7 @@ static bool excluded_filename(NSString *filename) {
         }
     }
 
-    fprintf(stderr, "downloaded %d bytes with %d in data\n", downloaded, [data length]);
+    NSLog(@"Downloaded %d bytes with %d in data.", downloaded, [data length]);
 
     libssh2_channel_free(channel);
     channel = NULL;
@@ -335,7 +335,7 @@ static bool excluded_filename(NSString *filename) {
     const int length = [contentData length];
     int sent = 0;
 
-    fprintf(stderr, "uploading: %s\n", filePath);
+    NSLog(@"Uploading file %@", [file fullpath]);
 
     libssh2_session_set_blocking(session, 1);
 
@@ -343,8 +343,7 @@ static bool excluded_filename(NSString *filename) {
         char *errmsg;
         int errlen;
         int err = libssh2_session_last_error(session, &errmsg, &errlen, 0);
-
-        fprintf(stderr, "Unable to open a session: (%d) %s\n", err, errmsg);
+        NSLog(@"Unable to open upload session: %d", err);
         return false;
     }
 
@@ -352,7 +351,7 @@ static bool excluded_filename(NSString *filename) {
         int packetSize = libssh2_channel_write(channel, &content[sent], 4096);
 
         if (packetSize < 0) {
-            fprintf(stderr, "error sending %s: %d\n", filePath, packetSize);
+            NSLog(@"Error %d sending: %@", packetSize, [file fullpath]);
             return false;
         }
 
@@ -366,7 +365,7 @@ static bool excluded_filename(NSString *filename) {
     libssh2_channel_free(channel);
     channel = NULL;
 
-    fprintf(stderr, "sent %s with %d bytes\n", filePath, length);
+    NSLog(@"Sent %d bytes as: %@", length, [file fullpath]);
 
     return true;
 }
