@@ -121,6 +121,10 @@
         @"cpp",        @"cc",
         @"cpp",        @"cxx",
         @"latex",      @"tex",
+        @"python",     @"py",
+        @"php",        @"php3",
+        @"php",        @"php4",
+        @"perl",       @"pl",
         nil
     ];
 
