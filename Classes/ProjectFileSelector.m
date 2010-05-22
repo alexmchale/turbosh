@@ -200,6 +200,19 @@
 
 #pragma mark Memory management
 
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    assert(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]);
+
+    project = nil;
+    allFiles = nil;
+    syncFiles = nil;
+    removedFiles = nil;
+    savedToolbarItems = nil;
+
+    return self;
+}
+
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];

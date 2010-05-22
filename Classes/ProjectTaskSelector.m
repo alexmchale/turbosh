@@ -190,11 +190,17 @@
 
 #pragma mark Memory management
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    assert(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]);
 
-    // Relinquish ownership any cached data, images, etc that aren't in use.
+    project = nil;
+    allFiles = nil;
+    syncFiles = nil;
+    removedFiles = nil;
+    savedToolbarItems = nil;
+
+    return self;
 }
 
 - (void)viewDidUnload {
