@@ -110,12 +110,21 @@
 
 - (NSString *) contentType {
     NSDictionary *types = [NSDictionary dictionaryWithObjectsAndKeys:
-        @"ruby", @"rb",
+        @"ruby",       @"rb",
         @"javascript", @"js",
+        @"bison",      @"y",
+        @"bison",      @"ypp",
+        @"bison",      @"y++",
+        @"bison",      @"yxx",
+        @"csharp",     @"cs",
+        @"cpp",        @"c++",
+        @"cpp",        @"cc",
+        @"cpp",        @"cxx",
+        @"latex",      @"tex",
         nil
     ];
 
-    NSString *ext = [self extension];
+    NSString *ext = [[self extension] lowercaseString];
     NSString *type = [types objectForKey:ext];
 
     return type ? type : ext;
