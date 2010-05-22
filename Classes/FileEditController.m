@@ -77,15 +77,19 @@
     [[info valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue: &keyboardBounds];
     CGSize keyboardSize = keyboardBounds.size;
 
+    NSLog(@"Keyboard Size: %fx%f", keyboardSize.width, keyboardSize.height);
+
     // Get the orientation of the device.
     UIDeviceOrientation orient = [UIDevice currentDevice].orientation;
 
     // Determine the amount by which to adjust the height.
-    int heightAdjustment;
+    CGFloat heightAdjustment;
     if (UIDeviceOrientationIsLandscape(orient))
         heightAdjustment = keyboardSize.width;
     else
         heightAdjustment = keyboardSize.height;
+
+    NSLog(@"Height Adjustment: %f\n", heightAdjustment);
 
     // Resize the scroll view (which is the root view of the window)
     CGRect viewFrame = [textView frame];
