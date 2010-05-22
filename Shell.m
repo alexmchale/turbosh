@@ -196,17 +196,25 @@ static bool excluded_filename(NSString *filename) {
 
     if ([self dispatchCommand:cmd storeAt:data]) {
         char *bytes = (char *)[data bytes];
+        long length = [data length];
+        long pathLength = (project.sshPath ? [project.sshPath length] : 0) + 1;
         long offset = 0;
+
         files = [NSMutableArray array];
 
-        while (offset < [data length]) {
-            NSString *file = [NSString stringWithUTF8String:&bytes[offset]];
-            int pathLength = [project.sshPath length] + 1;
-            file = [file substringFromIndex:pathLength];
+        while (offset < length) {
+            NSString *file = [NSString stringWithCString:&bytes[offset] encoding:NSUTF8StringEncoding];
 
-            if (!excluded_filename(file)) [files addObject:file];
+            if (pathLength < [file length]) {
+                file = [file substringFromIndex:pathLength];
 
-            offset += pathLength + [file length] + 1;
+                if (!excluded_filename(file)) [files addObject:file];
+            }
+
+            // Scan to 1 past the NULL.
+            while (offset < length && bytes[offset] != '\0')
+                offset++;
+            offset++;
         }
     }
 
