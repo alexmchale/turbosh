@@ -2,7 +2,7 @@
 
 @implementation ProjectFileSelector
 
-@synthesize myTableView, project, allFiles, syncFiles, removedFiles;
+@synthesize myTableView, project, allFiles, syncFiles, removedFiles, shownFiles;
 
 #pragma mark Button Actions
 
@@ -60,11 +60,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
     self.clearsSelectionOnViewWillAppear = NO;
-
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -85,6 +81,7 @@
 
     if ([shell connect]) {
         self.allFiles = [shell files];
+        self.shownFiles = allFiles;
 
         if (self.allFiles) {
             self.syncFiles = [NSMutableArray arrayWithArray:[Store filenames:project]];
@@ -100,6 +97,7 @@
     if (error) {
         self.allFiles = nil;
         self.syncFiles = nil;
+        self.shownFiles = nil;
     }
 
     [hud hide:YES];
@@ -123,6 +121,7 @@
     self.allFiles = nil;
     self.syncFiles = nil;
     self.removedFiles = nil;
+    self.shownFiles = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -142,8 +141,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    if (allFiles)
-        return [allFiles count];
+    if (shownFiles)
+        return [shownFiles count];
     else
         return 0;
 }
@@ -160,8 +159,8 @@
     }
 
     // Configure the cell...
-    assert(allFiles);
-    NSString *file = [allFiles objectAtIndex:indexPath.row];
+    assert(shownFiles);
+    NSString *file = [shownFiles objectAtIndex:indexPath.row];
     assert(file);
 
     cell.textLabel.text = file;
@@ -177,7 +176,7 @@
 #pragma mark Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *file = [self.allFiles objectAtIndex:indexPath.row];
+    NSString *file = [self.shownFiles objectAtIndex:indexPath.row];
 
     if ([syncFiles containsObject:file]) {
         [removedFiles addObject:file];
@@ -202,6 +201,7 @@
     allFiles = nil;
     syncFiles = nil;
     removedFiles = nil;
+    shownFiles = nil;
 
     cancelButton =
         [[UIBarButtonItem alloc]
@@ -229,6 +229,7 @@
     [project release];
     [allFiles release];
     [syncFiles release];
+    [shownFiles release];
     [removedFiles release];
     [cancelButton release];
     [spacer release];
@@ -248,6 +249,32 @@
 
 - (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
     [toolbar setItems:[NSArray arrayWithObjects:cancelButton, spacer, saveButton, nil]];
+}
+
+#pragma mark Search Bar Delegate
+
+- (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if (searchText == nil || [searchText length] == 0) {
+        self.shownFiles = allFiles;
+        [myTableView reloadData];
+        return;
+    }
+
+    NSMutableArray *newlyShownFiles = [NSMutableArray array];
+    NSString *lowercaseSearchText = [searchText lowercaseString];
+
+    for (NSString *filename in allFiles) {
+        NSString *lowercaseFilename = [filename lowercaseString];
+        NSRange textRange = [lowercaseFilename rangeOfString:lowercaseSearchText];
+
+        if (textRange.location != NSNotFound) {
+            [newlyShownFiles addObject:filename];
+        }
+    }
+
+    self.shownFiles = newlyShownFiles;
+    [myTableView reloadData];
 }
 
 @end
