@@ -3,8 +3,6 @@
 @implementation ProjectTaskSelector
 
 @synthesize myTableView, project, allFiles, syncFiles, removedFiles;
-@synthesize myToolbar, savedToolbarItems;
-@synthesize cancelButton, spacer, saveButton;
 
 #pragma mark Button Actions
 
@@ -28,15 +26,11 @@
 
     [file release];
 
-    [myToolbar setItems:savedToolbarItems];
-
     [TurboshAppDelegate reloadList];
     [TurboshAppDelegate editProject:project];
 }
 
 - (void) cancelAction {
-    [myToolbar setItems:savedToolbarItems];
-
     [TurboshAppDelegate editProject:project];
 }
 
@@ -198,17 +192,26 @@
     allFiles = nil;
     syncFiles = nil;
     removedFiles = nil;
-    savedToolbarItems = nil;
+
+    cancelButton =
+        [[UIBarButtonItem alloc]
+         initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+         target:self
+         action:@selector(cancelAction)];
+
+    spacer =
+        [[UIBarButtonItem alloc]
+         initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+         target:nil
+         action:nil];
+
+    saveButton =
+        [[UIBarButtonItem alloc]
+         initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+         target:self
+         action:@selector(saveAction)];
 
     return self;
-}
-
-- (void)viewDidUnload {
-    self.cancelButton = nil;
-    self.spacer = nil;
-    self.saveButton = nil;
-    self.myToolbar = nil;
-    self.savedToolbarItems = nil;
 }
 
 - (void)dealloc {
@@ -220,8 +223,6 @@
     [cancelButton release];
     [spacer release];
     [saveButton release];
-    [myToolbar release];
-    [savedToolbarItems release];
 
     [super dealloc];
 }
@@ -230,37 +231,13 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    [myToolbar setItems:savedToolbarItems];
-
     [TurboshAppDelegate editProject:project];
 }
 
 #pragma mark Toolbar Management
 
 - (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
-    self.myToolbar = toolbar;
-    self.savedToolbarItems = [toolbar items];
-
-    cancelButton =
-    [[UIBarButtonItem alloc]
-     initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-     target:self
-     action:@selector(cancelAction)];
-
-    spacer =
-    [[UIBarButtonItem alloc]
-     initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-     target:nil
-     action:nil];
-
-    saveButton =
-    [[UIBarButtonItem alloc]
-     initWithBarButtonSystemItem:UIBarButtonSystemItemSave
-     target:self
-     action:@selector(saveAction)];
-
-    NSArray *a = [NSArray arrayWithObjects:cancelButton, spacer, saveButton, nil];
-    [toolbar setItems:a];
+    [toolbar setItems:[NSArray arrayWithObjects:cancelButton, spacer, saveButton, nil]];
 }
 
 @end

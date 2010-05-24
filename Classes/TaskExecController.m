@@ -87,8 +87,7 @@
     return YES;
 }
 
-- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar
-{
+- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
 }
 
 #pragma mark Memory Management

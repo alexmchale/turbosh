@@ -3,14 +3,11 @@
 @implementation FileEditController
 
 @synthesize textView, text, startingRect;
-@synthesize myToolbar, savedToolbarItems;
 
 #pragma mark Button Actions
 
 - (void) cancelAction
 {
-    [myToolbar setItems:savedToolbarItems];
-
     ProjectFile *file = [[ProjectFile alloc] init];
     file.num = [Store currentFileNum];
     [Store loadProjectFile:file];
@@ -23,7 +20,6 @@
     self.text = textView.text;
 
     NSData *content = [text dataUsingEncoding:NSUTF8StringEncoding];
-    [myToolbar setItems:savedToolbarItems];
 
     ProjectFile *file = [[ProjectFile alloc] init];
     file.num = [Store currentFileNum];
@@ -197,9 +193,6 @@
     [text release];
     [textView release];
 
-    [myToolbar release];
-    [savedToolbarItems release];
-
     [cancelButton release];
     [spacer release];
     [saveButton release];
@@ -209,11 +202,7 @@
 
 - (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar
 {
-    self.myToolbar = toolbar;
-    self.savedToolbarItems = [toolbar items];
-
-    NSMutableArray *a = [NSMutableArray arrayWithObjects:cancelButton, spacer, saveButton, nil];
-    [toolbar setItems:a];
+    [toolbar setItems:[NSArray arrayWithObjects:cancelButton, spacer, saveButton, nil]];
 }
 
 @end

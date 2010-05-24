@@ -3,7 +3,6 @@
 @implementation FileViewController
 
 @synthesize webView, file, startingRect;
-@synthesize myToolbar, savedToolbar;
 
 // The designated initializer.  Override if you create the controller
 // programmatically and want to perform customization that is not
@@ -11,8 +10,6 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         file = nil;
-        myToolbar = nil;
-        savedToolbar = nil;
     }
 
     return self;
@@ -53,13 +50,6 @@
     [TurboshAppDelegate setLabelText:[file condensedPath]];
 }
 
-- (void) viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-
-    [myToolbar setItems:savedToolbar];
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Overriden to allow any orientation.
     return YES;
@@ -73,18 +63,9 @@
 
 #pragma mark Memory Management
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-
-    // Release any cached data, images, etc that aren't in use.
-}
-
 - (void)dealloc {
     [webView release];
     [file release];
-    [myToolbar release];
-    [savedToolbar release];
 
     [super dealloc];
 }
@@ -92,9 +73,6 @@
 #pragma mark Toolbar Management
 
 - (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
-    self.myToolbar = toolbar;
-    self.savedToolbar = [toolbar items];
-
     UIBarItem *spacer = [[[UIBarButtonItem alloc]
                           initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                           target:nil action:nil] autorelease];
@@ -102,7 +80,7 @@
                           initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
                           target:self action:@selector(startEdit)] autorelease];
 
-    NSMutableArray *items = [savedToolbar mutableCopy];
+    NSMutableArray *items = [toolbar.items mutableCopy];
     [items addObject:spacer];
     [items addObject:edit];
     [toolbar setItems:items animated:YES];

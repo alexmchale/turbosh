@@ -9,9 +9,17 @@
 
 @implementation DetailViewController
 
-@synthesize toolbar, popoverController, label, spinner;
+@synthesize toolbar, popoverController, label, spinner, projectButton;
 
 #pragma mark Switcher View Manager
+
+- (void) clearToolbar
+{
+    if (projectButton)
+        toolbar.items = [NSArray arrayWithObject:projectButton];
+    else
+        toolbar.items = [NSArray array];
+}
 
 - (void)switchTo:(UIViewController<ContentPaneDelegate> *)controller
 {
@@ -33,6 +41,7 @@
     [controller viewWillAppear:YES];
 
     // Update the toolbar.
+    [self clearToolbar];
     [controller viewSwitcher:self configureToolbar:toolbar];
 
     // Remove the current view and replace with the new one.
@@ -67,7 +76,10 @@
            withBarButtonItem:(UIBarButtonItem*)barButtonItem
         forPopoverController:(UIPopoverController*)pc
 {
+    self.projectButton = barButtonItem;
+
     barButtonItem.title = @"Project";
+    barButtonItem.tag = TAG_PROJECT_BUTTON;
 
     NSMutableArray *items = [[toolbar items] mutableCopy];
     [items insertObject:barButtonItem atIndex:0];
@@ -82,6 +94,8 @@
       willShowViewController:(UIViewController *)aViewController
    invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem
 {
+    self.projectButton = nil;
+
     NSMutableArray *items = [[toolbar items] mutableCopy];
     [items removeObject:barButtonItem];
     [toolbar setItems:items animated:YES];
@@ -99,6 +113,11 @@
 
 #pragma mark View lifecycle
 
+- (void) viewDidLoad
+{
+    projectButton = nil;
+}
+
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     NSInteger toolbarHeight = toolbar.frame.size.height;
     CGRect fr1 = self.view.frame;
@@ -109,6 +128,7 @@
 - (void)viewDidUnload {
     self.popoverController = nil;
     self.toolbar = nil;
+    self.projectButton = nil;
 }
 
 #pragma mark Memory management
@@ -119,6 +139,7 @@
     [toolbar release];
     [label release];
     [spinner release];
+    [projectButton release];
 
     [super dealloc];
 }
