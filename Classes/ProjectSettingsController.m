@@ -40,7 +40,6 @@
 
         [nextProject release];
     }
-
 }
 
 - (void) updateStatus:(NSNotification *)notif
@@ -130,6 +129,22 @@
     }
 
     syncLabel.text = t;
+}
+
+- (BOOL) resignFirstResponder
+{
+    [super resignFirstResponder];
+
+    [projectName resignFirstResponder];
+    [sshHost resignFirstResponder];
+    [sshPort resignFirstResponder];
+    [sshUser resignFirstResponder];
+    [sshPass resignFirstResponder];
+    [sshPath resignFirstResponder];
+
+    [self saveForm];
+
+    return YES;
 }
 
 #pragma mark View Initialization
@@ -431,6 +446,8 @@
 
         case TS_FILES:
         {
+            [self resignFirstResponder];
+
             ProjectFileSelector *pfs = [[ProjectFileSelector alloc]
                                          initWithNibName:@"ProjectFileSelector"
                                          bundle:nil];
@@ -443,6 +460,8 @@
 
         case TS_TASKS:
         {
+            [self resignFirstResponder];
+
             ProjectTaskSelector *pts = [[ProjectTaskSelector alloc]
                                         initWithNibName:@"ProjectTaskSelector"
                                         bundle:nil];
@@ -455,6 +474,8 @@
 
         case TS_ADD_REM:
         {
+            [self resignFirstResponder];
+
             switch (indexPath.row) {
                 case TAR_ADD_PROJECT:
                     [self addNewProject];
