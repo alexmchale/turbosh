@@ -76,7 +76,7 @@
     NSLog(@"Keyboard Size: %fx%f", keyboardSize.width, keyboardSize.height);
 
     // Get the orientation of the device.
-    UIDeviceOrientation orient = [UIDevice currentDevice].orientation;
+    UIDeviceOrientation orient = self.interfaceOrientation;
 
     // Determine the amount by which to adjust the height.
     CGFloat heightAdjustment;
