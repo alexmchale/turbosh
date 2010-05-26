@@ -100,7 +100,8 @@
         [psc release];
     }
 
-    CommandDispatcher *cd = [[CommandDispatcher alloc] initWithProject:p session:NULL command:f.filename];
+    NSString *commandString = [NSString stringWithFormat:@"./%@", f.filename];
+    CommandDispatcher *cd = [[CommandDispatcher alloc] initWithProject:p session:NULL command:commandString];
     delegate.taskExecController.dispatcher = cd;
     [TurboshAppDelegate switchTo:delegate.taskExecController];
     [cd release];
