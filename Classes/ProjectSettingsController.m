@@ -48,87 +48,70 @@
     Project *p = [notif.userInfo valueForKey:@"project"];
     ProjectFile *f = [notif.userInfo valueForKey:@"file"];
     CommandDispatcher *d = [notif.userInfo valueForKey:@"task"];
-    NSString *t;
+    NSString *t = nil;
 
     switch (state) {
         case SS_SELECT_PROJECT:
-            t = [NSString stringWithFormat:@"Selecting the next project to work on."];
             break;
 
         case SS_CONNECT_TO_SERVER:
-            t = [NSString stringWithFormat:@"Connecting to %@.", [p name]];
-            break;
-
         case SS_ESTABLISH_SSH:
-            t = [NSString stringWithFormat:@"Establishing SSH connection with %@.", [p name]];
-            break;
-
         case SS_AUTHENTICATE_SSH:
-            t = [NSString stringWithFormat:@"Authenticating SSH with %@.", [p name]];
+            t = [NSString stringWithFormat:@"Connecting to %@", [p name]];
             break;
 
         case SS_EXECUTE_COMMAND:
-            t = [NSString stringWithFormat:@"Executing %@ on %@.", [d command], [p name]];
+            t = [NSString stringWithFormat:@"Executing %@ on %@", [d command], [p name]];
             break;
 
         case SS_SELECT_FILE:
-            t = [NSString stringWithFormat:@"Selecting next file on %@.", [p name]];
             break;
 
         case SS_INITIATE_HASH:
         case SS_CONTINUE_HASH:
         case SS_COMPLETE_HASH:
-            t = [NSString stringWithFormat:@"Computing remote MD5 for %@ on %@", [f condensedPath], [p name]];
+            t = [NSString stringWithFormat:@"Synchronizing %@ on %@", [f condensedPath], [p name]];
             break;
 
         case SS_FILE_IS_MISSING:
-            t = [NSString stringWithFormat:@"Determined the file %@ is missing on %@.", [f condensedPath], p.name];
             break;
 
         case SS_DELETE_LOCAL_FILE:
-            t = [NSString stringWithFormat:@"Deleting local copy of %@.", [f condensedPath]];
             break;
 
         case SS_TEST_IF_CHANGED:
-            t = [NSString stringWithFormat:@"Testing if the file %@ on %@ has changed.", [f condensedPath], p.name];
             break;
 
         case SS_INITIATE_UPLOAD:
-            t = [NSString stringWithFormat:@"Starting upload of file %@ to %@.", [f condensedPath], p.name];
+            t = [NSString stringWithFormat:@"Uploading %@ to %@", [f condensedPath], p.name];
             break;
 
         case SS_INITIATE_DOWNLOAD:
-            t = [NSString stringWithFormat:@"Starting download of file %@ from %@.", [f condensedPath], p.name];
+            t = [NSString stringWithFormat:@"Downloading %@ from %@", [f condensedPath], p.name];
             break;
 
         case SS_CONTINUE_TRANSFER:
-            t = [NSString stringWithFormat:@"Continuing transfer of file %@ for %@.", [f condensedPath], p.name];
             break;
 
         case SS_COMPLETE_TRANSFER:
-            t = [NSString stringWithFormat:@"Completing transfer of file %@ for %@.", [f condensedPath], p.name];
             break;
 
         case SS_TERMINATE_SSH:
-            t = [NSString stringWithFormat:@"Terminating SSH session with %@.", p.name];
-            break;
-
         case SS_DISCONNECT:
             t = [NSString stringWithFormat:@"Disconnecting from %@", p.name];
             break;
 
         case SS_AWAITING_ANSWER:
-            t = @"Waiting for user input.";
             break;
 
         case SS_IDLE:
-            t = @"Turbosh is currently idle.";
+            t = @"Turbosh is currently idle";
             break;
 
         default: assert(false);
     }
 
-    syncLabel.text = t;
+    if (t) syncLabel.text = t;
 }
 
 - (BOOL) resignFirstResponder
