@@ -29,5 +29,6 @@
 - (NSString *)escapedRelativePath;
 - (NSString *)condensedPath;
 - (NSString *)extension;
+- (bool) existsInDatabase;
 
 @end

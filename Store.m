@@ -265,6 +265,17 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     return (nextNum > 0) ? [NSNumber numberWithInt:nextNum] : nil;
 }
 
++ (bool) projectExists:(NSNumber *)num
+{
+    if (!num) return false;
+
+    NSInteger currentNum = [num intValue];
+    NSString *where = [NSString stringWithFormat:@"id=%d", currentNum];
+    NSInteger thisNum = [self scalarInt:@"id" onTable:@"projects" where:where offset:0 orderBy:@"id"];
+
+    return (thisNum != 0) && (currentNum == thisNum);
+}
+
 #pragma mark ProjectFile
 
 + (NSNumber *) currentFileNum
@@ -478,6 +489,17 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     NSInteger idint = [self scalarInt:@"id" onTable:@"files" where:wherecl offset:offset orderBy:@"path"];
 
     return (idint > 0) ? [NSNumber numberWithInt:idint] : nil;
+}
+
++ (bool) fileExists:(NSNumber *)num
+{
+    if (!num) return false;
+
+    NSInteger currentNum = [num intValue];
+    NSString *where = [NSString stringWithFormat:@"id=%d", currentNum];
+    NSInteger thisNum = [self scalarInt:@"id" onTable:@"files" where:where offset:0 orderBy:@"id"];
+
+    return (thisNum != 0) && (currentNum == thisNum);
 }
 
 #pragma mark ProjectTask

@@ -20,6 +20,7 @@
 + (NSInteger) projectCount;
 + (NSNumber *) projectNumAtOffset:(NSInteger)offset;
 + (NSNumber *) projectNumAfterNum:(NSNumber *)num;
++ (bool) projectExists:(NSNumber *)num;
 
 + (NSNumber *) currentFileNum;
 + (void) setCurrentFile:(ProjectFile *)file;
@@ -34,6 +35,7 @@
 + (NSString *) fileContent:(ProjectFile *)file;
 + (void) storeLocal:(ProjectFile *)file content:(NSData *)content;
 + (void) storeRemote:(ProjectFile *)file content:(NSData *)content;
++ (bool) fileExists:(NSNumber *)num;
 
 + (void) storeProjectTask:(ProjectFile *)file;
 + (BOOL) loadProjectTask:(ProjectFile *)file;

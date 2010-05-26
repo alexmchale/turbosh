@@ -42,6 +42,11 @@
     return self;
 }
 
+- (bool) existsInDatabase
+{
+    return [Store fileExists:num];
+}
+
 #pragma mark Memory Management
 
 - (id) init

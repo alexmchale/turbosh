@@ -23,9 +23,10 @@
 
 #pragma mark Field Accessors
 
-//- (NSArray *) tasks {
-//    return [Store projectTasks:self];
-//}
+- (bool) existsInDatabase
+{
+    return [Store projectExists:num];
+}
 
 #pragma mark Memory Management
 

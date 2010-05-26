@@ -24,6 +24,6 @@
 
 - (id) loadCurrent;
 - (id) loadByOffset:(NSInteger)offset;
-//- (NSArray *) tasks;
+- (bool) existsInDatabase;
 
 @end
