@@ -14,6 +14,8 @@
     UIBarButtonItem *cancelButton;
     UIBarButtonItem *spacer;
     UIBarButtonItem *saveButton;
+
+    bool busy;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;

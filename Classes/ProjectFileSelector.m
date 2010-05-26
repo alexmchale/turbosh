@@ -7,6 +7,8 @@
 #pragma mark Button Actions
 
 - (void) saveAction {
+    if (busy) return;
+
     ProjectFile *file = [[ProjectFile alloc] init];
 
     MBProgressHUD *hud = [[[MBProgressHUD alloc] initWithView:self.view] autorelease];
@@ -52,6 +54,8 @@
 }
 
 - (void) cancelAction {
+    if (busy) return;
+
     [TurboshAppDelegate editProject:project];
 }
 
@@ -68,6 +72,8 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    busy = true;
+
     [super viewDidAppear:animated];
 
     NSString *error = nil;
@@ -115,6 +121,8 @@
         [alert show];
         [alert release];
     }
+
+    busy = false;
 }
 
 - (void) viewDidDisappear:(BOOL)animated {

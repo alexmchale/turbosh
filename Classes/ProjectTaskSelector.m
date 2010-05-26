@@ -7,6 +7,8 @@
 #pragma mark Button Actions
 
 - (void) saveAction {
+    if (busy) return;
+
     ProjectFile *file = [[ProjectFile alloc] init];
 
     for (NSString *filename in syncFiles) {
@@ -31,6 +33,8 @@
 }
 
 - (void) cancelAction {
+    if (busy) return;
+
     [TurboshAppDelegate editProject:project];
 }
 
@@ -51,6 +55,8 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    busy = true;
+
     [super viewDidAppear:animated];
 
     NSString *error = nil;
@@ -98,6 +104,8 @@
     }
 
     [myTableView reloadData];
+
+    busy = false;
 }
 
 - (void) viewDidDisappear:(BOOL)animated {
