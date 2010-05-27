@@ -14,6 +14,25 @@
 @synthesize dispatcher, transfer;
 @synthesize currentCommand;
 
+#pragma mark Utility Functions
+
+// The function kbd_callback is needed for keyboard-interactive authentication via LIBSSH2.
+static char *authPassword = NULL;
+static void kbd_callback(const char *name, int name_len,
+                         const char *instruction, int instruction_len, int num_prompts,
+                         const LIBSSH2_USERAUTH_KBDINT_PROMPT *prompts,
+                         LIBSSH2_USERAUTH_KBDINT_RESPONSE *responses,
+                         void **abstract)
+{
+    if (authPassword == NULL);
+    if (num_prompts != 1 || strstr(prompts[0].text, "assword") == NULL) return;
+
+    responses[0].text = authPassword;
+    responses[0].length = strlen(authPassword);
+
+    authPassword = NULL;
+}
+
 #pragma mark Synchronizer
 
 - (void) selectProject
@@ -108,6 +127,31 @@
         return;
     }
 
+    state = SS_REQUEST_AUTH_TYPE;
+}
+
+- (void) requestAuthType
+{
+    const char *user = [project.sshUser UTF8String];
+    const int userlen = [project.sshUser length];
+    const char *authlist = libssh2_userauth_list(session, user, userlen);
+    const int rc = libssh2_session_last_errno(session);
+
+    if (!authlist) {
+        if (rc == LIBSSH2_ERROR_EAGAIN) return;
+
+        NSLog(@"Failure reading authentication types from server: %d", rc);
+        state = SS_TERMINATE_SSH;
+        return;
+    }
+
+    if (authPassword != NULL) free(authPassword);
+    authPassword = strdup([project.sshPass UTF8String]);
+
+    authType.password = strstr(authlist, "password") != NULL;
+    authType.interactive = strstr(authlist, "keyboard-interactive") != NULL;
+    authType.publickey = strstr(authlist, "publickey") != NULL;
+
     state = SS_AUTHENTICATE_SSH;
 }
 
@@ -117,13 +161,30 @@
     const char *user = [project.sshUser UTF8String];
     const char *pass = [project.sshPass UTF8String];
 
-    int rc = libssh2_userauth_password(session, user, pass);
+    if (authType.password) {
+        int rc = libssh2_userauth_password(session, user, pass);
 
-    if (rc == LIBSSH2_ERROR_EAGAIN) return;
+        if (rc == LIBSSH2_ERROR_EAGAIN) return;
 
-    if (rc != 0) {
-        NSLog(@"Authentication by password failed.");
-        state = SS_TERMINATE_SSH;
+        if (rc != 0) {
+            NSLog(@"Authentication by password failed.");
+            state = SS_TERMINATE_SSH;
+            return;
+        }
+    } else if (authType.interactive) {
+        int rc = libssh2_userauth_keyboard_interactive(session, user, &kbd_callback);
+
+        if (rc == LIBSSH2_ERROR_EAGAIN) return;
+
+        if (rc != LIBSSH2_ERROR_NONE) {
+            NSLog(@"Authentication by keyboard-interactive failed.");
+            state = SS_TERMINATE_SSH;
+            return;
+        }
+    } else {
+        // TODO: Show an error message.
+
+        NSLog(@"No valid authentication mode was found.");
         return;
     }
 
@@ -401,6 +462,7 @@
         case SS_SELECT_PROJECT:         return [self selectProject];
         case SS_CONNECT_TO_SERVER:      return [self connectToServer];
         case SS_ESTABLISH_SSH:          return [self establishSsh];
+        case SS_REQUEST_AUTH_TYPE:      return [self requestAuthType];
         case SS_AUTHENTICATE_SSH:       return [self authenticateSsh];
         case SS_EXECUTE_COMMAND:        return [self executeCommand];
         case SS_SELECT_FILE:            return [self selectFile];

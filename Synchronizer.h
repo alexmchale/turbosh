@@ -5,6 +5,7 @@ enum SyncState
     SS_SELECT_PROJECT,
     SS_CONNECT_TO_SERVER,
     SS_ESTABLISH_SSH,
+    SS_REQUEST_AUTH_TYPE,
     SS_AUTHENTICATE_SSH,
     SS_EXECUTE_COMMAND,
     SS_SELECT_FILE,
@@ -49,6 +50,12 @@ enum SyncState
     NSMutableArray *pendingCommands;
 
     bool startup;
+
+    struct {
+        bool password;
+        bool interactive;
+        bool publickey;
+    } authType;
 }
 
 @property (nonatomic, retain) NSTimer *timer;

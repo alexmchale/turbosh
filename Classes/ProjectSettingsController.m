@@ -56,6 +56,7 @@
 
         case SS_CONNECT_TO_SERVER:
         case SS_ESTABLISH_SSH:
+        case SS_REQUEST_AUTH_TYPE:
         case SS_AUTHENTICATE_SSH:
             t = [NSString stringWithFormat:@"Connecting to %@", [p name]];
             break;
