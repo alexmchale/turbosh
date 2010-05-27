@@ -963,6 +963,42 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Alex McHale";
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Turbosh_Prefix.pch;
+				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
+				INFOPLIST_FILE = "Turbosh-Info.plist";
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				PRODUCT_NAME = Turbosh;
+				PROVISIONING_PROFILE = "91B538D8-7BEB-4812-884E-9410549DB222";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7480B46F11AE8B03001D8404 /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"ARCHS[sdk=iphoneos*]" = armv7;
+				"ARCHS[sdk=iphonesimulator*]" = i386;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Alex McHale";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PREBINDING = NO;
+				PROVISIONING_PROFILE = "074B31D0-0293-4171-A542-204C57A24F56";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				SDKROOT = iphoneos3.2;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = "Ad Hoc";
+		};
+		7480B47011AE8B03001D8404 /* Ad Hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Turbosh_Prefix.pch;
@@ -972,7 +1008,7 @@
 				PRODUCT_NAME = Turbosh;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = "Ad Hoc";
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1019,6 +1055,7 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
+				7480B47011AE8B03001D8404 /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1028,6 +1065,7 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
+				7480B46F11AE8B03001D8404 /* Ad Hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
