@@ -165,8 +165,9 @@
 
 - (void) initiateHash
 {
-    NSString *md5f = @"md5 %@ || md5sum %@";
-    NSString *md5Cmd = [NSString stringWithFormat:md5f, [file escapedRelativePath], [file escapedRelativePath]];
+    NSString *md5f = @"md5 %@ ; e=$?; if [ $e -eq 127 ]; then exec md5sum %@; else exit $e; fi";
+    NSString *pat = [file escapedRelativePath];
+    NSString *md5Cmd = [NSString stringWithFormat:md5f, pat, pat];
 
     self.dispatcher = [[CommandDispatcher alloc] initWithProject:project session:session command:md5Cmd];
     [dispatcher release];
@@ -185,6 +186,11 @@
         case INT32_MAX:
             // The connection failed and the command did not execute.
             state = SS_TERMINATE_SSH;
+            break;
+
+        case 127:
+            // Neither md5 command was found.
+            state = SS_SELECT_FILE;
             break;
 
         case 0:

@@ -104,7 +104,7 @@
 }
 
 - (NSString *)escapedRelativePath {
-    return [[self filename] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+    return [self.filename stringBySingleQuoting];
 }
 
 #pragma mark Content
