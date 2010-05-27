@@ -189,9 +189,24 @@
             break;
 
         case 127:
+        {
             // Neither md5 command was found.
-            state = SS_SELECT_FILE;
-            break;
+
+            NSString *tit = @"Command Missing";
+            NSString *msg = @"Neither the commands md5 nor md5sum could be found on the server.  Please install one of them and try again.";
+
+            UIAlertView *charAlert = [[UIAlertView alloc]
+                                      initWithTitle:tit
+                                      message:msg
+                                      delegate:self
+                                      cancelButtonTitle:@"Okay"
+                                      otherButtonTitles:nil];
+            charAlert.tag = TAG_MD5_COMMAND_MISSING;
+            [charAlert show];
+            [charAlert autorelease];
+
+            state = SS_AWAITING_ANSWER;
+        }   break;
 
         case 0:
             // The command succeeded.
@@ -435,6 +450,10 @@
                 state = SS_INITIATE_UPLOAD;
             else
                 state = SS_DELETE_LOCAL_FILE;
+            break;
+
+        case TAG_MD5_COMMAND_MISSING:
+            state = SS_TERMINATE_SSH;
             break;
     }
 }
