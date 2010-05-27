@@ -25,6 +25,23 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
 
 }
 
+// The function kbd_callback is needed for keyboard-interactive authentication via LIBSSH2.
+static char *authPassword = NULL;
+static void kbd_callback(const char *name, int name_len,
+                         const char *instruction, int instruction_len, int num_prompts,
+                         const LIBSSH2_USERAUTH_KBDINT_PROMPT *prompts,
+                         LIBSSH2_USERAUTH_KBDINT_RESPONSE *responses,
+                         void **abstract)
+{
+    if (authPassword == NULL);
+    if (num_prompts != 1 || strstr(prompts[0].text, "assword") == NULL) return;
+
+    responses[0].text = authPassword;
+    responses[0].length = strlen(authPassword);
+
+    authPassword = NULL;
+}
+
 #pragma mark Connection Management
 
 // Start the event pump for this connection.
@@ -101,14 +118,31 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
     }
 
     // Authenticate using the configured password.
-	const char *user = [project.sshUser UTF8String];
-	const char *pass = [project.sshPass UTF8String];
-    while ((rc = libssh2_userauth_password(session, user, pass)) == LIBSSH2_ERROR_EAGAIN)
+    do {
+        const char *user = [project.sshUser UTF8String];
+        const char *pass = [project.sshPass UTF8String];
+        rc = libssh2_userauth_password(session, user, pass);
+
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
-        //continue;
+    } while (rc == LIBSSH2_ERROR_EAGAIN);
+
     if (rc) {
-        NSLog(@"Authentication by password failed.");
-        return false;
+        NSLog(@"Authentication by password failed, trying interactive.");
+
+        do {
+            if (authPassword != NULL) free(authPassword);
+            authPassword = strdup([project.sshPass UTF8String]);
+
+            const char *user = [project.sshUser UTF8String];
+            rc = libssh2_userauth_keyboard_interactive(session, user, &kbd_callback);
+
+            [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
+        } while (rc == LIBSSH2_ERROR_EAGAIN);
+
+        if (rc != LIBSSH2_ERROR_NONE) {
+            NSLog(@"Authentication by keyboard-interactive failed.");
+            return false;
+        }
     }
 
     return true;
