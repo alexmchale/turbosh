@@ -145,6 +145,7 @@
 		74B3D575117AB92B00021611 /* FileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B3D574117AB92B00021611 /* FileTransfer.m */; };
 		74D740211166E28C0010A592 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D740201166E28C0010A592 /* RegexKitLite.m */; };
 		74D7403A11674C2E0010A592 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74D7403911674C2E0010A592 /* libicucore.dylib */; };
+		74DDE17811B0156C006FBFBE /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74DDE17711B0156C006FBFBE /* Entitlements.plist */; };
 		74ECA28D1184DF1200458DAF /* TaskExecController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74ECA28B1184DF1200458DAF /* TaskExecController.m */; };
 		74ECA28E1184DF1200458DAF /* TaskExecController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74ECA28C1184DF1200458DAF /* TaskExecController.xib */; };
 		74ECA3721187D6F500458DAF /* task-viewer.html in Resources */ = {isa = PBXBuildFile; fileRef = 74ECA3711187D6F500458DAF /* task-viewer.html */; };
@@ -348,6 +349,7 @@
 		74D7401F1166E28C0010A592 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		74D740201166E28C0010A592 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		74D7403911674C2E0010A592 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		74DDE17711B0156C006FBFBE /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Entitlements.plist; sourceTree = "<group>"; };
 		74ECA28A1184DF1200458DAF /* TaskExecController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TaskExecController.h; path = Classes/TaskExecController.h; sourceTree = "<group>"; };
 		74ECA28B1184DF1200458DAF /* TaskExecController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TaskExecController.m; path = Classes/TaskExecController.m; sourceTree = "<group>"; };
 		74ECA28C1184DF1200458DAF /* TaskExecController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TaskExecController.xib; path = Classes/TaskExecController.xib; sourceTree = "<group>"; };
@@ -481,6 +483,7 @@
 				2804203B108E9BAB000629CD /* DetailView.xib */,
 				8D1107310486CEB800E47090 /* Turbosh-Info.plist */,
 				74ECA28C1184DF1200458DAF /* TaskExecController.xib */,
+				74DDE17711B0156C006FBFBE /* Entitlements.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -868,6 +871,7 @@
 				74ECA28E1184DF1200458DAF /* TaskExecController.xib in Resources */,
 				74ECA3721187D6F500458DAF /* task-viewer.html in Resources */,
 				7433E596119C1C8700873265 /* Icon.png in Resources */,
+				74DDE17811B0156C006FBFBE /* Entitlements.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -999,6 +1003,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Turbosh_Prefix.pch;
