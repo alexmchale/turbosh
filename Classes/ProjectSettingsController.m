@@ -54,7 +54,8 @@
         case SS_SELECT_PROJECT:
             break;
 
-        case SS_CONNECT_TO_SERVER:
+        case SS_BEGIN_CONN:
+        case SS_ESTABLISH_CONN:
         case SS_ESTABLISH_SSH:
         case SS_REQUEST_AUTH_TYPE:
         case SS_AUTHENTICATE_SSH:

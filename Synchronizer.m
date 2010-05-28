@@ -4,6 +4,14 @@
 #include <resolv.h>
 #include <errno.h>
 #include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <errno.h>
+#include <termios.h>
 
 #define SYNCHRONIZE_DELAY_SECONDS 0.05
 
@@ -56,13 +64,11 @@ static void kbd_callback(const char *name, int name_len,
 
     assert([Store loadProject:project]);
 
-    state = SS_CONNECT_TO_SERVER;
+    state = SS_BEGIN_CONN;
 }
 
-- (void) connectToServer
+- (void) beginConnection
 {
-    struct sockaddr_in sin;
-
     // Verify that the current project has a server configured.
     if (!project || !project.sshHost || !project.sshPort ||
             !project.sshUser || !project.sshPass || !project.sshPath ||
@@ -91,9 +97,24 @@ static void kbd_callback(const char *name, int name_len,
     sin.sin_port = htons([self.project.sshPort intValue]);
     sin.sin_addr.s_addr = ip;
 
-    // Establish the TCP connection.
-    if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) != 0) {
-        NSLog(@"Failed to connect %d", errno);
+    if (fcntl(sock, F_SETFL, O_NONBLOCK) < 0) {
+        NSLog(@"FCNTL error when setting non-blocking socket: %s", strerror(errno));
+        state = SS_TERMINATE_SSH;
+        return;
+    }
+
+    state = SS_ESTABLISH_CONN;
+}
+
+- (void) establishConnection
+{
+    int rc = connect(sock, (struct sockaddr *)&sin, sizeof(sin));
+
+    if (rc != 0) {
+        if (errno == EAGAIN || errno == EINPROGRESS || errno == EALREADY) return;
+
+        NSLog(@"Failed to connect (%d): %s", errno, strerror(errno));
+
         state = SS_DISCONNECT;
         return;
     }
@@ -446,7 +467,7 @@ static void kbd_callback(const char *name, int name_len,
         self.project = currentCommand.project;
         [pendingCommands removeObjectAtIndex:0];
 
-        state = SS_CONNECT_TO_SERVER;
+        state = SS_BEGIN_CONN;
     }
 }
 
@@ -472,7 +493,8 @@ static void kbd_callback(const char *name, int name_len,
     // Execute the appropriate callback for this state.
     switch (state) {
         case SS_SELECT_PROJECT:         return [self selectProject];
-        case SS_CONNECT_TO_SERVER:      return [self connectToServer];
+        case SS_BEGIN_CONN:             return [self beginConnection];
+        case SS_ESTABLISH_CONN:         return [self establishConnection];
         case SS_ESTABLISH_SSH:          return [self establishSsh];
         case SS_REQUEST_AUTH_TYPE:      return [self requestAuthType];
         case SS_AUTHENTICATE_SSH:       return [self authenticateSsh];

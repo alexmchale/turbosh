@@ -3,7 +3,8 @@
 enum SyncState
 {
     SS_SELECT_PROJECT,
-    SS_CONNECT_TO_SERVER,
+    SS_BEGIN_CONN,
+    SS_ESTABLISH_CONN,
     SS_ESTABLISH_SSH,
     SS_REQUEST_AUTH_TYPE,
     SS_AUTHENTICATE_SSH,
@@ -45,6 +46,7 @@ enum SyncState
     LIBSSH2_SESSION *session;
     CommandDispatcher *dispatcher;
     FileTransfer *transfer;
+    struct sockaddr_in sin;
 
     CommandDispatcher *currentCommand;
     NSMutableArray *pendingCommands;
