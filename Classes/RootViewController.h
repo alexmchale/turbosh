@@ -12,8 +12,11 @@
 
 @interface RootViewController : UITableViewController {
     DetailViewController *detailViewController;
+    NSInteger currentProjectNum;
 }
 
 @property (nonatomic, retain) IBOutlet DetailViewController *detailViewController;
+
+- (void) reload;
 
 @end

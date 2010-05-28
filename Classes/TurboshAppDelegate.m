@@ -127,7 +127,7 @@
 + (void) reloadList
 {
     TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    [delegate.rootViewController.tableView reloadData];
+    [delegate.rootViewController reload];
 }
 
 + (void) spin:(bool)spinning

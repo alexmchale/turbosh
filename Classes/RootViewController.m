@@ -5,7 +5,15 @@
 
 @synthesize detailViewController;
 
-#pragma mark -
+#pragma mark Management
+
+- (void) reload
+{
+    [self.tableView reloadData];
+
+    currentProjectNum = [[Store currentProjectNum] intValue];
+}
+
 #pragma mark View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated
@@ -99,9 +107,10 @@ typedef enum {
     // Dequeue or create a cell of the appropriate type.
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                       reuseIdentifier:CellIdentifier] autorelease];
     }
+    cell.accessoryType = UITableViewCellAccessoryNone;
 
     switch (indexPath.section) {
         case MST_FILES:
@@ -121,6 +130,10 @@ typedef enum {
         case MST_PROJECTS:
             [project loadByOffset:indexPath.row];
             cell.textLabel.text = project.name;
+//            if (project.num && [project.num intValue] == currentProjectNum)
+//                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+//            else
+//                cell.accessoryType = UITableViewCellAccessoryNone;
             break;
     }
 
