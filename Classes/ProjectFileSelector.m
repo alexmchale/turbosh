@@ -18,13 +18,12 @@
 
     for (NSString *filename in syncFiles) {
         [file loadByProject:project filename:filename];
-
         if (file.num == nil) [Store storeProjectFile:file];
     }
 
     for (NSString *filename in removedFiles) {
         [file loadByProject:project filename:filename];
-        [Store deleteProjectFile:file];
+        if (file.num != nil) [Store deleteProjectFile:file];
     }
 
     Shell *s = [[Shell alloc] initWithProject:project];
