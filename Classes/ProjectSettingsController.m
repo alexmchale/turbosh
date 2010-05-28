@@ -195,12 +195,13 @@
 
     [nc addObserver:self
            selector:@selector(updateStatus:)
-               name:@"sync-state" object:sync];
+               name:@"sync-state"
+             object:sync];
 }
 
-- (void) viewDidDisappear:(BOOL)animated
+- (void) viewWillDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
+    [super viewWillDisappear:animated];
 
     // Stop listening for sync events.
     [[NSNotificationCenter defaultCenter] removeObserver:self];
