@@ -44,6 +44,7 @@ static void kbd_callback(const char *name, int name_len,
     nextFileOffset = 0;
 
     if (num == nil) {
+        self.project = nil;
         state = SS_IDLE;
         return;
     }
@@ -215,6 +216,7 @@ static void kbd_callback(const char *name, int name_len,
     nextFileOffset++;
 
     if (file.num == nil) {
+        self.file = nil;
         state = SS_TERMINATE_SSH;
         return;
     }
@@ -401,11 +403,19 @@ static void kbd_callback(const char *name, int name_len,
 
 - (void) terminateSsh
 {
+    if (dispatcher) {
+        [dispatcher close];
+        self.dispatcher = nil;
+    }
+
     if (session != NULL) {
         libssh2_session_disconnect(session, "Normal Shutdown, Thank you for playing");
         libssh2_session_free(session);
         session = NULL;
     }
+
+    if (project && ![project existsInDatabase]) self.project = nil;
+    if (file && ![file existsInDatabase]) self.file = nil;
 
     state = SS_DISCONNECT;
 }
@@ -445,6 +455,8 @@ static void kbd_callback(const char *name, int name_len,
     // Adjust the state if we don't have a project and we're not idle.
     if (project == nil && state != SS_IDLE) state = SS_SELECT_PROJECT;
     if (state != SS_IDLE) NSLog(@"Synchronizer At %d", state);
+    if (project && ![project existsInDatabase]) state = SS_TERMINATE_SSH;
+    if (file && ![file existsInDatabase]) state = SS_TERMINATE_SSH;
 
     [TurboshAppDelegate spin:(state != SS_IDLE)];
 
