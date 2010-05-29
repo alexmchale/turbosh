@@ -113,10 +113,12 @@ static void kbd_callback(const char *name, int name_len,
     if (rc != 0) {
         if (errno == EAGAIN || errno == EINPROGRESS || errno == EALREADY) return;
 
-        NSLog(@"Failed to connect (%d): %s", errno, strerror(errno));
+        if (errno != EISCONN) {
+            NSLog(@"Failed to connect (%d): %s", errno, strerror(errno));
 
-        state = SS_DISCONNECT;
-        return;
+            state = SS_DISCONNECT;
+            return;
+        }
     }
 
     state = SS_ESTABLISH_SSH;
