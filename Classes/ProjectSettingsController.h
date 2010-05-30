@@ -4,7 +4,7 @@
 @interface ProjectSettingsController : UIViewController
 	<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ContentPaneDelegate, UIActionSheetDelegate>
 {
-    UITableView IBOutlet *myTableView;
+    UITableView *myTableView;
     Project *proj;
 
     UITextField *projectName;
