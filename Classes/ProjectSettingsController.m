@@ -519,6 +519,7 @@
         proj.sshPort = [NSNumber numberWithInt:22];
     else
         proj.sshPort = [nf numberFromString:portString];
+    if ([proj.sshPort intValue] <= 0) proj.sshPort = [NSNumber numberWithInt:22];
 
     proj.sshUser = sshUser.text;
     proj.sshPass = sshPass.text;
