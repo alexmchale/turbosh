@@ -4,6 +4,28 @@
 
 @synthesize webView, file, startingRect;
 
+- (void) loadFile
+{
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSURL *baseURL = [NSURL fileURLWithPath:[bundle resourcePath]];
+    NSURL *htmlURL = [NSURL fileURLWithPath:[bundle pathForResource:@"editor" ofType:@"html" inDirectory:NO]];
+    NSString *html = [[[NSString alloc] initWithContentsOfURL:htmlURL] autorelease];
+
+    NSString *t = [file contentType];
+    NSString *c = [file content];
+    NSString *y = [NSString stringWithFormat:@"%d", (int)startingRect.origin.y];
+
+    c = [c stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
+    c = [c stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
+    html = [html stringByReplacingOccurrencesOfString:@"___LANGUAGE___" withString:t];
+    html = [html stringByReplacingOccurrencesOfString:@"___CONTENT___" withString:c];
+    html = [html stringByReplacingOccurrencesOfString:@"___STARTING_OFFSET___" withString:y];
+
+    [webView loadHTMLString:html baseURL:baseURL];
+
+    [TurboshAppDelegate setLabelText:[file condensedPath]];
+}
+
 // The designated initializer.  Override if you create the controller
 // programmatically and want to perform customization that is not
 // appropriate for viewDidLoad.
@@ -30,35 +52,12 @@
 {
     [super viewWillAppear:animated];
 
-    NSBundle *bundle = [NSBundle mainBundle];
-    NSURL *baseURL = [NSURL fileURLWithPath:[bundle resourcePath]];
-    NSURL *htmlURL = [NSURL fileURLWithPath:[bundle pathForResource:@"editor" ofType:@"html" inDirectory:NO]];
-    NSString *html = [[[NSString alloc] initWithContentsOfURL:htmlURL] autorelease];
-
-    NSString *t = [file contentType];
-    NSString *c = [file content];
-    NSString *y = [NSString stringWithFormat:@"%d", (int)startingRect.origin.y];
-
-    c = [c stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
-    c = [c stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
-    html = [html stringByReplacingOccurrencesOfString:@"___LANGUAGE___" withString:t];
-    html = [html stringByReplacingOccurrencesOfString:@"___CONTENT___" withString:c];
-    html = [html stringByReplacingOccurrencesOfString:@"___STARTING_OFFSET___" withString:y];
-
-    [webView loadHTMLString:html baseURL:baseURL];
-
-    [TurboshAppDelegate setLabelText:[file condensedPath]];
+    [self loadFile];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Overriden to allow any orientation.
     return YES;
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 #pragma mark Memory Management
