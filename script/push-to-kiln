@@ -1,0 +1,7 @@
+#!/bin/sh
+
+hg convert --datesort . ../turbosh-hg
+
+pushd ../turbosh-hg
+hg push
+popd
