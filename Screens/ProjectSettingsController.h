@@ -16,7 +16,7 @@
     UITextField *sshPath;
 
     enum SyncState syncState;
-    UILabel *syncLabel;
+    IBOutlet UILabel *syncLabel;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
