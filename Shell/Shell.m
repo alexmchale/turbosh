@@ -430,6 +430,8 @@ static bool excluded_filename(NSString *filename) {
     NSMutableData *md5CmdResult = [NSMutableData data];
     bool md5Success = [self dispatchCommand:md5Cmd storeAt:md5CmdResult];
 
+    NSLog(@"Remote MD5 command: %@", md5Cmd);
+
     if (!md5Success) return nil;
     if ([md5CmdResult length] < 32) return nil;
 

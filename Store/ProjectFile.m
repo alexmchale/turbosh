@@ -100,10 +100,10 @@
 }
 
 - (NSString *) escapedPath {
-    return [[self fullpath] stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+    return [[self fullpath] stringBySingleQuoting];
 }
 
-- (NSString *)escapedRelativePath {
+- (NSString *) escapedRelativePath {
     return [self.filename stringBySingleQuoting];
 }
 
