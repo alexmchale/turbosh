@@ -11,8 +11,8 @@
     #import <sqlite3.h>
     #import <CommonCrypto/CommonDigest.h>
 
-    #import "AnsiCode.h"
-    #import "StringUtil.h"
+    #import "Util/AnsiCode.h"
+    #import "Util/StringUtil.h"
 
     #import "MBProgressHUD.h"
     #import "RegexKitLite.h"
@@ -20,15 +20,15 @@
     #import "Constants.h"
     #import "TurboshAppDelegate.h"
 
-    #import "TextFieldCell.h"
-    #import "Utils.h"
+    #import "Widgets/TextFieldCell.h"
+    #import "Util/Utils.h"
     #import "Shell.h"
     #import "CommandDispatcher.h"
     #import "FileTransfer.h"
 
-    #import "Store.h"
-    #import "Project.h"
-    #import "ProjectFile.h"
+    #import "Store/Store.h"
+    #import "Store/Project.h"
+    #import "Store/ProjectFile.h"
     #import "Synchronizer.h"
 
     #import "DetailViewController.h"

@@ -1,5 +1,4 @@
 #import <UIKit/UIKit.h>
-#import "ProjectFile.h"
 
 @interface FileViewController : UIViewController <UIWebViewDelegate, ContentPaneDelegate>
 {
