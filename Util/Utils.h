@@ -2,7 +2,7 @@
 
 NSString *hex_md5(NSData *str);
 
-@interface Utils : NSObject 
+@interface Utils : NSObject
 {
 }
 

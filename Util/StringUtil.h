@@ -5,5 +5,6 @@
 - (NSString *) stringByConvertingAnsiColor;
 - (NSString *) stringByQuotingJavascript;
 - (NSString *) stringBySingleQuoting;
+- (NSString *) findMd5;
 
 @end

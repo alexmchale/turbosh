@@ -49,4 +49,11 @@
     return [NSString stringWithFormat:@"'%@'", ns];
 }
 
+- (NSString *) findMd5
+{
+    NSString *md5Regex = @"[0-9a-fA-F]{32}";
+    NSString *md5 = [[self stringByMatching:md5Regex] uppercaseString];
+    return md5;
+}
+
 @end

@@ -441,10 +441,7 @@ static bool excluded_filename(NSString *filename) {
     NSString *md5String = [NSString stringWithUTF8String:cString];
     free(cString);
 
-    NSString *md5Regex = @"[0-9a-fA-F]{32}";
-    NSString *md5Match = [md5String stringByMatching:md5Regex];
-
-    return md5Match;
+    return [md5String findMd5];
 }
 
 #pragma mark Wrapper Tasks

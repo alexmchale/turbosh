@@ -344,8 +344,7 @@ static void kbd_callback(const char *name, int name_len,
 {
     NSData *md5Data = [dispatcher stdoutResponse];
     NSString *remoteMd5 = [[NSString alloc] initWithData:md5Data encoding:NSUTF8StringEncoding];
-    NSString *md5Regex = @"[0-9a-fA-F]{32}";
-    NSString *md5 = [[remoteMd5 stringByMatching:md5Regex] uppercaseString];
+    NSString *md5 = [remoteMd5 findMd5];
 
     bool lEl = [file.localMd5 isEqualToString:file.remoteMd5];
     bool lEr = [file.localMd5 isEqualToString:md5];
