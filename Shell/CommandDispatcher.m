@@ -23,7 +23,8 @@
     assert(project.sshPath);
     assert(command);
 
-    pwdCommand = [[NSString alloc] initWithFormat:@"cd %@ && %@ < /dev/null", project.sshPath, command];
+    NSString *escapedProjectPath = [project.sshPath stringBySingleQuoting];
+    pwdCommand = [[NSString alloc] initWithFormat:@"cd %@ && %@ < /dev/null", escapedProjectPath, command];
 
     exitCode = 0;
 
