@@ -51,9 +51,20 @@
 
 - (NSString *) findMd5
 {
-    NSString *md5Regex = @"[0-9a-fA-F]{32}";
-    NSString *md5 = [[self stringByMatching:md5Regex] uppercaseString];
-    return md5;
+    NSString *r1 = @"^([0-9A-F]{32}) ";         // Linux-style MD5 result.
+    NSString *r2 = @"MD5 .* = ([0-9A-F]{32})$"; // BSD-style MD5 result.
+    NSString *r3 = @"([0-9A-F]{32})";           // Generic MD5 result.
+
+    NSArray *md5Regexes = [NSArray arrayWithObjects:r1, r2, r3, nil];
+    NSString *upper = [self uppercaseString];
+
+    for (NSString *regex in md5Regexes) {
+        NSArray *comps = [upper componentsMatchedByRegex:regex capture:1];
+
+        if ([comps count] > 0) return [comps objectAtIndex:0];
+    }
+
+    return nil;
 }
 
 @end
