@@ -254,8 +254,9 @@ static void kbd_callback(const char *name, int name_len,
     NSString *md5f = @"md5 %@ ; e=$?; if [ $e -eq 127 ]; then exec md5sum %@; else exit $e; fi";
     NSString *pat = [file escapedRelativePath];
     NSString *md5Cmd = [NSString stringWithFormat:md5f, pat, pat];
+    NSString *shCmd = [NSString stringWithFormat:@"sh -c %@", [md5Cmd stringBySingleQuoting]];
 
-    self.dispatcher = [[CommandDispatcher alloc] initWithProject:project session:session command:md5Cmd];
+    self.dispatcher = [[CommandDispatcher alloc] initWithProject:project session:session command:shCmd];
     [dispatcher release];
 
     state = SS_CONTINUE_HASH;

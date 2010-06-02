@@ -45,7 +45,7 @@
 
 - (NSString *) stringBySingleQuoting
 {
-    NSString *ns = [self stringByReplacingOccurrencesOfString:@"'" withString:@"\\'"];
+    NSString *ns = [self stringByReplacingOccurrencesOfString:@"'" withString:@"'\\''"];
     return [NSString stringWithFormat:@"'%@'", ns];
 }
 

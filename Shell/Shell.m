@@ -426,11 +426,15 @@ static bool excluded_filename(NSString *filename) {
 
 - (NSString *) remoteMd5:(ProjectFile *)file
 {
-    NSString *md5Cmd = [NSString stringWithFormat:@"md5 %@ || md5sum %@", [file escapedPath], [file escapedPath]];
-    NSMutableData *md5CmdResult = [NSMutableData data];
-    bool md5Success = [self dispatchCommand:md5Cmd storeAt:md5CmdResult];
+    NSString *md5f = @"md5 %@ ; e=$?; if [ $e -eq 127 ]; then exec md5sum %@; else exit $e; fi";
+    NSString *pat = [file escapedRelativePath];
+    NSString *md5Cmd = [NSString stringWithFormat:md5f, pat, pat];
+    NSString *shCmd = [NSString stringWithFormat:@"sh -c %@", [md5Cmd stringBySingleQuoting]];
 
-    NSLog(@"Remote MD5 command: %@", md5Cmd);
+    NSMutableData *md5CmdResult = [NSMutableData data];
+    bool md5Success = [self dispatchCommand:shCmd storeAt:md5CmdResult];
+
+    NSLog(@"Remote MD5 command: %@", shCmd);
 
     if (!md5Success) return nil;
     if ([md5CmdResult length] < 32) return nil;
