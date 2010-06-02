@@ -51,8 +51,8 @@
 
 - (NSString *) findMd5
 {
-    NSString *r1 = @"^([0-9A-F]{32}) ";         // Linux-style MD5 result.
-    NSString *r2 = @"MD5 .* = ([0-9A-F]{32})$"; // BSD-style MD5 result.
+    NSString *r1 = @"MD5 .* = ([0-9A-F]{32})$"; // BSD-style MD5 result.
+    NSString *r2 = @"^([0-9A-F]{32}) ";         // Linux-style MD5 result.
     NSString *r3 = @"([0-9A-F]{32})";           // Generic MD5 result.
 
     NSArray *md5Regexes = [NSArray arrayWithObjects:r1, r2, r3, nil];
