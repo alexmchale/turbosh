@@ -158,21 +158,21 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 7486312E11B571C800C938AB /* openssl.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 9069D28C0FCE659A0042E34C /* libcrypto.a */;
+			remoteGlobalIDString = 9069D28C0FCE659A0042E34C;
 			remoteInfo = crypto;
 		};
 		7486315311B5734C00C938AB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7486312E11B571C800C938AB /* openssl.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 9069D13C0FCE35730042E34C /* make */;
+			remoteGlobalIDString = 9069D13C0FCE35730042E34C;
 			remoteInfo = make;
 		};
 		7486315511B5734F00C938AB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7486312E11B571C800C938AB /* openssl.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 9069D28B0FCE659A0042E34C /* crypto */;
+			remoteGlobalIDString = 9069D28B0FCE659A0042E34C;
 			remoteInfo = crypto;
 		};
 /* End PBXContainerItemProxy section */
@@ -961,6 +961,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Turbosh_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
 				INFOPLIST_FILE = "Turbosh-Info.plist";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
@@ -978,9 +979,14 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Turbosh_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
 				INFOPLIST_FILE = "Turbosh-Info.plist";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				OTHER_CFLAGS = (
+					"-DNDEBUG",
+					"-DNS_BLOCK_ASSERTIONS=1",
+				);
 				PRODUCT_NAME = Turbosh;
 				PROVISIONING_PROFILE = "91B538D8-7BEB-4812-884E-9410549DB222";
 				VALIDATE_PRODUCT = YES;
@@ -1014,6 +1020,7 @@
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Turbosh_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
 				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
 				INFOPLIST_FILE = "Turbosh-Info.plist";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
