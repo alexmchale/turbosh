@@ -139,35 +139,41 @@
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         proj = nil;
 
-		projectName = [[UITextField alloc] init];
-		projectName.autocorrectionType = UITextAutocorrectionTypeNo;
-		projectName.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		projectName.delegate = self;
+        projectName = [[UITextField alloc] init];
+        projectName.autocorrectionType = UITextAutocorrectionTypeNo;
+        projectName.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        projectName.delegate = self;
+        projectName.clearButtonMode = UITextFieldViewModeWhileEditing;
 
-		sshHost = [[UITextField alloc] init];
-		sshHost.autocorrectionType = UITextAutocorrectionTypeNo;
-		sshHost.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		sshHost.delegate = self;
+        sshHost = [[UITextField alloc] init];
+        sshHost.autocorrectionType = UITextAutocorrectionTypeNo;
+        sshHost.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        sshHost.delegate = self;
+        sshHost.clearButtonMode = UITextFieldViewModeWhileEditing;
 
-		sshPort = [[UITextField alloc] init];
-		sshPort.keyboardType = UIKeyboardTypeNumberPad;
-		sshPort.delegate = self;
+        sshPort = [[UITextField alloc] init];
+        sshPort.keyboardType = UIKeyboardTypeNumberPad;
+        sshPort.delegate = self;
+        sshPort.clearButtonMode = UITextFieldViewModeWhileEditing;
 
-		sshUser = [[UITextField alloc] init];
-		sshUser.autocorrectionType = UITextAutocorrectionTypeNo;
-		sshUser.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		sshUser.delegate = self;
+        sshUser = [[UITextField alloc] init];
+        sshUser.autocorrectionType = UITextAutocorrectionTypeNo;
+        sshUser.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        sshUser.delegate = self;
+        sshUser.clearButtonMode = UITextFieldViewModeWhileEditing;
 
-		sshPass = [[UITextField alloc] init];
-		sshPass.secureTextEntry = YES;
-		sshPass.autocorrectionType = UITextAutocorrectionTypeNo;
-		sshPass.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		sshPass.delegate = self;
+        sshPass = [[UITextField alloc] init];
+        sshPass.secureTextEntry = YES;
+        sshPass.autocorrectionType = UITextAutocorrectionTypeNo;
+        sshPass.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        sshPass.delegate = self;
+        sshPass.clearButtonMode = UITextFieldViewModeWhileEditing;
 
-		sshPath = [[UITextField alloc] init];
-		sshPath.autocorrectionType = UITextAutocorrectionTypeNo;
-		sshPath.autocapitalizationType = UITextAutocapitalizationTypeNone;
-		sshPath.delegate = self;
+        sshPath = [[UITextField alloc] init];
+        sshPath.autocorrectionType = UITextAutocorrectionTypeNo;
+        sshPath.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        sshPath.delegate = self;
+        sshPath.clearButtonMode = UITextFieldViewModeWhileEditing;
 
         syncLabel = nil;
     }
