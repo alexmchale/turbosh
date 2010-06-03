@@ -161,7 +161,12 @@ typedef enum {
             f.num = [Store projectFileNumber:p atOffset:indexPath.row];
             f.project = p;
             assert([Store loadProjectFile:f]);
-            [TurboshAppDelegate editFile:f];
+
+            if (f.remoteMd5)
+                [TurboshAppDelegate editFile:f];
+            else
+                show_alert(@"File Not Ready", @"That file has not yet been downloaded from the server.");
+
             [f release];
             [p release];
         }   break;
