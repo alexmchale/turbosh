@@ -213,7 +213,7 @@
 		7486312E11B571C800C938AB /* openssl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openssl.xcodeproj; path = "/Users/alexmchale/Projects/openssl-xcode/openssl.xcodeproj"; sourceTree = "<absolute>"; };
 		74A5ACE411709E05006A48A3 /* FileEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileEditController.h; path = ../Screens/FileEditController.h; sourceTree = "<group>"; };
 		74A5ACE511709E05006A48A3 /* FileEditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileEditController.m; path = ../Screens/FileEditController.m; sourceTree = "<group>"; };
-		74A5ACE611709E05006A48A3 /* FileEditController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FileEditController.xib; path = Screens/FileEditController.xib; sourceTree = "<group>"; };
+		74A5ACE611709E05006A48A3 /* FileEditController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FileEditController.xib; path = ../Screens/FileEditController.xib; sourceTree = "<group>"; };
 		74AE5E70115E783B006CA577 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = Util/Utils.h; sourceTree = "<group>"; };
 		74AE5E71115E783B006CA577 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utils.m; path = Util/Utils.m; sourceTree = "<group>"; };
 		74AE5E84115E7BFC006CA577 /* ProjectSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectSettingsController.h; path = Screens/ProjectSettingsController.h; sourceTree = "<group>"; };
@@ -305,7 +305,7 @@
 		74B36F38115B2A9800E3B2D1 /* sh_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = sh_style.css; sourceTree = "<group>"; };
 		74B36F8B115B2AAA00E3B2D1 /* FileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileViewController.h; path = ../Screens/FileViewController.h; sourceTree = "<group>"; };
 		74B36F8C115B2AAA00E3B2D1 /* FileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileViewController.m; path = ../Screens/FileViewController.m; sourceTree = "<group>"; };
-		74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FileViewController.xib; path = Screens/FileViewController.xib; sourceTree = "<group>"; };
+		74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FileViewController.xib; path = ../Screens/FileViewController.xib; sourceTree = "<group>"; };
 		74B36FA0115B2B2A00E3B2D1 /* Project.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Project.h; path = Store/Project.h; sourceTree = "<group>"; };
 		74B36FA1115B2B2A00E3B2D1 /* Project.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Project.m; path = Store/Project.m; sourceTree = "<group>"; };
 		74B36FA2115B2B2A00E3B2D1 /* ProjectFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectFile.h; path = Store/ProjectFile.h; sourceTree = "<group>"; };
@@ -481,8 +481,6 @@
 			isa = PBXGroup;
 			children = (
 				7433E595119C1C8700873265 /* Icon.png */,
-				74A5ACE611709E05006A48A3 /* FileEditController.xib */,
-				74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
 				8D1107310486CEB800E47090 /* Turbosh-Info.plist */,
@@ -552,6 +550,8 @@
 		74B36EE3115B2A9700E3B2D1 /* File Editor */ = {
 			isa = PBXGroup;
 			children = (
+				74A5ACE611709E05006A48A3 /* FileEditController.xib */,
+				74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */,
 				74A5ACE411709E05006A48A3 /* FileEditController.h */,
 				74A5ACE511709E05006A48A3 /* FileEditController.m */,
 				74B36F8B115B2AAA00E3B2D1 /* FileViewController.h */,

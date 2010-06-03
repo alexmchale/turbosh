@@ -26,5 +26,6 @@
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView *spinner;
 
 - (void) switchTo:(UIViewController *)controller;
+- (void) clearToolbar;
 
 @end

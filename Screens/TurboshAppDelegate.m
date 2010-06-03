@@ -141,6 +141,12 @@
         [spinner stopAnimating];
 }
 
++ (void) clearToolbar
+{
+    TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    [delegate.detailViewController clearToolbar];
+}
+
 #pragma mark -
 #pragma mark Application lifecycle
 

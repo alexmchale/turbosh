@@ -15,11 +15,19 @@
     NSString *c = [file content];
     NSString *y = [NSString stringWithFormat:@"%d", (int)startingRect.origin.y];
 
-    c = [c stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
-    c = [c stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
-    html = [html stringByReplacingOccurrencesOfString:@"___LANGUAGE___" withString:t];
-    html = [html stringByReplacingOccurrencesOfString:@"___CONTENT___" withString:c];
-    html = [html stringByReplacingOccurrencesOfString:@"___STARTING_OFFSET___" withString:y];
+    if (!t || !c) {
+        // Show a message and redirect to the project page.
+
+        html = @"<br><br><br><center>That file is not yet loaded.</center>";
+
+        [TurboshAppDelegate clearToolbar];
+    } else {
+        c = [c stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
+        c = [c stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
+        html = [html stringByReplacingOccurrencesOfString:@"___LANGUAGE___" withString:t];
+        html = [html stringByReplacingOccurrencesOfString:@"___CONTENT___" withString:c];
+        html = [html stringByReplacingOccurrencesOfString:@"___STARTING_OFFSET___" withString:y];
+    }
 
     [webView loadHTMLString:html baseURL:baseURL];
 
@@ -48,9 +56,9 @@
           action:@selector(editDocument:)] autorelease];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void) viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
 
     [self loadFile];
 }

@@ -51,5 +51,6 @@
 + (void) queueCommand:(CommandDispatcher *)dispatcher;
 + (void) reloadList;
 + (void) spin:(bool)spinning;
++ (void) clearToolbar;
 
 @end
