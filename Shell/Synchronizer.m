@@ -75,7 +75,7 @@ static void kbd_callback(const char *name, int name_len,
 
     self.project.num = num;
 
-    assert([Store loadProject:project]);
+    [Store loadProject:project];
 
     state = SS_BEGIN_CONN;
 }
@@ -257,7 +257,7 @@ static void kbd_callback(const char *name, int name_len,
         return;
     }
 
-    assert([Store loadProjectFile:file]);
+    [Store loadProjectFile:file];
 
     if (self.file.remoteMd5)
         state = SS_INITIATE_HASH;
@@ -589,7 +589,7 @@ static void kbd_callback(const char *name, int name_len,
 
 - (id) init
 {
-    assert(self = [super init]);
+    self = [super init];
 
     timer = [NSTimer timerWithTimeInterval:SYNCHRONIZE_DELAY_SECONDS
                                     target:self

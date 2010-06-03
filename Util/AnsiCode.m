@@ -82,7 +82,7 @@
 
 - (id) init
 {
-    assert(self = [super init]);
+    self = [super init];
 
     codes = [[NSMutableArray alloc] init];
 

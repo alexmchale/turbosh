@@ -34,7 +34,7 @@
         Project *nextProject = [[Project alloc] init];
 
         nextProject.num = [Store projectNumAtOffset:0];
-        assert([Store loadProject:nextProject]);
+        [Store loadProject:nextProject];
 
         [TurboshAppDelegate editProject:nextProject];
 

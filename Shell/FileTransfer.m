@@ -2,7 +2,7 @@
 
 - (id) initWithSession:(LIBSSH2_SESSION *)s upload:(ProjectFile *)f
 {
-    assert(self = [super init]);
+    self = [super init];
 
     session = s;
     channel = NULL;
@@ -21,7 +21,7 @@
 
 - (id) initWithSession:(LIBSSH2_SESSION *)s download:(ProjectFile *)f
 {
-    assert(self = [super init]);
+    self = [super init];
 
     session = s;
     channel = NULL;

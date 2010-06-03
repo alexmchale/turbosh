@@ -12,17 +12,17 @@ static sqlite3 *db;
     NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     path = [documentsPath stringByAppendingPathComponent:@"database.sqlite"];
 
-    assert(sqlite3_initialize() == SQLITE_OK);
+    sqlite3_initialize();
 
     bool isNewDatabase = ![fileManager fileExistsAtPath:path];
-    if (isNewDatabase) assert([fileManager createFileAtPath:path contents:nil attributes:nil]);
-    assert(sqlite3_open([path UTF8String], &db) == SQLITE_OK);
+    if (isNewDatabase) [fileManager createFileAtPath:path contents:nil attributes:nil];
+    sqlite3_open([path UTF8String], &db);
 
     if (isNewDatabase) {
         char *tableSql;
 
         tableSql = "CREATE TABLE kv (k TEXT NOT NULL PRIMARY KEY ON CONFLICT REPLACE, v BLOB)";
-        assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
+        sqlite3_exec(db, tableSql, NULL, NULL, NULL);
 
         tableSql = "CREATE TABLE projects ("
                    "id INTEGER NOT NULL PRIMARY KEY ON CONFLICT REPLACE AUTOINCREMENT, "
@@ -33,7 +33,7 @@ static sqlite3 *db;
                    "ssh_password TEXT, "
                    "ssh_path TEXT"
                    ")";
-        assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
+        sqlite3_exec(db, tableSql, NULL, NULL, NULL);
 
         tableSql = "CREATE TABLE files ("
                    "id INTEGER NOT NULL PRIMARY KEY ON CONFLICT REPLACE AUTOINCREMENT, "
@@ -44,15 +44,14 @@ static sqlite3 *db;
                    "remote_md5 TEXT, "
                    "local_md5 TEXT, "
                    "UNIQUE (project_id, path, usage) ON CONFLICT REPLACE)";
-        assert(sqlite3_exec(db, tableSql, NULL, NULL, NULL) == SQLITE_OK);
+        sqlite3_exec(db, tableSql, NULL, NULL, NULL);
 
         [self setValue:@"1" forKey:@"version"];
-        assert(1 == [self intValue:@"version"]);
     }
 }
 
 + (void) close {
-    assert(sqlite3_close(db) == SQLITE_OK);
+    sqlite3_close(db);
 }
 
 #pragma mark SQLite Utils
@@ -75,42 +74,42 @@ static NSNumber *get_integer(sqlite3_stmt *stmt, int column) {
 }
 
 static void bind_prepare(sqlite3_stmt **stmt, const char *sql) {
-    assert(sqlite3_prepare_v2(db, sql, -1, stmt, NULL) == SQLITE_OK);
+    sqlite3_prepare_v2(db, sql, -1, stmt, NULL);
 }
 
 static void bind_string(sqlite3_stmt *stmt, int column, const NSString *s, bool allowNull) {
     assert(allowNull || s);
 
     if (s != nil)
-        assert(sqlite3_bind_text(stmt, column, [s UTF8String], -1, SQLITE_TRANSIENT) == SQLITE_OK);
+        sqlite3_bind_text(stmt, column, [s UTF8String], -1, SQLITE_TRANSIENT);
     else
-        assert(sqlite3_bind_null(stmt, column) == SQLITE_OK);
+        sqlite3_bind_null(stmt, column);
 }
 
 static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allowNull) {
     assert(allowNull || n);
 
     if (n != nil)
-        assert(sqlite3_bind_int(stmt, column, [n intValue]) == SQLITE_OK);
+        sqlite3_bind_int(stmt, column, [n intValue]);
     else
-        assert(sqlite3_bind_null(stmt, column) == SQLITE_OK);
+        sqlite3_bind_null(stmt, column);
 }
 
 static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull) {
     assert(allowNull || d);
 
     if (d != nil)
-        assert(sqlite3_bind_blob(stmt, column, [d bytes], [d length], SQLITE_TRANSIENT) == SQLITE_OK);
+        sqlite3_bind_blob(stmt, column, [d bytes], [d length], SQLITE_TRANSIENT);
     else
-        assert(sqlite3_bind_null(stmt, column) == SQLITE_OK);
+        sqlite3_bind_null(stmt, column);
 }
 
 static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     while (rowCount-- > 0)
-        assert(sqlite3_step(stmt) == SQLITE_ROW);
+        sqlite3_step(stmt);
 
-    assert(sqlite3_step(stmt) == SQLITE_DONE);
-    assert(sqlite3_finalize(stmt) == SQLITE_OK);
+    sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
 }
 
 #pragma mark Project
@@ -127,8 +126,8 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
 
     BOOL found = FALSE;
     sqlite3_stmt *t;
-    assert(sqlite3_prepare_v2(db, s, -1, &t, NULL) == SQLITE_OK);
-    assert(sqlite3_bind_int(t, 1, [project.num intValue]) == SQLITE_OK);
+    sqlite3_prepare_v2(db, s, -1, &t, NULL);
+    sqlite3_bind_int(t, 1, [project.num intValue]);
 
     switch (sqlite3_step(t)) {
         case SQLITE_ROW:
@@ -150,7 +149,7 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
             assert(1 != 1);
     }
 
-    assert(sqlite3_finalize(t) == SQLITE_OK);
+    sqlite3_finalize(t);
 
     return found;
 }
@@ -164,7 +163,7 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
               "id, name, "
               "ssh_hostname, ssh_port, ssh_username, ssh_password, ssh_path"
               ") VALUES (?, ?, ?, ?, ?, ?, ?)";
-    assert(sqlite3_prepare_v2(db, s, -1, &t, NULL) == SQLITE_OK);
+    sqlite3_prepare_v2(db, s, -1, &t, NULL);
 
     bind_integer(t, 1, project.num, true);
     bind_string(t, 2, project.name, false);
@@ -174,8 +173,8 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     bind_string(t, 6, project.sshPass, true);
     bind_string(t, 7, project.sshPath, true);
 
-    assert(sqlite3_step(t) == SQLITE_DONE);
-    assert(sqlite3_finalize(t) == SQLITE_OK);
+    sqlite3_step(t);
+    sqlite3_finalize(t);
 
     project.num = [NSNumber numberWithInt:sqlite3_last_insert_rowid(db)];
 }
@@ -316,15 +315,15 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
 
     sqlite3_stmt *stmt;
     const char *sql = "SELECT path FROM files WHERE project_id=? AND usage=?";
-    assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
-    assert(sqlite3_bind_int(stmt, 1, [project.num intValue]) == SQLITE_OK);
+    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    sqlite3_bind_int(stmt, 1, [project.num intValue]);
     bind_string(stmt, 2, usage, false);
 
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         [filenames addObject:get_string(stmt, 0)];
     }
 
-    assert(sqlite3_finalize(stmt) == SQLITE_OK);
+    sqlite3_finalize(stmt);
 
     return filenames;
 }
@@ -338,7 +337,7 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     assert(file.num != nil);
     const NSString *nsSql = [NSString stringWithFormat:@"DELETE FROM files WHERE id=%@", file.num];
     const char *sql = [nsSql UTF8String];
-    assert(sqlite3_exec(db, sql, NULL, NULL, NULL) == SQLITE_OK);
+    sqlite3_exec(db, sql, NULL, NULL, NULL);
     file.num = nil;
 }
 
@@ -351,8 +350,8 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
 
     BOOL found = FALSE;
     sqlite3_stmt *t;
-    assert(sqlite3_prepare_v2(db, s, -1, &t, NULL) == SQLITE_OK);
-    assert(sqlite3_bind_int(t, 1, [file.num intValue]) == SQLITE_OK);
+    sqlite3_prepare_v2(db, s, -1, &t, NULL);
+    sqlite3_bind_int(t, 1, [file.num intValue]);
     bind_string(t, 2, usage, false);
 
     switch (sqlite3_step(t)) {
@@ -365,12 +364,12 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
 
                 Project *project = [[Project alloc] init];
                 project.num = loadedProjectId;
-                assert([Store loadProject:project]);
+                [Store loadProject:project];
                 file.project = project;
                 [project release];
             }
 
-            assert([file.project.num isEqualToNumber:loadedProjectId]);
+            [file.project.num isEqualToNumber:loadedProjectId];
 
             file.filename = get_string(t, 1);
             file.remoteMd5 = get_string(t, 2);
@@ -387,7 +386,7 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
             assert(1 != 1);
     }
 
-    assert(sqlite3_finalize(t) == SQLITE_OK);
+    sqlite3_finalize(t);
 
     return found;
 }
@@ -401,13 +400,12 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
 
     sqlite3_stmt *stmt;
     const char *sql = "INSERT INTO files (id, project_id, path, usage) VALUES (?, ?, ?, ?)";
-    assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
+    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
     bind_integer(stmt, 1, file.num, true);
     bind_integer(stmt, 2, file.project.num, false);
     bind_string(stmt, 3, file.filename, false);
     bind_string(stmt, 4, usage, false);
-    assert(sqlite3_step(stmt) == SQLITE_DONE);
-    assert(sqlite3_finalize(stmt) == SQLITE_OK);
+    bind_finalize(stmt, 0);
 }
 
 + (void) storeProjectFile:(ProjectFile *)file
@@ -425,8 +423,7 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     bind_string(stmt, 1, md5, false);
     bind_data(stmt, 2, content, false);
     bind_integer(stmt, 3, file.num, false);
-    assert(sqlite3_step(stmt) == SQLITE_DONE);
-    assert(sqlite3_finalize(stmt) == SQLITE_OK);
+    bind_finalize(stmt, 0);
 }
 
 + (void) storeRemote:(ProjectFile *)file content:(NSData *)content
@@ -440,8 +437,7 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     bind_string(stmt, 2, md5, false);
     bind_data(stmt, 3, content, false);
     bind_integer(stmt, 4, file.num, false);
-    assert(sqlite3_step(stmt) == SQLITE_DONE);
-    assert(sqlite3_finalize(stmt) == SQLITE_OK);
+    bind_finalize(stmt, 0);
 }
 
 + (NSString *) fileContent:(ProjectFile *)file
@@ -461,15 +457,15 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     NSNumber *num = nil;
     sqlite3_stmt *stmt;
     const char *sql = "SELECT id FROM files WHERE project_id=? AND path=? AND usage=?";
-    assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
-    assert(sqlite3_bind_int(stmt, 1, [project.num intValue]) == SQLITE_OK);
-    assert(sqlite3_bind_text(stmt, 2, [filename UTF8String], -1, SQLITE_TRANSIENT) == SQLITE_OK);
+    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    sqlite3_bind_int(stmt, 1, [project.num intValue]);
+    sqlite3_bind_text(stmt, 2, [filename UTF8String], -1, SQLITE_TRANSIENT);
     bind_string(stmt, 3, usage, false);
 
     if (sqlite3_step(stmt) == SQLITE_ROW)
         num = get_integer(stmt, 0);
 
-    assert(sqlite3_finalize(stmt) == SQLITE_OK);
+    sqlite3_finalize(stmt);
 
     return num;
 }
@@ -556,11 +552,10 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
 + (void) setValue:(NSString *)value forKey:(NSString *)key {
     sqlite3_stmt *stmt;
     const char *sql = "INSERT INTO kv (k, v) VALUES (?, ?)";
-    assert(sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK);
-    assert(sqlite3_bind_text(stmt, 1, [key UTF8String], -1, SQLITE_TRANSIENT) == SQLITE_OK);
-    assert(sqlite3_bind_blob(stmt, 2, [value UTF8String], -1, SQLITE_TRANSIENT) == SQLITE_OK);
-    assert(sqlite3_step(stmt) == SQLITE_DONE);
-    assert(sqlite3_finalize(stmt) == SQLITE_OK);
+    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    sqlite3_bind_text(stmt, 1, [key UTF8String], -1, SQLITE_TRANSIENT);
+    sqlite3_bind_blob(stmt, 2, [value UTF8String], -1, SQLITE_TRANSIENT);
+    bind_finalize(stmt, 0);
 }
 
 + (void) setIntValue:(NSInteger)value forKey:(NSString *)key {
@@ -573,8 +568,8 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
 
     sqlite3_stmt *selStmt;
     NSString *selSql = @"SELECT v FROM kv WHERE k LIKE ?";
-    assert(sqlite3_prepare_v2(db, [selSql UTF8String], -1, &selStmt, NULL) == SQLITE_OK);
-    assert(sqlite3_bind_text(selStmt, 1, [key UTF8String], -1, SQLITE_TRANSIENT) == SQLITE_OK);
+    sqlite3_prepare_v2(db, [selSql UTF8String], -1, &selStmt, NULL);
+    sqlite3_bind_text(selStmt, 1, [key UTF8String], -1, SQLITE_TRANSIENT);
 
     switch(sqlite3_step(selStmt)) {
     case SQLITE_ROW:
@@ -589,7 +584,7 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
         break;
     }
 
-    assert(sqlite3_finalize(selStmt) == SQLITE_OK);
+    sqlite3_finalize(selStmt);
 
     return value;
 }
@@ -613,12 +608,12 @@ static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
     NSString *s = [NSString stringWithFormat:f, col, tab, where, order, offset];
     NSString *v = nil;
 
-    assert(sqlite3_prepare_v2(db, [s UTF8String], -1, &t, NULL) == SQLITE_OK);
+    sqlite3_prepare_v2(db, [s UTF8String], -1, &t, NULL);
 
     if (sqlite3_step(t) == SQLITE_ROW)
         v = get_string(t, 0);
 
-    assert(sqlite3_finalize(t) == SQLITE_OK);
+    sqlite3_finalize(t);
 
     return v;
 

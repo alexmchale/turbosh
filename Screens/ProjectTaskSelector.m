@@ -193,7 +193,7 @@
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    assert(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]);
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
 
     project = nil;
     allFiles = nil;

@@ -18,7 +18,7 @@
     self.localMd5 = nil;
     self.remoteMd5 = nil;
 
-    assert([Store loadProjectFile:self]);
+    [Store loadProjectFile:self];
 
     return self;
 }
@@ -35,9 +35,9 @@
     self.localMd5 = nil;
     self.remoteMd5 = nil;
 
-    if (self.num) assert([Store loadProjectFile:self]);
+    if (self.num) [Store loadProjectFile:self];
 
-    assert([filename isEqual:myFilename]);
+    [filename isEqual:myFilename];
 
     return self;
 }
@@ -51,7 +51,7 @@
 
 - (id) init
 {
-    assert(self = [super init]);
+    self = [super init];
 
     num = nil;
     project = nil;

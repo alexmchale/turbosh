@@ -10,7 +10,7 @@
                session:(LIBSSH2_SESSION *)newSession
                command:(NSString *)newCommand
 {
-    assert(self = [super init]);
+    self = [super init];
 
     session = newSession;
 

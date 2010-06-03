@@ -123,7 +123,7 @@ typedef enum {
             [project loadCurrent];
             file.num = [Store projectTaskNumber:project atOffset:indexPath.row];
             file.project = project;
-            assert([Store loadProjectTask:file]);
+            [Store loadProjectTask:file];
             cell.textLabel.text = [file condensedPath];
             break;
 
@@ -160,7 +160,7 @@ typedef enum {
             ProjectFile *f = [[ProjectFile alloc] init];
             f.num = [Store projectFileNumber:p atOffset:indexPath.row];
             f.project = p;
-            assert([Store loadProjectFile:f]);
+            [Store loadProjectFile:f];
 
             if (f.remoteMd5)
                 [TurboshAppDelegate editFile:f];
@@ -177,7 +177,7 @@ typedef enum {
             ProjectFile *f = [[ProjectFile alloc] init];
             f.num = [Store projectTaskNumber:p atOffset:indexPath.row];
             f.project = p;
-            assert([Store loadProjectTask:f]);
+            [Store loadProjectTask:f];
             [TurboshAppDelegate launchTask:f];
             [f release];
             [p release];
@@ -187,7 +187,7 @@ typedef enum {
         {
             Project *p = [[Project alloc] init];
             p.num = [Store projectNumAtOffset:indexPath.row];
-            assert([Store loadProject:p]);
+            [Store loadProject:p];
             [TurboshAppDelegate editProject:p];
             [p release];
         }   break;

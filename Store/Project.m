@@ -9,14 +9,14 @@
 
 - (id) loadCurrent {
     self.num = [Store currentProjectNum];
-    assert([Store loadProject:self]);
+    [Store loadProject:self];
 
     return self;
 }
 
 - (id) loadByOffset:(NSInteger)offset {
     self.num = [Store projectNumAtOffset:offset];
-    assert([Store loadProject:self]);
+    [Store loadProject:self];
 
     return self;
 }
@@ -32,7 +32,7 @@
 
 - (id) init
 {
-    assert(self = [super init]);
+    self = [super init];
 
     num = nil;
     name = nil;
