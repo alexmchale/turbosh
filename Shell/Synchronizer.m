@@ -259,7 +259,10 @@ static void kbd_callback(const char *name, int name_len,
 
     assert([Store loadProjectFile:file]);
 
-    state = SS_INITIATE_HASH;
+    if (self.file.remoteMd5)
+        state = SS_INITIATE_HASH;
+    else
+        state = SS_INITIATE_DOWNLOAD;
 }
 
 - (void) initiateHash
