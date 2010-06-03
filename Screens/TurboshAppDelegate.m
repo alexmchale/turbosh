@@ -118,6 +118,11 @@
     [[self synchronizer] synchronize];
 }
 
++ (void) sync:(NSNumber *)projectNumber
+{
+    [[self synchronizer] synchronize:projectNumber];
+}
+
 + (void) queueCommand:(CommandDispatcher *)dispatcher
 {
     TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];

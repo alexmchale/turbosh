@@ -36,6 +36,7 @@ enum SyncState
     Project *project;
     ProjectFile *file;
     NSInteger nextFileOffset;
+    NSMutableArray *projectsToSync;
 
     NSString *localHash;
     NSString *remoteHash;
@@ -62,6 +63,7 @@ enum SyncState
 
 @property (nonatomic, retain) NSTimer *timer;
 @property (nonatomic, retain) Project *project;
+@property (nonatomic, retain) NSMutableArray *projectsToSync;
 @property (nonatomic, retain) ProjectFile *file;
 @property (nonatomic, retain) CommandDispatcher *dispatcher;
 @property (nonatomic, retain) FileTransfer *transfer;
@@ -69,6 +71,7 @@ enum SyncState
 
 - (void) step;
 - (void) synchronize;
+- (void) synchronize:(NSNumber *)projectNumber;
 - (void) appendCommand:(CommandDispatcher *)command;
 
 @end

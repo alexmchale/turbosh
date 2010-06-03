@@ -28,7 +28,7 @@
     [TurboshAppDelegate editFile:file atRect:textView.bounds];
     [file release];
 
-    [TurboshAppDelegate sync];
+    [TurboshAppDelegate sync:file.project.num];
 }
 
 #pragma mark Edit Events

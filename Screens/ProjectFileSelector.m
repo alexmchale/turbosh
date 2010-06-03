@@ -23,7 +23,7 @@
 
     [file release];
 
-    [TurboshAppDelegate sync];
+    [TurboshAppDelegate sync:project.num];
     [TurboshAppDelegate reloadList];
     [TurboshAppDelegate editProject:project];
 }

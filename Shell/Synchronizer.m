@@ -18,7 +18,7 @@
 @implementation Synchronizer
 
 @synthesize timer;
-@synthesize project, file;
+@synthesize project, file, projectsToSync;
 @synthesize dispatcher, transfer;
 @synthesize currentCommand;
 
@@ -45,7 +45,20 @@ static void kbd_callback(const char *name, int name_len,
 
 - (void) selectProject
 {
-    NSNumber *num = [Store projectNumAfterNum:project.num];
+    NSNumber *num = nil;
+
+    if (projectsToSync) {
+        if ([projectsToSync count] == 0) {
+            self.projectsToSync = nil;
+            state = SS_IDLE;
+            return;
+        }
+
+        num = [[[projectsToSync objectAtIndex:0] retain] autorelease];
+        [projectsToSync removeObjectAtIndex:0];
+    } else {
+        num = [Store projectNumAfterNum:project.num];
+    }
 
     self.file = nil;
     self.project = nil;
@@ -526,6 +539,19 @@ static void kbd_callback(const char *name, int name_len,
     startup = true;
 }
 
+- (void) synchronize:(NSNumber *)projectNumber
+{
+    startup = true;
+
+    if (projectNumber) {
+        if (!projectsToSync)
+            self.projectsToSync = [NSMutableArray array];
+
+        if (![projectsToSync containsObject:projectNumber])
+            [projectsToSync addObject:projectNumber];
+    }
+}
+
 - (void) appendCommand:(CommandDispatcher *)command
 {
     [pendingCommands addObject:command];
@@ -579,6 +605,7 @@ static void kbd_callback(const char *name, int name_len,
 
     currentCommand = nil;
     pendingCommands = [[NSMutableArray alloc] init];
+    projectsToSync = nil;
 
     sock = 0;
     session = NULL;
@@ -595,6 +622,7 @@ static void kbd_callback(const char *name, int name_len,
     [transfer release];
     [currentCommand release];
     [pendingCommands release];
+    [projectsToSync release];
 
     [super dealloc];
 }
