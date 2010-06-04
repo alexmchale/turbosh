@@ -42,6 +42,7 @@ static void kbd_callback(const char *name, int name_len,
     struct sockaddr_in sin;
     int rc;
 
+    // Verify that we have somewhere to connect to.
     if (!project || !project.sshHost || !project.sshPort ||
         !project.sshUser || !project.sshPass || !project.sshPath) {
         return false;
@@ -74,6 +75,7 @@ static void kbd_callback(const char *name, int name_len,
 
     // Begin a new SSH session.
     if (!(session = libssh2_session_init())) {
+        NSLog(@"Unable to create the SSH2 session.");
         return false;
     }
 
@@ -81,9 +83,10 @@ static void kbd_callback(const char *name, int name_len,
     libssh2_session_set_blocking(session, 0);
 
     // Establish the SSH connection.
-    while ((rc = libssh2_session_startup(session, sock)) == LIBSSH2_ERROR_EAGAIN)
+    do {
+        rc = libssh2_session_startup(session, sock);
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
-        //continue;
+    } while (rc == LIBSSH2_ERROR_EAGAIN);
 
     if (rc) {
         NSLog(@"Failure establishing SSH session: %d", rc);
@@ -99,7 +102,7 @@ static void kbd_callback(const char *name, int name_len,
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
     } while (rc == LIBSSH2_ERROR_EAGAIN);
 
-    if (rc) {
+    if (rc != LIBSSH2_ERROR_NONE) {
         NSLog(@"Authentication by password failed, trying interactive.");
 
         do {
