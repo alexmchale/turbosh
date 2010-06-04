@@ -154,16 +154,13 @@ static bool excluded_filename(NSString *filename) {
 - (NSArray *) findFilesOfType:(char)type {
     NSMutableData *data = [[NSMutableData alloc] init];
     NSMutableArray *files = nil;
-    NSString *testCmd = [NSString stringWithFormat:@"test -d %@", [self escapedPath]];
-    NSString *findCmd = [NSString stringWithFormat:@"find %@ -type %c -print0", [self escapedPath], type];
-    NSString *cmd = [NSString stringWithFormat:@"%@ && %@", testCmd, findCmd];
+    NSString *cmd = [NSString stringWithFormat:@"find . -type %c -print0", type];
 
     NSLog(@"Find command: %@", cmd);
 
     if ([self dispatchCommand:cmd storeAt:data]) {
         char *bytes = (char *)[data bytes];
         long length = [data length];
-        long pathLength = (project.sshPath ? [project.sshPath length] : 0) + 1;
         long offset = 0;
 
         files = [NSMutableArray array];
@@ -171,8 +168,8 @@ static bool excluded_filename(NSString *filename) {
         while (offset < length) {
             NSString *file = [NSString stringWithCString:&bytes[offset] encoding:NSUTF8StringEncoding];
 
-            if (pathLength < [file length]) {
-                file = [file substringFromIndex:pathLength];
+            if ([file length] > 2) {
+                file = [file substringFromIndex:2];
 
                 if (!excluded_filename(file)) [files addObject:file];
             }
@@ -193,17 +190,13 @@ static bool excluded_filename(NSString *filename) {
 - (NSArray *) executables {
     NSMutableData *data = [[NSMutableData alloc] init];
     NSMutableArray *files = nil;
-    NSString *ep = [self escapedPath];
-    NSString *testCmd = [NSString stringWithFormat:@"test -d %@", ep];
-    NSString *findCmd = [NSString stringWithFormat:@"find %@ -type f -perm -100 -print0", ep];
-    NSString *cmd = [NSString stringWithFormat:@"%@ && %@", testCmd, findCmd];
+    NSString *findCmd = @"find -type f -perm -100 -print0";
 
-    NSLog(@"Find Command: %@", cmd);
+    NSLog(@"Find Command: %@", findCmd);
 
-    if ([self dispatchCommand:cmd storeAt:data]) {
+    if ([self dispatchCommand:findCmd storeAt:data]) {
         char *bytes = (char *)[data bytes];
         long length = [data length];
-        long pathLength = (project.sshPath ? [project.sshPath length] : 0) + 1;
         long offset = 0;
 
         files = [NSMutableArray array];
@@ -211,8 +204,8 @@ static bool excluded_filename(NSString *filename) {
         while (offset < length) {
             NSString *file = [NSString stringWithCString:&bytes[offset] encoding:NSUTF8StringEncoding];
 
-            if (pathLength < [file length]) {
-                file = [file substringFromIndex:pathLength];
+            if ([file length] > 2) {
+                file = [file substringFromIndex:2];
 
                 if (!excluded_filename(file)) [files addObject:file];
             }
@@ -239,72 +232,27 @@ static bool excluded_filename(NSString *filename) {
 #pragma mark Connection Drivers
 
 // Blocks while the command is being run.
-- (bool) dispatchCommand:(NSString *)command storeAt:(NSMutableData *)output {
-    LIBSSH2_CHANNEL *channel;
-    int rc;
+- (bool) dispatchCommand:(NSString *)command storeAt:(NSMutableData *)output
+{
+    CommandDispatcher *cd =
+        [[CommandDispatcher alloc]
+            initWithProject:project
+            session:session
+            command:command];
 
-    show_alert(@"Debug", @"Opening channel");
-
-    /* Exec non-blocking on the remove host */
-    do {
-        channel = libssh2_channel_open_session(session);
-        rc = libssh2_session_last_error(session, NULL, NULL, 0);
-
+    while ([cd step])
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
-    } while (channel == NULL && rc == LIBSSH2_ERROR_EAGAIN);
 
-    if (channel == NULL) {
-        NSLog(@"Error dispatching command: %@", command);
-        return false;
+    bool success = cd.exitCode == 0;
+
+    if (success) {
+        [output setLength:0];
+        [output appendData:[cd stdoutResponse]];
     }
 
-    show_alert(@"Debug", @"Starting execution");
+    [cd release];
 
-    do {
-        rc = libssh2_channel_exec(channel, [command UTF8String]);
-
-        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
-    } while (rc == LIBSSH2_ERROR_EAGAIN);
-
-    if (rc != LIBSSH2_ERROR_NONE) {
-        NSLog(@"Error %d while executing command: %@", rc, command);
-        libssh2_channel_free(channel);
-        return false;
-    }
-
-    show_alert(@"Debug", @"Reading response");
-
-    char buffer[0x4000];
-    do {
-        rc = libssh2_channel_read(channel, buffer, sizeof(buffer));
-
-        if (rc > 0) [output appendBytes:buffer length:rc];
-
-        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
-    } while (rc > 0 || rc == LIBSSH2_ERROR_EAGAIN);
-
-    int exitcode = 127;
-
-    show_alert(@"Debug", @"Closing channel");
-
-    do {
-        rc = libssh2_channel_close(channel);
-
-        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
-    } while (rc == LIBSSH2_ERROR_EAGAIN);
-
-    if (rc == LIBSSH2_ERROR_NONE)
-        exitcode = libssh2_channel_get_exit_status( channel );
-
-    show_alert(@"Debug", @"Dispatch complete");
-
-    NSLog(@"Executed command: %@", command);
-    NSLog(@"Exit code %d with byte count %d", exitcode, [output length]);
-
-    libssh2_channel_free(channel);
-    channel = NULL;
-
-    return exitcode == 0;
+    return success;
 }
 
 #pragma mark Wrapper Tasks
