@@ -58,6 +58,8 @@
     [self.view addSubview:hud];
     [hud show:YES];
 
+    show_alert(@"Debug", @"Begining connection procedure");
+
     Shell *shell = [[Shell alloc] initWithProject:project];
 
     if ([shell connect]) {

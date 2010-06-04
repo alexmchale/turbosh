@@ -54,6 +54,8 @@ static void kbd_callback(const char *name, int name_len,
         return false;
     }
 
+    show_alert(@"Turbosh", @"Resolving DNS");
+
     // Resolve the address of the server.
     struct hostent *host = gethostbyname([project.sshHost UTF8String]);
     in_addr_t ip;
@@ -66,6 +68,8 @@ static void kbd_callback(const char *name, int name_len,
     sin.sin_family = AF_INET;
     sin.sin_port = htons([self.project.sshPort intValue]);
     sin.sin_addr.s_addr = ip;
+
+    show_alert(@"Debug", @"Connecting to server");
 
     // Establish the TCP connection.
     if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) != 0) {
@@ -82,6 +86,8 @@ static void kbd_callback(const char *name, int name_len,
     // Configure LIBSSH2 for non-blocking communications.
     libssh2_session_set_blocking(session, 0);
 
+    show_alert(@"Debug", @"Establishing SSH");
+
     // Establish the SSH connection.
     do {
         rc = libssh2_session_startup(session, sock);
@@ -93,6 +99,8 @@ static void kbd_callback(const char *name, int name_len,
         return nil;
     }
 
+    show_alert(@"Debug", @"Authenticating with password");
+
     // Authenticate using the configured password.
     do {
         const char *user = [project.sshUser UTF8String];
@@ -103,6 +111,8 @@ static void kbd_callback(const char *name, int name_len,
     } while (rc == LIBSSH2_ERROR_EAGAIN);
 
     if (rc != LIBSSH2_ERROR_NONE) {
+        show_alert(@"Debug", @"Authenticating with keyboard-interactive");
+
         NSLog(@"Authentication by password failed, trying interactive.");
 
         do {
@@ -120,6 +130,9 @@ static void kbd_callback(const char *name, int name_len,
             return false;
         }
     }
+
+    NSString *m = [NSString stringWithFormat:@"Successfully connected to %@", project.sshHost];
+    show_alert(@"Turbosh", m);
 
     return true;
 }
@@ -166,6 +179,8 @@ static bool excluded_filename(NSString *filename) {
         long pathLength = (project.sshPath ? [project.sshPath length] : 0) + 1;
         long offset = 0;
 
+        show_alert(@"Debug", @"Parsing file query response");
+
         files = [NSMutableArray array];
 
         while (offset < length) {
@@ -183,6 +198,8 @@ static bool excluded_filename(NSString *filename) {
             offset++;
         }
     }
+
+    show_alert(@"Debug", @"File query is complete");
 
     [data release];
 
@@ -243,6 +260,8 @@ static bool excluded_filename(NSString *filename) {
     LIBSSH2_CHANNEL *channel;
     int rc;
 
+    show_alert(@"Debug", @"Opening channel");
+
     /* Exec non-blocking on the remove host */
     do {
         channel = libssh2_channel_open_session(session);
@@ -256,6 +275,8 @@ static bool excluded_filename(NSString *filename) {
         return false;
     }
 
+    show_alert(@"Debug", @"Starting execution");
+
     do {
         rc = libssh2_channel_exec(channel, [command UTF8String]);
 
@@ -268,6 +289,8 @@ static bool excluded_filename(NSString *filename) {
         return false;
     }
 
+    show_alert(@"Debug", @"Reading response");
+
     char buffer[0x4000];
     do {
         rc = libssh2_channel_read(channel, buffer, sizeof(buffer));
@@ -279,6 +302,8 @@ static bool excluded_filename(NSString *filename) {
 
     int exitcode = 127;
 
+    show_alert(@"Debug", @"Closing channel");
+
     do {
         rc = libssh2_channel_close(channel);
 
@@ -287,6 +312,8 @@ static bool excluded_filename(NSString *filename) {
 
     if (rc == LIBSSH2_ERROR_NONE)
         exitcode = libssh2_channel_get_exit_status( channel );
+
+    show_alert(@"Debug", @"Dispatch complete");
 
     NSLog(@"Executed command: %@", command);
     NSLog(@"Exit code %d with byte count %d", exitcode, [output length]);
