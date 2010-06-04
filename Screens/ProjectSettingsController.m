@@ -246,6 +246,8 @@
         case TS_ADD_REM:            return @"";
         default:                    assert(false);
     }
+
+    return nil;
 }
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
@@ -257,6 +259,8 @@
         case TS_ADD_REM:            return proj.num ? TAR_ROW_COUNT : 0;
         default:                    assert(false);
     }
+
+    return 0;
 }
 
 - (UITableViewCell *) cellFor:(UITableView *)tableView
