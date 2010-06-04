@@ -3,7 +3,6 @@
 @implementation ProjectSettingsController
 
 @synthesize myTableView;
-@synthesize proj;
 @synthesize projectName;
 @synthesize sshHost, sshPort, sshUser, sshPass, sshPath;
 @synthesize syncLabel;
@@ -207,6 +206,7 @@
 
     // Stop listening for sync events.
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self resignFirstResponder];
 }
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
@@ -517,7 +517,7 @@
 
 - (void) saveForm
 {
-    if (!proj) return;
+    if (!proj || !projectName) return;
 
 	NSNumberFormatter *nf = [[NSNumberFormatter alloc] init];
 
@@ -553,12 +553,22 @@
 #pragma mark Project Management
 
 - (void) setProject:(Project *)newProject {
+    [self saveForm];
+
     // Store the project in this form.
 
     proj = newProject;
     [newProject retain];
 
     // Now update the fields in this form for the new project.
+
+    projectName.text = proj.name;
+
+    sshHost.text = proj.sshHost;
+    sshPort.text = [proj.sshPort stringValue];
+    sshUser.text = proj.sshUser;
+    sshPass.text = proj.sshPass;
+    sshPath.text = proj.sshPath;
 
     [myTableView reloadData];
 }

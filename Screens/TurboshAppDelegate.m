@@ -39,7 +39,7 @@
     }
 
     delegate.rootViewController.title = project.name;
-    delegate.projectSettingsController.proj = project;
+    [delegate.projectSettingsController setProject:project];
 
     [Store setCurrentProject:project];
 

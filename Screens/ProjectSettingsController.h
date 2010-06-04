@@ -20,7 +20,6 @@
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
-@property (nonatomic, retain) Project *proj;
 @property (nonatomic, retain) UITextField *projectName;
 @property (nonatomic, retain) UITextField *sshHost;
 @property (nonatomic, retain) UITextField *sshPort;
@@ -30,6 +29,7 @@
 @property (nonatomic, retain) IBOutlet UILabel *syncLabel;
 
 - (void) saveForm;
+- (void) setProject:(Project *)newProject;
 
 typedef enum {
     TS_PROJECT_MAIN,
