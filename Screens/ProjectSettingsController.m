@@ -209,6 +209,11 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [myTableView reloadData];
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
@@ -284,7 +289,7 @@
     label.backgroundColor = [UIColor clearColor];
 
     field.text = value;
-    field.frame = CGRectMake(110, yOffset, tableFrame.size.width - 275, height);
+    field.frame = CGRectMake(110, yOffset, tableFrame.size.width - 220, height);
     field.textColor = [UIColor colorWithRed:0.243 green:0.306 blue:0.435 alpha:1.0];
 
     [cell.contentView addSubview:label];

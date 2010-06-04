@@ -123,6 +123,8 @@
     CGRect fr1 = self.view.frame;
     CGRect fr2 = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);
     currentController.view.frame = fr2;
+
+    [currentController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 - (void)viewDidUnload {
