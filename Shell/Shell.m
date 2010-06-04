@@ -5,24 +5,17 @@
 #include <errno.h>
 #include <arpa/inet.h>
 
-static int waitsocket(int socket_fd, LIBSSH2_SESSION *session);
-
 @implementation Shell
 
-@synthesize project, timer;
+@synthesize project;
 
-- (id) initWithProject:(Project *)proj {
-
+- (id) initWithProject:(Project *)proj
+{
     self = [self init];
 
-    running = true;
-    queue = [[NSMutableArray alloc] init];
-    failures = 0;
-
-    self.project = proj;
+    project = [proj retain];
 
     return self;
-
 }
 
 // The function kbd_callback is needed for keyboard-interactive authentication via LIBSSH2.
@@ -43,26 +36,6 @@ static void kbd_callback(const char *name, int name_len,
 }
 
 #pragma mark Connection Management
-
-// Start the event pump for this connection.
-- (void) start {
-    if (timer == nil) {
-        if ([self connect]) {
-            self.timer = [NSTimer timerWithTimeInterval:0.001 target:self selector:@selector(pump:) userInfo:nil repeats:YES];
-            [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
-        }
-    }
-}
-
-// Stop the event pump.
-- (void) stop {
-    if (timer != nil) {
-        [timer invalidate];
-        self.timer = nil;
-
-        [self disconnect];
-    }
-}
 
 // Establish a new SSH connection.
 - (bool) connect {
@@ -154,10 +127,6 @@ static void kbd_callback(const char *name, int name_len,
     libssh2_session_free(session);
 
     close(sock);
-}
-
-// Push and pull data from the SSH connection.
-- (void) pump:(NSTimer*)theTimer {
 }
 
 #pragma mark File Queying
@@ -269,183 +238,60 @@ static bool excluded_filename(NSString *filename) {
 // Blocks while the command is being run.
 - (bool) dispatchCommand:(NSString *)command storeAt:(NSMutableData *)output {
     LIBSSH2_CHANNEL *channel;
-    int bytecount = 0;
     int rc;
 
     /* Exec non-blocking on the remove host */
-    while((channel = libssh2_channel_open_session(session)) == NULL &&
-          libssh2_session_last_error(session,NULL,NULL,0) == LIBSSH2_ERROR_EAGAIN) {
-        //waitsocket(sock, session);
+    do {
+        channel = libssh2_channel_open_session(session);
+        rc = libssh2_session_last_error(session, NULL, NULL, 0);
+
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
-    }
+    } while (channel == NULL && rc == LIBSSH2_ERROR_EAGAIN);
 
     if (channel == NULL) {
         NSLog(@"Error dispatching command: %@", command);
         return false;
     }
 
-    while((rc = libssh2_channel_exec(channel, [command UTF8String])) == LIBSSH2_ERROR_EAGAIN) {
-        //waitsocket(sock, session);
-        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
-    }
+    do {
+        rc = libssh2_channel_exec(channel, [command UTF8String]);
 
-    if (rc) {
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
+    } while (rc == LIBSSH2_ERROR_EAGAIN);
+
+    if (rc != LIBSSH2_ERROR_NONE) {
         NSLog(@"Error %d while executing command: %@", rc, command);
+        libssh2_channel_free(channel);
         return false;
     }
 
-    for (;;) {
-        /* loop until we block */
-        int rc;
-        do
-        {
-            char buffer[0x4000];
-            rc = libssh2_channel_read(channel, buffer, sizeof(buffer));
+    char buffer[0x4000];
+    do {
+        rc = libssh2_channel_read(channel, buffer, sizeof(buffer));
 
-            if (rc > 0) {
-                [output appendBytes:buffer length:rc];
-            }
-        } while (rc > 0);
+        if (rc > 0) [output appendBytes:buffer length:rc];
 
-        if (rc != LIBSSH2_ERROR_EAGAIN)
-            break;
-
-        //waitsocket(sock, session);
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
-    }
+    } while (rc > 0 || rc == LIBSSH2_ERROR_EAGAIN);
 
     int exitcode = 127;
 
-    while((rc = libssh2_channel_close(channel)) == LIBSSH2_ERROR_EAGAIN)
-        //waitsocket(sock, session);
-        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
+    do {
+        rc = libssh2_channel_close(channel);
 
-    if (!rc) {
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
+    } while (rc == LIBSSH2_ERROR_EAGAIN);
+
+    if (rc == LIBSSH2_ERROR_NONE)
         exitcode = libssh2_channel_get_exit_status( channel );
-    }
 
     NSLog(@"Executed command: %@", command);
-    NSLog(@"Exit code %d with byte count %d", exitcode, bytecount);
+    NSLog(@"Exit code %d with byte count %d", exitcode, [output length]);
 
     libssh2_channel_free(channel);
     channel = NULL;
 
     return exitcode == 0;
-}
-
-// Download the file at path.
-- (NSData *) downloadFile:(NSString *)filePath {
-    LIBSSH2_CHANNEL *channel;
-    struct stat fileinfo;
-    NSInteger downloaded = 0;
-    NSMutableData *data = [NSMutableData data];
-    const char *cFilename = [filePath UTF8String];
-    int rc;
-
-    NSLog(@"Downloading file: %@ %s", filePath, cFilename);
-
-    libssh2_session_set_blocking(session, 1);
-
-    if (!(channel = libssh2_scp_recv(session, cFilename, &fileinfo))) {
-        char *errMsg;
-        int errLen;
-        libssh2_session_last_error(session, &errMsg, &errLen, 0);
-        NSLog(@"Unable to open download session: %@", [NSString stringWithUTF8String:errMsg]);
-        return nil;
-    }
-
-    while (downloaded < fileinfo.st_size) {
-        char mem[1024];
-        int packetSize = sizeof(mem);
-        int remaining = fileinfo.st_size - downloaded;
-
-        if (remaining < packetSize) packetSize = remaining;
-
-        rc = libssh2_channel_read(channel, mem, packetSize);
-
-        if (rc >= 0) {
-            [data appendBytes:mem length:rc];
-            downloaded += rc;
-        } else if (rc != LIBSSH2_ERROR_EAGAIN) {
-            data = nil;
-            break;
-        }
-    }
-
-    NSLog(@"Downloaded %d bytes with %d in data.", downloaded, [data length]);
-
-    libssh2_channel_free(channel);
-    channel = NULL;
-
-    return data;
-}
-
-- (bool) uploadFile:(ProjectFile *)file
-{
-    LIBSSH2_CHANNEL *channel;
-    const char *filePath = [[file fullpath] UTF8String];
-    const NSData *contentData = [[file content] dataUsingEncoding:NSUTF8StringEncoding];
-    const char *content = [contentData bytes];
-    const int length = [contentData length];
-    int sent = 0;
-
-    NSLog(@"Uploading file %@", [file fullpath]);
-
-    libssh2_session_set_blocking(session, 1);
-
-    if (!(channel = libssh2_scp_send(session, filePath, 0777, length))) {
-        char *errmsg;
-        int errlen;
-        int err = libssh2_session_last_error(session, &errmsg, &errlen, 0);
-        NSLog(@"Unable to open upload session: %d", err);
-        return false;
-    }
-
-    while (sent < length) {
-        int packetSize = libssh2_channel_write(channel, &content[sent], 4096);
-
-        if (packetSize < 0) {
-            NSLog(@"Error %d sending: %@", packetSize, [file fullpath]);
-            return false;
-        }
-
-        sent += packetSize;
-    }
-
-    libssh2_channel_send_eof(channel);
-    libssh2_channel_wait_eof(channel);
-    libssh2_channel_wait_closed(channel);
-
-    libssh2_channel_free(channel);
-    channel = NULL;
-
-    NSLog(@"Sent %d bytes as: %@", length, [file fullpath]);
-
-    return true;
-}
-
-- (NSString *) remoteMd5:(ProjectFile *)file
-{
-    NSString *md5f = @"md5 %@ ; e=$?; if [ $e -eq 127 ]; then exec md5sum %@; else exit $e; fi";
-    NSString *pat = [file escapedRelativePath];
-    NSString *md5Cmd = [NSString stringWithFormat:md5f, pat, pat];
-    NSString *shCmd = [NSString stringWithFormat:@"sh -c %@", [md5Cmd stringBySingleQuoting]];
-
-    NSMutableData *md5CmdResult = [NSMutableData data];
-    bool md5Success = [self dispatchCommand:shCmd storeAt:md5CmdResult];
-
-    NSLog(@"Remote MD5 command: %@", shCmd);
-
-    if (!md5Success) return nil;
-    if ([md5CmdResult length] < 32) return nil;
-
-    char *cString = malloc([md5CmdResult length] + 1);
-    memcpy(cString, [md5CmdResult bytes], [md5CmdResult length]);
-    cString[[md5CmdResult length]] = '\0';
-    NSString *md5String = [NSString stringWithUTF8String:cString];
-    free(cString);
-
-    return [md5String findMd5];
 }
 
 #pragma mark Wrapper Tasks
@@ -463,37 +309,6 @@ static bool excluded_filename(NSString *filename) {
     [s release];
 
     return f;
-}
-
-static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)
-{
-    struct timeval timeout;
-    int rc;
-    fd_set fd;
-    fd_set *writefd = NULL;
-    fd_set *readfd = NULL;
-    int dir;
-
-    timeout.tv_sec = 10;
-    timeout.tv_usec = 0;
-
-    FD_ZERO(&fd);
-
-    FD_SET(socket_fd, &fd);
-
-    /* now make sure we wait in the correct direction */
-    dir = libssh2_session_block_directions(session);
-
-
-    if(dir & LIBSSH2_SESSION_BLOCK_INBOUND)
-        readfd = &fd;
-
-    if(dir & LIBSSH2_SESSION_BLOCK_OUTBOUND)
-        writefd = &fd;
-
-    rc = select(socket_fd + 1, readfd, writefd, NULL, &timeout);
-
-    return rc;
 }
 
 @end

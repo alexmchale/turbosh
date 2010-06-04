@@ -71,9 +71,13 @@
         } else {
             error = @"Failed to get list of files.";
         }
+
+        [shell disconnect];
     } else {
         error = @"Failed to connect to server.";
     }
+
+    [shell release];
 
     if (error) {
         self.allFiles = nil;

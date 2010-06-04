@@ -13,19 +13,11 @@ typedef enum {
 @interface Shell : NSObject
 {
 	Project *project;
-
-    bool running;
-    NSMutableArray *queue;
-    int failures;
-
-    NSTimer *timer;
     int sock;
     LIBSSH2_SESSION *session;
 }
 
 @property (nonatomic, retain) Project *project;
-
-@property (nonatomic, retain) NSTimer *timer;
 
 - (id) initWithProject:(Project *)proj;
 
@@ -36,12 +28,7 @@ typedef enum {
 - (NSArray *) files;
 - (NSArray *) executables;
 - (NSArray *) findFilesOfType:(char)type;
-- (NSString *) remoteMd5:(ProjectFile *)file;
-
 - (bool) dispatchCommand:(NSString *)command storeAt:(NSMutableData *)output;
-- (NSData *) downloadFile:(NSString *)filePath;
-- (bool) uploadFile:(ProjectFile *)file;
-
 - (NSString *) escapedPath;
 
 + (NSArray *) fetchProjectFileList:(Project *)p;
