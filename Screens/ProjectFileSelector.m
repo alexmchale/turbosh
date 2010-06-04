@@ -88,18 +88,8 @@
     [hud hide:YES];
     [hud removeFromSuperview];
 
-    if (allFiles == nil || error != nil) {
-        UIAlertView *alert =
-            [[UIAlertView alloc]
-             initWithTitle:@"Connection Failed"
-             message:error
-             delegate:self
-             cancelButtonTitle:@"Okay"
-             otherButtonTitles:nil];
-
-        [alert show];
-        [alert release];
-    }
+    if (allFiles == nil || error != nil)
+        show_alert(@"Connection Failed", error);
 
     busy = false;
 }
