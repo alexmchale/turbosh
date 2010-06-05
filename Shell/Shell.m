@@ -174,6 +174,8 @@ static bool excluded_filename(NSString *filename) {
                 offset++;
             offset++;
         }
+
+        [files sortUsingSelector:@selector(caseInsensitiveCompare:)];
     }
 
     [data release];
