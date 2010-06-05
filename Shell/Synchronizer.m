@@ -297,16 +297,7 @@ static void kbd_callback(const char *name, int name_len,
 
             NSString *tit = @"Command Missing";
             NSString *msg = @"Neither the commands md5 nor md5sum could be found on the server.  Please install one of them and try again.";
-
-            UIAlertView *charAlert = [[UIAlertView alloc]
-                                      initWithTitle:tit
-                                      message:msg
-                                      delegate:self
-                                      cancelButtonTitle:@"Okay"
-                                      otherButtonTitles:nil];
-            charAlert.tag = TAG_MD5_COMMAND_MISSING;
-            [charAlert show];
-            [charAlert autorelease];
+            show_alert(tit, msg);
 
             state = SS_AWAITING_ANSWER;
         }   break;
