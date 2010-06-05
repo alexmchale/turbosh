@@ -448,6 +448,7 @@
                                          initWithNibName:@"ProjectFileSelector"
                                          bundle:nil];
             pfs.project = proj;
+            pfs.mode = FU_FILE;
 
             [TurboshAppDelegate switchTo:pfs];
             [pfs release];
@@ -458,13 +459,14 @@
         {
             [self resignFirstResponder];
 
-            ProjectTaskSelector *pts = [[ProjectTaskSelector alloc]
-                                        initWithNibName:@"ProjectTaskSelector"
+            ProjectFileSelector *pfs = [[ProjectFileSelector alloc]
+                                        initWithNibName:@"ProjectFileSelector"
                                         bundle:nil];
-            pts.project = proj;
+            pfs.project = proj;
+            pfs.mode = FU_TASK;
 
-            [TurboshAppDelegate switchTo:pts];
-            [pts release];
+            [TurboshAppDelegate switchTo:pfs];
+            [pfs release];
 
         }   break;
 

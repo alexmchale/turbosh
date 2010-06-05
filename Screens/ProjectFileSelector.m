@@ -2,22 +2,26 @@
 
 @implementation ProjectFileSelector
 
-@synthesize myTableView, project, allFiles, syncFiles, removedFiles, shownFiles;
+@synthesize myTableView;
+@synthesize project;
+@synthesize allFiles, syncFiles, removedFiles, shownFiles;
+@synthesize mode;
 
 #pragma mark Button Actions
 
-- (void) saveAction {
+- (void) saveAction
+{
     if (busy) return;
 
     ProjectFile *file = [[ProjectFile alloc] init];
 
     for (NSString *filename in syncFiles) {
-        [file loadByProject:project filename:filename];
+        [file loadByProject:project filename:filename forUsage:mode];
         if (file.num == nil) [Store storeProjectFile:file];
     }
 
     for (NSString *filename in removedFiles) {
-        [file loadByProject:project filename:filename];
+        [file loadByProject:project filename:filename forUsage:mode];
         if (file.num != nil) [Store deleteProjectFile:file];
     }
 
@@ -36,17 +40,15 @@
 
 #pragma mark View lifecycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
     self.clearsSelectionOnViewWillAppear = NO;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated
+{
     busy = true;
 
     [super viewDidAppear:animated];
@@ -61,11 +63,11 @@
     Shell *shell = [[Shell alloc] initWithProject:project];
 
     if ([shell connect]) {
-        self.allFiles = [shell files];
+        self.allFiles = [shell files:mode];
         self.shownFiles = allFiles;
 
         if (self.allFiles) {
-            self.syncFiles = [NSMutableArray arrayWithArray:[Store filenames:project]];
+            self.syncFiles = [NSMutableArray arrayWithArray:[Store filenames:project ofUsage:mode]];
             self.removedFiles = [NSMutableArray array];
             [myTableView reloadData];
         } else {

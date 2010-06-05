@@ -246,7 +246,7 @@ static void kbd_callback(const char *name, int name_len,
     self.file = [[ProjectFile alloc] init];
     [file release];
 
-    self.file.num = [Store projectFileNumber:project atOffset:nextFileOffset];
+    self.file.num = [Store projectFileNumber:project atOffset:nextFileOffset ofUsage:FU_FILE];
     self.file.project = project;
 
     nextFileOffset++;

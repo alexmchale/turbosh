@@ -55,8 +55,8 @@ typedef enum {
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
-        case MST_FILES:     return [Store fileCountForCurrentProject] ? @"Files" : @"";
-        case MST_TASKS:     return [Store taskCountForCurrentProject] ? @"Tasks" : @"";
+        case MST_FILES:     return [Store fileCountForCurrentProject:FU_FILE] ? @"Files" : @"";
+        case MST_TASKS:     return [Store fileCountForCurrentProject:FU_TASK] ? @"Tasks" : @"";
         case MST_PROJECTS:  return @"Projects";
         default:            return @"";
     }
@@ -91,8 +91,8 @@ typedef enum {
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case MST_FILES:     return [Store fileCountForCurrentProject];
-        case MST_TASKS:     return [Store taskCountForCurrentProject];
+        case MST_FILES:     return [Store fileCountForCurrentProject:FU_FILE];
+        case MST_TASKS:     return [Store fileCountForCurrentProject:FU_TASK];
         case MST_PROJECTS:  return [Store projectCount];
         default:            return 0;
     }
@@ -115,15 +115,16 @@ typedef enum {
     switch (indexPath.section) {
         case MST_FILES:
             [project loadCurrent];
-            [file loadByNumber:[Store projectFileNumber:project atOffset:indexPath.row]];
+            [file loadByNumber:[Store projectFileNumber:project atOffset:indexPath.row ofUsage:FU_FILE]];
             cell.textLabel.text = [file condensedPath];
             break;
 
         case MST_TASKS:
             [project loadCurrent];
-            file.num = [Store projectTaskNumber:project atOffset:indexPath.row];
+            file.num = [Store projectFileNumber:project atOffset:indexPath.row ofUsage:FU_TASK];
             file.project = project;
-            [Store loadProjectTask:file];
+            file.usage = FU_TASK;
+            [Store loadProjectFile:file];
             cell.textLabel.text = [file condensedPath];
             break;
 
@@ -158,7 +159,7 @@ typedef enum {
         {
             Project *p = [[[Project alloc] init] loadCurrent];
             ProjectFile *f = [[ProjectFile alloc] init];
-            f.num = [Store projectFileNumber:p atOffset:indexPath.row];
+            f.num = [Store projectFileNumber:p atOffset:indexPath.row ofUsage:FU_FILE];
             f.project = p;
             [Store loadProjectFile:f];
 
@@ -175,9 +176,10 @@ typedef enum {
         {
             Project *p = [[[Project alloc] init] loadCurrent];
             ProjectFile *f = [[ProjectFile alloc] init];
-            f.num = [Store projectTaskNumber:p atOffset:indexPath.row];
+            f.num = [Store projectFileNumber:p atOffset:indexPath.row ofUsage:FU_FILE];
             f.project = p;
-            [Store loadProjectTask:f];
+            f.usage = FU_TASK;
+            [Store loadProjectFile:f];
             [TurboshAppDelegate launchTask:f];
             [f release];
             [p release];

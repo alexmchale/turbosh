@@ -134,16 +134,6 @@ static void kbd_callback(const char *name, int name_len,
 
 #pragma mark File Queying
 
-// List all directories for this shell path.
-- (NSArray *) directories {
-    return [self findFilesOfType:'d'];
-}
-
-// List all regular files for this shell path.
-- (NSArray *) files {
-    return [self findFilesOfType:'f'];
-}
-
 static bool excluded_filename(NSString *filename) {
     static NSString *exclRegex = @"\\.git|\\.svn|\\.hg";
     const NSRange range = [filename rangeOfRegex:exclRegex];
@@ -151,14 +141,19 @@ static bool excluded_filename(NSString *filename) {
 }
 
 // Executes and parses a find command on the remote server.
-- (NSArray *) findFilesOfType:(char)type {
+- (NSArray *) files:(FileUsage)usage
+{
     NSMutableData *data = [[NSMutableData alloc] init];
     NSMutableArray *files = nil;
-    NSString *cmd = [NSString stringWithFormat:@"find . -type %c -print0", type];
+    NSString *cmd = nil;
+
+    if (usage == FU_FILE) cmd = @"find . -type f -print0";
+    if (usage == FU_TASK) cmd = @"find . -type f -perm -100 -print0";
+    if (usage == FU_PATH) cmd = @"find . -type d -print0";
 
     NSLog(@"Find command: %@", cmd);
 
-    if ([self dispatchCommand:cmd storeAt:data]) {
+    if (cmd && [self dispatchCommand:cmd storeAt:data]) {
         char *bytes = (char *)[data bytes];
         long length = [data length];
         long offset = 0;
@@ -253,23 +248,6 @@ static bool excluded_filename(NSString *filename) {
     [cd release];
 
     return success;
-}
-
-#pragma mark Wrapper Tasks
-
-+ (NSArray *) fetchProjectFileList:(Project *)p
-{
-    Shell *s = [[Shell alloc] initWithProject:p];
-    NSArray *f = nil;
-
-    if ([s connect]) {
-        f = [s files];
-        [s disconnect];
-    }
-
-    [s release];
-
-    return f;
 }
 
 @end

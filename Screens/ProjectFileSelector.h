@@ -17,6 +17,7 @@
     UIBarButtonItem *saveButton;
 
     bool busy;
+    FileUsage mode;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
@@ -25,5 +26,6 @@
 @property (nonatomic, retain) NSArray *shownFiles;
 @property (nonatomic, retain) NSMutableArray *syncFiles;
 @property (nonatomic, retain) NSMutableArray *removedFiles;
+@property FileUsage mode;
 
 @end
