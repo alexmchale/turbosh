@@ -365,13 +365,12 @@ static NSString *usage_str(FileUsage usage)
 
     const char *s = "SELECT project_id, path, remote_md5, local_md5 "
                     "FROM files "
-                    "WHERE id=? AND usage=?";
+                    "WHERE id=?";
 
     BOOL found = FALSE;
     sqlite3_stmt *t;
     sqlite3_prepare_v2(db, s, -1, &t, NULL);
     sqlite3_bind_int(t, 1, [file.num intValue]);
-    bind_string(t, 2, usage_str(file.usage), false);
 
     switch (sqlite3_step(t)) {
         case SQLITE_ROW:

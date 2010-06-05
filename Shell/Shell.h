@@ -2,6 +2,8 @@
 #import <libssh2.h>
 #import <ProjectFile.h>
 
+bool excluded_filename(NSString *filename);
+
 typedef enum {
     SCR_SUCCESS,
     SCR_CONNECTION_FAILED,
@@ -27,6 +29,5 @@ typedef enum {
 
 - (NSArray *) files:(FileUsage)usage;
 - (bool) dispatchCommand:(NSString *)command storeAt:(NSMutableData *)output;
-- (NSString *) escapedPath;
 
 @end

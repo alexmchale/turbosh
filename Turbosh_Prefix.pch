@@ -25,6 +25,7 @@
     #import "Shell.h"
     #import "CommandDispatcher.h"
     #import "FileTransfer.h"
+    #import "FileLister.h"
 
     #import "Store/Store.h"
     #import "Store/Project.h"

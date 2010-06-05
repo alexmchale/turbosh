@@ -134,8 +134,9 @@ static void kbd_callback(const char *name, int name_len,
 
 #pragma mark File Queying
 
-static bool excluded_filename(NSString *filename) {
-    static NSString *exclRegex = @"\\.git|\\.svn|\\.hg";
+bool excluded_filename(NSString *filename)
+{
+    static NSString *exclRegex = @"\\.git|\\.svn|\\.hg|\\.\\.";
     const NSRange range = [filename rangeOfRegex:exclRegex];
     return range.location != NSNotFound;
 }
@@ -143,87 +144,19 @@ static bool excluded_filename(NSString *filename) {
 // Executes and parses a find command on the remote server.
 - (NSArray *) files:(FileUsage)usage
 {
-    NSMutableData *data = [[NSMutableData alloc] init];
-    NSMutableArray *files = nil;
-    NSString *cmd = nil;
+    FileLister *fl = [[FileLister alloc] initWithProject:project session:session];
 
-    if (usage == FU_FILE) cmd = @"find . -type f -print0";
-    if (usage == FU_TASK) cmd = @"find . -type f -perm -100 -print0";
-    if (usage == FU_PATH) cmd = @"find . -type d -print0";
+    fl.path = @".";
+    fl.mode = usage;
 
-    NSLog(@"Find command: %@", cmd);
+    while ([fl step])
+        [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
 
-    if (cmd && [self dispatchCommand:cmd storeAt:data]) {
-        char *bytes = (char *)[data bytes];
-        long length = [data length];
-        long offset = 0;
+    NSArray *files = [fl files];
 
-        files = [NSMutableArray array];
-
-        while (offset < length) {
-            NSString *file = [NSString stringWithCString:&bytes[offset] encoding:NSUTF8StringEncoding];
-
-            if ([file length] > 2) {
-                file = [file substringFromIndex:2];
-
-                if (!excluded_filename(file)) [files addObject:file];
-            }
-
-            // Scan to 1 past the NULL.
-            while (offset < length && bytes[offset] != '\0')
-                offset++;
-            offset++;
-        }
-
-        [files sortUsingSelector:@selector(caseInsensitiveCompare:)];
-    }
-
-    [data release];
+    [fl release];
 
     return files;
-}
-
-// Finds executables in the project path.
-- (NSArray *) executables {
-    NSMutableData *data = [[NSMutableData alloc] init];
-    NSMutableArray *files = nil;
-    NSString *findCmd = @"find -type f -perm -100 -print0";
-
-    NSLog(@"Find Command: %@", findCmd);
-
-    if ([self dispatchCommand:findCmd storeAt:data]) {
-        char *bytes = (char *)[data bytes];
-        long length = [data length];
-        long offset = 0;
-
-        files = [NSMutableArray array];
-
-        while (offset < length) {
-            NSString *file = [NSString stringWithCString:&bytes[offset] encoding:NSUTF8StringEncoding];
-
-            if ([file length] > 2) {
-                file = [file substringFromIndex:2];
-
-                if (!excluded_filename(file)) [files addObject:file];
-            }
-
-            // Scan to 1 past the NULL.
-            while (offset < length && bytes[offset] != '\0')
-                offset++;
-            offset++;
-        }
-    }
-
-    [data release];
-
-    return files;
-}
-
-- (NSString *) escapedPath {
-    if (!project.sshPath || [@"" isEqualToString:project.sshPath])
-        return @".";
-
-    return [project.sshPath stringBySingleQuoting];
 }
 
 #pragma mark Connection Drivers
