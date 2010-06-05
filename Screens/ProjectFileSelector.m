@@ -108,8 +108,6 @@
     return YES;
 }
 
-
-#pragma mark -
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -117,6 +115,27 @@
     return 1;
 }
 
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch (mode) {
+        case FU_FILE: return @"Files to synchronize to Turbosh";
+        case FU_PATH: return @"Directories to synchronize to Turbosh";
+        case FU_TASK: return @"Executables to run from Turbosh";
+
+        default: assert(false); return nil;
+    }
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    switch (mode) {
+        case FU_FILE: return @"The selected files will be synchronized with the server.";
+        case FU_PATH: return @"All existing and new files in the selected paths will be synchronized.";
+        case FU_TASK: return @"Any files with executable permission in your project are available as tasks.";
+
+        default: assert(false); return nil;
+    }
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
