@@ -19,7 +19,7 @@
 
 @synthesize timer;
 @synthesize project, file, projectsToSync;
-@synthesize dispatcher, transfer;
+@synthesize dispatcher, transfer, lister;
 @synthesize currentCommand;
 
 #pragma mark Utility Functions
@@ -228,7 +228,7 @@ static void kbd_callback(const char *name, int name_len,
     if (currentCommand && [project.num isEqualToNumber:currentCommand.project.num])
         state = SS_EXECUTE_COMMAND;
     else
-        state = SS_SELECT_FILE;
+        state = SS_INITIATE_LIST;
 }
 
 - (void) executeCommand
@@ -239,6 +239,54 @@ static void kbd_callback(const char *name, int name_len,
         self.currentCommand = nil;
         state = SS_TERMINATE_SSH;
     }
+}
+
+- (void) initiateList
+{
+    self.file = [[ProjectFile alloc] init];
+    [file release];
+
+    self.file.num = [Store projectFileNumber:project atOffset:nextFileOffset ofUsage:FU_PATH];
+    self.file.project = project;
+
+    nextFileOffset++;
+
+    if (file.num == nil) {
+        self.file = nil;
+        nextFileOffset = 0;
+        state = SS_SELECT_FILE;
+        return;
+    }
+
+    [Store loadProjectFile:file];
+
+    self.lister = [[FileLister alloc] initWithProject:project session:session];
+    [lister release];
+
+    lister.mode = FU_FILE;
+    lister.path = file.filename;
+
+    state = SS_CONTINUE_LIST;
+}
+
+- (void) continueList
+{
+    if ([lister step]) return;
+
+    NSArray *files = [lister files];
+
+    if (!files) return;
+
+    ProjectFile *newFile = [[ProjectFile alloc] init];
+
+    for (NSString *filename in files) {
+        [newFile loadByProject:project filename:filename forUsage:FU_FILE];
+        if (!newFile.num) [Store storeProjectFile:newFile];
+    }
+
+    [newFile release];
+
+    state = SS_INITIATE_LIST;
 }
 
 - (void) selectFile
@@ -517,6 +565,8 @@ static void kbd_callback(const char *name, int name_len,
         case SS_REQUEST_AUTH_TYPE:      return [self requestAuthType];
         case SS_AUTHENTICATE_SSH:       return [self authenticateSsh];
         case SS_EXECUTE_COMMAND:        return [self executeCommand];
+        case SS_INITIATE_LIST:          return [self initiateList];
+        case SS_CONTINUE_LIST:          return [self continueList];
         case SS_SELECT_FILE:            return [self selectFile];
         case SS_INITIATE_HASH:          return [self initiateHash];
         case SS_CONTINUE_HASH:          return [self continueHash];
@@ -604,6 +654,7 @@ static void kbd_callback(const char *name, int name_len,
     file = nil;
     dispatcher = nil;
     transfer = nil;
+    lister = nil;
     startup = false;
 
     currentCommand = nil;
@@ -623,6 +674,7 @@ static void kbd_callback(const char *name, int name_len,
     [file release];
     [dispatcher release];
     [transfer release];
+    [lister release];
     [currentCommand release];
     [pendingCommands release];
     [projectsToSync release];

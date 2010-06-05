@@ -9,6 +9,8 @@ enum SyncState
     SS_REQUEST_AUTH_TYPE,
     SS_AUTHENTICATE_SSH,
     SS_EXECUTE_COMMAND,
+    SS_INITIATE_LIST,
+    SS_CONTINUE_LIST,
     SS_SELECT_FILE,
     SS_INITIATE_HASH,
     SS_CONTINUE_HASH,
@@ -47,6 +49,7 @@ enum SyncState
     LIBSSH2_SESSION *session;
     CommandDispatcher *dispatcher;
     FileTransfer *transfer;
+    FileLister *lister;
     struct sockaddr_in sin;
 
     CommandDispatcher *currentCommand;
@@ -67,6 +70,7 @@ enum SyncState
 @property (nonatomic, retain) ProjectFile *file;
 @property (nonatomic, retain) CommandDispatcher *dispatcher;
 @property (nonatomic, retain) FileTransfer *transfer;
+@property (nonatomic, retain) FileLister *lister;
 @property (nonatomic, retain) CommandDispatcher *currentCommand;
 
 - (void) step;
