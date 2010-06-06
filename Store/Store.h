@@ -37,6 +37,9 @@
 + (void) storeRemote:(ProjectFile *)file content:(NSData *)content;
 + (bool) fileExists:(NSNumber *)num;
 
++ (void) setFontSize:(NSInteger)size;
++ (NSInteger) fontSize;
+
 + (void) setValue:(NSString *)value forKey:(NSString *)key;
 + (void) setIntValue:(NSInteger)value forKey:(NSString *)key;
 

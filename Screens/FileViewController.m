@@ -3,6 +3,8 @@
 @implementation FileViewController
 
 @synthesize webView, file, startingRect;
+@synthesize fontPicker = _fontPicker;
+@synthesize fontPickerPopover = _fontPickerPopover;
 
 - (void) loadFile
 {
@@ -14,6 +16,7 @@
     NSString *t = [file contentType];
     NSString *c = [file content];
     NSString *y = [NSString stringWithFormat:@"%d", (int)startingRect.origin.y];
+    NSString *fs = [NSString stringWithFormat:@"%d", [Store fontSize]];
 
     if (!t || !c) {
         // Show a message and redirect to the project page.
@@ -26,6 +29,7 @@
         c = [c stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
         html = [html stringByReplacingOccurrencesOfString:@"___LANGUAGE___" withString:t];
         html = [html stringByReplacingOccurrencesOfString:@"___CONTENT___" withString:c];
+        html = [html stringByReplacingOccurrencesOfString:@"___FONT_SIZE___" withString:fs];
         html = [html stringByReplacingOccurrencesOfString:@"___STARTING_OFFSET___" withString:y];
     }
 
@@ -71,30 +75,71 @@
 #pragma mark Memory Management
 
 - (void)dealloc {
-    [webView release];
-    [file release];
+    self.webView = nil;
+    self.file = nil;
+    self.fontPicker = nil;
+    self.fontPickerPopover = nil;
 
     [super dealloc];
 }
 
 #pragma mark Toolbar Management
 
-- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
+- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar
+{
+    UIImage *fontButtonImage = [UIImage imageNamed:@"19-gear.png"];
+
     UIBarItem *spacer = [[[UIBarButtonItem alloc]
                           initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                           target:nil action:nil] autorelease];
+    UIBarItem *font = [[[UIBarButtonItem alloc]
+                          initWithImage:fontButtonImage
+                          style:UIBarButtonItemStylePlain
+                          target:self action:@selector(configureFont:)] autorelease];
     UIBarItem *edit = [[[UIBarButtonItem alloc]
                           initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
                           target:self action:@selector(startEdit)] autorelease];
 
     NSMutableArray *items = [toolbar.items mutableCopy];
     [items addObject:spacer];
+    [items addObject:font];
     [items addObject:edit];
     [toolbar setItems:items animated:YES];
     [items release];
 }
 
+#pragma mark Font Picker Delegate
+
+- (void) fontChanged:(NSInteger)fontSize
+{
+    [self.fontPickerPopover dismissPopoverAnimated:YES];
+
+    self.startingRect = CGRectMake(0, 0, webView.frame.size.width, webView.frame.size.height);
+    [Store setFontSize:fontSize];
+    [self loadFile];
+}
+
 #pragma mark File Editor Interface
+
+- (void) configureFont:(id)sender
+{
+    if (_fontPicker == nil) {
+        self.fontPicker =
+            [[[FontPickerController alloc]
+                initWithStyle:UITableViewStylePlain] autorelease];
+
+        self.fontPicker.delegate = self;
+
+        self.fontPickerPopover =
+            [[[UIPopoverController alloc]
+                initWithContentViewController:self.fontPicker] autorelease];
+    }
+
+    [self.fontPickerPopover
+        presentPopoverFromBarButtonItem:sender
+        permittedArrowDirections:UIPopoverArrowDirectionAny
+        animated:YES];
+}
 
 - (void) startEdit
 {

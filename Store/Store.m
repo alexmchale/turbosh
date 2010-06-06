@@ -513,6 +513,20 @@ static NSString *usage_str(FileUsage usage)
     return (thisNum != 0) && (currentNum == thisNum);
 }
 
+#pragma mark Font Configuration
+
++ (void) setFontSize:(NSInteger)size
+{
+    [self setIntValue:size forKey:@"current.font.size"];
+}
+
++ (NSInteger) fontSize
+{
+    NSInteger size = [self intValue:@"current.font.size"];
+
+    return size > 0 ? size : 14;
+}
+
 #pragma mark Key-Value
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key {

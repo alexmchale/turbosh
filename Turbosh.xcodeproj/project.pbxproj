@@ -26,6 +26,8 @@
 		74610D8A11642BB000CF7B04 /* ProjectFileSelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74610D8811642BB000CF7B04 /* ProjectFileSelector.xib */; };
 		747EC175116150D8002D8CD8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 747EC174116150D8002D8CD8 /* libz.dylib */; };
 		74818BA411BA56BE002EEA86 /* FileLister.m in Sources */ = {isa = PBXBuildFile; fileRef = 74818BA311BA56BE002EEA86 /* FileLister.m */; };
+		74818C7A11BAB02D002EEA86 /* FontPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 74818C7911BAB02D002EEA86 /* FontPicker.m */; };
+		74818CBB11BBEAAA002EEA86 /* 19-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 74818CBA11BBEAAA002EEA86 /* 19-gear.png */; };
 		7486315911B5739900C938AB /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7486313811B571C800C938AB /* libcrypto.a */; };
 		74A5ACE711709E05006A48A3 /* FileEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A5ACE511709E05006A48A3 /* FileEditController.m */; };
 		74A5ACE811709E05006A48A3 /* FileEditController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A5ACE611709E05006A48A3 /* FileEditController.xib */; };
@@ -208,6 +210,9 @@
 		747EC174116150D8002D8CD8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		74818BA211BA56BE002EEA86 /* FileLister.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileLister.h; sourceTree = "<group>"; };
 		74818BA311BA56BE002EEA86 /* FileLister.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileLister.m; sourceTree = "<group>"; };
+		74818C7811BAB02D002EEA86 /* FontPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontPicker.h; sourceTree = "<group>"; };
+		74818C7911BAB02D002EEA86 /* FontPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontPicker.m; sourceTree = "<group>"; };
+		74818CBA11BBEAAA002EEA86 /* 19-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "19-gear.png"; sourceTree = "<group>"; };
 		7486312E11B571C800C938AB /* openssl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openssl.xcodeproj; path = "/Users/alexmchale/Projects/openssl-xcode/openssl.xcodeproj"; sourceTree = "<absolute>"; };
 		74A5ACE411709E05006A48A3 /* FileEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileEditController.h; path = ../Screens/FileEditController.h; sourceTree = "<group>"; };
 		74A5ACE511709E05006A48A3 /* FileEditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileEditController.m; path = ../Screens/FileEditController.m; sourceTree = "<group>"; };
@@ -475,6 +480,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				74818CBA11BBEAAA002EEA86 /* 19-gear.png */,
 				7433E595119C1C8700873265 /* Icon.png */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
@@ -554,6 +560,8 @@
 				74B36F8B115B2AAA00E3B2D1 /* FileViewController.h */,
 				74B36F8C115B2AAA00E3B2D1 /* FileViewController.m */,
 				74B36EE4115B2A9700E3B2D1 /* editor.html */,
+				74818C7811BAB02D002EEA86 /* FontPicker.h */,
+				74818C7911BAB02D002EEA86 /* FontPicker.m */,
 			);
 			name = "File Editor";
 			path = HtmlEditor;
@@ -874,6 +882,7 @@
 				74ECA3721187D6F500458DAF /* task-viewer.html in Resources */,
 				7433E596119C1C8700873265 /* Icon.png in Resources */,
 				74DDE17811B0156C006FBFBE /* Entitlements.plist in Resources */,
+				74818CBB11BBEAAA002EEA86 /* 19-gear.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -927,6 +936,7 @@
 				74BC2A4011B5667600CB8775 /* userauth.c in Sources */,
 				74BC2A4111B5667600CB8775 /* version.c in Sources */,
 				74818BA411BA56BE002EEA86 /* FileLister.m in Sources */,
+				74818C7A11BAB02D002EEA86 /* FontPicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
