@@ -1,66 +1,67 @@
-# Turbosh #
+Turbosh is an SSH project manager. It's good at viewing files, editing them, and launching tasks on your server.
 
-## Description ##
+Turbosh lets you view and edit files while offline. It'll synchronize them back to the server at the next opportunity.
 
-*Turbosh* is a development environment for the iPad.
+* Please see the Known Issues section below *
 
-## Features ##
+* Version 1.2 has been submitted to Apple for review *
 
-* Integrates with the popular version control system *Git*.
-* Use *SSH* to compile and run the software on a remote server.
-* Support *syntax highlighting* and *autoindentation*.
-* Local files exist on the iPad and are synchronized.  Works off-line.
-* The destination folder may be considered volitale.  Perhaps recommend that it
-  is a clone of the real repository.
 
-## Workflow (Straight Copy) ##
+### Typical Workflow ###
 
-* Create a new project.
-  * Assign it a name.
-  * Assign your SSH credentials - hostname, port, username, password, path.
-  * The path is the folder to use on the remote server.
-* Select files to manage from the remote server.
-* Those files will be downloaded to Turbosh.
-* They will be uploaded back to the server when it is updated.
-* The server will be periodically checked to see if a new version is available.
-* A large question is how to merge the two files if they differ.
+A typical workflow with Turbosh may look like:
 
-## Workflow (Local Git) ##
+1. Add SSH login/password and set the path for your project.
+2. Select what files you would like to edit in Turbosh.
+3. Select what tasks you would like to launch from Turbosh. Tasks are any files with user executable permission in your project directory.
+4. Start viewing files, editing files, or launching tasks.
 
-* Create a new project.
-  * Assign your git url and password or key.
-  * Assign your SSH credentials - username, password, key.
-  * Create various SSH tasks - stored commands.
-* Pull from one or more remote repositories.
-* Edit your code.  All code is stored locally on the iPad.
-* Commit locally.  The repo on your iPad is a full-flegded git clone.
-* Push your changes to your git origin.
-* Run your build task.
 
-## Problems ##
+### Origin of Turbosh ###
 
-* Need a clean way to upload in-progress code.  *rsync* is a good candidate
-  for this task.
-* Tightly coupling the local revision to the remote side may be the best
-  solution.  Git would run only on the server, but the IDE would interpret its
-  output.
-* Instead of having a local Git repository, perhaps synchronize selected files.
-* Git, Hg, SVN integration could be added later via the SSH layer.
+Turbosh came from a time on a plane. I wanted to make a few small tweaks to some code I was thinking about. Flying in coach, it was incredibly uncomfortable to use my laptop on the plane. I was wishing that I had a way to edit those files on my iPad. Turbosh is that way!
 
-## Major Implementation Tasks ##
 
-* Git
-* SSH
-* Editor widget with syntax highlighting and autoindentation.
-* Configuration screens
-* File list / switcher
+### Syntax Highlighting ###
 
-## Road Map ##
+The following languages are syntax highlighted in the file viewer:
 
-1. An editor, no saving, just a single view
-2. Syntax highlighting
-3. Auto-indentation
-4. File saving & any other editor finishing touches
-5. Create project, add SSH configuration, download files
-6. At start-up, file-save and button-press synchronize files
-7. Configurable tasks to run on the SSH server & provide output
+C, C++, C#, CSS, HTML, Java, Javascript, LaTeX, Perl, PHP, Python, Ruby, Scala, SQL, Tcl, XML
+
+Please note that the file editor does not show the files syntax-highlighted.
+
+
+### Known Issues ###
+
+Turbosh does not play nice if you have your shell set to something other than bash or sh. This is fixed in v1.2.  For now, consider changing your shell or adding a second user account that uses bash.
+
+Paths or filenames with spaces in them do not work properly. This is fixed in v1.2.
+
+There's a limit of the number files in a path that Turbosh can handle.  I have had success with folders up to 50,000 files.  A customer sent in a report that it was failing against a folder of about 700,000 files.  The limit is somewhere in the middle.
+
+Please email me at alexmchale@gmail.com if you run into any troubles with Turbosh.
+
+
+### Changes ###
+
+v1.2
+
+* Paths or filenames with spaces are now handled correctly.
+* Shells other than bash (zsh, csh, tcsh, etc) are now supported.
+* Files are now initially downloaded in the background. A warning will be shown if you try to access them before they have been downloaded.
+* A clear button is now presented when editing project settings fields.
+* After saving a file, that project will be synchronized. Previously all projects were synchronized, causing a long delay before uploading the changes.
+* Fixed all known crash bugs, overall performance and stability improvements.
+
+v1.1
+
+* The toolbar acts better.
+* Adding/deleting projects should work more reliably.
+* Connecting to OSX now works properly.
+* The editor will no longer go all-white in landscape mode.
+* Cancel/save buttons can no longer be tapped while the synchronized-files/task-executables screens are loading.
+* The synchronization status messages should be more useful now.
+* Show the user an alert when neither the md5 nor md5sum commands exist on the server.
+* Fixed a bug where sometimes a server failing to connect during synchronization could lock up the app until it times out.
+* Fixed a bug caused by UTF-8 characters in filenames.  The bug would cause the app to lock up or crash.
+* Fixed a bug when the file or task lists fail, the Cancel button would not be replaced by the Project button in portrait mode.
