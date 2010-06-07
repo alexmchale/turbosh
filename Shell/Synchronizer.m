@@ -281,7 +281,10 @@ static void kbd_callback(const char *name, int name_len,
 
     for (NSString *filename in files) {
         [newFile loadByProject:project filename:filename forUsage:FU_FILE];
-        if (!newFile.num) [Store storeProjectFile:newFile];
+        if (!newFile.num) {
+            [Store storeProjectFile:newFile];
+            [TurboshAppDelegate reloadList];
+        }
     }
 
     [newFile release];
