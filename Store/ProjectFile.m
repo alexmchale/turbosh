@@ -5,6 +5,7 @@
 @synthesize num;
 @synthesize project;
 @synthesize filename, localMd5, remoteMd5;
+@synthesize usage;
 
 #pragma mark Data Loaders
 
@@ -23,17 +24,20 @@
     return self;
 }
 
-- (id) loadByProject:(Project *)myProject filename:(NSString *)myFilename
+- (id) loadByProject:(Project *)myProject
+            filename:(NSString *)myFilename
+            forUsage:(FileUsage)myUsage
 {
     assert(myProject != nil);
     assert(myProject.num != nil);
     assert(myFilename != nil);
 
-    self.num = [Store projectFileNumber:myProject filename:myFilename];
+    self.num = [Store projectFileNumber:myProject filename:myFilename ofUsage:myUsage];
     self.project = myProject;
     self.filename = myFilename;
     self.localMd5 = nil;
     self.remoteMd5 = nil;
+    self.usage = myUsage;
 
     if (self.num) [Store loadProjectFile:self];
 

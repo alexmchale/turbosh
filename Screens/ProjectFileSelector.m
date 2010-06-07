@@ -2,22 +2,26 @@
 
 @implementation ProjectFileSelector
 
-@synthesize myTableView, project, allFiles, syncFiles, removedFiles, shownFiles;
+@synthesize myTableView;
+@synthesize project;
+@synthesize allFiles, syncFiles, removedFiles, shownFiles;
+@synthesize mode;
 
 #pragma mark Button Actions
 
-- (void) saveAction {
+- (void) saveAction
+{
     if (busy) return;
 
     ProjectFile *file = [[ProjectFile alloc] init];
 
     for (NSString *filename in syncFiles) {
-        [file loadByProject:project filename:filename];
+        [file loadByProject:project filename:filename forUsage:mode];
         if (file.num == nil) [Store storeProjectFile:file];
     }
 
     for (NSString *filename in removedFiles) {
-        [file loadByProject:project filename:filename];
+        [file loadByProject:project filename:filename forUsage:mode];
         if (file.num != nil) [Store deleteProjectFile:file];
     }
 
@@ -36,17 +40,15 @@
 
 #pragma mark View lifecycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
     self.clearsSelectionOnViewWillAppear = NO;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
+- (void)viewDidAppear:(BOOL)animated
+{
     busy = true;
 
     [super viewDidAppear:animated];
@@ -61,11 +63,11 @@
     Shell *shell = [[Shell alloc] initWithProject:project];
 
     if ([shell connect]) {
-        self.allFiles = [shell files];
+        self.allFiles = [shell files:mode];
         self.shownFiles = allFiles;
 
         if (self.allFiles) {
-            self.syncFiles = [NSMutableArray arrayWithArray:[Store filenames:project]];
+            self.syncFiles = [NSMutableArray arrayWithArray:[Store filenames:project ofUsage:mode]];
             self.removedFiles = [NSMutableArray array];
             [myTableView reloadData];
         } else {
@@ -106,8 +108,6 @@
     return YES;
 }
 
-
-#pragma mark -
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -115,15 +115,32 @@
     return 1;
 }
 
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch (mode) {
+        case FU_FILE: return @"Files to synchronize to Turbosh";
+        case FU_PATH: return @"Directories to synchronize to Turbosh";
+        case FU_TASK: return @"Executables to run from Turbosh";
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
-    if (shownFiles)
-        return [shownFiles count];
-    else
-        return 0;
+        default: assert(false); return nil;
+    }
 }
 
+- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    switch (mode) {
+        case FU_FILE: return @"The selected files will be synchronized with the server.";
+        case FU_PATH: return @"All existing and new files in the selected paths will be synchronized.";
+        case FU_TASK: return @"Any files with executable permission in your project are available as tasks.";
+
+        default: assert(false); return nil;
+    }
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return shownFiles ? [shownFiles count] : 0;
+}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

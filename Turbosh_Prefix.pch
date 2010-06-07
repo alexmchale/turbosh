@@ -25,6 +25,7 @@
     #import "Shell.h"
     #import "CommandDispatcher.h"
     #import "FileTransfer.h"
+    #import "FileLister.h"
 
     #import "Store/Store.h"
     #import "Store/Project.h"
@@ -35,7 +36,6 @@
     #import "FileViewController.h"
     #import "ProjectSettingsController.h"
     #import "ProjectFileSelector.h"
-    #import "ProjectTaskSelector.h"
     #import "FileEditController.h"
     #import "TaskExecController.h"
 

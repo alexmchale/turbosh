@@ -24,25 +24,21 @@
 
 + (NSNumber *) currentFileNum;
 + (void) setCurrentFile:(ProjectFile *)file;
-+ (NSNumber *) projectFileNumber:(Project *)project atOffset:(NSInteger)offset;
-+ (NSInteger) fileCountForCurrentProject;
-+ (NSInteger) fileCount:(Project *)project;
-+ (NSArray *) filenames:(Project *)project;
++ (NSNumber *) projectFileNumber:(Project *)project atOffset:(NSInteger)offset ofUsage:(FileUsage)usage;
++ (NSInteger) fileCountForCurrentProject:(FileUsage)usage;
++ (NSInteger) fileCount:(Project *)project ofUsage:(FileUsage)usage;
++ (NSArray *) filenames:(Project *)project ofUsage:(FileUsage)usage;
 + (void) deleteProjectFile:(ProjectFile *)file;
 + (BOOL) loadProjectFile:(ProjectFile *)file;
 + (void) storeProjectFile:(ProjectFile *)file;
-+ (NSNumber *) projectFileNumber:(Project *)project filename:(NSString *)filename;
++ (NSNumber *) projectFileNumber:(Project *)project filename:(NSString *)filename ofUsage:(FileUsage)usage;
 + (NSString *) fileContent:(ProjectFile *)file;
 + (void) storeLocal:(ProjectFile *)file content:(NSData *)content;
 + (void) storeRemote:(ProjectFile *)file content:(NSData *)content;
 + (bool) fileExists:(NSNumber *)num;
 
-+ (void) storeProjectTask:(ProjectFile *)file;
-+ (BOOL) loadProjectTask:(ProjectFile *)file;
-+ (NSArray *) taskNames:(Project *)project;
-+ (NSInteger) taskCountForCurrentProject;
-+ (NSNumber *) projectTaskNumber:(Project *)project filename:(NSString *)filename;
-+ (NSNumber *) projectTaskNumber:(Project *)project atOffset:(NSInteger)offset;
++ (void) setFontSize:(NSInteger)size;
++ (NSInteger) fontSize;
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key;
 + (void) setIntValue:(NSInteger)value forKey:(NSString *)key;

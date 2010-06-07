@@ -66,8 +66,10 @@
             break;
 
         case SS_SELECT_FILE:
+        case SS_INITIATE_LIST:
             break;
 
+        case SS_CONTINUE_LIST:
         case SS_INITIATE_HASH:
         case SS_CONTINUE_HASH:
         case SS_COMPLETE_HASH:
@@ -242,6 +244,7 @@
         case TS_PROJECT_MAIN:       return @"Project";
         case TS_SSH_CREDENTIALS:    return @"SSH Credentials";
         case TS_FILES:              return @"";
+        case TS_PATHS:              return @"";
         case TS_TASKS:              return @"";
         case TS_ADD_REM:            return @"";
         default:                    assert(false);
@@ -255,6 +258,7 @@
         case TS_PROJECT_MAIN:       return TM_ROW_COUNT;
         case TS_SSH_CREDENTIALS:    return TC_ROW_COUNT;
         case TS_FILES:              return TF_ROW_COUNT;
+        case TS_PATHS:              return TP_ROW_COUNT;
         case TS_TASKS:              return TT_ROW_COUNT;
         case TS_ADD_REM:            return proj.num ? TAR_ROW_COUNT : 0;
         default:                    assert(false);
@@ -357,6 +361,18 @@
 
             break;
 
+        case TS_PATHS:
+            cell = [tableView dequeueReusableCellWithIdentifier:@"PathsCell"];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                               reuseIdentifier:@"PathsCell"] autorelease];
+            }
+
+            cell.textLabel.text = @"Synchronized Paths";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
+            break;
+
         case TS_TASKS:
             cell = [tableView dequeueReusableCellWithIdentifier:@"TasksCell"];
             if (cell == nil) {
@@ -448,6 +464,22 @@
                                          initWithNibName:@"ProjectFileSelector"
                                          bundle:nil];
             pfs.project = proj;
+            pfs.mode = FU_FILE;
+
+            [TurboshAppDelegate switchTo:pfs];
+            [pfs release];
+
+        }   break;
+
+        case TS_PATHS:
+        {
+            [self resignFirstResponder];
+
+            ProjectFileSelector *pfs = [[ProjectFileSelector alloc]
+                                        initWithNibName:@"ProjectFileSelector"
+                                        bundle:nil];
+            pfs.project = proj;
+            pfs.mode = FU_PATH;
 
             [TurboshAppDelegate switchTo:pfs];
             [pfs release];
@@ -458,13 +490,14 @@
         {
             [self resignFirstResponder];
 
-            ProjectTaskSelector *pts = [[ProjectTaskSelector alloc]
-                                        initWithNibName:@"ProjectTaskSelector"
+            ProjectFileSelector *pfs = [[ProjectFileSelector alloc]
+                                        initWithNibName:@"ProjectFileSelector"
                                         bundle:nil];
-            pts.project = proj;
+            pfs.project = proj;
+            pfs.mode = FU_TASK;
 
-            [TurboshAppDelegate switchTo:pts];
-            [pts release];
+            [TurboshAppDelegate switchTo:pfs];
+            [pfs release];
 
         }   break;
 
