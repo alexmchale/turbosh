@@ -213,7 +213,7 @@
 		74818C7811BAB02D002EEA86 /* FontPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontPicker.h; sourceTree = "<group>"; };
 		74818C7911BAB02D002EEA86 /* FontPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontPicker.m; sourceTree = "<group>"; };
 		74818CBA11BBEAAA002EEA86 /* 19-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "19-gear.png"; sourceTree = "<group>"; };
-		7486312E11B571C800C938AB /* openssl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openssl.xcodeproj; path = "/Users/alexmchale/Projects/openssl-xcode/openssl.xcodeproj"; sourceTree = "<absolute>"; };
+		7486312E11B571C800C938AB /* openssl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openssl.xcodeproj; path = "../openssl-xcode/openssl.xcodeproj"; sourceTree = "<group>"; };
 		74A5ACE411709E05006A48A3 /* FileEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileEditController.h; path = ../Screens/FileEditController.h; sourceTree = "<group>"; };
 		74A5ACE511709E05006A48A3 /* FileEditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileEditController.m; path = ../Screens/FileEditController.m; sourceTree = "<group>"; };
 		74A5ACE611709E05006A48A3 /* FileEditController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FileEditController.xib; path = ../Screens/FileEditController.xib; sourceTree = "<group>"; };
