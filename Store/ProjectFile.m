@@ -134,6 +134,7 @@
         @"php",        @"php3",
         @"php",        @"php4",
         @"perl",       @"pl",
+        @"markdown",   @"md"
         nil
     ];
 
