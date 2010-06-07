@@ -66,9 +66,9 @@
             break;
 
         case SS_SELECT_FILE:
+        case SS_INITIATE_LIST:
             break;
 
-        case SS_INITIATE_LIST:
         case SS_CONTINUE_LIST:
         case SS_INITIATE_HASH:
         case SS_CONTINUE_HASH:
