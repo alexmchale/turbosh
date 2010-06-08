@@ -28,6 +28,7 @@
 		74818BA411BA56BE002EEA86 /* FileLister.m in Sources */ = {isa = PBXBuildFile; fileRef = 74818BA311BA56BE002EEA86 /* FileLister.m */; };
 		74818C7A11BAB02D002EEA86 /* FontPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 74818C7911BAB02D002EEA86 /* FontPicker.m */; };
 		74818CBB11BBEAAA002EEA86 /* 19-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 74818CBA11BBEAAA002EEA86 /* 19-gear.png */; };
+		74818E5311BDF849002EEA86 /* find-script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 74818E5211BDF849002EEA86 /* find-script.sh */; };
 		7486315911B5739900C938AB /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7486313811B571C800C938AB /* libcrypto.a */; };
 		74A5ACE711709E05006A48A3 /* FileEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A5ACE511709E05006A48A3 /* FileEditController.m */; };
 		74A5ACE811709E05006A48A3 /* FileEditController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A5ACE611709E05006A48A3 /* FileEditController.xib */; };
@@ -213,6 +214,7 @@
 		74818C7811BAB02D002EEA86 /* FontPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FontPicker.h; sourceTree = "<group>"; };
 		74818C7911BAB02D002EEA86 /* FontPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontPicker.m; sourceTree = "<group>"; };
 		74818CBA11BBEAAA002EEA86 /* 19-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "19-gear.png"; sourceTree = "<group>"; };
+		74818E5211BDF849002EEA86 /* find-script.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "find-script.sh"; path = "Shell/find-script.sh"; sourceTree = "<group>"; };
 		7486312E11B571C800C938AB /* openssl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openssl.xcodeproj; path = "/Users/alexmchale/Projects/openssl-xcode/openssl.xcodeproj"; sourceTree = "<absolute>"; };
 		74A5ACE411709E05006A48A3 /* FileEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileEditController.h; path = ../Screens/FileEditController.h; sourceTree = "<group>"; };
 		74A5ACE511709E05006A48A3 /* FileEditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileEditController.m; path = ../Screens/FileEditController.m; sourceTree = "<group>"; };
@@ -527,6 +529,7 @@
 				74B3D574117AB92B00021611 /* FileTransfer.m */,
 				74818BA211BA56BE002EEA86 /* FileLister.h */,
 				74818BA311BA56BE002EEA86 /* FileLister.m */,
+				74818E5211BDF849002EEA86 /* find-script.sh */,
 			);
 			name = Shell;
 			sourceTree = "<group>";
@@ -883,6 +886,7 @@
 				7433E596119C1C8700873265 /* Icon.png in Resources */,
 				74DDE17811B0156C006FBFBE /* Entitlements.plist in Resources */,
 				74818CBB11BBEAAA002EEA86 /* 19-gear.png in Resources */,
+				74818E5311BDF849002EEA86 /* find-script.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

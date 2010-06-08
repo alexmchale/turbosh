@@ -38,14 +38,26 @@
 
 - (NSString *) createCommand
 {
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSURL *scriptURL = [NSURL fileURLWithPath:[bundle pathForResource:@"find-script" ofType:@"sh" inDirectory:NO]];
+    NSString *script = [[[NSString alloc] initWithContentsOfURL:scriptURL] autorelease];
+
     NSString *cf = nil;
-    NSString *cp = [self.path stringBySingleQuoting];
 
-    if (mode == FU_FILE) cf = @"find %@ -type f -print0";
-    if (mode == FU_TASK) cf = @"find %@ -type f -perm -100 -print0";
-    if (mode == FU_PATH) cf = @"find %@ -type d -print0";
+    if (mode == FU_FILE) cf = @"-type f -print0";
+    if (mode == FU_TASK) cf = @"-type f -perm -100 -print0";
+    if (mode == FU_PATH) cf = @"-type d -print0";
 
-    return cf ? [NSString stringWithFormat:cf, cp] : nil;
+    if (cf != nil) {
+        NSString *cf = [cf stringBySingleQuoting];
+        NSString *cp = [self.path stringBySingleQuoting];
+
+        script = [script stringByReplacingOccurrencesOfString:@"___TARGET_PATH___" withString:cp];
+        script = [script stringByReplacingOccurrencesOfString:@"___FIND_PARAMETERS___" withString:cf];
+        return script;
+    }
+
+    return nil;
 }
 
 - (bool) close
@@ -88,7 +100,8 @@
         // Parse the results.
         case 2:
         {
-            if (dispatcher.exitCode != 0) return [self close];
+            // Exit codes >1 are permission/existence errors.
+            if (dispatcher.exitCode > 1) return [self close];
 
             NSData *data = [dispatcher stdoutResponse];
             const char *bytes = [data bytes];
