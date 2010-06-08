@@ -49,7 +49,7 @@
     if (mode == FU_PATH) cf = @"-type d -print0";
 
     if (cf != nil) {
-        NSString *cf = [cf stringBySingleQuoting];
+        cf = [cf stringBySingleQuoting];
         NSString *cp = [self.path stringBySingleQuoting];
 
         script = [script stringByReplacingOccurrencesOfString:@"___TARGET_PATH___" withString:cp];
