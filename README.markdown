@@ -39,10 +39,18 @@ Paths or filenames with spaces in them do not work properly. This is fixed in v1
 
 There's a limit of the number files in a path that Turbosh can handle.  I have had success with folders up to 50,000 files.  A customer sent in a report that it was failing against a folder of about 700,000 files.  The limit is somewhere in the middle.
 
+Turbosh cannot handle a project path that contains any files your user account does not have permission to read.
+
 Please email me at alexmchale@gmail.com if you run into any troubles with Turbosh.
 
 
 ### Changes ###
+
+v1.3
+
+* Feature: There is now a gear in the file viewer to change the font size. Five sizes are available.
+* Feature: There is a new screen that lets you synchronize a directory. This causes all new files that appear in that directory to be downloaded when synchronizing.
+* Fix a bug caused by project paths that contain files the user cannot read.
 
 v1.2
 
