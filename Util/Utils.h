@@ -7,6 +7,4 @@ void show_alert(NSString *title, NSString *message);
 {
 }
 
-+ (NSString *) getUrl:(NSURL *)url;
-
 @end

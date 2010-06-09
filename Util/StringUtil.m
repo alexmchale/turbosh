@@ -67,4 +67,11 @@
     return nil;
 }
 
+- (NSData *) dataWithAutoEncoding
+{
+    NSStringEncoding enc = [self fastestEncoding];
+
+    return [self dataUsingEncoding:enc];
+}
+
 @end
