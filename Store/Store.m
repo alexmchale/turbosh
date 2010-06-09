@@ -312,7 +312,7 @@ static NSString *usage_str(FileUsage usage)
     if (project.num == nil) return 0;
 
     NSString *idcl =
-        [NSString stringWithFormat:@"project_id=%d AND usage='%@'",
+        [NSString stringWithFormat:@"project_id=%d AND usage LIKE '%@'",
             [project.num intValue],
             usage_str(usage)];
 
@@ -335,7 +335,7 @@ static NSString *usage_str(FileUsage usage)
     assert(project.num != nil);
 
     sqlite3_stmt *stmt;
-    const char *sql = "SELECT path FROM files WHERE project_id=? AND usage=?";
+    const char *sql = "SELECT path FROM files WHERE project_id=? AND usage LIKE ?";
     sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
     sqlite3_bind_int(stmt, 1, [project.num intValue]);
     bind_string(stmt, 2, usage_str(usage), false);
@@ -493,7 +493,7 @@ static NSString *usage_str(FileUsage usage)
     assert(project.num != nil);
 
     NSString *wherecl =
-        [NSString stringWithFormat:@"project_id=%d AND usage='%@'",
+        [NSString stringWithFormat:@"project_id=%d AND usage LIKE '%@'",
             [project.num intValue],
             usage_str(usage)];
 
