@@ -51,6 +51,7 @@
 
     switch (state) {
         case SS_SELECT_PROJECT:
+            t = @"Selecting project to synchronize";
             break;
 
         case SS_BEGIN_CONN:
@@ -77,11 +78,7 @@
             break;
 
         case SS_FILE_IS_MISSING:
-            break;
-
         case SS_DELETE_LOCAL_FILE:
-            break;
-
         case SS_TEST_IF_CHANGED:
             break;
 
@@ -94,8 +91,6 @@
             break;
 
         case SS_CONTINUE_TRANSFER:
-            break;
-
         case SS_COMPLETE_TRANSFER:
             break;
 
