@@ -51,6 +51,7 @@ v1.3
 * Feature: There is now a gear in the file viewer to change the font size. Five sizes are available.
 * Feature: There is a new screen that lets you synchronize a directory. This causes all new files that appear in that directory to be downloaded when synchronizing.
 * Fix a bug caused by project paths that contain files the user cannot read.
+* Improve support for UTF-8, UTF-16 and UTF-32 files.
 
 v1.2
 
