@@ -69,9 +69,7 @@
 
 - (NSData *) dataWithAutoEncoding
 {
-    NSStringEncoding enc = [self fastestEncoding];
-
-    return [self dataUsingEncoding:enc];
+    return [self dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
 }
 
 @end

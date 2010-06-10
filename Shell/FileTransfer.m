@@ -13,8 +13,11 @@
     file = f;
     [file retain];
 
-    content = [NSMutableData dataWithData:[[file content] dataUsingEncoding:NSUTF8StringEncoding]];
-    [content retain];
+    NSData *rawContent = [file rawContent];
+    if (rawContent)
+        content = [[NSMutableData dataWithData:rawContent] retain];
+    else
+        content = nil;
 
     return self;
 }
@@ -64,6 +67,11 @@
         case 0:
             // Initialize the upload.
 
+            offset = 0;
+            success = false;
+
+            if (!content) return [self close];
+
             if (isUpload)
                 channel = libssh2_scp_send(session, [[file fullpath] UTF8String], mode, [content length]);
             else
@@ -76,8 +84,6 @@
             }
 
             step++;
-            offset = 0;
-            success = false;
 
             return true;
 

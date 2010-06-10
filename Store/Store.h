@@ -32,7 +32,7 @@
 + (BOOL) loadProjectFile:(ProjectFile *)file;
 + (void) storeProjectFile:(ProjectFile *)file;
 + (NSNumber *) projectFileNumber:(Project *)project filename:(NSString *)filename ofUsage:(FileUsage)usage;
-+ (NSString *) fileContent:(ProjectFile *)file;
++ (NSData *) fileContent:(ProjectFile *)file;
 + (void) storeLocal:(ProjectFile *)file content:(NSData *)content;
 + (void) storeRemote:(ProjectFile *)file content:(NSData *)content;
 + (bool) fileExists:(NSNumber *)num;

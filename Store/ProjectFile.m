@@ -113,8 +113,12 @@
 
 #pragma mark Content
 
-- (NSString *) content {
+- (NSData *) rawContent {
     return [Store fileContent:self];
+}
+
+- (NSString *) content {
+    return [[self rawContent] stringWithAutoEncoding];
 }
 
 - (NSString *) contentType {

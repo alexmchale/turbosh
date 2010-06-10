@@ -307,7 +307,7 @@ static void kbd_callback(const char *name, int name_len,
 
     [Store loadProjectFile:file];
 
-    if (self.file.remoteMd5)
+    if (file.remoteMd5 && [file.remoteMd5 length] == 32)
         state = SS_INITIATE_HASH;
     else
         state = SS_INITIATE_DOWNLOAD;
@@ -399,14 +399,13 @@ static void kbd_callback(const char *name, int name_len,
 - (void) testIfChanged
 {
     NSData *md5Data = [dispatcher stdoutResponse];
-    NSString *remoteMd5 = [[NSString alloc] initWithData:md5Data encoding:NSUTF8StringEncoding];
+    NSString *remoteMd5 = [md5Data stringWithAutoEncoding];
     NSString *md5 = [remoteMd5 findMd5];
 
     bool lEl = [file.localMd5 isEqualToString:file.remoteMd5];
     bool lEr = [file.localMd5 isEqualToString:md5];
     bool rEr = [file.remoteMd5 isEqualToString:md5];
 
-    [remoteMd5 release];
     self.dispatcher = nil;
 
     if (rEr && lEr) {

@@ -13,6 +13,7 @@
 
     #import "Util/AnsiCode.h"
     #import "Util/StringUtil.h"
+    #import "Util/DataUtil.h"
 
     #import "MBProgressHUD.h"
     #import "RegexKitLite.h"

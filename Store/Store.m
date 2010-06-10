@@ -56,12 +56,17 @@ static sqlite3 *db;
 
 #pragma mark SQLite Utils
 
+static NSData *get_data(sqlite3_stmt *stmt, int column) {
+    const char *data = sqlite3_column_blob(stmt, column);
+    const int length = sqlite3_column_bytes(stmt, column);
+
+    return [NSData dataWithBytes:data length:length];
+}
+
 static NSString *get_string(sqlite3_stmt *stmt, int column) {
-    char *cString = (char *)sqlite3_column_text(stmt, column);
+    const NSData *data = get_data(stmt, column);
 
-    if (cString == NULL) return nil;
-
-    return [NSString stringWithUTF8String:cString];
+    return [data stringWithAutoEncoding];
 }
 
 static NSNumber *get_integer(sqlite3_stmt *stmt, int column) {
@@ -77,11 +82,24 @@ static void bind_prepare(sqlite3_stmt **stmt, const char *sql) {
     sqlite3_prepare_v2(db, sql, -1, stmt, NULL);
 }
 
+static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull) {
+    assert(allowNull || d);
+
+    if (!allowNull && !d) d = [NSData data];
+
+    if (d != nil)
+        sqlite3_bind_blob(stmt, column, [d bytes], [d length], SQLITE_TRANSIENT);
+    else
+        sqlite3_bind_null(stmt, column);
+}
+
 static void bind_string(sqlite3_stmt *stmt, int column, const NSString *s, bool allowNull) {
     assert(allowNull || s);
 
+    if (!allowNull && !s) s = @"";
+
     if (s != nil)
-        sqlite3_bind_text(stmt, column, [s UTF8String], -1, SQLITE_TRANSIENT);
+        bind_data(stmt, column, [s dataWithAutoEncoding], allowNull);
     else
         sqlite3_bind_null(stmt, column);
 }
@@ -95,13 +113,8 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
         sqlite3_bind_null(stmt, column);
 }
 
-static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull) {
-    assert(allowNull || d);
-
-    if (d != nil)
-        sqlite3_bind_blob(stmt, column, [d bytes], [d length], SQLITE_TRANSIENT);
-    else
-        sqlite3_bind_null(stmt, column);
+static bool bind_row(sqlite3_stmt *stmt) {
+    return sqlite3_step(stmt) == SQLITE_ROW;
 }
 
 static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
@@ -454,13 +467,24 @@ static NSString *usage_str(FileUsage usage)
     bind_finalize(stmt, 0);
 }
 
-+ (NSString *) fileContent:(ProjectFile *)file
++ (NSData *) fileContent:(ProjectFile *)file
 {
     if (!file.num) return nil;
 
-    NSInteger num = [file.num intValue];
-    NSString *fileid = [NSString stringWithFormat:@"id=%d", num];
-    return [self scalar:@"content" onTable:@"files" where:fileid offset:0 orderBy:@"id"];
+    NSData *content = nil;
+
+    sqlite3_stmt *stmt;
+    const char *sql = "SELECT content FROM files WHERE id=?";
+    bind_prepare(&stmt, sql);
+    bind_integer(stmt, 1, file.num, false);
+
+    if (bind_row(stmt)) {
+        content = get_data(stmt, 0);
+    }
+
+    bind_finalize(stmt, 0);
+
+    return content;
 }
 
 + (NSNumber *) projectFileNumber:(Project *)project
@@ -469,18 +493,20 @@ static NSString *usage_str(FileUsage usage)
 {
     assert(project.num);
 
+    if (!project.num) return nil;
+
     NSNumber *num = nil;
     sqlite3_stmt *stmt;
-    const char *sql = "SELECT id FROM files WHERE project_id=? AND path=? AND usage=?";
-    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-    sqlite3_bind_int(stmt, 1, [project.num intValue]);
-    sqlite3_bind_text(stmt, 2, [filename UTF8String], -1, SQLITE_TRANSIENT);
+    const char *sql = "SELECT id FROM files WHERE project_id=? AND path=? AND usage LIKE ?";
+    bind_prepare(&stmt, sql);
+    bind_integer(stmt, 1, project.num, false);
+    bind_string(stmt, 2, filename, false);
     bind_string(stmt, 3, usage_str(usage), false);
 
-    if (sqlite3_step(stmt) == SQLITE_ROW)
+    if (bind_row(stmt))
         num = get_integer(stmt, 0);
 
-    sqlite3_finalize(stmt);
+    bind_finalize(stmt, 0);
 
     return num;
 }
@@ -532,9 +558,9 @@ static NSString *usage_str(FileUsage usage)
 + (void) setValue:(NSString *)value forKey:(NSString *)key {
     sqlite3_stmt *stmt;
     const char *sql = "INSERT INTO kv (k, v) VALUES (?, ?)";
-    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-    sqlite3_bind_text(stmt, 1, [key UTF8String], -1, SQLITE_TRANSIENT);
-    sqlite3_bind_blob(stmt, 2, [value UTF8String], -1, SQLITE_TRANSIENT);
+    bind_prepare(&stmt, sql);
+    bind_string(stmt, 1, key, false);
+    bind_string(stmt, 2, value, false);
     bind_finalize(stmt, 0);
 }
 
@@ -546,25 +572,16 @@ static NSString *usage_str(FileUsage usage)
 + (NSString *) stringValue:(NSString *)key {
     NSString *value = nil;
 
-    sqlite3_stmt *selStmt;
-    NSString *selSql = @"SELECT v FROM kv WHERE k LIKE ?";
-    sqlite3_prepare_v2(db, [selSql UTF8String], -1, &selStmt, NULL);
-    sqlite3_bind_text(selStmt, 1, [key UTF8String], -1, SQLITE_TRANSIENT);
+    sqlite3_stmt *stmt;
+    const char *sql = "SELECT v FROM kv WHERE k LIKE ?";
+    bind_prepare(&stmt, sql);
+    bind_string(stmt, 1, key, false);
 
-    switch(sqlite3_step(selStmt)) {
-    case SQLITE_ROW:
-        value = get_string(selStmt, 0);
-        break;
-
-    case SQLITE_DONE:
-        break;
-
-    default:
-        assert(1 != 1);
-        break;
+    if (bind_row(stmt)) {
+        value = get_string(stmt, 0);
     }
 
-    sqlite3_finalize(selStmt);
+    bind_finalize(stmt, 0);
 
     return value;
 }
@@ -581,22 +598,20 @@ static NSString *usage_str(FileUsage usage)
               onTable:(NSString *)tab
                 where:(NSString *)where
                offset:(NSInteger)offset
-              orderBy:(NSString *)order {
-
-    sqlite3_stmt *t;
+              orderBy:(NSString *)order
+{
+    sqlite3_stmt *stmt;
     NSString *f = @"SELECT %@ FROM %@ WHERE %@ ORDER BY %@ LIMIT 1 OFFSET %d";
     NSString *s = [NSString stringWithFormat:f, col, tab, where, order, offset];
     NSString *v = nil;
 
-    sqlite3_prepare_v2(db, [s UTF8String], -1, &t, NULL);
+    bind_prepare(&stmt, [s UTF8String]);
 
-    if (sqlite3_step(t) == SQLITE_ROW)
-        v = get_string(t, 0);
+    if (bind_row(stmt)) v = get_string(stmt, 0);
 
-    sqlite3_finalize(t);
+    bind_finalize(stmt, 0);
 
     return v;
-
 }
 
 + (NSInteger) scalarInt:(NSString *)col

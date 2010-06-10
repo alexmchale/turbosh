@@ -78,10 +78,7 @@
 
             [nc postNotificationName:@"begin" object:self];
 
-            if (channel == NULL) {
-                fprintf(stderr, "command (%s) error (%d): %s\n", [command UTF8String], rc, errmsg);
-                return [self close];
-            }
+            if (channel == NULL) return [self close];
 
             step++;
             environStep = 0;
@@ -132,8 +129,6 @@
             if (rc == LIBSSH2_ERROR_EAGAIN) return true;
             if (rc != LIBSSH2_ERROR_NONE) return [self close];
 
-            NSLog(@"Executing: %@", pwdCommand);
-
             step++;
 
             return true;
@@ -175,8 +170,6 @@
                                               nil];
 
                     [nc postNotificationName:@"progress" object:self userInfo:userInfo];
-
-                    NSLog(@"cmd(%@) stdout %d bytes", command, rc);
                 }
             }
 
@@ -202,8 +195,6 @@
                                               nil];
 
                     [nc postNotificationName:@"progress" object:self userInfo:userInfo];
-
-                    NSLog(@"cmd(%@) stderr %d bytes", command, rc);
                 }
             }
 
@@ -231,8 +222,6 @@
 
 - (bool) close
 {
-    NSLog(@"cmd(%@) closing at step %d with exit code %d", command, step, exitCode);
-
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 
     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
