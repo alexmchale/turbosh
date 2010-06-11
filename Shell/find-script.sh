@@ -18,5 +18,4 @@ if [[ ! -r "$TARGET_PATH" || ! -x "$TARGET_PATH" ]]; then
     exit 73
 fi
 
-cd "$TARGET_PATH"
-exec find . $FIND_PARAMETERS 2> /dev/null < /dev/null
+exec find "$TARGET_PATH" $FIND_PARAMETERS 2> /dev/null < /dev/null
