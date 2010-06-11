@@ -10,9 +10,7 @@
     self = [super init];
 
     session = newSession;
-
-    project = newProject;
-    [project retain];
+    project = [newProject retain];
 
     step = 0;
     files = nil;
@@ -44,9 +42,9 @@
 
     NSString *cf = nil;
 
-    if (mode == FU_FILE) cf = @"-type f -print0";
-    if (mode == FU_TASK) cf = @"-type f -perm -100 -print0";
-    if (mode == FU_PATH) cf = @"-type d -print0";
+    if (mode == FU_FILE) cf = @"-type f ";
+    if (mode == FU_TASK) cf = @"-type f -perm -100";
+    if (mode == FU_PATH) cf = @"-type d";
 
     if (cf != nil) {
         cf = [cf stringBySingleQuoting];
@@ -104,24 +102,20 @@
             if (dispatcher.exitCode > 1) return [self close];
 
             NSData *data = [dispatcher stdoutResponse];
-            const char *bytes = [data bytes];
-            const long length = [data length];
-            long offset = 0;
+            NSString *string = [data stringWithAutoEncoding];
+            NSArray *elements = [string arrayOfCaptureComponentsMatchedByRegex:@"[^\\n\\r]+"];
 
             files = [[NSMutableArray alloc] init];
 
-            while (offset < length) {
-                NSString *file = [NSString stringWithCString:&bytes[offset] encoding:NSUTF8StringEncoding];
+            for (NSArray *matches in elements) {
+                NSString *file = [matches objectAtIndex:0];
+
+                if (!file || [file length] == 0) continue;
 
                 NSRange dotSlash = [file rangeOfString:@"./"];
                 if (dotSlash.location == 0) file = [file substringFromIndex:2];
 
                 if (!excluded_filename(file)) [files addObject:file];
-
-                // Scan to 1 past the NULL.
-                while (offset < length && bytes[offset] != '\0')
-                    offset++;
-                offset++;
             }
 
             [files sortUsingSelector:@selector(caseInsensitiveCompare:)];
