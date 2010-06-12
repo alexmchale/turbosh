@@ -628,9 +628,7 @@ void load_project_file(sqlite3_stmt *t, ProjectFile *file)
     bind_prepare(&stmt, sql);
     bind_string(stmt, 1, key, false);
 
-    if (bind_row(stmt)) {
-        value = get_string(stmt, 0);
-    }
+    if (bind_row(stmt)) value = get_string(stmt, 0);
 
     bind_finalize(stmt, 0);
 

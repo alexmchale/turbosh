@@ -62,12 +62,10 @@
         [psc release];
     }
 
-    if (file != nil) {
+    if (file.num) {
         delegate.fileViewController.file = file;
-        [Store setCurrentFile:file];
+        delegate.fileViewController.startingRect = startingRect;
     }
-
-    delegate.fileViewController.startingRect = startingRect;
 
     [self switchTo:delegate.fileViewController];
 }
