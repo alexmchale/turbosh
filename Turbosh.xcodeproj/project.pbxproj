@@ -372,7 +372,7 @@
 		74ECA3711187D6F500458DAF /* task-viewer.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "task-viewer.html"; path = "HtmlEditor/task-viewer.html"; sourceTree = "<group>"; };
 		74ECA3BB1188514B00458DAF /* StringUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringUtil.h; path = Util/StringUtil.h; sourceTree = "<group>"; };
 		74ECA3BC1188514B00458DAF /* StringUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StringUtil.m; path = Util/StringUtil.m; sourceTree = "<group>"; };
-		8D1107310486CEB800E47090 /* Turbosh-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Turbosh-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Turbosh-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Turbosh-Info.plist"; path = "../Turbosh-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -397,6 +397,7 @@
 		080E96DDFE201D6D7F000001 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				8D1107310486CEB800E47090 /* Turbosh-Info.plist */,
 				74B54E391192D45700A4FF6C /* Constants.h */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				28A0AAE50D9B0CCF005BE974 /* Turbosh_Prefix.pch */,
@@ -496,7 +497,6 @@
 				7433E595119C1C8700873265 /* Icon.png */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
-				8D1107310486CEB800E47090 /* Turbosh-Info.plist */,
 				74ECA28C1184DF1200458DAF /* TaskExecController.xib */,
 				74DDE17711B0156C006FBFBE /* Entitlements.plist */,
 			);
