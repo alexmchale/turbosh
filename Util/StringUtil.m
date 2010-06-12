@@ -72,4 +72,16 @@
     return [self dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
 }
 
+- (NSString *) stringByStrippingWhitespace
+{
+    NSCharacterSet *ws = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    return [self stringByTrimmingCharactersInSet:ws];
+}
+
+- (bool) hasContent
+{
+    NSString *trimmed = [self stringByStrippingWhitespace];
+    return [trimmed length] != 0;
+}
+
 @end

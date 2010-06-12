@@ -7,6 +7,15 @@
 
 #pragma mark Data Loaders
 
++ (id) current
+{
+    Project *project = [[[Project alloc] init] autorelease];
+
+    [project loadCurrent];
+
+    return project;
+}
+
 - (id) loadCurrent {
     self.num = [Store currentProjectNum];
     [Store loadProject:self];

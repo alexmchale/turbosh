@@ -100,6 +100,8 @@
         [psc release];
     }
 
+    NSString *commandArgs = [f content];
+    if (!commandArgs) commandArgs = @"";
     NSString *commandString = [NSString stringWithFormat:@"%@ %@", f.filename, commandArgs];
     CommandDispatcher *cd = [[CommandDispatcher alloc] initWithProject:p session:NULL command:commandString];
     delegate.taskExecController.dispatcher = cd;

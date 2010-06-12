@@ -1,4 +1,5 @@
 #import "ProjectSettingsController.h"
+#import "ProjectTaskManager.h"
 
 @implementation ProjectSettingsController
 
@@ -238,9 +239,7 @@
     switch (section) {
         case TS_PROJECT_MAIN:       return @"Project";
         case TS_SSH_CREDENTIALS:    return @"SSH Credentials";
-        case TS_FILES:              return @"";
-        case TS_PATHS:              return @"";
-        case TS_TASKS:              return @"";
+        case TS_SUBSCRIPTION:       return @"Subscriptions";
         case TS_ADD_REM:            return @"";
         default:                    assert(false);
     }
@@ -252,9 +251,7 @@
     switch (section) {
         case TS_PROJECT_MAIN:       return TM_ROW_COUNT;
         case TS_SSH_CREDENTIALS:    return TC_ROW_COUNT;
-        case TS_FILES:              return TF_ROW_COUNT;
-        case TS_PATHS:              return TP_ROW_COUNT;
-        case TS_TASKS:              return TT_ROW_COUNT;
+        case TS_SUBSCRIPTION:       return TS_ROW_COUNT;
         case TS_ADD_REM:            return proj.num ? TAR_ROW_COUNT : 0;
         default:                    assert(false);
     }
@@ -344,39 +341,29 @@
             }
             break;
 
-        case TS_FILES:
+        case TS_SUBSCRIPTION:
             cell = [tableView dequeueReusableCellWithIdentifier:@"FilesCell"];
             if (cell == nil) {
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                reuseIdentifier:@"FilesCell"] autorelease];
             }
 
-            cell.textLabel.text = @"Synchronized Files";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            switch (indexPath.row) {
+                case TS_MANAGE_FILES:
+                    cell.textLabel.text = @"Synchronized Files";
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    break;
 
-            break;
+                case TS_MANAGE_PATHS:
+                    cell.textLabel.text = @"Synchronized Paths";
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    break;
 
-        case TS_PATHS:
-            cell = [tableView dequeueReusableCellWithIdentifier:@"PathsCell"];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:@"PathsCell"] autorelease];
+                case TS_MANAGE_TASKS:
+                    cell.textLabel.text = @"Task Executables";
+                    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+                    break;
             }
-
-            cell.textLabel.text = @"Synchronized Paths";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-
-            break;
-
-        case TS_TASKS:
-            cell = [tableView dequeueReusableCellWithIdentifier:@"TasksCell"];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:@"TasksCell"] autorelease];
-            }
-
-            cell.textLabel.text = @"Task Executables";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
             break;
 
@@ -451,22 +438,7 @@
             }
             break;
 
-        case TS_FILES:
-        {
-            [self resignFirstResponder];
-
-            ProjectFileSelector *pfs = [[ProjectFileSelector alloc]
-                                         initWithNibName:@"ProjectFileSelector"
-                                         bundle:nil];
-            pfs.project = proj;
-            pfs.mode = FU_FILE;
-
-            [TurboshAppDelegate switchTo:pfs];
-            [pfs release];
-
-        }   break;
-
-        case TS_PATHS:
+        case TS_SUBSCRIPTION:
         {
             [self resignFirstResponder];
 
@@ -474,27 +446,26 @@
                                         initWithNibName:@"ProjectFileSelector"
                                         bundle:nil];
             pfs.project = proj;
-            pfs.mode = FU_PATH;
+
+            switch (indexPath.row) {
+                case TS_MANAGE_FILES:
+                    pfs.mode = FU_FILE;
+                    break;
+
+                case TS_MANAGE_PATHS:
+                    pfs.mode = FU_PATH;
+                    break;
+
+                case TS_MANAGE_TASKS:
+                    pfs.mode = FU_TASK;
+                    break;
+            }
 
             [TurboshAppDelegate switchTo:pfs];
             [pfs release];
 
-        }   break;
-
-        case TS_TASKS:
-        {
-            [self resignFirstResponder];
-
-            ProjectFileSelector *pfs = [[ProjectFileSelector alloc]
-                                        initWithNibName:@"ProjectFileSelector"
-                                        bundle:nil];
-            pfs.project = proj;
-            pfs.mode = FU_TASK;
-
-            [TurboshAppDelegate switchTo:pfs];
-            [pfs release];
-
-        }   break;
+            break;
+        }
 
         case TS_ADD_REM:
         {
@@ -534,6 +505,15 @@
         default: assert(false);
     }
 
+}
+
+- (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == TS_SUBSCRIPTION && indexPath.row == TS_MANAGE_TASKS) {
+        ProjectTaskManager *ptm = [[ProjectTaskManager alloc] initWithStyle:UITableViewStyleGrouped];
+        [TurboshAppDelegate switchTo:ptm];
+        [ptm release];
+    }
 }
 
 #pragma mark Action Sheet Delegate

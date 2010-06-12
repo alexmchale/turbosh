@@ -7,5 +7,7 @@
 - (NSString *) stringBySingleQuoting;
 - (NSString *) findMd5;
 - (NSData *) dataWithAutoEncoding;
+- (NSString *) stringByStrippingWhitespace;
+- (bool) hasContent;
 
 @end

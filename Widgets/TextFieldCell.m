@@ -40,6 +40,7 @@ static NSString *CellIdentifier = @"TextFieldCell";
     text.textColor = [UIColor colorWithRed:0.243 green:0.306 blue:0.435 alpha:1.0];
     text.autocorrectionType = UITextAutocorrectionTypeNo;
     text.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    text.clearButtonMode = UITextFieldViewModeWhileEditing;
 
     if (name == nil)
         text.frame = CGRectMake(10, yOffset, tableFrame.size.width - 150, height);

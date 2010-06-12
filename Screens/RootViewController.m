@@ -175,7 +175,7 @@ typedef enum {
         {
             Project *p = [[[Project alloc] init] loadCurrent];
             ProjectFile *f = [[ProjectFile alloc] init];
-            f.num = [Store projectFileNumber:p atOffset:indexPath.row ofUsage:FU_FILE];
+            f.num = [Store projectFileNumber:p atOffset:indexPath.row ofUsage:FU_TASK];
             f.project = p;
             f.usage = FU_TASK;
             [Store loadProjectFile:f];

@@ -4,7 +4,18 @@
 
 @synthesize session;
 @synthesize project;
-@synthesize pwdCommand;
+
+- (NSString *) createCommand
+{
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSURL *scriptURL = [NSURL fileURLWithPath:[bundle pathForResource:@"command-script" ofType:@"sh" inDirectory:NO]];
+    NSString *script = [[[NSString alloc] initWithContentsOfURL:scriptURL] autorelease];
+
+    script = [script stringByReplacingOccurrencesOfString:@"___ROOT_PATH___" withString:project.sshPath];
+    script = [script stringByReplacingOccurrencesOfString:@"___COMMAND___" withString:command];
+
+    return script;
+}
 
 - (id) initWithProject:(Project *)newProject
                session:(LIBSSH2_SESSION *)newSession
@@ -17,14 +28,11 @@
     project = newProject;
     [project retain];
 
-    command = newCommand;
-    [command retain];
+    command = [newCommand retain];
+    commandScript = [[self createCommand] retain];
 
     assert(project.sshPath);
     assert(command);
-
-    NSString *escapedProjectPath = [project.sshPath stringBySingleQuoting];
-    pwdCommand = [[NSString alloc] initWithFormat:@"cd %@ && %@ < /dev/null", escapedProjectPath, command];
 
     exitCode = 0;
 
@@ -42,8 +50,8 @@
     [self close];
 
     [project release];
-    [pwdCommand release];
     [command release];
+    [commandScript release];
     [stdoutResponse release];
     [stderrResponse release];
     [environ release];
@@ -124,7 +132,7 @@
         case 3:
             // Dispatch the command to the server.
 
-            rc = libssh2_channel_exec(channel, [pwdCommand UTF8String]);
+            rc = libssh2_channel_exec(channel, [commandScript UTF8String]);
 
             if (rc == LIBSSH2_ERROR_EAGAIN) return true;
             if (rc != LIBSSH2_ERROR_NONE) return [self close];
