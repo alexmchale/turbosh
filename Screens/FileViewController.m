@@ -43,8 +43,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    file = nil;
-
     self.navigationItem.rightBarButtonItem =
         [[[UIBarButtonItem alloc]
           initWithBarButtonSystemItem:UIBarButtonSystemItemEdit
