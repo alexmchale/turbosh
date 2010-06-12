@@ -116,12 +116,16 @@ static void bind_string(sqlite3_stmt *stmt, int column, const NSString *s, bool 
 
     if (!allowNull && !s) s = @"";
 
-    const char *cString = [[s dataWithAutoEncoding] bytes];
+    NSMutableData *data = [[s dataWithAutoEncoding] mutableCopy];
+    [data appendBytes:"\0" length:1];
+    const char *cString = [data bytes];
 
     if (s != nil)
         sqlite3_bind_text(stmt, column, cString, -1, SQLITE_TRANSIENT);
     else
         sqlite3_bind_null(stmt, column);
+
+    [data release];
 }
 
 static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allowNull) {
