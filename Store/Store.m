@@ -548,7 +548,7 @@ void load_project_file(sqlite3_stmt *t, ProjectFile *file)
 
     NSNumber *num = nil;
     sqlite3_stmt *stmt;
-    const char *sql = "SELECT id FROM files WHERE project_id=? AND path=? AND usage LIKE ?";
+    const char *sql = "SELECT id FROM files WHERE project_id=? AND path LIKE ? AND usage LIKE ?";
     bind_prepare(&stmt, sql);
     bind_integer(stmt, 1, project.num, false);
     bind_string(stmt, 2, filename, false);
