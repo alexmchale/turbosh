@@ -1,12 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "Project.h"
 
-typedef enum {
-    FU_FILE,
-    FU_TASK,
-    FU_PATH
-} FileUsage;
-
 @class Project;
 
 @interface ProjectFile : NSObject

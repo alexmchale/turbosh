@@ -390,11 +390,31 @@ static NSString *usage_str(FileUsage usage)
     file.num = nil;
 }
 
+void load_project_file(sqlite3_stmt *t, ProjectFile *file)
+{
+    NSNumber *loadedProjectId = get_integer(t, 1);
+
+    if (file.project == nil) {
+        assert(loadedProjectId != nil);
+
+        Project *project = [[Project alloc] init];
+        project.num = loadedProjectId;
+        [Store loadProject:project];
+        file.project = project;
+        [project release];
+    }
+
+    file.num = get_integer(t, 0);
+    file.filename = get_string(t, 2);
+    file.remoteMd5 = get_string(t, 3);
+    file.localMd5 = get_string(t, 4);
+}
+
 + (BOOL) loadProjectFile:(ProjectFile *)file
 {
     assert(file.num);
 
-    const char *s = "SELECT project_id, path, remote_md5, local_md5 "
+    const char *s = "SELECT id, project_id, path, remote_md5, local_md5 "
                     "FROM files "
                     "WHERE id=?";
 
@@ -406,23 +426,7 @@ static NSString *usage_str(FileUsage usage)
     switch (sqlite3_step(t)) {
         case SQLITE_ROW:
         {
-            NSNumber *loadedProjectId = get_integer(t, 0);
-
-            if (file.project == nil) {
-                assert(loadedProjectId != nil);
-
-                Project *project = [[Project alloc] init];
-                project.num = loadedProjectId;
-                [Store loadProject:project];
-                file.project = project;
-                [project release];
-            }
-
-            [file.project.num isEqualToNumber:loadedProjectId];
-
-            file.filename = get_string(t, 1);
-            file.remoteMd5 = get_string(t, 2);
-            file.localMd5 = get_string(t, 3);
+            load_project_file(t, file);
 
             found = TRUE;
         }   break;
@@ -438,6 +442,35 @@ static NSString *usage_str(FileUsage usage)
     sqlite3_finalize(t);
 
     return found;
+}
+
++ (NSArray *) files:(Project *)project ofUsage:(FileUsage)usage
+{
+    if (!project.num) return [NSArray array];
+
+    const char *s = "SELECT id, project_id, path, remote_md5, local_md5 "
+                    "FROM files "
+                    "WHERE project_id=? AND usage LIKE ?";
+
+    NSMutableArray *files = [NSMutableArray array];
+    sqlite3_stmt *t;
+    bind_prepare(&t, s);
+    bind_integer(t, 1, project.num, false);
+    bind_string(t, 2, usage_str(usage), false);
+
+    while (bind_row(t)) {
+        ProjectFile *file = [[ProjectFile alloc] init];
+
+        file.usage = usage;
+        load_project_file(t, file);
+        [files addObject:file];
+
+        [file release];
+    }
+
+    bind_finalize(t, 0);
+
+    return files;
 }
 
 + (void) storeProjectFile:(ProjectFile *)file

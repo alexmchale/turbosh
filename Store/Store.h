@@ -28,6 +28,7 @@
 + (NSInteger) fileCountForCurrentProject:(FileUsage)usage;
 + (NSInteger) fileCount:(Project *)project ofUsage:(FileUsage)usage;
 + (NSArray *) filenames:(Project *)project ofUsage:(FileUsage)usage;
++ (NSArray *) files:(Project *)project ofUsage:(FileUsage)usage;
 + (void) deleteProjectFile:(ProjectFile *)file;
 + (BOOL) loadProjectFile:(ProjectFile *)file;
 + (void) storeProjectFile:(ProjectFile *)file;

@@ -24,6 +24,7 @@
 
 - (id) loadCurrent;
 - (id) loadByOffset:(NSInteger)offset;
+- (NSArray *) files:(FileUsage)usage;
 - (bool) existsInDatabase;
 
 @end

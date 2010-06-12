@@ -21,6 +21,11 @@
     return self;
 }
 
+- (NSArray *) files:(FileUsage)usage
+{
+    return [Store files:self ofUsage:usage];
+}
+
 #pragma mark Field Accessors
 
 - (bool) existsInDatabase
