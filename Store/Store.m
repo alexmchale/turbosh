@@ -48,6 +48,24 @@ static sqlite3 *db;
 
         [self setValue:@"1" forKey:@"version"];
     }
+
+    const int CURRENT_VERSION = 2;
+
+    for (int version = [self intValue:@"version"]; version < CURRENT_VERSION; ++version) {
+        switch (version) {
+            case 1:
+            {
+                const char *s = "UPDATE files SET path='./'||path WHERE usage LIKE 'task'";
+                sqlite3_exec(db, s, NULL, NULL, NULL);
+
+                break;
+            }
+
+            default: assert(false);
+        }
+    }
+
+    [self setIntValue:CURRENT_VERSION forKey:@"version"];
 }
 
 + (void) close {

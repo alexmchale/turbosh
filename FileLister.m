@@ -112,8 +112,10 @@
 
                 if (!file || [file length] == 0) continue;
 
-                NSRange dotSlash = [file rangeOfString:@"./"];
-                if (dotSlash.location == 0) file = [file substringFromIndex:2];
+                if (mode != FU_TASK) {
+                    NSRange dotSlash = [file rangeOfString:@"./"];
+                    if (dotSlash.location == 0) file = [file substringFromIndex:2];
+                }
 
                 if (!excluded_filename(file)) [files addObject:file];
             }
