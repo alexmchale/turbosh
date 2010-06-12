@@ -82,9 +82,9 @@ static NSData *get_data(sqlite3_stmt *stmt, int column) {
 }
 
 static NSString *get_string(sqlite3_stmt *stmt, int column) {
-    const NSData *data = get_data(stmt, column);
+    const char *data = (char *)sqlite3_column_text(stmt, column);
 
-    return [data stringWithAutoEncoding];
+    return data ? [NSString stringWithUTF8String:data] : nil;
 }
 
 static NSNumber *get_integer(sqlite3_stmt *stmt, int column) {
