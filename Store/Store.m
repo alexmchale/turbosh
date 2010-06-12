@@ -116,8 +116,10 @@ static void bind_string(sqlite3_stmt *stmt, int column, const NSString *s, bool 
 
     if (!allowNull && !s) s = @"";
 
+    const char *cString = [[s dataWithAutoEncoding] bytes];
+
     if (s != nil)
-        bind_data(stmt, column, [s dataWithAutoEncoding], allowNull);
+        sqlite3_bind_text(stmt, column, cString, -1, SQLITE_TRANSIENT);
     else
         sqlite3_bind_null(stmt, column);
 }
