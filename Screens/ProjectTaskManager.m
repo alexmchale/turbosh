@@ -77,6 +77,8 @@
 
     [newCmdFields release];
     [newArgFields release];
+
+    [TurboshAppDelegate setLabelText:@"Task Configuration"];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
