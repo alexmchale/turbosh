@@ -994,6 +994,7 @@
 				PRODUCT_NAME = Turbosh;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1015,6 +1016,7 @@
 				);
 				PRODUCT_NAME = Turbosh;
 				PROVISIONING_PROFILE = "91B538D8-7BEB-4812-884E-9410549DB222";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -1051,6 +1053,7 @@
 				INFOPLIST_FILE = "Turbosh-Info.plist";
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_NAME = Turbosh;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = "Ad Hoc";
