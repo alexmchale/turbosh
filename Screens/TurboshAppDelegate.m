@@ -5,7 +5,7 @@
 
 @implementation TurboshAppDelegate
 
-@synthesize window, splitViewController, rootViewController, detailViewController;
+@synthesize window, navController, splitViewController, rootViewController, detailViewController;
 @synthesize projectSettingsController, fileViewController, taskExecController;
 @synthesize synchronizer;
 
@@ -161,9 +161,16 @@
     // Initialize the database.
     [Store open];
 
-    // Add the split view controller's view to the window and display.
-    [window addSubview:splitViewController.view];
-    [window makeKeyAndVisible];
+    if (navController) {
+        [window addSubview:navController.view];
+        [window makeKeyAndVisible];
+    } else if (splitViewController) {
+        [window addSubview:splitViewController.view];
+        [window makeKeyAndVisible];
+    } else {
+        assert(false);
+    }
+
 
     // Select that last used project and update the DVC to show it.
     Project *currentProject = [[[Project alloc] init] loadCurrent];
