@@ -4,6 +4,7 @@
 #include <resolv.h>
 #include <errno.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 @implementation Shell
 
@@ -26,7 +27,7 @@ static void kbd_callback(const char *name, int name_len,
                          LIBSSH2_USERAUTH_KBDINT_RESPONSE *responses,
                          void **abstract)
 {
-    if (authPassword == NULL);
+    if (authPassword == NULL) return;
     if (num_prompts != 1 || strstr(prompts[0].text, "assword") == NULL) return;
 
     responses[0].text = authPassword;
