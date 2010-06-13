@@ -19,6 +19,7 @@
 {
     TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     delegate.detailViewController.label.text = text;
+    delegate.navController.title = text;
 }
 
 + (void) setMenuText:(NSString *)text
@@ -170,7 +171,6 @@
     } else {
         assert(false);
     }
-
 
     // Select that last used project and update the DVC to show it.
     Project *currentProject = [[[Project alloc] init] loadCurrent];
