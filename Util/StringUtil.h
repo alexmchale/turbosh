@@ -2,6 +2,7 @@
 
 @interface NSString (monkey)
 
+- (NSData *) decodeBase64;
 - (NSString *) stringByConvertingAnsiColor;
 - (NSString *) stringByQuotingJavascript;
 - (NSString *) stringBySingleQuoting;

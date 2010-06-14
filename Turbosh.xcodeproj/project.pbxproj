@@ -21,6 +21,9 @@
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		7414716511B4F0B100B5AC05 /* TextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7414716411B4F0B100B5AC05 /* TextFieldCell.m */; };
+		741A64A911C55E3000E57D5E /* KeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 741A64A811C55E3000E57D5E /* KeyPair.m */; };
+		741A67CD11C688E800E57D5E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 741A67CC11C688E800E57D5E /* MessageUI.framework */; };
+		741A67D311C6891100E57D5E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 741A67D211C6891100E57D5E /* MessageUI.framework */; };
 		7433E596119C1C8700873265 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7433E595119C1C8700873265 /* Icon.png */; };
 		74356ACE11BF34DF0061E2C2 /* DataUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 74356ACD11BF34DF0061E2C2 /* DataUtil.m */; };
 		74356D1F11C1D7990061E2C2 /* ProjectTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 74356D1E11C1D7990061E2C2 /* ProjectTaskManager.m */; };
@@ -207,6 +210,10 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../main.m; sourceTree = "<group>"; };
 		7414716311B4F0B100B5AC05 /* TextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextFieldCell.h; path = Widgets/TextFieldCell.h; sourceTree = "<group>"; };
 		7414716411B4F0B100B5AC05 /* TextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextFieldCell.m; path = Widgets/TextFieldCell.m; sourceTree = "<group>"; };
+		741A64A711C55E3000E57D5E /* KeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeyPair.h; path = Shell/KeyPair.h; sourceTree = "<group>"; };
+		741A64A811C55E3000E57D5E /* KeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeyPair.m; path = Shell/KeyPair.m; sourceTree = "<group>"; };
+		741A67CC11C688E800E57D5E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		741A67D211C6891100E57D5E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		7433E595119C1C8700873265 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		74356ACC11BF34DF0061E2C2 /* DataUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataUtil.h; path = Util/DataUtil.h; sourceTree = "<group>"; };
 		74356ACD11BF34DF0061E2C2 /* DataUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataUtil.m; path = Util/DataUtil.m; sourceTree = "<group>"; };
@@ -388,6 +395,8 @@
 				747EC175116150D8002D8CD8 /* libz.dylib in Frameworks */,
 				74D7403A11674C2E0010A592 /* libicucore.dylib in Frameworks */,
 				7486315911B5739900C938AB /* libcrypto.a in Frameworks */,
+				741A67CD11C688E800E57D5E /* MessageUI.framework in Frameworks */,
+				741A67D311C6891100E57D5E /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,6 +496,7 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				1D0189A21192F74C00A6F2E5 /* Third Party */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				741A67CC11C688E800E57D5E /* MessageUI.framework */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -512,6 +522,7 @@
 				74B371EE115DC8C300E3B2D1 /* libsqlite3.dylib */,
 				747EC174116150D8002D8CD8 /* libz.dylib */,
 				74D7403911674C2E0010A592 /* libicucore.dylib */,
+				741A67D211C6891100E57D5E /* MessageUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -540,6 +551,8 @@
 				74818BA311BA56BE002EEA86 /* FileLister.m */,
 				74818E5211BDF849002EEA86 /* find-script.sh */,
 				74356DB711C255720061E2C2 /* command-script.sh */,
+				741A64A711C55E3000E57D5E /* KeyPair.h */,
+				741A64A811C55E3000E57D5E /* KeyPair.m */,
 			);
 			name = Shell;
 			sourceTree = "<group>";
@@ -957,6 +970,7 @@
 				74818C7A11BAB02D002EEA86 /* FontPicker.m in Sources */,
 				74356ACE11BF34DF0061E2C2 /* DataUtil.m in Sources */,
 				74356D1F11C1D7990061E2C2 /* ProjectTaskManager.m in Sources */,
+				741A64A911C55E3000E57D5E /* KeyPair.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

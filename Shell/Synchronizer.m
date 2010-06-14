@@ -189,10 +189,36 @@ static void kbd_callback(const char *name, int name_len,
     authType.interactive = strstr(authlist, "keyboard-interactive") != NULL;
     authType.publickey = strstr(authlist, "publickey") != NULL;
 
-    state = SS_AUTHENTICATE_SSH;
+    state = SS_AUTHENTICATE_SSH_BY_KEY;
 }
 
-- (void) authenticateSsh
+- (void) authenticateSshByKey
+{
+    // Authenticate using the stored SSH key.
+    KeyPair *key = [[KeyPair alloc] init];
+    const char *user = [project.sshUser UTF8String];
+    const char *privateKey = [[key privateFilename] UTF8String];
+    const char *publicKey = [[key publicFilename] UTF8String];
+
+    int rc = libssh2_userauth_publickey_fromfile(session, user, publicKey, privateKey, NULL);
+
+    [key release];
+
+    if (rc == LIBSSH2_ERROR_EAGAIN) return;
+
+    if (rc != LIBSSH2_ERROR_NONE) {
+        NSLog(@"Authentication by key failed.");
+        state = SS_AUTHENTICATE_SSH_BY_PASSWORD;
+        return;
+    }
+
+    if (currentCommand && [project.num isEqualToNumber:currentCommand.project.num])
+        state = SS_EXECUTE_COMMAND;
+    else
+        state = SS_INITIATE_LIST;
+}
+
+- (void) authenticateSshByPassword
 {
     // Authenticate using the configured password.
     const char *user = [project.sshUser UTF8String];
@@ -553,7 +579,8 @@ static void kbd_callback(const char *name, int name_len,
         case SS_ESTABLISH_CONN:         return [self establishConnection];
         case SS_ESTABLISH_SSH:          return [self establishSsh];
         case SS_REQUEST_AUTH_TYPE:      return [self requestAuthType];
-        case SS_AUTHENTICATE_SSH:       return [self authenticateSsh];
+        case SS_AUTHENTICATE_SSH_BY_KEY:        return [self authenticateSshByKey];
+        case SS_AUTHENTICATE_SSH_BY_PASSWORD:   return [self authenticateSshByPassword];
         case SS_EXECUTE_COMMAND:        return [self executeCommand];
         case SS_INITIATE_LIST:          return [self initiateList];
         case SS_CONTINUE_LIST:          return [self continueList];
