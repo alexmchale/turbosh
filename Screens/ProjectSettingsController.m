@@ -150,6 +150,7 @@
     MFMailComposeViewController *con = [[MFMailComposeViewController alloc] init];
 
     con.mailComposeDelegate = self;
+    con.navigationBar.barStyle = UIBarStyleBlack;
     [con setSubject:@"Turbosh Public Key"];
     [con setMessageBody:publicKey isHTML:NO];
     [self presentModalViewController:con animated:YES];
@@ -163,6 +164,11 @@
                          error:(NSError *)error
 {
     [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void) resetPublicKey
+{
+    [[[[KeyPair alloc] init] generate] release];
 }
 
 #pragma mark View Initialization
@@ -580,8 +586,26 @@
                     break;
 
                 case TPK_RESET_KEY:
-                    assert(false);
-                    break;
+                {
+                    NSString *act =
+                    [NSString
+                     stringWithFormat:@"Are you sure you want to generate a new SSH key?",
+                     proj.name];
+
+                    UIActionSheet *actionSheet =
+                    [[UIActionSheet alloc]
+                     initWithTitle:act
+                     delegate:self
+                     cancelButtonTitle:@"Nevermind"
+                     destructiveButtonTitle:@"Reset it!"
+                     otherButtonTitles:nil];
+
+                    actionSheet.tag = TAG_RESET_KEY;
+                    actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+                    [actionSheet showInView:self.view];
+
+                    [actionSheet release];
+                }   break;
 
                 default: assert(false);
             }
@@ -609,6 +633,9 @@
 {
     if (actionSheet.tag == TAG_DELETE_PROJECT && buttonIndex == 0)
         [self removeThisProject];
+
+    if (actionSheet.tag == TAG_RESET_KEY && buttonIndex == 0)
+        [self resetPublicKey];
 }
 
 #pragma mark Text Field Delegate
