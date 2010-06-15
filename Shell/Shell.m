@@ -45,7 +45,7 @@ static void kbd_callback(const char *name, int name_len,
 
     // Verify that we have somewhere to connect to.
     if (!project || !project.sshHost || !project.sshPort ||
-        !project.sshUser || !project.sshPass || !project.sshPath) {
+        !project.sshUser || !project.sshPath) {
         return false;
     }
 
@@ -109,6 +109,8 @@ static void kbd_callback(const char *name, int name_len,
     [keyPair release];
 
     if (rc != LIBSSH2_ERROR_NONE) {
+        if (!project.sshPass) return false;
+
         // Authenticate using the configured password.
         do {
             const char *user = [project.sshUser UTF8String];

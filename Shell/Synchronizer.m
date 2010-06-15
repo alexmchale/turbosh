@@ -84,7 +84,7 @@ static void kbd_callback(const char *name, int name_len,
 {
     // Verify that the current project has a server configured.
     if (!project || !project.sshHost || !project.sshPort ||
-            !project.sshUser || !project.sshPass || !project.sshPath ||
+            !project.sshUser || !project.sshPath ||
             [project.sshHost length] == 0) {
         state = SS_SELECT_PROJECT;
         return;
@@ -183,7 +183,8 @@ static void kbd_callback(const char *name, int name_len,
     }
 
     if (authPassword != NULL) free(authPassword);
-    authPassword = strdup([project.sshPass UTF8String]);
+    authPassword = NULL;
+    if (project.sshPass) authPassword = strdup([project.sshPass UTF8String]);
 
     authType.password = strstr(authlist, "password") != NULL;
     authType.interactive = strstr(authlist, "keyboard-interactive") != NULL;
@@ -194,6 +195,12 @@ static void kbd_callback(const char *name, int name_len,
 
 - (void) authenticateSshByKey
 {
+    // Verify that we have connection parameters.
+    if (!project.sshUser) {
+        state = SS_TERMINATE_SSH;
+        return;
+    }
+
     // Authenticate using the stored SSH key.
     KeyPair *key = [[KeyPair alloc] init];
     const char *user = [project.sshUser UTF8String];
@@ -220,6 +227,12 @@ static void kbd_callback(const char *name, int name_len,
 
 - (void) authenticateSshByPassword
 {
+    // Verify that we have connection parameters.
+    if (!authPassword || !project.sshUser || !project.sshPass) {
+        state = SS_TERMINATE_SSH;
+        return;
+    }
+
     // Authenticate using the configured password.
     const char *user = [project.sshUser UTF8String];
     const char *pass = [project.sshPass UTF8String];
