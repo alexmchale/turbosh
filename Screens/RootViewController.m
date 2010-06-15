@@ -4,6 +4,9 @@
 @implementation RootViewController
 
 @synthesize detailViewController;
+@synthesize project;
+@synthesize files;
+@synthesize tasks;
 
 #pragma mark Management
 
@@ -11,7 +14,9 @@
 {
     [self.tableView reloadData];
 
-    currentProjectNum = [[Store currentProjectNum] intValue];
+    self.project = [Project current];
+    self.files = [Store files:project ofUsage:FU_FILE];
+    self.tasks = [Store files:project ofUsage:FU_TASK];
 }
 
 #pragma mark View lifecycle
@@ -21,6 +26,8 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     self.tableView.backgroundColor = [UIColor colorWithRed:0.15 green:0.15 blue:0.15 alpha:1.0];
     self.tableView.separatorColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.0];
+
+    [self reload];
 }
 
 - (void)viewDidLoad {
@@ -54,8 +61,8 @@ typedef enum {
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
-        case MST_FILES:     return [Store fileCountForCurrentProject:FU_FILE] ? @"Files" : @"";
-        case MST_TASKS:     return [Store fileCountForCurrentProject:FU_TASK] ? @"Tasks" : @"";
+        case MST_FILES:     return [files count] ? @"Files" : @"";
+        case MST_TASKS:     return [tasks count] ? @"Tasks" : @"";
         case MST_PROJECTS:  return @"Projects";
         default:            return @"";
     }
@@ -90,8 +97,8 @@ typedef enum {
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case MST_FILES:     return [Store fileCountForCurrentProject:FU_FILE];
-        case MST_TASKS:     return [Store fileCountForCurrentProject:FU_TASK];
+        case MST_FILES:     return [files count];
+        case MST_TASKS:     return [tasks count];
         case MST_PROJECTS:  return [Store projectCount];
         default:            return 0;
     }
@@ -100,8 +107,6 @@ typedef enum {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     static NSString *CellIdentifier = @"MenuCellIdentifier";
-    Project *project = [[Project alloc] init];
-    ProjectFile *file = [[ProjectFile alloc] init];
 
     // Dequeue or create a cell of the appropriate type.
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -113,22 +118,20 @@ typedef enum {
 
     switch (indexPath.section) {
         case MST_FILES:
-            [project loadCurrent];
-            [file loadByNumber:[Store projectFileNumber:project atOffset:indexPath.row ofUsage:FU_FILE]];
+        {
+            ProjectFile *file = [files objectAtIndex:indexPath.row];
             cell.textLabel.text = [file condensedPath];
             break;
+        }
 
         case MST_TASKS:
-            [project loadCurrent];
-            file.num = [Store projectFileNumber:project atOffset:indexPath.row ofUsage:FU_TASK];
-            file.project = project;
-            file.usage = FU_TASK;
-            [Store loadProjectFile:file];
+        {
+            ProjectFile *file = [tasks objectAtIndex:indexPath.row];
             cell.textLabel.text = [file condensedPath];
             break;
+        }
 
         case MST_PROJECTS:
-            [project loadByOffset:indexPath.row];
             cell.textLabel.text = project.name;
 //            if (project.num && [project.num intValue] == currentProjectNum)
 //                cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -140,9 +143,6 @@ typedef enum {
     cell.textLabel.textColor = [UIColor whiteColor];
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.contentView.backgroundColor = [UIColor clearColor];
-
-    [file release];
-    [project release];
 
     return cell;
 
@@ -156,32 +156,19 @@ typedef enum {
     switch (indexPath.section) {
         case MST_FILES:
         {
-            Project *p = [[[Project alloc] init] loadCurrent];
-            ProjectFile *f = [[ProjectFile alloc] init];
-            f.num = [Store projectFileNumber:p atOffset:indexPath.row ofUsage:FU_FILE];
-            f.project = p;
-            [Store loadProjectFile:f];
+            ProjectFile *file = [files objectAtIndex:indexPath.row];
+            [Store loadProjectFile:file];
 
-            if (f.remoteMd5)
-                [TurboshAppDelegate editFile:f];
+            if (file.remoteMd5)
+                [TurboshAppDelegate editFile:file];
             else
                 show_alert(@"File Not Ready", @"That file has not yet been downloaded from the server.");
-
-            [f release];
-            [p release];
         }   break;
 
         case MST_TASKS:
         {
-            Project *p = [[[Project alloc] init] loadCurrent];
-            ProjectFile *f = [[ProjectFile alloc] init];
-            f.num = [Store projectFileNumber:p atOffset:indexPath.row ofUsage:FU_TASK];
-            f.project = p;
-            f.usage = FU_TASK;
-            [Store loadProjectFile:f];
-            [TurboshAppDelegate launchTask:f];
-            [f release];
-            [p release];
+            ProjectFile *file = [tasks objectAtIndex:indexPath.row];
+            [TurboshAppDelegate launchTask:file];
         }   break;
 
         case MST_PROJECTS:
@@ -199,28 +186,22 @@ typedef enum {
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark -
 #pragma mark Memory management
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-
-    // Relinquish ownership any cached data, images, etc. that aren't in use.
+- (void)viewDidUnload
+{
+    self.detailViewController = nil;
+    self.files = nil;
+    self.tasks = nil;
 }
 
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
-}
-
-
-- (void)dealloc {
+- (void)dealloc
+{
     [detailViewController release];
+    [files release];
+    [tasks release];
 
     [super dealloc];
 }
 
-
 @end
-
