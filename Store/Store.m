@@ -160,11 +160,46 @@ static NSString *usage_str(FileUsage usage)
 
 #pragma mark Project
 
+void load_project(sqlite3_stmt *t, Project *project) {
+    project.num = get_integer(t, 0);
+    project.name = get_string(t, 1);
+    project.sshHost = get_string(t, 2);
+    project.sshPort = get_integer(t, 3);
+    project.sshUser = get_string(t, 4);
+    project.sshPass = get_string(t, 5);
+    project.sshPath = get_string(t, 6);
+}
+
++ (NSArray *) projects
+{
+    const char *s = "SELECT id, name, "
+                    "ssh_hostname, ssh_port, "
+                    "ssh_username, ssh_password, ssh_path "
+                    "FROM projects";
+
+    NSMutableArray *projects = [NSMutableArray array];
+    sqlite3_stmt *t;
+    bind_prepare(&t, s);
+
+    while (bind_row(t)) {
+        Project *project = [[Project alloc] init];
+
+        load_project(t, project);
+        [projects addObject:project];
+
+        [project release];
+    }
+
+    bind_finalize(t, 0);
+
+    return projects;
+}
+
 + (BOOL) loadProject:(Project *)project {
     assert(project != nil);
     assert(project.num != nil);
 
-    char *s = "SELECT name, "
+    char *s = "SELECT id, name, "
               "ssh_hostname, ssh_port, "
               "ssh_username, ssh_password, ssh_path "
               "FROM projects "
@@ -177,13 +212,7 @@ static NSString *usage_str(FileUsage usage)
 
     switch (sqlite3_step(t)) {
         case SQLITE_ROW:
-            project.name = get_string(t, 0);
-            project.sshHost = get_string(t, 1);
-            project.sshPort = get_integer(t, 2);
-            project.sshUser = get_string(t, 3);
-            project.sshPass = get_string(t, 4);
-            project.sshPath = get_string(t, 5);
-
+            load_project(t, project);
             found = TRUE;
             break;
 

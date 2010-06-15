@@ -12,6 +12,7 @@
 + (void) open;
 + (void) close;
 
++ (NSArray *) projects;
 + (BOOL) loadProject:(Project *)project;
 + (void) storeProject:(Project *)project;
 + (void) deleteProject:(Project *)project;

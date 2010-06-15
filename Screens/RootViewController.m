@@ -4,7 +4,7 @@
 @implementation RootViewController
 
 @synthesize detailViewController;
-@synthesize project;
+@synthesize projects;
 @synthesize files;
 @synthesize tasks;
 
@@ -14,9 +14,12 @@
 {
     [self.tableView reloadData];
 
-    self.project = [Project current];
-    self.files = [Store files:project ofUsage:FU_FILE];
-    self.tasks = [Store files:project ofUsage:FU_TASK];
+    Project *currentProject = [Project current];
+    currentProjectNum = [currentProject.num intValue];
+
+    self.projects = [Store projects];
+    self.files = [Store files:currentProject ofUsage:FU_FILE];
+    self.tasks = [Store files:currentProject ofUsage:FU_TASK];
 }
 
 #pragma mark View lifecycle
@@ -99,7 +102,7 @@ typedef enum {
     switch (section) {
         case MST_FILES:     return [files count];
         case MST_TASKS:     return [tasks count];
-        case MST_PROJECTS:  return [Store projectCount];
+        case MST_PROJECTS:  return [projects count];
         default:            return 0;
     }
 }
@@ -132,12 +135,16 @@ typedef enum {
         }
 
         case MST_PROJECTS:
+        {
+            Project *project = [projects objectAtIndex:indexPath.row];
+
             cell.textLabel.text = project.name;
 //            if (project.num && [project.num intValue] == currentProjectNum)
 //                cell.accessoryType = UITableViewCellAccessoryCheckmark;
 //            else
 //                cell.accessoryType = UITableViewCellAccessoryNone;
             break;
+        }
     }
 
     cell.textLabel.textColor = [UIColor whiteColor];
@@ -173,11 +180,8 @@ typedef enum {
 
         case MST_PROJECTS:
         {
-            Project *p = [[Project alloc] init];
-            p.num = [Store projectNumAtOffset:indexPath.row];
-            [Store loadProject:p];
-            [TurboshAppDelegate editProject:p];
-            [p release];
+            Project *project = [projects objectAtIndex:indexPath.row];
+            [TurboshAppDelegate editProject:project];
         }   break;
 
         default: assert(false);
@@ -191,6 +195,7 @@ typedef enum {
 - (void)viewDidUnload
 {
     self.detailViewController = nil;
+    self.projects = nil;
     self.files = nil;
     self.tasks = nil;
 }
@@ -198,6 +203,7 @@ typedef enum {
 - (void)dealloc
 {
     [detailViewController release];
+    [projects release];
     [files release];
     [tasks release];
 
