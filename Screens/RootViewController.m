@@ -117,34 +117,36 @@ typedef enum {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:CellIdentifier] autorelease];
     }
+
+    cell.textLabel.text = @"";
     cell.accessoryType = UITableViewCellAccessoryNone;
 
     switch (indexPath.section) {
         case MST_FILES:
-        {
-            ProjectFile *file = [files objectAtIndex:indexPath.row];
-            cell.textLabel.text = [file condensedPath];
+            if (indexPath.row < [files count]) {
+                ProjectFile *file = [files objectAtIndex:indexPath.row];
+                cell.textLabel.text = [file condensedPath];
+            }
             break;
-        }
 
         case MST_TASKS:
-        {
-            ProjectFile *file = [tasks objectAtIndex:indexPath.row];
-            cell.textLabel.text = [file condensedPath];
+            if (indexPath.row < [tasks count]) {
+                ProjectFile *file = [tasks objectAtIndex:indexPath.row];
+                cell.textLabel.text = [file condensedPath];
+            }
             break;
-        }
 
         case MST_PROJECTS:
-        {
-            Project *project = [projects objectAtIndex:indexPath.row];
+            if (indexPath.row < [projects count]) {
+                Project *project = [projects objectAtIndex:indexPath.row];
 
-            cell.textLabel.text = project.name;
-            if (project.num && [project.num intValue] == currentProjectNum)
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            else
-                cell.accessoryType = UITableViewCellAccessoryNone;
+                cell.textLabel.text = project.name;
+                if (project.num && [project.num intValue] == currentProjectNum)
+                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                else
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+            }
             break;
-        }
     }
 
     cell.textLabel.textColor = [UIColor whiteColor];
@@ -155,34 +157,35 @@ typedef enum {
 
 }
 
-#pragma mark -
 #pragma mark Table view delegate
 
 - (void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
         case MST_FILES:
-        {
-            ProjectFile *file = [files objectAtIndex:indexPath.row];
-            [Store loadProjectFile:file];
+            if (indexPath.row < [files count]) {
+                ProjectFile *file = [files objectAtIndex:indexPath.row];
+                [Store loadProjectFile:file];
 
-            if (file.remoteMd5)
-                [TurboshAppDelegate editFile:file];
-            else
-                show_alert(@"File Not Ready", @"That file has not yet been downloaded from the server.");
-        }   break;
+                if (file.remoteMd5)
+                    [TurboshAppDelegate editFile:file];
+                else
+                    show_alert(@"File Not Ready", @"That file has not yet been downloaded from the server.");
+            }
+            break;
 
         case MST_TASKS:
-        {
-            ProjectFile *file = [tasks objectAtIndex:indexPath.row];
-            [TurboshAppDelegate launchTask:file];
-        }   break;
+            if (indexPath.row < [tasks count]) {
+                ProjectFile *file = [tasks objectAtIndex:indexPath.row];
+                [TurboshAppDelegate launchTask:file];
+            }
+            break;
 
         case MST_PROJECTS:
-        {
-            Project *project = [projects objectAtIndex:indexPath.row];
-            [TurboshAppDelegate editProject:project];
-        }   break;
+            if (indexPath.row < [projects count]) {
+                Project *project = [projects objectAtIndex:indexPath.row];
+                [TurboshAppDelegate editProject:project];
+            }
 
         default: assert(false);
     }
