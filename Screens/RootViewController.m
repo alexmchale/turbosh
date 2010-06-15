@@ -186,6 +186,7 @@ typedef enum {
                 Project *project = [projects objectAtIndex:indexPath.row];
                 [TurboshAppDelegate editProject:project];
             }
+            break;
 
         default: assert(false);
     }
