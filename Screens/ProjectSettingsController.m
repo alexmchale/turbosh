@@ -15,6 +15,15 @@
     Project *nextProject = [[Project alloc] init];
 
     nextProject.name = @"New Project";
+
+    if (proj) {
+        nextProject.sshHost = proj.sshHost;
+        nextProject.sshPort = proj.sshPort;
+        nextProject.sshUser = proj.sshUser;
+        nextProject.sshPass = proj.sshPass;
+        nextProject.sshPath = proj.sshPath;
+    }
+
     [Store storeProject:nextProject];
 
     [TurboshAppDelegate editProject:nextProject];
