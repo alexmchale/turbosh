@@ -24,6 +24,7 @@
 		741A64A911C55E3000E57D5E /* KeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 741A64A811C55E3000E57D5E /* KeyPair.m */; };
 		741A67CD11C688E800E57D5E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 741A67CC11C688E800E57D5E /* MessageUI.framework */; };
 		741A67D311C6891100E57D5E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 741A67D211C6891100E57D5E /* MessageUI.framework */; };
+		741A697E11C7915100E57D5E /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 741A697D11C7915100E57D5E /* iTunesArtwork */; };
 		7433E596119C1C8700873265 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7433E595119C1C8700873265 /* Icon.png */; };
 		74356ACE11BF34DF0061E2C2 /* DataUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 74356ACD11BF34DF0061E2C2 /* DataUtil.m */; };
 		74356D1F11C1D7990061E2C2 /* ProjectTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 74356D1E11C1D7990061E2C2 /* ProjectTaskManager.m */; };
@@ -214,6 +215,7 @@
 		741A64A811C55E3000E57D5E /* KeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeyPair.m; path = Shell/KeyPair.m; sourceTree = "<group>"; };
 		741A67CC11C688E800E57D5E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		741A67D211C6891100E57D5E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		741A697D11C7915100E57D5E /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		7433E595119C1C8700873265 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		74356ACC11BF34DF0061E2C2 /* DataUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataUtil.h; path = Util/DataUtil.h; sourceTree = "<group>"; };
 		74356ACD11BF34DF0061E2C2 /* DataUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataUtil.m; path = Util/DataUtil.m; sourceTree = "<group>"; };
@@ -504,6 +506,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				741A697D11C7915100E57D5E /* iTunesArtwork */,
 				74818CBA11BBEAAA002EEA86 /* 19-gear.png */,
 				7433E595119C1C8700873265 /* Icon.png */,
 				8D1107310486CEB800E47090 /* Turbosh-Info.plist */,
@@ -914,6 +917,7 @@
 				74818CBB11BBEAAA002EEA86 /* 19-gear.png in Resources */,
 				74818E5311BDF849002EEA86 /* find-script.sh in Resources */,
 				74356DB811C255720061E2C2 /* command-script.sh in Resources */,
+				741A697E11C7915100E57D5E /* iTunesArtwork in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
