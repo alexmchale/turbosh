@@ -4,8 +4,6 @@ Turbosh lets you view and edit files while offline. It'll synchronize them back 
 
 * Please see the Known Issues section below *
 
-* Version 1.2 has been submitted to Apple for review *
-
 
 ### Typical Workflow ###
 
@@ -33,13 +31,9 @@ Please note that the file editor does not show the files syntax-highlighted.
 
 ### Known Issues ###
 
-Turbosh does not play nice if you have your shell set to something other than bash or sh. This is fixed in v1.2.  For now, consider changing your shell or adding a second user account that uses bash.
-
-Paths or filenames with spaces in them do not work properly. This is fixed in v1.2.
-
 There's a limit of the number files in a path that Turbosh can handle.  I have had success with folders up to 50,000 files.  A customer sent in a report that it was failing against a folder of about 700,000 files.  The limit is somewhere in the middle.
 
-Turbosh cannot handle a project path that contains any files your user account does not have permission to read.
+Turbosh cannot handle a project path that contains any files your user account does not have permission to read. This is fixed in v1.3.
 
 Please email me at alexmchale@gmail.com if you run into any troubles with Turbosh.
 
@@ -52,6 +46,7 @@ v1.3
 * Feature: There is a new screen that lets you synchronize a directory. This causes all new files that appear in that directory to be downloaded when synchronizing.
 * Feature: New screen to edit the parameters passed to a task when it is run. Ability to run arbitrary commands as tasks.
 * Feature: Public key authentication is now supported. Turbosh now has a public key that will be tried before the password for authentication.
+* The current project is now marked with a checkmark in the file list.
 * Bug Fix: Turbosh now only uses POSIX parameters when calling find. This enables support for Solaris.
 * Bug Fix: Project paths that contain files the user cannot read would cause files lists to fail.
 * Improve support for UTF-8, UTF-16 and UTF-32 files.
