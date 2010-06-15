@@ -51,6 +51,7 @@ v1.3
 * Feature: There is now a gear in the file viewer to change the font size. Five sizes are available.
 * Feature: There is a new screen that lets you synchronize a directory. This causes all new files that appear in that directory to be downloaded when synchronizing.
 * Feature: New screen to edit the parameters passed to a task when it is run. Ability to run arbitrary commands as tasks.
+* Feature: Public key authentication is now supported. Turbosh now has a public key that will be tried before the password for authentication.
 * Bug Fix: Turbosh now only uses POSIX parameters when calling find. This enables support for Solaris.
 * Bug Fix: Project paths that contain files the user cannot read would cause files lists to fail.
 * Improve support for UTF-8, UTF-16 and UTF-32 files.
