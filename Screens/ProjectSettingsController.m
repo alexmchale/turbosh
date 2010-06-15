@@ -184,52 +184,6 @@
 
 #pragma mark View Initialization
 
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        proj = nil;
-
-        projectName = [[UITextField alloc] init];
-        projectName.autocorrectionType = UITextAutocorrectionTypeNo;
-        projectName.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        projectName.delegate = self;
-        projectName.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        sshHost = [[UITextField alloc] init];
-        sshHost.autocorrectionType = UITextAutocorrectionTypeNo;
-        sshHost.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        sshHost.delegate = self;
-        sshHost.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        sshPort = [[UITextField alloc] init];
-        sshPort.keyboardType = UIKeyboardTypeNumberPad;
-        sshPort.delegate = self;
-        sshPort.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        sshUser = [[UITextField alloc] init];
-        sshUser.autocorrectionType = UITextAutocorrectionTypeNo;
-        sshUser.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        sshUser.delegate = self;
-        sshUser.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        sshPass = [[UITextField alloc] init];
-        sshPass.secureTextEntry = YES;
-        sshPass.autocorrectionType = UITextAutocorrectionTypeNo;
-        sshPass.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        sshPass.delegate = self;
-        sshPass.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        sshPath = [[UITextField alloc] init];
-        sshPath.autocorrectionType = UITextAutocorrectionTypeNo;
-        sshPath.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        sshPath.delegate = self;
-        sshPath.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        syncLabel = nil;
-    }
-    return self;
-}
-
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -267,6 +221,39 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
+}
+
+- (void) viewDidLoad
+{
+    self.projectName = [TextFieldCell cellForTableView:myTableView labeled:@"Name"];
+    self.projectName.text.delegate = self;
+
+    self.sshHost = [TextFieldCell cellForTableView:myTableView labeled:@"Hostname"];
+    self.sshHost.text.delegate = self;
+
+    self.sshPort = [TextFieldCell cellForTableView:myTableView labeled:@"Port"];
+    self.sshPort.text.delegate = self;
+    self.sshPort.text.keyboardType = UIKeyboardTypeNumberPad;
+
+    self.sshUser = [TextFieldCell cellForTableView:myTableView labeled:@"Username"];
+    self.sshUser.text.delegate = self;
+
+    self.sshPass = [TextFieldCell cellForTableView:myTableView labeled:@"Password"];
+    self.sshPass.text.delegate = self;
+    self.sshPass.text.secureTextEntry = YES;
+
+    self.sshPath = [TextFieldCell cellForTableView:myTableView labeled:@"Path"];
+    self.sshPath.text.delegate = self;
+}
+
+- (void) viewDidUnload
+{
+    self.projectName = nil;
+    self.sshHost = nil;
+    self.sshPort = nil;
+    self.sshUser = nil;
+    self.sshPass = nil;
+    self.sshPath = nil;
 }
 
 - (void)dealloc {
@@ -363,7 +350,7 @@
         case TS_PROJECT_MAIN:
             switch (indexPath.row) {
                 case TM_NAME:
-					cell = [self cellFor:tableView field:projectName name:@"Name" value:proj.name];
+                    cell = projectName;
                     break;
 
                 default: assert(false);
@@ -373,23 +360,23 @@
         case TS_SSH_CREDENTIALS:
             switch (indexPath.row) {
                 case TC_HOSTNAME:
-					cell = [self cellFor:tableView field:sshHost name:@"Hostname" value:proj.sshHost];
+                    cell = sshHost;
                     break;
 
                 case TC_PORT:
-					cell = [self cellFor:tableView field:sshPort name:@"Port" value:[proj.sshPort stringValue]];
+                    cell = sshPort;
                     break;
 
                 case TC_USERNAME:
-					cell = [self cellFor:tableView field:sshUser name:@"Username" value:proj.sshUser];
+                    cell = sshUser;
                     break;
 
                 case TC_PASSWORD:
-					cell = [self cellFor:tableView field:sshPass name:@"Password" value:proj.sshPass];
+                    cell = sshPass;
                     break;
 
                 case TC_PATH:
-					cell = [self cellFor:tableView field:sshPath name:@"Path" value:proj.sshPath];
+                    cell = sshPath;
                     break;
 
                 default: assert(false);
@@ -657,20 +644,20 @@
 
 	NSNumberFormatter *nf = [[NSNumberFormatter alloc] init];
 
-    proj.name = projectName.text;
+    proj.name = projectName.text.text;
 
-    proj.sshHost = sshHost.text;
+    proj.sshHost = sshHost.text.text;
 
-    NSString *portString = [sshPort.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *portString = [sshPort.text.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (!portString || [@"" isEqualToString:portString])
         proj.sshPort = [NSNumber numberWithInt:22];
     else
         proj.sshPort = [nf numberFromString:portString];
     if ([proj.sshPort intValue] <= 0) proj.sshPort = [NSNumber numberWithInt:22];
 
-    proj.sshUser = sshUser.text;
-    proj.sshPass = sshPass.text;
-    proj.sshPath = sshPath.text;
+    proj.sshUser = sshUser.text.text;
+    proj.sshPass = sshPass.text.text;
+    proj.sshPath = sshPath.text.text;
 
     [Store storeProject:proj];
 
@@ -683,7 +670,7 @@
 {
     [self saveForm];
 
-    if (textField == projectName) [TurboshAppDelegate reloadList];
+    if (textField == projectName.text) [TurboshAppDelegate reloadList];
 }
 
 #pragma mark Project Management
@@ -699,13 +686,13 @@
 
     // Now update the fields in this form for the new project.
 
-    projectName.text = proj.name;
+    projectName.text.text = proj.name;
 
-    sshHost.text = proj.sshHost;
-    sshPort.text = [proj.sshPort stringValue];
-    sshUser.text = proj.sshUser;
-    sshPass.text = proj.sshPass;
-    sshPath.text = proj.sshPath;
+    sshHost.text.text = proj.sshHost;
+    sshPort.text.text = [proj.sshPort stringValue];
+    sshUser.text.text = proj.sshUser;
+    sshPass.text.text = proj.sshPass;
+    sshPath.text.text = proj.sshPath;
 
     [myTableView reloadData];
 }

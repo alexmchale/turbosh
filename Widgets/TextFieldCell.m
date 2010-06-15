@@ -43,9 +43,9 @@ static NSString *CellIdentifier = @"TextFieldCell";
     text.clearButtonMode = UITextFieldViewModeWhileEditing;
 
     if (name == nil)
-        text.frame = CGRectMake(10, yOffset, tableFrame.size.width - 150, height);
+        text.frame = CGRectMake(10, yOffset, tableFrame.size.width - 50, height);
     else
-        text.frame = CGRectMake(110, yOffset, tableFrame.size.width - 250, height);
+        text.frame = CGRectMake(110, yOffset, tableFrame.size.width - 150, height);
 
     if (name != nil) [self.contentView addSubview:label];
     [self.contentView addSubview:text];

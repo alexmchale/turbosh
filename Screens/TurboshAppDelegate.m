@@ -12,7 +12,16 @@
 + (void) switchTo:(UIViewController *)controller
 {
     TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    [delegate.detailViewController switchTo:controller];
+
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [delegate.detailViewController switchTo:controller];
+    } else {
+        for (UIView *subview in delegate.window.subviews) {
+            [subview removeFromSuperview];
+        }
+
+        [delegate.window addSubview:controller.view];
+    }
 }
 
 + (void) setLabelText:(NSString *)text
@@ -33,8 +42,13 @@
     TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
 
     if (delegate.projectSettingsController == nil) {
-        ProjectSettingsController *psc =
-            [[ProjectSettingsController alloc] initWithNibName:nil bundle:nil];
+        ProjectSettingsController *psc;
+
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+            psc = [[ProjectSettingsController alloc] initWithNibName:@"ProjectSettingsController-iPad" bundle:nil];
+        else
+            psc = [[ProjectSettingsController alloc] initWithNibName:@"ProjectSettingsController-iPhone" bundle:nil];
+
         delegate.projectSettingsController = psc;
         [psc release];
     }
@@ -176,7 +190,8 @@
 
     // Select that last used project and update the DVC to show it.
     Project *currentProject = [[[Project alloc] init] loadCurrent];
-    [TurboshAppDelegate editProject:currentProject];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        [TurboshAppDelegate editProject:currentProject];
     [currentProject release];
 
     // Start the file synchronizer.

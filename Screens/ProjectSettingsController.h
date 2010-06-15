@@ -8,25 +8,25 @@
     UITableView *myTableView;
     Project *proj;
 
-    UITextField *projectName;
+    TextFieldCell *projectName;
 
-    UITextField *sshHost;
-    UITextField *sshPort;
-    UITextField *sshUser;
-    UITextField *sshPass;
-    UITextField *sshPath;
+    TextFieldCell *sshHost;
+    TextFieldCell *sshPort;
+    TextFieldCell *sshUser;
+    TextFieldCell *sshPass;
+    TextFieldCell *sshPath;
 
     enum SyncState syncState;
     IBOutlet UILabel *syncLabel;
 }
 
 @property (nonatomic, retain) IBOutlet UITableView *myTableView;
-@property (nonatomic, retain) UITextField *projectName;
-@property (nonatomic, retain) UITextField *sshHost;
-@property (nonatomic, retain) UITextField *sshPort;
-@property (nonatomic, retain) UITextField *sshUser;
-@property (nonatomic, retain) UITextField *sshPass;
-@property (nonatomic, retain) UITextField *sshPath;
+@property (nonatomic, retain) TextFieldCell *projectName;
+@property (nonatomic, retain) TextFieldCell *sshHost;
+@property (nonatomic, retain) TextFieldCell *sshPort;
+@property (nonatomic, retain) TextFieldCell *sshUser;
+@property (nonatomic, retain) TextFieldCell *sshPass;
+@property (nonatomic, retain) TextFieldCell *sshPath;
 @property (nonatomic, retain) IBOutlet UILabel *syncLabel;
 
 - (void) saveForm;
