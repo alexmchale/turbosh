@@ -47,8 +47,11 @@ static const char encodingTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq
     // Create a new string from the data in the memory buffer
     char * base64Pointer;
     long base64Length = BIO_get_mem_data(mem, &base64Pointer);
-    NSString * base64String = [NSString stringWithCString: base64Pointer
-                                                   length: base64Length];
+    char *base64Copy = malloc(base64Length + 1);
+    memcpy(base64Copy, base64Pointer, base64Length);
+    base64Copy[base64Length] = '\0';
+    NSString *base64String = [NSString stringWithUTF8String:base64Copy];
+    free(base64Copy);
 
     // Clean up and go home
     BIO_free_all(mem);
