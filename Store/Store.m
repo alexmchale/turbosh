@@ -101,8 +101,6 @@ static void bind_prepare(sqlite3_stmt **stmt, const char *sql) {
 }
 
 static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull) {
-    assert(allowNull || d);
-
     if (!allowNull && !d) d = [NSData data];
 
     if (d != nil)
@@ -112,8 +110,6 @@ static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull)
 }
 
 static void bind_string(sqlite3_stmt *stmt, int column, const NSString *s, bool allowNull) {
-    assert(allowNull || s);
-
     if (!allowNull && !s) s = @"";
 
     NSMutableData *data = [[s dataWithAutoEncoding] mutableCopy];
@@ -129,7 +125,7 @@ static void bind_string(sqlite3_stmt *stmt, int column, const NSString *s, bool 
 }
 
 static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allowNull) {
-    assert(allowNull || n);
+    if (!allowNull && !n) n = [NSNumber numberWithInt:0];
 
     if (n != nil)
         sqlite3_bind_int(stmt, column, [n intValue]);
@@ -208,6 +204,8 @@ static NSString *usage_str(FileUsage usage)
     assert(project != nil);
     assert(project.name != nil);
 
+    if (!project.sshPort) project.sshPort = [NSNumber numberWithInt:22];
+
     sqlite3_stmt *t;
     char *s = "INSERT INTO projects ("
               "id, name, "
@@ -217,16 +215,18 @@ static NSString *usage_str(FileUsage usage)
 
     bind_integer(t, 1, project.num, true);
     bind_string(t, 2, project.name, false);
-    bind_string(t, 3, project.sshHost, true);
+    bind_string(t, 3, project.sshHost, false);
     bind_integer(t, 4, project.sshPort, true);
-    bind_string(t, 5, project.sshUser, true);
-    bind_string(t, 6, project.sshPass, true);
-    bind_string(t, 7, project.sshPath, true);
+    bind_string(t, 5, project.sshUser, false);
+    bind_string(t, 6, project.sshPass, false);
+    bind_string(t, 7, project.sshPath, false);
 
     sqlite3_step(t);
     sqlite3_finalize(t);
 
     project.num = [NSNumber numberWithInt:sqlite3_last_insert_rowid(db)];
+
+    [self loadProject:project];
 }
 
 + (void) deleteProject:(Project *)project
