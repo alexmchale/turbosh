@@ -2,7 +2,8 @@
 #import <Synchronizer.h>
 
 @interface ProjectSettingsController : UIViewController
-	<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, ContentPaneDelegate, UIActionSheetDelegate>
+	<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate,
+     ContentPaneDelegate, UIActionSheetDelegate, MFMailComposeViewControllerDelegate>
 {
     UITableView *myTableView;
     Project *proj;
@@ -36,6 +37,7 @@ typedef enum {
     TS_SSH_CREDENTIALS,
     TS_SUBSCRIPTION,
     TS_ADD_REM,
+    TS_MANAGE_KEY,
     TS_SECTION_COUNT
 } TableSections;
 
@@ -59,6 +61,13 @@ typedef enum {
     TS_MANAGE_TASKS,
     TS_ROW_COUNT
 } TableSubscriptions;
+
+typedef enum {
+    TPK_CLIPBOARD_KEY,
+    TPK_SEND_KEY,
+    TPK_RESET_KEY,
+    TPK_ROW_COUNT
+} TablePublicKey;
 
 typedef enum {
     TAR_ADD_PROJECT,

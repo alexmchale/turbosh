@@ -15,6 +15,15 @@
     Project *nextProject = [[Project alloc] init];
 
     nextProject.name = @"New Project";
+
+    if (proj) {
+        nextProject.sshHost = proj.sshHost;
+        nextProject.sshPort = proj.sshPort;
+        nextProject.sshUser = proj.sshUser;
+        nextProject.sshPass = proj.sshPass;
+        nextProject.sshPath = proj.sshPath;
+    }
+
     [Store storeProject:nextProject];
 
     [TurboshAppDelegate editProject:nextProject];
@@ -27,6 +36,8 @@
     assert(proj);
 
     [Store deleteProject:proj];
+    [proj release];
+    proj = nil;
 
     if ([Store projectCount] == 0) {
         [self addNewProject];
@@ -59,7 +70,8 @@
         case SS_ESTABLISH_CONN:
         case SS_ESTABLISH_SSH:
         case SS_REQUEST_AUTH_TYPE:
-        case SS_AUTHENTICATE_SSH:
+        case SS_AUTHENTICATE_SSH_BY_KEY:
+        case SS_AUTHENTICATE_SSH_BY_PASSWORD:
             t = [NSString stringWithFormat:@"Connecting to %@", [p name]];
             break;
 
@@ -127,6 +139,47 @@
     [self saveForm];
 
     return YES;
+}
+
+- (void) copyPublicKey
+{
+    KeyPair *key = [[KeyPair alloc] init];
+    NSString *publicKey = [NSString stringWithContentsOfFile:[key publicFilename]
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:nil];
+    UIPasteboard *pb = [UIPasteboard generalPasteboard];
+    [pb setString:publicKey];
+    [key release];
+}
+
+- (void) sendPublicKey
+{
+    KeyPair *key = [[KeyPair alloc] init];
+    NSString *publicKey = [NSString stringWithContentsOfFile:[key publicFilename]
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:nil];
+    MFMailComposeViewController *con = [[MFMailComposeViewController alloc] init];
+
+    con.mailComposeDelegate = self;
+    con.navigationBar.barStyle = UIBarStyleBlack;
+    [con setSubject:@"Turbosh Public Key"];
+    [con setMessageBody:publicKey isHTML:NO];
+    [self presentModalViewController:con animated:YES];
+
+    [con release];
+    [key release];
+}
+
+- (void) mailComposeController:(MFMailComposeViewController *)controller
+           didFinishWithResult:(MFMailComposeResult)result
+                         error:(NSError *)error
+{
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+- (void) resetPublicKey
+{
+    [[[[KeyPair alloc] init] generate] release];
 }
 
 #pragma mark View Initialization
@@ -240,7 +293,8 @@
         case TS_PROJECT_MAIN:       return @"Project";
         case TS_SSH_CREDENTIALS:    return @"SSH Credentials";
         case TS_SUBSCRIPTION:       return @"Subscriptions";
-        case TS_ADD_REM:            return @"";
+        case TS_ADD_REM:            return @"Project Management";
+        case TS_MANAGE_KEY:         return @"Public Key Authentication";
         default:                    assert(false);
     }
 
@@ -253,6 +307,7 @@
         case TS_SSH_CREDENTIALS:    return TC_ROW_COUNT;
         case TS_SUBSCRIPTION:       return TS_ROW_COUNT;
         case TS_ADD_REM:            return proj.num ? TAR_ROW_COUNT : 0;
+        case TS_MANAGE_KEY:         return TPK_ROW_COUNT;
         default:                    assert(false);
     }
 
@@ -388,6 +443,34 @@
 
             break;
 
+        case TS_MANAGE_KEY:
+            cell = [tableView dequeueReusableCellWithIdentifier:@"pkCell"];
+            if (cell == nil) {
+                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                               reuseIdentifier:@"pkCell"] autorelease];
+            }
+
+            switch (indexPath.row) {
+                case TPK_CLIPBOARD_KEY:
+                    cell.textLabel.text = @"Copy public key to clipboard";
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    break;
+
+                case TPK_SEND_KEY:
+                    cell.textLabel.text = @"Email public key";
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    break;
+
+                case TPK_RESET_KEY:
+                    cell.textLabel.text = @"Generate a new key pair";
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    break;
+
+                default: assert(false);
+            }
+
+            break;
+
         default: assert(false);
     }
 
@@ -502,6 +585,44 @@
             }
         }   break;
 
+        case TS_MANAGE_KEY:
+        {
+            switch (indexPath.row) {
+                case TPK_CLIPBOARD_KEY:
+                    [self copyPublicKey];
+                    break;
+
+                case TPK_SEND_KEY:
+                    [self sendPublicKey];
+                    break;
+
+                case TPK_RESET_KEY:
+                {
+                    NSString *act =
+                    [NSString
+                     stringWithFormat:@"Are you sure you want to generate a new SSH key?",
+                     proj.name];
+
+                    UIActionSheet *actionSheet =
+                    [[UIActionSheet alloc]
+                     initWithTitle:act
+                     delegate:self
+                     cancelButtonTitle:@"Nevermind"
+                     destructiveButtonTitle:@"Reset it!"
+                     otherButtonTitles:nil];
+
+                    actionSheet.tag = TAG_RESET_KEY;
+                    actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+                    [actionSheet showInView:self.view];
+
+                    [actionSheet release];
+                }   break;
+
+                default: assert(false);
+            }
+
+        }   break;
+
         default: assert(false);
     }
 
@@ -523,6 +644,9 @@
 {
     if (actionSheet.tag == TAG_DELETE_PROJECT && buttonIndex == 0)
         [self removeThisProject];
+
+    if (actionSheet.tag == TAG_RESET_KEY && buttonIndex == 0)
+        [self resetPublicKey];
 }
 
 #pragma mark Text Field Delegate
@@ -569,6 +693,7 @@
 
     // Store the project in this form.
 
+    [proj release];
     proj = newProject;
     [newProject retain];
 

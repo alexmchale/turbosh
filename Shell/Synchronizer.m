@@ -84,7 +84,7 @@ static void kbd_callback(const char *name, int name_len,
 {
     // Verify that the current project has a server configured.
     if (!project || !project.sshHost || !project.sshPort ||
-            !project.sshUser || !project.sshPass || !project.sshPath ||
+            !project.sshUser || !project.sshPath ||
             [project.sshHost length] == 0) {
         state = SS_SELECT_PROJECT;
         return;
@@ -183,17 +183,56 @@ static void kbd_callback(const char *name, int name_len,
     }
 
     if (authPassword != NULL) free(authPassword);
-    authPassword = strdup([project.sshPass UTF8String]);
+    authPassword = NULL;
+    if (project.sshPass) authPassword = strdup([project.sshPass UTF8String]);
 
     authType.password = strstr(authlist, "password") != NULL;
     authType.interactive = strstr(authlist, "keyboard-interactive") != NULL;
     authType.publickey = strstr(authlist, "publickey") != NULL;
 
-    state = SS_AUTHENTICATE_SSH;
+    state = SS_AUTHENTICATE_SSH_BY_KEY;
 }
 
-- (void) authenticateSsh
+- (void) authenticateSshByKey
 {
+    // Verify that we have connection parameters.
+    if (!project.sshUser) {
+        state = SS_TERMINATE_SSH;
+        return;
+    }
+
+    // Authenticate using the stored SSH key.
+    KeyPair *key = [[KeyPair alloc] init];
+    const char *user = [project.sshUser UTF8String];
+    const char *privateKey = [[key privateFilename] UTF8String];
+    const char *publicKey = [[key publicFilename] UTF8String];
+
+    int rc = libssh2_userauth_publickey_fromfile(session, user, publicKey, privateKey, NULL);
+
+    [key release];
+
+    if (rc == LIBSSH2_ERROR_EAGAIN) return;
+
+    if (rc != LIBSSH2_ERROR_NONE) {
+        NSLog(@"Authentication by key failed.");
+        state = SS_AUTHENTICATE_SSH_BY_PASSWORD;
+        return;
+    }
+
+    if (currentCommand && [project.num isEqualToNumber:currentCommand.project.num])
+        state = SS_EXECUTE_COMMAND;
+    else
+        state = SS_INITIATE_LIST;
+}
+
+- (void) authenticateSshByPassword
+{
+    // Verify that we have connection parameters.
+    if (!authPassword || !project.sshUser || !project.sshPass) {
+        state = SS_TERMINATE_SSH;
+        return;
+    }
+
     // Authenticate using the configured password.
     const char *user = [project.sshUser UTF8String];
     const char *pass = [project.sshPass UTF8String];
@@ -281,7 +320,10 @@ static void kbd_callback(const char *name, int name_len,
 
     for (NSString *filename in files) {
         [newFile loadByProject:project filename:filename forUsage:FU_FILE];
-        if (!newFile.num) [Store storeProjectFile:newFile];
+        if (!newFile.num) {
+            [Store storeProjectFile:newFile];
+            [TurboshAppDelegate reloadList];
+        }
     }
 
     [newFile release];
@@ -553,7 +595,8 @@ static void kbd_callback(const char *name, int name_len,
         case SS_ESTABLISH_CONN:         return [self establishConnection];
         case SS_ESTABLISH_SSH:          return [self establishSsh];
         case SS_REQUEST_AUTH_TYPE:      return [self requestAuthType];
-        case SS_AUTHENTICATE_SSH:       return [self authenticateSsh];
+        case SS_AUTHENTICATE_SSH_BY_KEY:        return [self authenticateSshByKey];
+        case SS_AUTHENTICATE_SSH_BY_PASSWORD:   return [self authenticateSshByPassword];
         case SS_EXECUTE_COMMAND:        return [self executeCommand];
         case SS_INITIATE_LIST:          return [self initiateList];
         case SS_CONTINUE_LIST:          return [self continueList];

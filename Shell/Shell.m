@@ -45,7 +45,7 @@ static void kbd_callback(const char *name, int name_len,
 
     // Verify that we have somewhere to connect to.
     if (!project || !project.sshHost || !project.sshPort ||
-        !project.sshUser || !project.sshPass || !project.sshPath) {
+        !project.sshUser || !project.sshPath) {
         return false;
     }
 
@@ -94,31 +94,49 @@ static void kbd_callback(const char *name, int name_len,
         return nil;
     }
 
-    // Authenticate using the configured password.
+    KeyPair *keyPair = [[KeyPair alloc] init];
+
+    // Authenticate using the public key.
     do {
         const char *user = [project.sshUser UTF8String];
-        const char *pass = [project.sshPass UTF8String];
-        rc = libssh2_userauth_password(session, user, pass);
+        const char *pubfile = [[keyPair publicFilename] UTF8String];
+        const char *prifile = [[keyPair privateFilename] UTF8String];
+        rc = libssh2_userauth_publickey_fromfile(session, user, pubfile, prifile, NULL);
 
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
     } while (rc == LIBSSH2_ERROR_EAGAIN);
 
+    [keyPair release];
+
     if (rc != LIBSSH2_ERROR_NONE) {
-        NSLog(@"Authentication by password failed, trying interactive.");
+        if (!project.sshPass) return false;
 
+        // Authenticate using the configured password.
         do {
-            if (authPassword != NULL) free(authPassword);
-            authPassword = strdup([project.sshPass UTF8String]);
-
             const char *user = [project.sshUser UTF8String];
-            rc = libssh2_userauth_keyboard_interactive(session, user, &kbd_callback);
+            const char *pass = [project.sshPass UTF8String];
+            rc = libssh2_userauth_password(session, user, pass);
 
             [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
         } while (rc == LIBSSH2_ERROR_EAGAIN);
 
         if (rc != LIBSSH2_ERROR_NONE) {
-            NSLog(@"Authentication by keyboard-interactive failed.");
-            return false;
+            NSLog(@"Authentication by password failed, trying interactive.");
+
+            do {
+                if (authPassword != NULL) free(authPassword);
+                authPassword = strdup([project.sshPass UTF8String]);
+
+                const char *user = [project.sshUser UTF8String];
+                rc = libssh2_userauth_keyboard_interactive(session, user, &kbd_callback);
+
+                [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
+            } while (rc == LIBSSH2_ERROR_EAGAIN);
+
+            if (rc != LIBSSH2_ERROR_NONE) {
+                NSLog(@"Authentication by keyboard-interactive failed.");
+                return false;
+            }
         }
     }
 

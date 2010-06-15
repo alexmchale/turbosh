@@ -158,9 +158,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
     // Initialize the database.
     [Store open];
+
+    // Initialize the public/private key pair.
+    [[[KeyPair alloc] init] release];
 
     if (navController) {
         [window addSubview:navController.view];
@@ -182,7 +184,6 @@
     [[NSRunLoop mainRunLoop] addTimer:synchronizer.timer forMode:NSDefaultRunLoopMode];
 
     return YES;
-
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {

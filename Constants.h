@@ -6,7 +6,8 @@ enum TagNumbers
     TAG_FILE_CONFLICT,
     TAG_FILE_MISSING,
     TAG_PROJECT_BUTTON,
-    TAG_MD5_COMMAND_MISSING
+    TAG_MD5_COMMAND_MISSING,
+    TAG_RESET_KEY
 };
 
 typedef enum {
