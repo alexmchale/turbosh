@@ -12,14 +12,14 @@
 
 - (void) reload
 {
-    [self.tableView reloadData];
-
     Project *currentProject = [Project current];
     currentProjectNum = [currentProject.num intValue];
 
     self.projects = [Store projects];
     self.files = [Store files:currentProject ofUsage:FU_FILE];
     self.tasks = [Store files:currentProject ofUsage:FU_TASK];
+
+    [self.tableView reloadData];
 }
 
 #pragma mark View lifecycle
