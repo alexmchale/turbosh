@@ -27,6 +27,8 @@
     assert(proj);
 
     [Store deleteProject:proj];
+    [proj release];
+    proj = nil;
 
     if ([Store projectCount] == 0) {
         [self addNewProject];
@@ -682,6 +684,7 @@
 
     // Store the project in this form.
 
+    [proj release];
     proj = newProject;
     [newProject retain];
 
