@@ -139,10 +139,10 @@ typedef enum {
             Project *project = [projects objectAtIndex:indexPath.row];
 
             cell.textLabel.text = project.name;
-//            if (project.num && [project.num intValue] == currentProjectNum)
-//                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-//            else
-//                cell.accessoryType = UITableViewCellAccessoryNone;
+            if (project.num && [project.num intValue] == currentProjectNum)
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
             break;
         }
     }
