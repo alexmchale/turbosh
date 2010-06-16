@@ -154,6 +154,7 @@
 
 - (void) sendPublicKey
 {
+    TurboshAppDelegate *app = [[UIApplication sharedApplication] delegate];
     KeyPair *key = [[KeyPair alloc] init];
     NSString *publicKey = [NSString stringWithContentsOfFile:[key publicFilename]
                                                     encoding:NSUTF8StringEncoding
@@ -164,7 +165,7 @@
     con.navigationBar.barStyle = UIBarStyleBlack;
     [con setSubject:@"Turbosh Public Key"];
     [con setMessageBody:publicKey isHTML:NO];
-    [self presentModalViewController:con animated:YES];
+    [app.splitViewController presentModalViewController:con animated:YES];
 
     [con release];
     [key release];
@@ -174,7 +175,8 @@
            didFinishWithResult:(MFMailComposeResult)result
                          error:(NSError *)error
 {
-    [self dismissModalViewControllerAnimated:YES];
+    TurboshAppDelegate *app = [[UIApplication sharedApplication] delegate];
+    [app.splitViewController dismissModalViewControllerAnimated:YES];
 }
 
 - (void) resetPublicKey
