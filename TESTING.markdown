@@ -12,3 +12,6 @@
   3. Task Executables
   4. Edit files, watch synchronization
   5. Launch tasks with parameters
+3. Test project management
+  1. Add a new project, verify
+  2. Delete a project, verify
