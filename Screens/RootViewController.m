@@ -197,6 +197,7 @@ typedef enum {
 #pragma mark Toolbar Management
 
 - (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
+    toolbar.items = [NSArray array];
 }
 
 #pragma mark Memory management
