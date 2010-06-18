@@ -229,23 +229,29 @@
 {
     self.projectName = [TextFieldCell cellForTableView:myTableView labeled:@"Name"];
     self.projectName.text.delegate = self;
+    [self.projectName setValue:proj.name];
 
     self.sshHost = [TextFieldCell cellForTableView:myTableView labeled:@"Hostname"];
     self.sshHost.text.delegate = self;
+    [self.sshHost setValue:proj.sshHost];
 
     self.sshPort = [TextFieldCell cellForTableView:myTableView labeled:@"Port"];
     self.sshPort.text.delegate = self;
     self.sshPort.text.keyboardType = UIKeyboardTypeNumberPad;
+    [self.sshPort setValue:(proj.sshPort ? [proj.sshPort stringValue] : @"22")];
 
     self.sshUser = [TextFieldCell cellForTableView:myTableView labeled:@"Username"];
     self.sshUser.text.delegate = self;
+    [self.sshUser setValue:proj.sshUser];
 
     self.sshPass = [TextFieldCell cellForTableView:myTableView labeled:@"Password"];
     self.sshPass.text.delegate = self;
     self.sshPass.text.secureTextEntry = YES;
+    [self.sshPass setValue:proj.sshPass];
 
     self.sshPath = [TextFieldCell cellForTableView:myTableView labeled:@"Path"];
     self.sshPath.text.delegate = self;
+    [self.sshPath setValue:proj.sshPath];
 }
 
 - (void) viewDidUnload

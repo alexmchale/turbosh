@@ -10,4 +10,7 @@
 + (id) cellForTableView:(UITableView *)tableView;
 + (id) cellForTableView:(UITableView *)tableView labeled:(NSString *)name;
 
+- (NSString *) value;
+- (void) setValue:(NSString *)value;
+
 @end

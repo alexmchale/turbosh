@@ -55,6 +55,16 @@ static NSString *CellIdentifier = @"TextFieldCell";
     return self;
 }
 
+- (NSString *) value
+{
+    return text.text;
+}
+
+- (void) setValue:(NSString *)value
+{
+    text.text = value ? value : @"";
+}
+
 - (void) dealloc
 {
     [text release];
