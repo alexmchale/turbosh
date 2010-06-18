@@ -5,7 +5,7 @@
 
 @implementation TurboshAppDelegate
 
-@synthesize window, navController, splitViewController, rootViewController, detailViewController;
+@synthesize window, splitViewController, rootViewController, detailViewController;
 @synthesize projectSettingsController, fileViewController, taskExecController;
 @synthesize synchronizer;
 
@@ -13,22 +13,13 @@
 {
     TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [delegate.detailViewController switchTo:controller];
-    } else {
-        for (UIView *subview in delegate.window.subviews) {
-            [subview removeFromSuperview];
-        }
-
-        [delegate.window addSubview:controller.view];
-    }
+    [delegate.detailViewController switchTo:controller];
 }
 
 + (void) setLabelText:(NSString *)text
 {
     TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     delegate.detailViewController.label.text = text;
-    delegate.navController.title = text;
 }
 
 + (void) setMenuText:(NSString *)text
@@ -178,11 +169,11 @@
     // Initialize the public/private key pair.
     [[[KeyPair alloc] init] release];
 
-    if (navController) {
-        [window addSubview:navController.view];
-        [window makeKeyAndVisible];
-    } else if (splitViewController) {
+    if (splitViewController) {
         [window addSubview:splitViewController.view];
+        [window makeKeyAndVisible];
+    } else if (detailViewController) {
+        [window addSubview:detailViewController.view];
         [window makeKeyAndVisible];
     } else {
         assert(false);
@@ -190,8 +181,7 @@
 
     // Select that last used project and update the DVC to show it.
     Project *currentProject = [[[Project alloc] init] loadCurrent];
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        [TurboshAppDelegate editProject:currentProject];
+    [TurboshAppDelegate editProject:currentProject];
     [currentProject release];
 
     // Start the file synchronizer.
