@@ -1,25 +1,18 @@
-# EXIT CODES
-# 71 = Path does not exist.
-# 72 = Path is not a directory.
-# 73 = Path is unreadable.
+if [ ! -e ___ROOT_PATH___ ]; then
+    exit 71;
+fi;
 
-ROOT_PATH=___ROOT_PATH___
+if [ ! -d ___ROOT_PATH___ ]; then
+    exit 72;
+fi;
 
-if [ ! -e "$ROOT_PATH" ]; then
-    exit 71
-fi
-
-if [ ! -d "$ROOT_PATH" ]; then
-    exit 72
-fi
-
-if [[ ! -r "$ROOT_PATH" || ! -x "$ROOT_PATH" ]]; then
-    exit 73
-fi
+if [[ ! -r ___ROOT_PATH___ || ! -x ___ROOT_PATH___ ]]; then
+    exit 73;
+fi;
 
 if [ -f "~/.turbosh" ]; then
-    . ~/.turbosh > /dev/null 2>&1
-fi
+    . ~/.turbosh > /dev/null 2>&1;
+fi;
 
-cd $ROOT_PATH
-exec ___COMMAND___ < /dev/null
+cd ___ROOT_PATH___;
+___COMMAND___

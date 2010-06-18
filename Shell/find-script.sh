@@ -1,21 +1,13 @@
-# EXIT CODES
-# 71 = Path does not exist.
-# 72 = Path is not a directory.
-# 73 = Path is unreadable.
+if [ ! -e ___TARGET_PATH___ ]; then
+    exit 71;
+fi;
 
-TARGET_PATH=___TARGET_PATH___
-FIND_PARAMETERS=___FIND_PARAMETERS___
+if [ ! -d ___TARGET_PATH___ ]; then
+    exit 72;
+fi;
 
-if [ ! -e "$TARGET_PATH" ]; then
-    exit 71
-fi
+if [[ ! -r ___TARGET_PATH___ || ! -x ___TARGET_PATH___ ]]; then
+    exit 73;
+fi;
 
-if [ ! -d "$TARGET_PATH" ]; then
-    exit 72
-fi
-
-if [[ ! -r "$TARGET_PATH" || ! -x "$TARGET_PATH" ]]; then
-    exit 73
-fi
-
-exec find "$TARGET_PATH" $FIND_PARAMETERS 2> /dev/null < /dev/null
+exec find ___TARGET_PATH___ ___FIND_PARAMETERS___ 2> /dev/null < /dev/null;

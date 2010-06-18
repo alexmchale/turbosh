@@ -40,22 +40,19 @@
     NSURL *scriptURL = [NSURL fileURLWithPath:[bundle pathForResource:@"find-script" ofType:@"sh" inDirectory:NO]];
     NSString *script = [[[NSString alloc] initWithContentsOfURL:scriptURL] autorelease];
 
+    NSString *cp = [self.path stringBySingleQuoting];
     NSString *cf = nil;
 
     if (mode == FU_FILE) cf = @"-type f ";
     if (mode == FU_TASK) cf = @"-type f -perm -100";
     if (mode == FU_PATH) cf = @"-type d";
 
-    if (cf != nil) {
-        cf = [cf stringBySingleQuoting];
-        NSString *cp = [self.path stringBySingleQuoting];
+    if (cf == nil) return nil;
 
-        script = [script stringByReplacingOccurrencesOfString:@"___TARGET_PATH___" withString:cp];
-        script = [script stringByReplacingOccurrencesOfString:@"___FIND_PARAMETERS___" withString:cf];
-        return script;
-    }
+    script = [script stringByReplacingOccurrencesOfString:@"___TARGET_PATH___" withString:cp];
+    script = [script stringByReplacingOccurrencesOfString:@"___FIND_PARAMETERS___" withString:cf];
 
-    return nil;
+    return script;
 }
 
 - (bool) close

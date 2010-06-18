@@ -11,8 +11,10 @@
     NSURL *scriptURL = [NSURL fileURLWithPath:[bundle pathForResource:@"command-script" ofType:@"sh" inDirectory:NO]];
     NSString *script = [[[NSString alloc] initWithContentsOfURL:scriptURL] autorelease];
 
-    script = [script stringByReplacingOccurrencesOfString:@"___ROOT_PATH___" withString:project.sshPath];
+    script = [script stringByReplacingOccurrencesOfString:@"___ROOT_PATH___" withString:[project.sshPath stringBySingleQuoting]];
     script = [script stringByReplacingOccurrencesOfString:@"___COMMAND___" withString:command];
+    script = [script stringByReplacingOccurrencesOfRegex:@"[\r\n]" withString:@" "];
+    script = [NSString stringWithFormat:@"sh -c %@", [script stringBySingleQuoting]];
 
     return script;
 }
