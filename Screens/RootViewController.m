@@ -194,6 +194,11 @@ typedef enum {
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark Toolbar Management
+
+- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
+}
+
 #pragma mark Memory management
 
 - (void)viewDidUnload

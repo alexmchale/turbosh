@@ -180,9 +180,12 @@
     }
 
     // Select that last used project and update the DVC to show it.
-    Project *currentProject = [[[Project alloc] init] loadCurrent];
-    [TurboshAppDelegate editProject:currentProject];
-    [currentProject release];
+    Project *currentProject = [Project current];
+
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        [TurboshAppDelegate editProject:currentProject];
+    else
+        switch_to_list();
 
     // Start the file synchronizer.
     synchronizer = [[Synchronizer alloc] init];

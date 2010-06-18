@@ -43,5 +43,8 @@
     #import "ProjectFileSelector.h"
     #import "FileEditController.h"
     #import "TaskExecController.h"
+    #import "RootViewController.h"
+
+    #import "Navigation.h"
 
 #endif
