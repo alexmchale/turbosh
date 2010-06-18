@@ -158,6 +158,11 @@
     [delegate.detailViewController clearToolbar];
 }
 
+- (void) switchToList
+{
+    switch_to_list();
+}
+
 #pragma mark -
 #pragma mark Application lifecycle
 
@@ -173,6 +178,14 @@
         [window addSubview:splitViewController.view];
         [window makeKeyAndVisible];
     } else if (detailViewController) {
+        UIBarButtonItem *projectButton =
+            [[UIBarButtonItem alloc] initWithTitle:@"Project"
+                                             style:UIBarButtonItemStyleBordered
+                                            target:self
+                                            action:@selector(switchToList)];
+        detailViewController.projectButton = projectButton;
+        [projectButton release];
+
         [window addSubview:detailViewController.view];
         [window makeKeyAndVisible];
     } else {

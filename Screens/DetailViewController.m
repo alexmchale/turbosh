@@ -113,11 +113,6 @@
 
 #pragma mark View lifecycle
 
-- (void) viewDidLoad
-{
-    projectButton = nil;
-}
-
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     NSInteger toolbarHeight = toolbar.frame.size.height;
     CGRect fr1 = self.view.frame;
