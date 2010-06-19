@@ -35,7 +35,7 @@
     if (delegate.projectSettingsController == nil) {
         ProjectSettingsController *psc;
 
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        if (IS_IPAD)
             psc = [[ProjectSettingsController alloc] initWithNibName:@"ProjectSettingsController-iPad" bundle:nil];
         else
             psc = [[ProjectSettingsController alloc] initWithNibName:@"ProjectSettingsController-iPhone" bundle:nil];
@@ -196,7 +196,7 @@
     // Select that last used project and update the DVC to show it.
     Project *currentProject = [Project current];
 
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    if (IS_IPAD)
         [TurboshAppDelegate editProject:currentProject];
     else
         switch_to_list();
