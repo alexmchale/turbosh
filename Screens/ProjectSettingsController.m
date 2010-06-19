@@ -147,6 +147,8 @@
     if (t) syncLabel.text = t;
 }
 
+#pragma mark Manage Public Key
+
 - (BOOL) resignFirstResponder
 {
     [super resignFirstResponder];
@@ -207,6 +209,16 @@
         [app.splitViewController dismissModalViewControllerAnimated:YES];
     else
         [app.detailViewController dismissModalViewControllerAnimated:YES];
+}
+
+- (void) promptForResetPublicKey
+{
+    NSString *act =
+        [NSString
+         stringWithFormat:@"Are you sure you want to generate a new SSH key?",
+         proj.name];
+
+    show_action_sheet(self, TAG_RESET_KEY, act, @"Nevermind", @"Reset it!");
 }
 
 - (void) resetPublicKey
@@ -622,26 +634,8 @@
                     break;
 
                 case TPK_RESET_KEY:
-                {
-                    NSString *act =
-                    [NSString
-                     stringWithFormat:@"Are you sure you want to generate a new SSH key?",
-                     proj.name];
-
-                    UIActionSheet *actionSheet =
-                    [[UIActionSheet alloc]
-                     initWithTitle:act
-                     delegate:self
-                     cancelButtonTitle:@"Nevermind"
-                     destructiveButtonTitle:@"Reset it!"
-                     otherButtonTitles:nil];
-
-                    actionSheet.tag = TAG_RESET_KEY;
-                    actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
-                    [actionSheet showInView:self.view];
-
-                    [actionSheet release];
-                }   break;
+                    [self promptForResetPublicKey];
+                    break;
 
                 default: assert(false);
             }

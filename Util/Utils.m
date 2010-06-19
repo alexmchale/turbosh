@@ -36,4 +36,21 @@ void show_alert(NSString *title, NSString *message)
     [alert release];
 }
 
+void show_action_sheet(UIViewController<UIActionSheetDelegate> *con, int tag, NSString *msg, NSString *no, NSString *yes)
+{
+    UIActionSheet *actionSheet =
+        [[UIActionSheet alloc]
+         initWithTitle:msg
+         delegate:con
+         cancelButtonTitle:no
+         destructiveButtonTitle:yes
+         otherButtonTitles:nil];
+
+    actionSheet.tag = tag;
+    actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+    [actionSheet showInView:con.view];
+
+    [actionSheet release];
+}
+
 @end
