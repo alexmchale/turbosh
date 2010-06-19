@@ -21,12 +21,27 @@
         toolbar.items = [NSArray array];
 }
 
+- (void) adjustControllerSize:(UIViewController *)controller
+{
+    UIDeviceOrientation orient = [[UIDevice currentDevice] orientation];
+    NSInteger toolbarHeight = toolbar.frame.size.height;
+    CGRect fr1 = self.view.frame;
+
+    if (IS_IPAD || !UIInterfaceOrientationIsLandscape(orient)) {
+        CGRect fr2 = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);
+        controller.view.frame = fr2;
+    } else {
+        CGRect fr2 = CGRectMake(0, toolbarHeight, fr1.size.height, fr1.size.width - toolbarHeight);
+        controller.view.frame = fr2;
+    }
+
+    if ([controller respondsToSelector:@selector(reload)]) [controller reload];
+}
+
 - (void)switchTo:(UIViewController<ContentPaneDelegate> *)controller
 {
     // Adjust the incoming controller's view to match the available size.
-    NSInteger toolbarHeight = toolbar.frame.size.height;
-    CGRect fr1 = self.view.frame;
-    controller.view.frame = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);
+    [self adjustControllerSize:controller];
 
     // Remove all controls from the toolbar except the popover button.
     if ([[toolbar items] count] > 0) {
@@ -114,10 +129,9 @@
 #pragma mark View lifecycle
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    NSInteger toolbarHeight = toolbar.frame.size.height;
-    CGRect fr1 = self.view.frame;
-    CGRect fr2 = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);
-    currentController.view.frame = fr2;
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+
+    [self adjustControllerSize:currentController];
 
     [currentController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
