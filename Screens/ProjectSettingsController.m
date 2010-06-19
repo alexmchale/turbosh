@@ -603,19 +603,7 @@
                          stringWithFormat:@"Are you sure you want to remove the project %@ from Turbosh?",
                          proj.name];
 
-                    UIActionSheet *actionSheet =
-                        [[UIActionSheet alloc]
-                         initWithTitle:act
-                         delegate:self
-                         cancelButtonTitle:@"Nevermind"
-                         destructiveButtonTitle:@"Remove it!"
-                         otherButtonTitles:nil];
-
-                    actionSheet.tag = TAG_DELETE_PROJECT;
-                    actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
-                    [actionSheet showInView:self.view];
-
-                    [actionSheet release];
+                    show_action_sheet(self, TAG_DELETE_PROJECT, act, @"Nevermind", @"Remove it!");
                 }   break;
 
                 default: assert(false);
