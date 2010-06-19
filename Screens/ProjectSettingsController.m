@@ -10,6 +10,28 @@
 
 #pragma mark Action Management
 
+- (NSIndexPath *) indexOfField:(UITextField *)textField
+{
+    int section = TS_SSH_CREDENTIALS;
+    int row = 999;
+
+    if (textField == projectName.text) {
+        section = TS_PROJECT_MAIN;
+        row = TM_NAME;
+    }
+
+    if (textField == sshHost.text) row = TC_HOSTNAME;
+    if (textField == sshPort.text) row = TC_PORT;
+    if (textField == sshUser.text) row = TC_USERNAME;
+    if (textField == sshPass.text) row = TC_PASSWORD;
+    if (textField == sshPath.text) row = TC_PATH;
+
+    if (row == 999)
+        return nil;
+
+    return [NSIndexPath indexPathForRow:row inSection:section];
+}
+
 - (void) addNewProject
 {
     Project *nextProject = [[Project alloc] init];
@@ -680,6 +702,36 @@
     [TurboshAppDelegate setMenuText:proj.name];
 
     [nf release];
+}
+
+- (void)selectIndexEvent:(NSTimer *)theTimer
+{
+    NSIndexPath *indexPath = theTimer.userInfo;
+
+    if (indexPath) {
+        [myTableView scrollToRowAtIndexPath:indexPath
+                           atScrollPosition:UITableViewScrollPositionMiddle
+                                   animated:YES];
+    }
+}
+
+- (void) textFieldDidBeginEditing:(UITextField *)textField
+{
+    adjust_current_controller();
+
+    NSIndexPath *indexPath = [self indexOfField:textField];
+
+    if (indexPath) {
+        [myTableView scrollToRowAtIndexPath:indexPath
+                           atScrollPosition:UITableViewScrollPositionMiddle
+                                   animated:YES];
+
+        [NSTimer scheduledTimerWithTimeInterval:0.50
+                                         target:self
+                                       selector:@selector(selectIndexEvent:)
+                                       userInfo:indexPath
+                                        repeats:NO];
+    }
 }
 
 - (void) textFieldDidEndEditing:(UITextField *)textField

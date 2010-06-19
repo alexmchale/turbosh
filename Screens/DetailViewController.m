@@ -52,6 +52,11 @@
     if ([controller respondsToSelector:@selector(reload)]) [controller reload];
 }
 
+- (void) adjustCurrentController
+{
+    [self adjustControllerSize:currentController];
+}
+
 - (void)switchTo:(UIViewController<ContentPaneDelegate> *)controller
 {
     // Adjust the incoming controller's view to match the available size.

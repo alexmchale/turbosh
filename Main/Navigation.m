@@ -11,3 +11,10 @@ void switch_to_list()
 
     [TurboshAppDelegate switchTo:rvc];
 }
+
+void adjust_current_controller()
+{
+    TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+
+    [delegate.detailViewController adjustCurrentController];
+}

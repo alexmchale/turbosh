@@ -30,5 +30,6 @@
 
 - (void) switchTo:(UIViewController *)controller;
 - (void) clearToolbar;
+- (void) adjustCurrentController;
 
 @end
