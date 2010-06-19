@@ -165,7 +165,11 @@
     con.navigationBar.barStyle = UIBarStyleBlack;
     [con setSubject:@"Turbosh Public Key"];
     [con setMessageBody:publicKey isHTML:NO];
-    [app.splitViewController presentModalViewController:con animated:YES];
+
+    if (app.splitViewController)
+        [app.splitViewController presentModalViewController:con animated:YES];
+    else
+        [app.detailViewController presentModalViewController:con animated:YES];
 
     [con release];
     [key release];
@@ -176,7 +180,11 @@
                          error:(NSError *)error
 {
     TurboshAppDelegate *app = [[UIApplication sharedApplication] delegate];
-    [app.splitViewController dismissModalViewControllerAnimated:YES];
+
+    if (app.splitViewController)
+        [app.splitViewController dismissModalViewControllerAnimated:YES];
+    else
+        [app.detailViewController dismissModalViewControllerAnimated:YES];
 }
 
 - (void) resetPublicKey
