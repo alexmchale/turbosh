@@ -14,7 +14,7 @@
 		1DB6EDA711766EAF00FFC659 /* Synchronizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DB6EDA611766EAF00FFC659 /* Synchronizer.m */; };
 		1DC63B3A1188B50800DD3842 /* AnsiCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DC63B391188B50800DD3842 /* AnsiCode.m */; };
 		1DF12F9411789A18008927B0 /* CommandDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 1DF12F9311789A18008927B0 /* CommandDispatcher.m */; };
-		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		2804200B108E984D000629CD /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28042008108E984D000629CD /* RootViewController.m */; };
 		2804200C108E984D000629CD /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2804200A108E984D000629CD /* DetailViewController.m */; };
 		2804203C108E9BAB000629CD /* DetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2804203B108E9BAB000629CD /* DetailView.xib */; };
@@ -24,7 +24,6 @@
 		741A640111C4FE6B00E57D5E /* MainWindow-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 741A640011C4FE6B00E57D5E /* MainWindow-iPhone.xib */; };
 		741A64A911C55E3000E57D5E /* KeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 741A64A811C55E3000E57D5E /* KeyPair.m */; };
 		741A67CD11C688E800E57D5E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 741A67CC11C688E800E57D5E /* MessageUI.framework */; };
-		741A67D311C6891100E57D5E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 741A67D211C6891100E57D5E /* MessageUI.framework */; };
 		741A697E11C7915100E57D5E /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 741A697D11C7915100E57D5E /* iTunesArtwork */; };
 		741A69F411C81AEE00E57D5E /* ProjectSettingsController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 741A69F311C81AEE00E57D5E /* ProjectSettingsController-iPhone.xib */; };
 		7433E596119C1C8700873265 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7433E595119C1C8700873265 /* Icon.png */; };
@@ -405,7 +404,6 @@
 				74D7403A11674C2E0010A592 /* libicucore.dylib in Frameworks */,
 				7486315911B5739900C938AB /* libcrypto.a in Frameworks */,
 				741A67CD11C688E800E57D5E /* MessageUI.framework in Frameworks */,
-				741A67D311C6891100E57D5E /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
