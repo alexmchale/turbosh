@@ -18,6 +18,9 @@
 
     UILabel *label;
     UIActivityIndicatorView *spinner;
+
+    bool keyboardShown;
+    CGSize keyboardSize;
 }
 
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;

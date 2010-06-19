@@ -26,14 +26,28 @@
     UIDeviceOrientation orient = [[UIDevice currentDevice] orientation];
     NSInteger toolbarHeight = toolbar.frame.size.height;
     CGRect fr1 = self.view.frame;
+    int x, y;
+    int width, height;
+
+    x = 0;
+    y = toolbarHeight;
 
     if (IS_IPAD || !UIInterfaceOrientationIsLandscape(orient)) {
-        CGRect fr2 = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);
-        controller.view.frame = fr2;
+        width = fr1.size.width;
+        height = fr1.size.height - toolbarHeight;
     } else {
-        CGRect fr2 = CGRectMake(0, toolbarHeight, fr1.size.height, fr1.size.width - toolbarHeight);
-        controller.view.frame = fr2;
+        width = fr1.size.height;
+        height = fr1.size.width - toolbarHeight;
     }
+
+    if (keyboardShown) {
+        if (UIDeviceOrientationIsLandscape(orient))
+            height -= keyboardSize.width;
+        else
+            height -= keyboardSize.height;
+    }
+
+    controller.view.frame = CGRectMake(x, y, width, height);
 
     if ([controller respondsToSelector:@selector(reload)]) [controller reload];
 }
@@ -126,6 +140,37 @@
     return YES;
 }
 
+#pragma mark Keyboard Listeners
+
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    keyboardShown = true;
+
+    // Get the size of the keyboard.
+    NSDictionary* info = [aNotification userInfo];
+    CGRect keyboardBounds;
+    [[info valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue: &keyboardBounds];
+    keyboardSize = keyboardBounds.size;
+
+    [self adjustControllerSize:currentController];
+}
+
+
+// Called when the UIKeyboardDidHideNotification is sent
+- (void)keyboardWasHidden:(NSNotification*)aNotification
+{
+    keyboardShown = false;
+
+    // Get the size of the keyboard.
+    NSDictionary* info = [aNotification userInfo];
+    CGRect keyboardBounds;
+    [[info valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue: &keyboardBounds];
+    keyboardSize = keyboardBounds.size;
+
+    [self adjustControllerSize:currentController];
+}
+
 #pragma mark View lifecycle
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
@@ -136,7 +181,23 @@
     [currentController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
-- (void)viewDidUnload {
+- (void) viewDidLoad
+{
+    keyboardShown = false;
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasHidden:)
+                                                 name:UIKeyboardDidHideNotification object:nil];
+}
+
+- (void)viewDidUnload
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     self.popoverController = nil;
     self.toolbar = nil;
     self.projectButton = nil;
