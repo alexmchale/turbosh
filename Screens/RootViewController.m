@@ -30,6 +30,11 @@
     self.tableView.backgroundColor = [UIColor colorWithRed:0.15 green:0.15 blue:0.15 alpha:1.0];
     self.tableView.separatorColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.0];
 
+    if (IS_IPHONE) {
+        Project *currentProject = [Project current];
+        [TurboshAppDelegate setLabelText:currentProject.name];
+    }
+
     [self reload];
 }
 

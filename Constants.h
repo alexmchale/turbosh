@@ -15,3 +15,6 @@ typedef enum {
     FU_TASK,
     FU_PATH
 } FileUsage;
+
+#define IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+#define IS_IPAD   (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
