@@ -119,6 +119,8 @@
 
 - (void) configureFont:(id)sender
 {
+    if (!IS_IPAD) return;
+
     if (_fontPicker == nil) {
         self.fontPicker =
             [[[FontPickerController alloc]

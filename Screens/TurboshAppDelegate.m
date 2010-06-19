@@ -175,7 +175,8 @@
     [[[KeyPair alloc] init] release];
 
     if (splitViewController) {
-        [window addSubview:splitViewController.view];
+        UISplitViewController *split = splitViewController;
+        [window addSubview:split.view];
         [window makeKeyAndVisible];
     } else if (detailViewController) {
         UIBarButtonItem *projectButton =

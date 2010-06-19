@@ -10,7 +10,7 @@
         <UIPopoverControllerDelegate, UISplitViewControllerDelegate>
 {
 
-    UIPopoverController *popoverController;
+    id popoverController;
     UIToolbar *toolbar;
     UIBarItem *projectButton;
 

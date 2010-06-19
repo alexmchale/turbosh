@@ -4,7 +4,7 @@
 #import "QuartzCore/CAMediaTimingFunction.h"
 
 @interface DetailViewController ()
-@property (nonatomic, retain) UIPopoverController *popoverController;
+@property (nonatomic, retain) id popoverController;
 @end
 
 @implementation DetailViewController

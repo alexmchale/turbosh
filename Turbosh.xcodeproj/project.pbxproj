@@ -1032,7 +1032,7 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
 				INFOPLIST_FILE = "Turbosh-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_NAME = Turbosh;
 				PROVISIONING_PROFILE = "";
@@ -1055,7 +1055,7 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
 				INFOPLIST_FILE = "Turbosh-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_CFLAGS = (
 					"-DNDEBUG",
@@ -1101,7 +1101,7 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
 				INFOPLIST_FILE = "Turbosh-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_NAME = Turbosh;
 				SDKROOT = iphoneos4.0;

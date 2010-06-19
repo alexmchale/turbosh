@@ -9,13 +9,13 @@
     CGRect startingRect;
 
     FontPickerController *_fontPicker;
-    UIPopoverController *_fontPickerPopover;
+    id _fontPickerPopover;
 }
 
 @property (nonatomic, retain) IBOutlet UIWebView *webView;
 @property (nonatomic, retain) ProjectFile *file;
 @property CGRect startingRect;
 @property (nonatomic, retain) FontPickerController *fontPicker;
-@property (nonatomic, retain) UIPopoverController *fontPickerPopover;
+@property (nonatomic, retain) id fontPickerPopover;
 
 @end
