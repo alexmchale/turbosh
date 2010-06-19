@@ -146,7 +146,10 @@ typedef enum {
                 Project *project = [projects objectAtIndex:indexPath.row];
 
                 cell.textLabel.text = project.name;
-                if (project.num && [project.num intValue] == currentProjectNum)
+
+                if (IS_IPHONE)
+                    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+                else if (project.num && [project.num intValue] == currentProjectNum)
                     cell.accessoryType = UITableViewCellAccessoryCheckmark;
                 else
                     cell.accessoryType = UITableViewCellAccessoryNone;
@@ -189,7 +192,13 @@ typedef enum {
         case MST_PROJECTS:
             if (indexPath.row < [projects count]) {
                 Project *project = [projects objectAtIndex:indexPath.row];
-                [TurboshAppDelegate editProject:project];
+
+                if (IS_IPHONE) {
+                    [Store setCurrentProject:project];
+                    switch_to_list();
+                } else {
+                    [TurboshAppDelegate editProject:project];
+                }
             }
             break;
 
@@ -197,6 +206,16 @@ typedef enum {
     }
 
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) tableView:(UITableView *)aTableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == MST_PROJECTS) {
+        if (indexPath.row < [projects count]) {
+            Project *project = [projects objectAtIndex:indexPath.row];
+            [TurboshAppDelegate editProject:project];
+        }
+    }
 }
 
 #pragma mark Toolbar Management
