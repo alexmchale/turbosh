@@ -44,7 +44,8 @@
 {
     [super viewDidLoad];
 
-    self.clearsSelectionOnViewWillAppear = NO;
+    if ([self respondsToSelector:@selector(clearsSelectionOnViewWillAppear)])
+        self.clearsSelectionOnViewWillAppear = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated

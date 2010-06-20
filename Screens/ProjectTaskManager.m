@@ -47,9 +47,6 @@
 
     project = nil;
     files = nil;
-
-    // Uncomment the following line to preserve selection between presentations.
-    self.clearsSelectionOnViewWillAppear = NO;
 }
 
 - (void) viewWillAppear:(BOOL)animated

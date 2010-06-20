@@ -29,8 +29,11 @@ static const int FONT_SIZE_COUNT = 5;
 {
     [super viewDidLoad];
 
-    self.clearsSelectionOnViewWillAppear = NO;
-    self.contentSizeForViewInPopover = CGSizeMake(150.0, 225.0);
+    if ([self respondsToSelector:@selector(clearsSelectionOnViewWillAppear)]) {
+        self.clearsSelectionOnViewWillAppear = NO;
+        self.contentSizeForViewInPopover = CGSizeMake(150.0, 225.0);
+    }
+
     self.tableView.backgroundColor = [UIColor colorWithRed:0.15 green:0.15 blue:0.15 alpha:1.0];
     self.tableView.separatorColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.0];
 }
