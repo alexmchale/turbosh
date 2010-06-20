@@ -153,10 +153,22 @@
     keyboardShown = true;
 
     // Get the size of the keyboard.
-    NSDictionary* info = [aNotification userInfo];
-    CGRect keyboardBounds;
-    [[info valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue: &keyboardBounds];
-    keyboardSize = keyboardBounds.size;
+    if (!IS_IPAD && [[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+        UIDeviceOrientation orient = [[UIDevice currentDevice] orientation];
+
+        if (UIDeviceOrientationIsLandscape(orient)) {
+            keyboardSize.width = 480;
+            keyboardSize.height = 140;
+        } else {
+            keyboardSize.width = 320;
+            keyboardSize.height = 216;
+        }
+    } else {
+        NSDictionary* info = [aNotification userInfo];
+        CGRect keyboardBounds;
+        [[info valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&keyboardBounds];
+        keyboardSize = keyboardBounds.size;
+    }
 
     [self adjustControllerSize:currentController];
 }
@@ -168,10 +180,22 @@
     keyboardShown = false;
 
     // Get the size of the keyboard.
-    NSDictionary* info = [aNotification userInfo];
-    CGRect keyboardBounds;
-    [[info valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue: &keyboardBounds];
-    keyboardSize = keyboardBounds.size;
+    if (!IS_IPAD && [[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+        UIDeviceOrientation orient = [[UIDevice currentDevice] orientation];
+
+        if (UIDeviceOrientationIsLandscape(orient)) {
+            keyboardSize.width = 480;
+            keyboardSize.height = 140;
+        } else {
+            keyboardSize.width = 320;
+            keyboardSize.height = 216;
+        }
+    } else {
+        NSDictionary* info = [aNotification userInfo];
+        CGRect keyboardBounds;
+        [[info valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&keyboardBounds];
+        keyboardSize = keyboardBounds.size;
+    }
 
     [self adjustControllerSize:currentController];
 }
