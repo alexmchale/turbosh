@@ -47,6 +47,8 @@
             height -= keyboardSize.height;
     }
 
+    if (IS_IPAD) height += toolbarHeight;
+
     NSLog(@"Adjusting controller size %@ TO (%d, %d)", [[controller class] description], width, height);
 
     controller.view.frame = CGRectMake(x, y, width, height);
