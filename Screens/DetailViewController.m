@@ -71,6 +71,12 @@
         [toolbar setItems:[NSArray array]];
     }
 
+    // Force the view to load.
+    if (![controller isViewLoaded]) {
+        [controller loadView];
+        [controller viewDidLoad];
+    }
+
     // View will appear / disappear.
     [currentController viewWillDisappear:YES];
     [controller viewWillAppear:YES];
