@@ -262,7 +262,15 @@
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
     [self resignFirstResponder];
+
     [myTableView reloadData];
+
+    [projectName adjustSizeFor:myTableView];
+    [sshHost adjustSizeFor:myTableView];
+    [sshPort adjustSizeFor:myTableView];
+    [sshUser adjustSizeFor:myTableView];
+    [sshPass adjustSizeFor:myTableView];
+    [sshPath adjustSizeFor:myTableView];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
