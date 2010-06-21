@@ -351,47 +351,6 @@
     return 0;
 }
 
-- (UITableViewCell *) cellFor:(UITableView *)tableView
-						field:(UITextField *)field
-						 name:(NSString *)name
-						value:(NSString *)value
-{
-    static NSString *CellIdentifier = @"ProjectSettingsTextFieldCellIdentifier";
-
-    // Dequeue or create a cell of the appropriate type.
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-									   reuseIdentifier:CellIdentifier] autorelease];
-    }
-
-    for (UIView *view in cell.contentView.subviews) {
-        [view removeFromSuperview];
-    }
-
-    CGRect tableFrame = tableView.frame;
-    int yOffset = 10;
-    int height = cell.frame.size.height - (2 * yOffset);
-
-    UILabel *label = [[UILabel alloc] init];
-    label.text = name;
-    label.frame = CGRectMake(10, yOffset, 90, height);
-    label.font = [UIFont boldSystemFontOfSize:14.0];
-    label.textAlignment = UITextAlignmentRight;
-    label.backgroundColor = [UIColor clearColor];
-
-    field.text = value;
-    field.frame = CGRectMake(110, yOffset, tableFrame.size.width - 220, height);
-    field.textColor = [UIColor colorWithRed:0.243 green:0.306 blue:0.435 alpha:1.0];
-
-    [cell.contentView addSubview:label];
-    [cell.contentView addSubview:field];
-
-    [label release];
-
-    return cell;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	UITableViewCell *cell = nil;
@@ -434,11 +393,7 @@
             break;
 
         case TS_SUBSCRIPTION:
-            cell = [tableView dequeueReusableCellWithIdentifier:@"FilesCell"];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:@"FilesCell"] autorelease];
-            }
+            cell = [tableView cellForId:@"FilesCell" withStyle:UITableViewCellStyleDefault];
 
             switch (indexPath.row) {
                 case TS_MANAGE_FILES:
@@ -460,11 +415,7 @@
             break;
 
         case TS_ADD_REM:
-            cell = [tableView dequeueReusableCellWithIdentifier:@"AddRemCell"];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:@"AddRemCell"] autorelease];
-            }
+            cell = [tableView cellForId:@"AddRemCell" withStyle:UITableViewCellStyleDefault];
 
             switch (indexPath.row) {
                 case TAR_ADD_PROJECT:
@@ -481,11 +432,7 @@
             break;
 
         case TS_MANAGE_KEY:
-            cell = [tableView dequeueReusableCellWithIdentifier:@"pkCell"];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:@"pkCell"] autorelease];
-            }
+            cell = [tableView cellForId:@"pkCell" withStyle:UITableViewCellStyleDefault];
 
             switch (indexPath.row) {
                 case TPK_CLIPBOARD_KEY:

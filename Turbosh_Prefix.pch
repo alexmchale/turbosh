@@ -17,6 +17,7 @@
     #import "Util/AnsiCode.h"
     #import "Util/StringUtil.h"
     #import "Util/DataUtil.h"
+    #import "UITableViewUtil.h"
     #import "Shell/KeyPair.h"
 
     #import "MBProgressHUD.h"
