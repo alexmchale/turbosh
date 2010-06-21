@@ -1036,12 +1036,12 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
 				INFOPLIST_FILE = "Turbosh-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_NAME = Turbosh;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1059,7 +1059,7 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
 				INFOPLIST_FILE = "Turbosh-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				OTHER_CFLAGS = (
 					"-DNDEBUG",
@@ -1067,7 +1067,7 @@
 				);
 				PRODUCT_NAME = Turbosh;
 				PROVISIONING_PROFILE = "91B538D8-7BEB-4812-884E-9410549DB222";
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1105,10 +1105,10 @@
 				GCC_VERSION = "";
 				HEADER_SEARCH_PATHS = "../openssl-xcode/include/**";
 				INFOPLIST_FILE = "Turbosh-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
 				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				PRODUCT_NAME = Turbosh;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos3.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
