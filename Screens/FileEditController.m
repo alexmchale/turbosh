@@ -3,6 +3,7 @@
 @implementation FileEditController
 
 @synthesize textView, text, startingRect;
+@synthesize cancelButton, spacer, saveButton;
 
 #pragma mark Button Actions
 
@@ -50,6 +51,27 @@
 
 #pragma mark View Events
 
+- (void) viewDidLoad
+{
+    self.cancelButton =
+        [[[UIBarButtonItem alloc]
+         initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+         target:self
+         action:@selector(cancelAction)] autorelease];
+
+    self.spacer =
+        [[[UIBarButtonItem alloc]
+         initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+         target:nil
+         action:nil] autorelease];
+
+    self.saveButton =
+        [[[UIBarButtonItem alloc]
+         initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+         target:self
+         action:@selector(saveAction)] autorelease];
+}
+
 - (void) viewWillAppear:(BOOL)animated
 {
     textView.font = [UIFont fontWithName:@"Courier New" size:[Store fontSize]];
@@ -72,35 +94,18 @@
     textView.text = @"";
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     return YES;
 }
 
 #pragma mark Memory Management
 
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (void) viewDidUnload
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-
-    cancelButton =
-        [[UIBarButtonItem alloc]
-         initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-         target:self
-         action:@selector(cancelAction)];
-
-    spacer =
-        [[UIBarButtonItem alloc]
-         initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-         target:nil
-         action:nil];
-
-    saveButton =
-        [[UIBarButtonItem alloc]
-         initWithBarButtonSystemItem:UIBarButtonSystemItemSave
-         target:self
-         action:@selector(saveAction)];
-
-    return self;
+    self.cancelButton = nil;
+    self.spacer = nil;
+    self.saveButton = nil;
 }
 
 - (void)dealloc
