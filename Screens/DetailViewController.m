@@ -47,7 +47,10 @@
             height -= keyboardSize.height;
     }
 
-    if (IS_IPAD) height += toolbarHeight;
+    if (IS_IPAD) {
+        height += toolbarHeight;
+        if (UIDeviceOrientationIsLandscape(orient)) width -= toolbarHeight;
+    }
 
     NSLog(@"Adjusting controller size %@ TO (%d, %d)", [[controller class] description], width, height);
 
@@ -153,7 +156,7 @@
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    [self adjustControllerSize:currentController];
+    [self adjustCurrentController];
     [currentController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 

@@ -260,6 +260,8 @@
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self resignFirstResponder];
     [myTableView reloadData];
 }
 
