@@ -3,10 +3,6 @@
 #import "QuartzCore/CAAnimation.h"
 #import "QuartzCore/CAMediaTimingFunction.h"
 
-@interface DetailViewController ()
-@property (nonatomic, retain) id popoverController;
-@end
-
 @implementation DetailViewController
 
 @synthesize toolbar, popoverController, label, spinner, projectButton;

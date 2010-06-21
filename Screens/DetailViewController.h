@@ -10,7 +10,7 @@
         <UIPopoverControllerDelegate, UISplitViewControllerDelegate>
 {
 
-    id popoverController;
+    UIPopoverController *popoverController;
     UIToolbar *toolbar;
     UIBarItem *projectButton;
 
@@ -23,12 +23,13 @@
     CGSize keyboardSize;
 }
 
+@property (nonatomic, retain) UIPopoverController *popoverController;
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, retain) UIBarItem *projectButton;
 @property (nonatomic, retain) IBOutlet UILabel *label;
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView *spinner;
 
-- (void) switchTo:(UIViewController *)controller;
+- (void) switchTo:(UIViewController<ContentPaneDelegate> *)controller;
 - (void) clearToolbar;
 - (void) adjustCurrentController;
 
