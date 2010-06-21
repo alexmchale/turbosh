@@ -53,7 +53,8 @@
     controller.view.frame = CGRectMake(x, y, width, height);
     [controller.view setNeedsLayout];
 
-    if ([controller respondsToSelector:@selector(reload)]) [controller reload];
+    SEL reloadSelector = @selector(reload);
+    if ([controller respondsToSelector:reloadSelector]) [controller performSelector:reloadSelector];
 }
 
 - (void) adjustCurrentController
