@@ -32,12 +32,12 @@
     x = 0;
     y = toolbarHeight;
 
-    if (IS_IPAD || !UIInterfaceOrientationIsLandscape(orient)) {
-        width = fr1.size.width;
-        height = fr1.size.height - toolbarHeight;
-    } else {
+    if (UIInterfaceOrientationIsLandscape(orient)) {
         width = fr1.size.height;
         height = fr1.size.width - toolbarHeight;
+    } else {
+        width = fr1.size.width;
+        height = fr1.size.height - toolbarHeight;
     }
 
     if (keyboardShown) {
@@ -47,7 +47,10 @@
             height -= keyboardSize.height;
     }
 
+    NSLog(@"Adjusting controller size %@ TO (%d, %d)", [[controller class] description], width, height);
+
     controller.view.frame = CGRectMake(x, y, width, height);
+    [controller.view setNeedsLayout];
 
     if ([controller respondsToSelector:@selector(reload)]) [controller reload];
 }
@@ -59,9 +62,6 @@
 
 - (void)switchTo:(UIViewController<ContentPaneDelegate> *)controller
 {
-    // Adjust the incoming controller's view to match the available size.
-    [self adjustControllerSize:controller];
-
     // Remove all controls from the toolbar except the popover button.
     if ([[toolbar items] count] > 0) {
         UIBarButtonItem *pb = [[toolbar items] objectAtIndex:0];
@@ -85,6 +85,9 @@
     // View did appear / disappear.
     [currentController viewDidDisappear:YES];
     [controller viewDidAppear:YES];
+
+    // Adjust the incoming controller's view to match the available size.
+    [self adjustControllerSize:controller];
 
     // Set up an animation for the transition between the views.
     CATransition *animation = [CATransition animation];
@@ -140,18 +143,22 @@
 
 #pragma mark Rotation support
 
-// Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     return YES;
+}
+
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self adjustControllerSize:currentController];
+    [currentController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 #pragma mark Keyboard Listeners
 
-// Called when the UIKeyboardDidShowNotification is sent.
-- (void)keyboardWasShown:(NSNotification*)aNotification
+- (void) setKeyboardSize:(NSNotification *)aNotification
 {
-    keyboardShown = true;
-
     // Get the size of the keyboard.
     if (!IS_IPAD && [[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
         UIDeviceOrientation orient = [[UIDevice currentDevice] orientation];
@@ -169,7 +176,13 @@
         [[info valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&keyboardBounds];
         keyboardSize = keyboardBounds.size;
     }
+}
 
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    keyboardShown = true;
+    [self setKeyboardSize:aNotification];
     [self adjustControllerSize:currentController];
 }
 
@@ -178,37 +191,11 @@
 - (void)keyboardWasHidden:(NSNotification*)aNotification
 {
     keyboardShown = false;
-
-    // Get the size of the keyboard.
-    if (!IS_IPAD && [[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
-        UIDeviceOrientation orient = [[UIDevice currentDevice] orientation];
-
-        if (UIDeviceOrientationIsLandscape(orient)) {
-            keyboardSize.width = 480;
-            keyboardSize.height = 140;
-        } else {
-            keyboardSize.width = 320;
-            keyboardSize.height = 216;
-        }
-    } else {
-        NSDictionary* info = [aNotification userInfo];
-        CGRect keyboardBounds;
-        [[info valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&keyboardBounds];
-        keyboardSize = keyboardBounds.size;
-    }
-
+    [self setKeyboardSize:aNotification];
     [self adjustControllerSize:currentController];
 }
 
 #pragma mark View lifecycle
-
-- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-
-    [self adjustControllerSize:currentController];
-
-    [currentController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-}
 
 - (void) viewDidLoad
 {
