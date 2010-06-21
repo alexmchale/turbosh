@@ -6,37 +6,48 @@
 
 #pragma mark Command Dispatcher Listeners
 
+- (void) clearWindow
+{
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSURL *baseURL = [NSURL fileURLWithPath:[bundle resourcePath]];
+    NSURL *htmlURL = [NSURL fileURLWithPath:[bundle pathForResource:@"task-viewer" ofType:@"html" inDirectory:NO]];
+    NSString *html = [[[NSString alloc] initWithContentsOfURL:htmlURL] autorelease];
+
+    [webView loadHTMLString:html baseURL:baseURL];
+}
+
 - (void) transferBegin:(NSNotification *)notif
 {
-    NSLog(@"Task Begin");
-
     NSString *c = [[dispatcher command] stringByQuotingJavascript];
     NSString *js = [NSString stringWithFormat:@"printBegin(%@);", c];
+
+    NSLog(@"Task Begin");
+    NSLog(@"%@", js);
 
     [webView stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (void) transferProgress:(NSNotification *)notif
 {
-    NSLog(@"Task Progress");
-    NSLog(@"%@", [notif.userInfo valueForKey:@"string"]);
-
     NSString *c = [notif.userInfo valueForKey:@"string"];
     c = [c stringByConvertingAnsiColor];
     c = [c stringByQuotingJavascript];
     NSString *js = [NSString stringWithFormat:@"printProgress(%@);", c];
 
-    NSLog(@"%@", js);
+    NSLog(@"Task Progress");
+    NSLog(@"c: %@", c);
+    NSLog(@"j: %@", js);
 
     [webView stringByEvaluatingJavaScriptFromString:js];
 }
 
 - (void) transferFinish:(NSNotification *)notif
 {
-    NSLog(@"Task Finish");
-
     NSNumber *c = [notif.userInfo valueForKey:@"exit-code"];
     NSString *js = [NSString stringWithFormat:@"printFinish('%@');", c];
+
+    NSLog(@"Task Finish");
+    NSLog(@"%@", js);
 
     [webView stringByEvaluatingJavaScriptFromString:js];
 }
@@ -46,13 +57,6 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    NSBundle *bundle = [NSBundle mainBundle];
-    NSURL *baseURL = [NSURL fileURLWithPath:[bundle resourcePath]];
-    NSURL *htmlURL = [NSURL fileURLWithPath:[bundle pathForResource:@"task-viewer" ofType:@"html" inDirectory:NO]];
-    NSString *html = [[[NSString alloc] initWithContentsOfURL:htmlURL] autorelease];
-
-    [webView loadHTMLString:html baseURL:baseURL];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(transferBegin:)
@@ -68,6 +72,13 @@
 
     [TurboshAppDelegate queueCommand:dispatcher];
     [TurboshAppDelegate setLabelText:@"Task Launcher"];
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    [self clearWindow];
 }
 
 - (void) viewWillDisappear:(BOOL)animated

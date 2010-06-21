@@ -98,8 +98,8 @@
     TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
 
     if (delegate.taskExecController == nil) {
-        TaskExecController *psc =
-            [[TaskExecController alloc] initWithNibName:@"TaskExecController" bundle:nil];
+        NSString *nibName = IS_IPAD ? @"TaskExecController-iPad" : @"TaskExecController-iPhone";
+        TaskExecController *psc = [[TaskExecController alloc] initWithNibName:nibName bundle:nil];
         delegate.taskExecController = psc;
         [psc release];
     }

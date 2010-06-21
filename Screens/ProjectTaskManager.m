@@ -41,14 +41,6 @@
 
 #pragma mark View lifecycle
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    project = nil;
-    files = nil;
-}
-
 - (void) viewWillAppear:(BOOL)animated
 {
     self.project = [Project current];
