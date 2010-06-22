@@ -523,10 +523,11 @@ static void kbd_callback(const char *name, int name_len,
 
 - (void) terminateSsh
 {
-    if (dispatcher) {
-        [dispatcher close];
-        self.dispatcher = nil;
-    }
+    [dispatcher close];
+    self.dispatcher = nil;
+
+    [lister close];
+    self.lister = nil;
 
     if (session != NULL) {
         libssh2_session_disconnect(session, "Normal Shutdown, Thank you for playing");
@@ -537,6 +538,12 @@ static void kbd_callback(const char *name, int name_len,
     if (project && ![project existsInDatabase]) self.project = nil;
     if (file && ![file existsInDatabase]) self.file = nil;
 
+    if (!currentCommand && [pendingCommands count] > 0) {
+        self.currentCommand = [pendingCommands objectAtIndex:0];
+        self.project = currentCommand.project;
+        [pendingCommands removeObjectAtIndex:0];
+    }
+
     state = SS_DISCONNECT;
 }
 
@@ -545,7 +552,7 @@ static void kbd_callback(const char *name, int name_len,
     close(sock);
     sock = 0;
 
-    state = SS_SELECT_PROJECT;
+    state = currentCommand ? SS_BEGIN_CONN : SS_SELECT_PROJECT;
 }
 
 - (void) idle
@@ -579,6 +586,13 @@ static void kbd_callback(const char *name, int name_len,
     if (file && ![file existsInDatabase]) state = SS_TERMINATE_SSH;
 
     [TurboshAppDelegate spin:(state != SS_IDLE)];
+
+    // Abort this connection if there's a command ready and we're not connected for it.
+    if (currentCommand && project && ![project.num isEqualToNumber:currentCommand.project.num]) {
+        state = SS_TERMINATE_SSH;
+    } else if (!currentCommand && [pendingCommands count] > 0) {
+        state = SS_TERMINATE_SSH;
+    }
 
     // Post a notification of the synchronizer's current state.
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];

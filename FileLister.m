@@ -57,6 +57,7 @@
 
 - (bool) close
 {
+    session = NULL;
     [dispatcher close];
 
     step = 0;

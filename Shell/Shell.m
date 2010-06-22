@@ -147,6 +147,7 @@ static void kbd_callback(const char *name, int name_len,
 - (void) disconnect {
     libssh2_session_disconnect(session, "Normal Shutdown, Thank you for playing");
     libssh2_session_free(session);
+    session = NULL;
 
     close(sock);
 }

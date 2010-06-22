@@ -26,6 +26,7 @@
     self = [super init];
 
     session = newSession;
+    channel = NULL;
 
     project = newProject;
     [project retain];
@@ -239,6 +240,8 @@
                               nil];
 
     [nc postNotificationName:@"finish" object:self userInfo:userInfo];
+
+    session = NULL;
 
     if (channel != NULL) {
         libssh2_channel_free(channel);
