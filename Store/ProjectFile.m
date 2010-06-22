@@ -133,6 +133,7 @@
         @"cpp",        @"c++",
         @"cpp",        @"cc",
         @"cpp",        @"cxx",
+        @"cpp",        @"h",
         @"latex",      @"tex",
         @"python",     @"py",
         @"php",        @"php3",
