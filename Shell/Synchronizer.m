@@ -277,6 +277,9 @@ static void kbd_callback(const char *name, int name_len,
 
     if (![currentCommand step]) {
         self.currentCommand = nil;
+        self.project = nil;
+        self.file = nil;
+        startup = true;
         state = SS_TERMINATE_SSH;
     }
 }
