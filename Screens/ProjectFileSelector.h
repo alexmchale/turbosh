@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface ProjectFileSelector : UITableViewController
+@interface ProjectFileSelector : UIViewController
     <ContentPaneDelegate, UIAlertViewDelegate, UISearchBarDelegate>
 {
     UITableView *myTableView;

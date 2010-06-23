@@ -519,9 +519,8 @@
         {
             [self resignFirstResponder];
 
-            ProjectFileSelector *pfs = [[ProjectFileSelector alloc]
-                                        initWithNibName:@"ProjectFileSelector"
-                                        bundle:nil];
+            NSString *nib = IS_IPAD ? @"ProjectFileSelector-iPad" : @"ProjectFileSelector-iPhone";
+            ProjectFileSelector *pfs = [[ProjectFileSelector alloc] initWithNibName:nib bundle:nil];
             pfs.project = proj;
 
             switch (indexPath.row) {

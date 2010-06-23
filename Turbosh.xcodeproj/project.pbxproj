@@ -32,7 +32,7 @@
 		74356DB811C255720061E2C2 /* command-script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 74356DB711C255720061E2C2 /* command-script.sh */; };
 		7451C83811CF0E760098E044 /* UITableViewUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7451C83711CF0E760098E044 /* UITableViewUtil.m */; };
 		74610D8911642BB000CF7B04 /* ProjectFileSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 74610D8711642BB000CF7B04 /* ProjectFileSelector.m */; };
-		74610D8A11642BB000CF7B04 /* ProjectFileSelector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74610D8811642BB000CF7B04 /* ProjectFileSelector.xib */; };
+		74610D8A11642BB000CF7B04 /* ProjectFileSelector-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74610D8811642BB000CF7B04 /* ProjectFileSelector-iPad.xib */; };
 		747EC175116150D8002D8CD8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 747EC174116150D8002D8CD8 /* libz.dylib */; };
 		74818BA411BA56BE002EEA86 /* FileLister.m in Sources */ = {isa = PBXBuildFile; fileRef = 74818BA311BA56BE002EEA86 /* FileLister.m */; };
 		74818C7A11BAB02D002EEA86 /* FontPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 74818C7911BAB02D002EEA86 /* FontPicker.m */; };
@@ -41,6 +41,8 @@
 		7486315911B5739900C938AB /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7486313811B571C800C938AB /* libcrypto.a */; };
 		749ED1E211CC001200AAE6B6 /* Navigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 749ED1E111CC001200AAE6B6 /* Navigation.m */; };
 		74A5796611CF876800E32654 /* TaskExecController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A5796511CF876800E32654 /* TaskExecController-iPhone.xib */; };
+		74A57B6611D1A2DA00E32654 /* crystal-background.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A57B6511D1A2DA00E32654 /* crystal-background.png */; };
+		74A57B8D11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A57B8C11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib */; };
 		74A5ACE711709E05006A48A3 /* FileEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A5ACE511709E05006A48A3 /* FileEditController.m */; };
 		74A5ACE811709E05006A48A3 /* FileEditController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A5ACE611709E05006A48A3 /* FileEditController.xib */; };
 		74AE5E72115E783B006CA577 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AE5E71115E783B006CA577 /* Utils.m */; };
@@ -232,7 +234,7 @@
 		7451C83711CF0E760098E044 /* UITableViewUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UITableViewUtil.m; path = Util/UITableViewUtil.m; sourceTree = "<group>"; };
 		74610D8611642BB000CF7B04 /* ProjectFileSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectFileSelector.h; path = Screens/ProjectFileSelector.h; sourceTree = "<group>"; };
 		74610D8711642BB000CF7B04 /* ProjectFileSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProjectFileSelector.m; path = Screens/ProjectFileSelector.m; sourceTree = "<group>"; };
-		74610D8811642BB000CF7B04 /* ProjectFileSelector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ProjectFileSelector.xib; path = Screens/ProjectFileSelector.xib; sourceTree = "<group>"; };
+		74610D8811642BB000CF7B04 /* ProjectFileSelector-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "ProjectFileSelector-iPad.xib"; path = "Screens/ProjectFileSelector-iPad.xib"; sourceTree = "<group>"; };
 		747EC174116150D8002D8CD8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		74818BA211BA56BE002EEA86 /* FileLister.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileLister.h; sourceTree = "<group>"; };
 		74818BA311BA56BE002EEA86 /* FileLister.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileLister.m; sourceTree = "<group>"; };
@@ -244,6 +246,8 @@
 		749ED1E011CC001200AAE6B6 /* Navigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Navigation.h; path = Main/Navigation.h; sourceTree = "<group>"; };
 		749ED1E111CC001200AAE6B6 /* Navigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Navigation.m; path = Main/Navigation.m; sourceTree = "<group>"; };
 		74A5796511CF876800E32654 /* TaskExecController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "TaskExecController-iPhone.xib"; path = "Screens/TaskExecController-iPhone.xib"; sourceTree = "<group>"; };
+		74A57B6511D1A2DA00E32654 /* crystal-background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "crystal-background.png"; sourceTree = "<group>"; };
+		74A57B8C11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "ProjectFileSelector-iPhone.xib"; path = "Screens/ProjectFileSelector-iPhone.xib"; sourceTree = "<group>"; };
 		74A5ACE411709E05006A48A3 /* FileEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileEditController.h; path = ../Screens/FileEditController.h; sourceTree = "<group>"; };
 		74A5ACE511709E05006A48A3 /* FileEditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileEditController.m; path = ../Screens/FileEditController.m; sourceTree = "<group>"; };
 		74A5ACE611709E05006A48A3 /* FileEditController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FileEditController.xib; path = ../Screens/FileEditController.xib; sourceTree = "<group>"; };
@@ -470,7 +474,8 @@
 			isa = PBXGroup;
 			children = (
 				741A69F311C81AEE00E57D5E /* ProjectSettingsController-iPhone.xib */,
-				74610D8811642BB000CF7B04 /* ProjectFileSelector.xib */,
+				74610D8811642BB000CF7B04 /* ProjectFileSelector-iPad.xib */,
+				74A57B8C11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib */,
 				74AE5E86115E7BFC006CA577 /* ProjectSettingsController-iPad.xib */,
 				74610D8611642BB000CF7B04 /* ProjectFileSelector.h */,
 				74610D8711642BB000CF7B04 /* ProjectFileSelector.m */,
@@ -518,6 +523,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				74A57B6511D1A2DA00E32654 /* crystal-background.png */,
 				741A697D11C7915100E57D5E /* iTunesArtwork */,
 				74818CBA11BBEAAA002EEA86 /* 19-gear.png */,
 				7433E595119C1C8700873265 /* Icon.png */,
@@ -933,7 +939,7 @@
 				74B36F8A115B2A9800E3B2D1 /* sh_style.css in Resources */,
 				74B36F8F115B2AAA00E3B2D1 /* FileViewController.xib in Resources */,
 				74AE5E88115E7BFC006CA577 /* ProjectSettingsController-iPad.xib in Resources */,
-				74610D8A11642BB000CF7B04 /* ProjectFileSelector.xib in Resources */,
+				74610D8A11642BB000CF7B04 /* ProjectFileSelector-iPad.xib in Resources */,
 				74A5ACE811709E05006A48A3 /* FileEditController.xib in Resources */,
 				74ECA28E1184DF1200458DAF /* TaskExecController-iPad.xib in Resources */,
 				74ECA3721187D6F500458DAF /* task-viewer.html in Resources */,
@@ -946,6 +952,8 @@
 				741A697E11C7915100E57D5E /* iTunesArtwork in Resources */,
 				741A69F411C81AEE00E57D5E /* ProjectSettingsController-iPhone.xib in Resources */,
 				74A5796611CF876800E32654 /* TaskExecController-iPhone.xib in Resources */,
+				74A57B6611D1A2DA00E32654 /* crystal-background.png in Resources */,
+				74A57B8D11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

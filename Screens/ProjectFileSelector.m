@@ -40,14 +40,6 @@
 
 #pragma mark View lifecycle
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    if ([self respondsToSelector:@selector(clearsSelectionOnViewWillAppear)])
-        self.clearsSelectionOnViewWillAppear = NO;
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     busy = true;
