@@ -213,6 +213,14 @@
     [Store close];
 }
 
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    [TurboshAppDelegate sync];
+}
 
 #pragma mark -
 #pragma mark Application's Documents directory
