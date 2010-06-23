@@ -13,7 +13,7 @@
 #include <errno.h>
 #include <termios.h>
 
-#define SHOW_SYNC_LOG false
+#define SHOW_SYNC_LOG true
 #define SYNCHRONIZE_DELAY_SECONDS 0.05
 
 @implementation Synchronizer
@@ -552,8 +552,10 @@ static void kbd_callback(const char *name, int name_len,
 
 - (void) disconnect
 {
-    close(sock);
-    sock = 0;
+    if (sock != 0) {
+        close(sock);
+        sock = 0;
+    }
 
     state = currentCommand ? SS_BEGIN_CONN : SS_SELECT_PROJECT;
 }
@@ -636,6 +638,43 @@ static void kbd_callback(const char *name, int name_len,
 
         default: assert(false);
     }
+}
+
+- (SyncState) state { return state; }
+
+- (void) stop
+{
+    [currentCommand close];
+    self.currentCommand = nil;
+
+    [dispatcher close];
+    self.dispatcher = nil;
+
+    [lister close];
+    self.lister = nil;
+
+    [transfer close];
+    self.transfer = nil;
+
+    self.projectsToSync = nil;
+    self.project = nil;
+    self.file = nil;
+
+    startup = false;
+    [pendingCommands removeAllObjects];
+
+    if (session != NULL) {
+        libssh2_session_disconnect(session, "Normal Shutdown, Thank you for playing");
+        libssh2_session_free(session);
+        session = NULL;
+    }
+
+    if (sock != 0) {
+        close(sock);
+        sock = 0;
+    }
+
+    state = SS_IDLE;
 }
 
 - (void) synchronize

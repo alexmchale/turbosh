@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-enum SyncState
+typedef enum
 {
     SS_SELECT_PROJECT,
     SS_BEGIN_CONN,
@@ -27,12 +27,12 @@ enum SyncState
     SS_DISCONNECT,
     SS_AWAITING_ANSWER,
     SS_IDLE
-};
+} SyncState;
 
 @interface Synchronizer : NSObject
     <UIAlertViewDelegate>
 {
-    enum SyncState state;
+    SyncState state;
 
     NSTimer *timer;
 
@@ -74,7 +74,9 @@ enum SyncState
 @property (nonatomic, retain) FileLister *lister;
 @property (nonatomic, retain) CommandDispatcher *currentCommand;
 
+- (SyncState) state;
 - (void) step;
+- (void) stop;
 - (void) synchronize;
 - (void) synchronize:(NSNumber *)projectNumber;
 - (void) appendCommand:(CommandDispatcher *)command;

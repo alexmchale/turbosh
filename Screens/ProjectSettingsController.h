@@ -16,7 +16,7 @@
     TextFieldCell *sshPass;
     TextFieldCell *sshPath;
 
-    enum SyncState syncState;
+    SyncState syncState;
     IBOutlet UILabel *syncLabel;
 }
 

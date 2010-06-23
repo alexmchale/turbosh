@@ -119,11 +119,6 @@
     return delegate.synchronizer;
 }
 
-+ (void) sync
-{
-    [[self synchronizer] synchronize];
-}
-
 + (void) sync:(NSNumber *)projectNumber
 {
     [[self synchronizer] synchronize:projectNumber];
@@ -209,18 +204,33 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    // Save data if appropriate
+    synchronizer_stop();
     [Store close];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    synchronizer_stop();
+
+    if([CURRENT_DEVICE respondsToSelector:@selector(isMultitaskingSupported)]) {
+        UIBackgroundTaskIdentifier bgTask =
+            [application beginBackgroundTaskWithExpirationHandler: ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [application endBackgroundTask:bgTask];
+                });
+            }];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            synchronizer_run();
+            [application endBackgroundTask:bgTask];
+        });
+    }
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     [TurboshAppDelegate spin:false];
-    [TurboshAppDelegate sync];
+    synchronizer_start();
 }
 
 #pragma mark -

@@ -46,7 +46,6 @@
 + (void) editCurrentFile;
 + (void) launchTask:(ProjectFile *)f;
 + (Synchronizer *) synchronizer;
-+ (void) sync;
 + (void) sync:(NSNumber *)projectNumber;
 + (void) queueCommand:(CommandDispatcher *)dispatcher;
 + (void) reloadList;

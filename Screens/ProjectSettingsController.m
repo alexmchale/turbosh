@@ -77,7 +77,7 @@
 
 - (void) updateStatus:(NSNotification *)notif
 {
-    enum SyncState state = [[notif.userInfo valueForKey:@"state"] intValue];
+    SyncState state = [[notif.userInfo valueForKey:@"state"] intValue];
     Project *p = [notif.userInfo valueForKey:@"project"];
     ProjectFile *f = [notif.userInfo valueForKey:@"file"];
     CommandDispatcher *d = [notif.userInfo valueForKey:@"task"];

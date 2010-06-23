@@ -42,6 +42,7 @@
 		749ED1E211CC001200AAE6B6 /* Navigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 749ED1E111CC001200AAE6B6 /* Navigation.m */; };
 		74A5796611CF876800E32654 /* TaskExecController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A5796511CF876800E32654 /* TaskExecController-iPhone.xib */; };
 		74A57B8D11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A57B8C11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib */; };
+		74A57BF311D1CF0300E32654 /* Management.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A57BF211D1CF0300E32654 /* Management.m */; };
 		74A5ACE711709E05006A48A3 /* FileEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A5ACE511709E05006A48A3 /* FileEditController.m */; };
 		74A5ACE811709E05006A48A3 /* FileEditController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A5ACE611709E05006A48A3 /* FileEditController.xib */; };
 		74AE5E72115E783B006CA577 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AE5E71115E783B006CA577 /* Utils.m */; };
@@ -246,6 +247,8 @@
 		749ED1E111CC001200AAE6B6 /* Navigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Navigation.m; path = Main/Navigation.m; sourceTree = "<group>"; };
 		74A5796511CF876800E32654 /* TaskExecController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "TaskExecController-iPhone.xib"; path = "Screens/TaskExecController-iPhone.xib"; sourceTree = "<group>"; };
 		74A57B8C11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "ProjectFileSelector-iPhone.xib"; path = "Screens/ProjectFileSelector-iPhone.xib"; sourceTree = "<group>"; };
+		74A57BF111D1CF0300E32654 /* Management.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Management.h; sourceTree = "<group>"; };
+		74A57BF211D1CF0300E32654 /* Management.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Management.m; sourceTree = "<group>"; };
 		74A5ACE411709E05006A48A3 /* FileEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileEditController.h; path = ../Screens/FileEditController.h; sourceTree = "<group>"; };
 		74A5ACE511709E05006A48A3 /* FileEditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileEditController.m; path = ../Screens/FileEditController.m; sourceTree = "<group>"; };
 		74A5ACE611709E05006A48A3 /* FileEditController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FileEditController.xib; path = ../Screens/FileEditController.xib; sourceTree = "<group>"; };
@@ -589,6 +592,8 @@
 			children = (
 				749ED1E011CC001200AAE6B6 /* Navigation.h */,
 				749ED1E111CC001200AAE6B6 /* Navigation.m */,
+				74A57BF111D1CF0300E32654 /* Management.h */,
+				74A57BF211D1CF0300E32654 /* Management.m */,
 			);
 			name = Navigation;
 			sourceTree = "<group>";
@@ -1009,6 +1014,7 @@
 				741A64A911C55E3000E57D5E /* KeyPair.m in Sources */,
 				749ED1E211CC001200AAE6B6 /* Navigation.m in Sources */,
 				7451C83811CF0E760098E044 /* UITableViewUtil.m in Sources */,
+				74A57BF311D1CF0300E32654 /* Management.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
