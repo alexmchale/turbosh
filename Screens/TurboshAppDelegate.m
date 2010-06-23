@@ -219,6 +219,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [TurboshAppDelegate spin:false];
     [TurboshAppDelegate sync];
 }
 
