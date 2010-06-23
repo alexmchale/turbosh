@@ -40,6 +40,13 @@ Please email me at alexmchale@gmail.com if you run into any troubles with Turbos
 
 ### Changes ###
 
+v1.4
+
+* Turbosh is now an iPad/iPhone hybrid app!
+* Support for fast app switching (iOS4 only).
+* The synchronizer will now run one time when the app is put in the background (iOS4 only).
+* Tasks should now launch faster, even if the synchronizer is running.
+
 v1.3
 
 * Feature: There is now a gear in the file viewer to change the font size. Five sizes are available.
