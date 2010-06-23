@@ -33,8 +33,6 @@ Please note that the file editor does not show the files syntax-highlighted.
 
 There's a limit of the number files in a path that Turbosh can handle.  I have had success with folders up to 50,000 files.  A customer sent in a report that it was failing against a folder of about 700,000 files.  The limit is somewhere in the middle.
 
-Turbosh cannot handle a project path that contains any files your user account does not have permission to read. This is fixed in v1.3.
-
 Please email me at alexmchale@gmail.com if you run into any troubles with Turbosh.
 
 
