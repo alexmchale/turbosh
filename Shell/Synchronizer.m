@@ -27,6 +27,7 @@
 
 // The function kbd_callback is needed for keyboard-interactive authentication via LIBSSH2.
 static char *authPassword = NULL;
+static NSLock *kbd_callback_lock = nil;
 static void kbd_callback(const char *name, int name_len,
                          const char *instruction, int instruction_len, int num_prompts,
                          const LIBSSH2_USERAUTH_KBDINT_PROMPT *prompts,
@@ -249,7 +250,11 @@ static void kbd_callback(const char *name, int name_len,
             return;
         }
     } else if (authType.interactive) {
-        int rc = libssh2_userauth_keyboard_interactive(session, user, &kbd_callback);
+        int rc;
+
+        @synchronized(kbd_callback_lock) {
+            rc = libssh2_userauth_keyboard_interactive(session, user, &kbd_callback);
+        }
 
         if (rc == LIBSSH2_ERROR_EAGAIN) return;
 
@@ -730,6 +735,8 @@ static void kbd_callback(const char *name, int name_len,
 - (id) init
 {
     self = [super init];
+
+    if (!kbd_callback_lock) kbd_callback_lock = [[NSLock alloc] init];
 
     timer = [NSTimer timerWithTimeInterval:SYNCHRONIZE_DELAY_SECONDS
                                     target:self
