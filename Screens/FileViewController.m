@@ -149,7 +149,7 @@
     fec.text = file.content;
     fec.startingRect = CGRectMake(0, y, webView.frame.size.width, webView.frame.size.height);
 
-    [TurboshAppDelegate switchTo:fec];
+    switch_to_controller(fec);
 
     [fec release];
 }

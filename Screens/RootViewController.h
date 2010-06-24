@@ -2,7 +2,7 @@
 
 @class DetailViewController;
 
-@interface RootViewController : UITableViewController {
+@interface RootViewController : UITableViewController <ContentPaneDelegate> {
     DetailViewController *detailViewController;
 
     NSInteger currentProjectNum;

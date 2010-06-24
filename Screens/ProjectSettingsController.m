@@ -539,7 +539,7 @@
                     break;
             }
 
-            [TurboshAppDelegate switchTo:pfs];
+            switch_to_controller(pfs);
             [pfs release];
 
             break;
@@ -597,7 +597,7 @@
 {
     if (indexPath.section == TS_SUBSCRIPTION && indexPath.row == TS_MANAGE_TASKS) {
         ProjectTaskManager *ptm = [[ProjectTaskManager alloc] initWithStyle:UITableViewStyleGrouped];
-        [TurboshAppDelegate switchTo:ptm];
+        switch_to_controller(ptm);
         [ptm release];
     }
 }

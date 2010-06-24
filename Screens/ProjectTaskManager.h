@@ -7,7 +7,7 @@ enum
     PTM_ROW_COUNT
 };
 
-@interface ProjectTaskManager : UITableViewController
+@interface ProjectTaskManager : UITableViewController <ContentPaneDelegate>
 {
     Project *project;
     NSArray *files;

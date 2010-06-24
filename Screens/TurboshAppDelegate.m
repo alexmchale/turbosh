@@ -9,13 +9,6 @@
 @synthesize projectSettingsController, fileViewController, taskExecController;
 @synthesize synchronizer;
 
-+ (void) switchTo:(UIViewController *)controller
-{
-    TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-
-    [delegate.detailViewController switchTo:controller];
-}
-
 + (void) setLabelText:(NSString *)text
 {
     TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
@@ -49,7 +42,7 @@
 
     [Store setCurrentProject:project];
 
-    [self switchTo:delegate.projectSettingsController];
+    switch_to_controller(delegate.projectSettingsController);
 }
 
 + (void) editFile:(ProjectFile *)file
@@ -73,7 +66,7 @@
         delegate.fileViewController.startingRect = startingRect;
     }
 
-    [self switchTo:delegate.fileViewController];
+    switch_to_controller(delegate.fileViewController);
 }
 
 + (void) editCurrentFile
@@ -109,7 +102,7 @@
     NSString *commandString = [NSString stringWithFormat:@"%@ %@", f.filename, commandArgs];
     CommandDispatcher *cd = [[CommandDispatcher alloc] initWithProject:p session:NULL command:commandString];
     delegate.taskExecController.dispatcher = cd;
-    [TurboshAppDelegate switchTo:delegate.taskExecController];
+    switch_to_controller(delegate.taskExecController);
     [cd release];
 }
 
