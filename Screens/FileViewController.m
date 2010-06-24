@@ -36,7 +36,6 @@
     [webView loadHTMLString:html baseURL:baseURL];
 
     [Store setCurrentFile:file];
-    [TurboshAppDelegate setLabelText:[file condensedPath]];
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
@@ -55,6 +54,7 @@
     [super viewDidAppear:animated];
 
     [self loadFile];
+    [TurboshAppDelegate setLabelText:[file condensedPath]];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -119,24 +119,28 @@
 
 - (void) configureFont:(id)sender
 {
-    if (!IS_IPAD) return;
-
     if (_fontPicker == nil) {
         self.fontPicker =
             [[[FontPickerController alloc]
                 initWithStyle:UITableViewStylePlain] autorelease];
-
         self.fontPicker.delegate = self;
 
-        self.fontPickerPopover =
-            [[[UIPopoverController alloc]
-                initWithContentViewController:self.fontPicker] autorelease];
+        if (IS_IPAD) {
+
+            self.fontPickerPopover =
+                [[[UIPopoverController alloc]
+                    initWithContentViewController:self.fontPicker] autorelease];
+        }
     }
 
-    [self.fontPickerPopover
-        presentPopoverFromBarButtonItem:sender
-        permittedArrowDirections:UIPopoverArrowDirectionAny
-        animated:YES];
+    if (IS_IPAD) {
+        [self.fontPickerPopover
+            presentPopoverFromBarButtonItem:sender
+            permittedArrowDirections:UIPopoverArrowDirectionAny
+            animated:YES];
+    } else {
+        switch_to_controller(self.fontPicker);
+    }
 }
 
 - (void) startEdit

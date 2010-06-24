@@ -16,6 +16,13 @@ static const int FONT_SIZE_COUNT = 5;
 
 @synthesize delegate = _delegate;
 
+#pragma mark Actions
+
+- (void) saveAction
+{
+    [TurboshAppDelegate editCurrentFile];
+}
+
 #pragma mark View lifecycle
 
 - (void) viewWillAppear:(BOOL)animated
@@ -23,6 +30,8 @@ static const int FONT_SIZE_COUNT = 5;
     [super viewWillAppear:animated];
 
     [self.tableView reloadData];
+
+    if (IS_IPHONE) [TurboshAppDelegate setLabelText:@"Configuration"];
 }
 
 - (void)viewDidLoad
@@ -80,11 +89,38 @@ static const int FONT_SIZE_COUNT = 5;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
+    for (int i = 0; i < [tableView numberOfRowsInSection:0]; ++i) {
+        NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:lastIndexPath];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
+
     if (self.delegate != nil) {
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+
         NSInteger size = fontSizes[indexPath.row % FONT_SIZE_COUNT];
 
         [self.delegate fontChanged:size];
     }
+}
+
+#pragma mark Toolbar Management
+
+- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
+    UIBarButtonItem *spacer =
+        [[[UIBarButtonItem alloc]
+          initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+          target:nil
+          action:nil] autorelease];
+
+    UIBarButtonItem *saveButton =
+        [[[UIBarButtonItem alloc]
+          initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+          target:self
+          action:@selector(saveAction)] autorelease];
+
+    [toolbar setItems:[NSArray arrayWithObjects:spacer, saveButton, nil]];
 }
 
 #pragma mark Memory management

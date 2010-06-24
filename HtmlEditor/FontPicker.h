@@ -4,7 +4,7 @@
 - (void) fontChanged:(NSInteger)fontSize;
 @end
 
-@interface FontPickerController : UITableViewController
+@interface FontPickerController : UITableViewController <ContentPaneDelegate>
 {
     id<FontPickerDelegate> _delegate;
 }
