@@ -1,5 +1,3 @@
-#define DELEGATE ((TurboshAppDelegate *)[[UIApplication sharedApplication] delegate])
-
 void switch_to_controller(UIViewController<ContentPaneDelegate> *controller)
 {
     [DELEGATE.detailViewController switchTo:controller];

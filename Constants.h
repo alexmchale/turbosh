@@ -19,3 +19,4 @@ typedef enum {
 #define IS_IPHONE      (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 #define IS_IPAD        (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define CURRENT_DEVICE ([UIDevice currentDevice])
+#define DELEGATE       ((TurboshAppDelegate *)[[UIApplication sharedApplication] delegate])
