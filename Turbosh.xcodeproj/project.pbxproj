@@ -43,8 +43,10 @@
 		74A5796611CF876800E32654 /* TaskExecController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A5796511CF876800E32654 /* TaskExecController-iPhone.xib */; };
 		74A57B8D11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A57B8C11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib */; };
 		74A57BF311D1CF0300E32654 /* Management.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A57BF211D1CF0300E32654 /* Management.m */; };
+		74A57D3211D30DDC00E32654 /* FileEditController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A57D3111D30DDC00E32654 /* FileEditController-iPhone.xib */; };
+		74A57D7911D374CB00E32654 /* FileViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A57D7811D374CB00E32654 /* FileViewController-iPhone.xib */; };
 		74A5ACE711709E05006A48A3 /* FileEditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A5ACE511709E05006A48A3 /* FileEditController.m */; };
-		74A5ACE811709E05006A48A3 /* FileEditController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A5ACE611709E05006A48A3 /* FileEditController.xib */; };
+		74A5ACE811709E05006A48A3 /* FileEditController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A5ACE611709E05006A48A3 /* FileEditController-iPad.xib */; };
 		74AE5E72115E783B006CA577 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AE5E71115E783B006CA577 /* Utils.m */; };
 		74AE5E87115E7BFC006CA577 /* ProjectSettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AE5E85115E7BFC006CA577 /* ProjectSettingsController.m */; };
 		74AE5E88115E7BFC006CA577 /* ProjectSettingsController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74AE5E86115E7BFC006CA577 /* ProjectSettingsController-iPad.xib */; };
@@ -132,7 +134,7 @@
 		74B36F89115B2A9800E3B2D1 /* sh_main.js in Resources */ = {isa = PBXBuildFile; fileRef = 74B36F37115B2A9800E3B2D1 /* sh_main.js */; };
 		74B36F8A115B2A9800E3B2D1 /* sh_style.css in Resources */ = {isa = PBXBuildFile; fileRef = 74B36F38115B2A9800E3B2D1 /* sh_style.css */; };
 		74B36F8E115B2AAA00E3B2D1 /* FileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B36F8C115B2AAA00E3B2D1 /* FileViewController.m */; };
-		74B36F8F115B2AAA00E3B2D1 /* FileViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */; };
+		74B36F8F115B2AAA00E3B2D1 /* FileViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74B36F8D115B2AAA00E3B2D1 /* FileViewController-iPad.xib */; };
 		74B36FA4115B2B2A00E3B2D1 /* Project.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B36FA1115B2B2A00E3B2D1 /* Project.m */; };
 		74B36FA5115B2B2A00E3B2D1 /* ProjectFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B36FA3115B2B2A00E3B2D1 /* ProjectFile.m */; };
 		74B37176115CF37D00E3B2D1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74B37175115CF37D00E3B2D1 /* QuartzCore.framework */; };
@@ -249,9 +251,11 @@
 		74A57B8C11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "ProjectFileSelector-iPhone.xib"; path = "Screens/ProjectFileSelector-iPhone.xib"; sourceTree = "<group>"; };
 		74A57BF111D1CF0300E32654 /* Management.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Management.h; sourceTree = "<group>"; };
 		74A57BF211D1CF0300E32654 /* Management.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Management.m; sourceTree = "<group>"; };
+		74A57D3111D30DDC00E32654 /* FileEditController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "FileEditController-iPhone.xib"; path = "Screens/FileEditController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
+		74A57D7811D374CB00E32654 /* FileViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "FileViewController-iPhone.xib"; path = "Screens/FileViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
 		74A5ACE411709E05006A48A3 /* FileEditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileEditController.h; path = ../Screens/FileEditController.h; sourceTree = "<group>"; };
 		74A5ACE511709E05006A48A3 /* FileEditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileEditController.m; path = ../Screens/FileEditController.m; sourceTree = "<group>"; };
-		74A5ACE611709E05006A48A3 /* FileEditController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FileEditController.xib; path = ../Screens/FileEditController.xib; sourceTree = "<group>"; };
+		74A5ACE611709E05006A48A3 /* FileEditController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "FileEditController-iPad.xib"; path = "../Screens/FileEditController-iPad.xib"; sourceTree = "<group>"; };
 		74AE5E70115E783B006CA577 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = Util/Utils.h; sourceTree = "<group>"; };
 		74AE5E71115E783B006CA577 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utils.m; path = Util/Utils.m; sourceTree = "<group>"; };
 		74AE5E84115E7BFC006CA577 /* ProjectSettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectSettingsController.h; path = Screens/ProjectSettingsController.h; sourceTree = "<group>"; };
@@ -343,7 +347,7 @@
 		74B36F38115B2A9800E3B2D1 /* sh_style.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = sh_style.css; sourceTree = "<group>"; };
 		74B36F8B115B2AAA00E3B2D1 /* FileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileViewController.h; path = ../Screens/FileViewController.h; sourceTree = "<group>"; };
 		74B36F8C115B2AAA00E3B2D1 /* FileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FileViewController.m; path = ../Screens/FileViewController.m; sourceTree = "<group>"; };
-		74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = FileViewController.xib; path = ../Screens/FileViewController.xib; sourceTree = "<group>"; };
+		74B36F8D115B2AAA00E3B2D1 /* FileViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "FileViewController-iPad.xib"; path = "../Screens/FileViewController-iPad.xib"; sourceTree = "<group>"; };
 		74B36FA0115B2B2A00E3B2D1 /* Project.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Project.h; path = Store/Project.h; sourceTree = "<group>"; };
 		74B36FA1115B2B2A00E3B2D1 /* Project.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Project.m; path = Store/Project.m; sourceTree = "<group>"; };
 		74B36FA2115B2B2A00E3B2D1 /* ProjectFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectFile.h; path = Store/ProjectFile.h; sourceTree = "<group>"; };
@@ -616,10 +620,12 @@
 		74B36EE3115B2A9700E3B2D1 /* File Editor */ = {
 			isa = PBXGroup;
 			children = (
-				74A5ACE611709E05006A48A3 /* FileEditController.xib */,
-				74B36F8D115B2AAA00E3B2D1 /* FileViewController.xib */,
+				74A57D3111D30DDC00E32654 /* FileEditController-iPhone.xib */,
+				74A5ACE611709E05006A48A3 /* FileEditController-iPad.xib */,
 				74A5ACE411709E05006A48A3 /* FileEditController.h */,
 				74A5ACE511709E05006A48A3 /* FileEditController.m */,
+				74A57D7811D374CB00E32654 /* FileViewController-iPhone.xib */,
+				74B36F8D115B2AAA00E3B2D1 /* FileViewController-iPad.xib */,
 				74B36F8B115B2AAA00E3B2D1 /* FileViewController.h */,
 				74B36F8C115B2AAA00E3B2D1 /* FileViewController.m */,
 				74B36EE4115B2A9700E3B2D1 /* editor.html */,
@@ -939,10 +945,10 @@
 				74B36F60115B2A9800E3B2D1 /* sh_whitengrey.css in Resources */,
 				74B36F61115B2A9800E3B2D1 /* sh_zellner.css in Resources */,
 				74B36F8A115B2A9800E3B2D1 /* sh_style.css in Resources */,
-				74B36F8F115B2AAA00E3B2D1 /* FileViewController.xib in Resources */,
+				74B36F8F115B2AAA00E3B2D1 /* FileViewController-iPad.xib in Resources */,
 				74AE5E88115E7BFC006CA577 /* ProjectSettingsController-iPad.xib in Resources */,
 				74610D8A11642BB000CF7B04 /* ProjectFileSelector-iPad.xib in Resources */,
-				74A5ACE811709E05006A48A3 /* FileEditController.xib in Resources */,
+				74A5ACE811709E05006A48A3 /* FileEditController-iPad.xib in Resources */,
 				74ECA28E1184DF1200458DAF /* TaskExecController-iPad.xib in Resources */,
 				74ECA3721187D6F500458DAF /* task-viewer.html in Resources */,
 				7433E596119C1C8700873265 /* Icon.png in Resources */,
@@ -955,6 +961,8 @@
 				741A69F411C81AEE00E57D5E /* ProjectSettingsController-iPhone.xib in Resources */,
 				74A5796611CF876800E32654 /* TaskExecController-iPhone.xib in Resources */,
 				74A57B8D11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib in Resources */,
+				74A57D3211D30DDC00E32654 /* FileEditController-iPhone.xib in Resources */,
+				74A57D7911D374CB00E32654 /* FileViewController-iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

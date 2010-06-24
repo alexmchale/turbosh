@@ -44,8 +44,10 @@
     }
 
     if (IS_IPAD) {
-        height += toolbarHeight;
-        if (UIDeviceOrientationIsLandscape(orient)) width -= toolbarHeight;
+        if (UIDeviceOrientationIsLandscape(orient)) {
+            width -= toolbarHeight;
+            height += toolbarHeight;
+        }
     }
 
     NSLog(@"Adjusting controller size %@ TO (%d, %d)", [[controller class] description], width, height);
@@ -78,6 +80,9 @@
         [controller viewDidLoad];
     }
 
+    // Adjust the incoming controller's view to match the available size.
+    [self adjustControllerSize:controller];
+
     // View will appear / disappear.
     [currentController viewWillDisappear:YES];
     [controller viewWillAppear:YES];
@@ -93,9 +98,6 @@
     // View did appear / disappear.
     [currentController viewDidDisappear:YES];
     [controller viewDidAppear:YES];
-
-    // Adjust the incoming controller's view to match the available size.
-    [self adjustControllerSize:controller];
 
     // Set up an animation for the transition between the views.
     CATransition *animation = [CATransition animation];

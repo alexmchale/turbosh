@@ -55,8 +55,8 @@
     TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
 
     if (delegate.fileViewController == nil) {
-        FileViewController *psc =
-        [[FileViewController alloc] initWithNibName:nil bundle:nil];
+        NSString *nib = IS_IPAD ? @"FileViewController-iPad" : @"FileViewController-iPhone";
+        FileViewController *psc = [[FileViewController alloc] initWithNibName:nib bundle:nil];
         delegate.fileViewController = psc;
         [psc release];
     }

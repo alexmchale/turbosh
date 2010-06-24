@@ -87,6 +87,7 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [textView scrollRectToVisible:startingRect animated:NO];
+    NSLog(@"Now editing with scroll at (%d, %d) (%f, %f).", startingRect.origin.x, startingRect.origin.y, startingRect.size.width, startingRect.size.height);
 }
 
 - (void) viewDidDisappear:(BOOL)animated

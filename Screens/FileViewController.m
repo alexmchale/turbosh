@@ -144,10 +144,15 @@
     NSString *r = [webView stringByEvaluatingJavaScriptFromString:@"getCurrentScrollPosition()"];
     NSInteger y = [r integerValue];
 
-    FileEditController *fec = [[FileEditController alloc] initWithNibName:@"FileEditController" bundle:nil];
+    NSString *nib = IS_IPAD ? @"FileEditController-iPad" : @"FileEditController-iPhone";
+    FileEditController *fec = [[FileEditController alloc] initWithNibName:nib bundle:nil];
 
     fec.text = file.content;
     fec.startingRect = CGRectMake(0, y, webView.frame.size.width, webView.frame.size.height);
+
+    NSLog(@"Starting editor with scroll at (%d, %d) (%f, %f).",
+          fec.startingRect.origin.x, fec.startingRect.origin.y,
+          fec.startingRect.size.width, fec.startingRect.size.height);
 
     switch_to_controller(fec);
 
