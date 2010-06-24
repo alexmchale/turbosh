@@ -223,7 +223,9 @@
 
 - (void) resetPublicKey
 {
-    [[[[KeyPair alloc] init] generate] release];
+    KeyPair *key = [[KeyPair alloc] init];
+    [key generate];
+    [key release];
 }
 
 #pragma mark View Initialization

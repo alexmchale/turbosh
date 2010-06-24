@@ -27,7 +27,7 @@
     const char *privateFilename = [[self privateFilename] UTF8String];
     unsigned char keyBuffer[32 * 1024];
     unsigned char rawKey[32 * 1024];
-    unsigned char *keyBytesStart, *keyBytesEnd;
+    unsigned char *keyBytesEnd;
     unsigned char *flag = (unsigned char *)"\000\000\000\007ssh-rsa\000\000\000\001#....";
     const int flagLength = 20;
     FILE *fp;
@@ -51,7 +51,7 @@
     memcpy(keyBuffer, flag, flagLength);
     _libssh2_htonu32(&keyBuffer[16], keySize - 9);
 
-    keyBytesStart = keyBytesEnd = rawKey;
+    keyBytesEnd = rawKey;
     i2d_RSAPublicKey(rsaKey, &keyBytesEnd);
     memcpy(&keyBuffer[flagLength], &rawKey[6], keySize - 9);
 

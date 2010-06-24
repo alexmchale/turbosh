@@ -612,6 +612,7 @@ static void kbd_callback(const char *name, int name_len,
     if (file) [userInfo setObject:file forKey:@"file"];
     if (state == SS_EXECUTE_COMMAND && currentCommand) [userInfo setObject:currentCommand forKey:@"task"];
     [nc postNotificationName:@"sync-state" object:self userInfo:userInfo];
+    [userInfo release];
 
     // Execute the appropriate callback for this state.
     switch (state) {

@@ -213,7 +213,9 @@
     synchronizer_stop();
 
     if([CURRENT_DEVICE respondsToSelector:@selector(isMultitaskingSupported)]) {
-        UIBackgroundTaskIdentifier bgTask =
+        UIBackgroundTaskIdentifier bgTask = 0;
+
+        bgTask =
             [application beginBackgroundTaskWithExpirationHandler: ^{
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [application endBackgroundTask:bgTask];

@@ -387,9 +387,8 @@ void load_project(sqlite3_stmt *t, Project *project) {
 
 + (NSInteger) fileCountForCurrentProject:(FileUsage)usage
 {
-    Project *proj = [[[Project alloc] init] loadCurrent];
+    Project *proj = [Project current];
     NSInteger count = [self fileCount:proj ofUsage:usage];
-    [proj release];
 
     return count;
 }
