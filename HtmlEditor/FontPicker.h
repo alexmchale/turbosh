@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 
 @protocol FontPickerDelegate
-- (void) fontChanged:(NSInteger)fontSize;
+- (void) configurationChanged;
 @end
 
 @interface FontPickerController : UITableViewController <ContentPaneDelegate>

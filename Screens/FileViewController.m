@@ -106,12 +106,11 @@
 
 #pragma mark Font Picker Delegate
 
-- (void) fontChanged:(NSInteger)fontSize
+- (void) configurationChanged
 {
     [self.fontPickerPopover dismissPopoverAnimated:YES];
 
     self.startingRect = CGRectMake(0, 0, webView.frame.size.width, webView.frame.size.height);
-    [Store setFontSize:fontSize];
     [self loadFile];
 }
 

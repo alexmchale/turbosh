@@ -89,20 +89,21 @@ static const int FONT_SIZE_COUNT = 5;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    for (int i = 0; i < [tableView numberOfRowsInSection:0]; ++i) {
-        NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
+    // Remove all checkmarks from the previously selected item.
+    for (int i = 0; i < [tableView numberOfRowsInSection:indexPath.section]; ++i) {
+        NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:i inSection:indexPath.section];
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:lastIndexPath];
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
 
-    if (self.delegate != nil) {
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    // Select the newly selected item.
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-        NSInteger size = fontSizes[indexPath.row % FONT_SIZE_COUNT];
+    NSInteger size = fontSizes[indexPath.row % FONT_SIZE_COUNT];
+    [Store setFontSize:size];
 
-        [self.delegate fontChanged:size];
-    }
+    if (self.delegate != nil) [self.delegate configurationChanged];
 }
 
 #pragma mark Toolbar Management
