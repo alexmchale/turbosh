@@ -6,8 +6,12 @@ if [ ! -d ___ROOT_PATH___ ]; then
     exit 72;
 fi;
 
-if [[ ! -r ___ROOT_PATH___ || ! -x ___ROOT_PATH___ ]]; then
+if [ ! -r ___ROOT_PATH___ ]; then
     exit 73;
+fi;
+
+if [ ! -x ___ROOT_PATH___ ]; then
+    exit 74;
 fi;
 
 if [ -f "~/.turbosh" ]; then
