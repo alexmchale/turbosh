@@ -269,6 +269,7 @@ static void kbd_callback(const char *name, int name_len,
         // TODO: Show an error message.
 
         NSLog(@"No valid authentication mode was found.");
+        state = SS_TERMINATE_SSH;
         return;
     }
 
