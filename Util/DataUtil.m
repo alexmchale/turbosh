@@ -42,7 +42,7 @@ static const char encodingTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq
 
     // Encode all the data
     BIO_write(mem, [self bytes], [self length]);
-    BIO_flush(mem);
+    (void)BIO_flush(mem);
 
     // Create a new string from the data in the memory buffer
     char * base64Pointer;
