@@ -188,6 +188,8 @@ static void kbd_callback(const char *name, int name_len,
     authPassword = NULL;
     if (project.sshPass) authPassword = strdup([project.sshPass UTF8String]);
 
+    NSLog(@"Valid authentication modes for server: %s", authlist);
+
     authType.password = strstr(authlist, "password") != NULL;
     authType.interactive = strstr(authlist, "keyboard-interactive") != NULL;
     authType.publickey = strstr(authlist, "publickey") != NULL;
