@@ -218,7 +218,7 @@ static void kbd_callback(const char *name, int name_len,
     if (rc == LIBSSH2_ERROR_EAGAIN) return;
 
     if (rc != LIBSSH2_ERROR_NONE) {
-        NSLog(@"Authentication by key failed.");
+        NSLog(@"Authentication by key failed: %d", rc);
         state = SS_AUTHENTICATE_SSH_BY_PASSWORD;
         return;
     }
@@ -246,7 +246,7 @@ static void kbd_callback(const char *name, int name_len,
 
         if (rc == LIBSSH2_ERROR_EAGAIN) return;
 
-        if (rc != 0) {
+        if (rc != LIBSSH2_ERROR_NONE) {
             NSLog(@"Authentication by password failed.");
             state = SS_TERMINATE_SSH;
             return;
