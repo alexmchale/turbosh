@@ -139,6 +139,7 @@
         @"php",        @"php3",
         @"php",        @"php4",
         @"perl",       @"pl",
+        @"perl",       @"pm",
         @"xml",        @"xsl",
         @"xml",        @"xslt",
         nil
