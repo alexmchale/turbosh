@@ -61,7 +61,7 @@
     NSString *publicBase64 = [_publicKey encodeBase64WithNewlines:NO];
     const char *publicBase64c = [publicBase64 UTF8String];
 
-    int publicFile = open(publicFilename, O_CREAT|O_TRUNC|O_WRONLY);
+    int publicFile = open(publicFilename, O_CREAT|O_TRUNC|O_WRONLY, 0600);
     write(publicFile, "ssh-rsa ", 8);
     write(publicFile, publicBase64c, strlen(publicBase64c));
     write(publicFile, "\n", 1);
