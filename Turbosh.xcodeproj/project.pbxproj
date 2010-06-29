@@ -30,6 +30,7 @@
 		74356ACE11BF34DF0061E2C2 /* DataUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 74356ACD11BF34DF0061E2C2 /* DataUtil.m */; };
 		74356D1F11C1D7990061E2C2 /* ProjectTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 74356D1E11C1D7990061E2C2 /* ProjectTaskManager.m */; };
 		74356DB811C255720061E2C2 /* command-script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 74356DB711C255720061E2C2 /* command-script.sh */; };
+		7441538511DA10820043BD4A /* Icon-iPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7441538411DA10820043BD4A /* Icon-iPhone.png */; };
 		7451C83811CF0E760098E044 /* UITableViewUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7451C83711CF0E760098E044 /* UITableViewUtil.m */; };
 		74610D8911642BB000CF7B04 /* ProjectFileSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 74610D8711642BB000CF7B04 /* ProjectFileSelector.m */; };
 		74610D8A11642BB000CF7B04 /* ProjectFileSelector-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74610D8811642BB000CF7B04 /* ProjectFileSelector-iPad.xib */; };
@@ -232,6 +233,7 @@
 		74356D1D11C1D7990061E2C2 /* ProjectTaskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectTaskManager.h; path = Screens/ProjectTaskManager.h; sourceTree = "<group>"; };
 		74356D1E11C1D7990061E2C2 /* ProjectTaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProjectTaskManager.m; path = Screens/ProjectTaskManager.m; sourceTree = "<group>"; };
 		74356DB711C255720061E2C2 /* command-script.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "command-script.sh"; path = "Shell/command-script.sh"; sourceTree = "<group>"; };
+		7441538411DA10820043BD4A /* Icon-iPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-iPhone.png"; sourceTree = "<group>"; };
 		7451C83611CF0E760098E044 /* UITableViewUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UITableViewUtil.h; path = Util/UITableViewUtil.h; sourceTree = "<group>"; };
 		7451C83711CF0E760098E044 /* UITableViewUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UITableViewUtil.m; path = Util/UITableViewUtil.m; sourceTree = "<group>"; };
 		74610D8611642BB000CF7B04 /* ProjectFileSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectFileSelector.h; path = Screens/ProjectFileSelector.h; sourceTree = "<group>"; };
@@ -528,6 +530,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7441538411DA10820043BD4A /* Icon-iPhone.png */,
 				741A697D11C7915100E57D5E /* iTunesArtwork */,
 				74818CBA11BBEAAA002EEA86 /* 19-gear.png */,
 				7433E595119C1C8700873265 /* Icon.png */,
@@ -963,6 +966,7 @@
 				74A57B8D11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib in Resources */,
 				74A57D3211D30DDC00E32654 /* FileEditController-iPhone.xib in Resources */,
 				74A57D7911D374CB00E32654 /* FileViewController-iPhone.xib in Resources */,
+				7441538511DA10820043BD4A /* Icon-iPhone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
