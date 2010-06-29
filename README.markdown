@@ -33,17 +33,21 @@ Please note that the file editor does not show the files syntax-highlighted.
 
 There's a limit of the number files in a path that Turbosh can handle.  I have had success with folders up to 50,000 files.  A customer sent in a report that it was failing against a folder of about 700,000 files.  The limit is somewhere in the middle.
 
+Turbosh does not work if /bin/sh is not bash. This is fixed in v2.0.
+
 Please email me at alexmchale@gmail.com if you run into any troubles with Turbosh.
 
 
 ### Changes ###
 
-v1.4
+v2.0
 
 * Turbosh is now an iPad/iPhone hybrid app!
 * Support for fast app switching (iOS4 only).
 * The synchronizer will now run one time when the app is put in the background (iOS4 only).
 * Tasks should now launch faster, even if the synchronizer is running.
+* Fixed a bug that caused systems that had /bin/sh as a shell other than bash.
+* Fixed a bug that could cause the synchronizer to stall if no valid authentication mode could be found.
 
 v1.3
 
