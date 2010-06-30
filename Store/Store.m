@@ -649,7 +649,7 @@ void load_project_file(sqlite3_stmt *t, ProjectFile *file)
 {
     NSString *theme = [self stringValue:@"current.theme"];
 
-    return theme ? theme : @"vim-dark";
+    return theme ? theme : @"pablo";
 }
 
 #pragma mark Key-Value

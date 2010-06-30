@@ -11,87 +11,34 @@ static NSString *fontSizeNames[] = {
 static const int FONT_SIZE_COUNT = 5;
 
 static NSString *shjsThemes[] = {
-    @"acid",
-    @"berries-dark",
-    @"berries-light",
-    @"bipolar",
-    @"blacknblue",
-    @"bright",
-    @"contrast",
-    @"darkblue",
-    @"darkness",
-    @"desert",
-    @"dull",
-    @"easter",
-    @"emacs",
-    @"golden",
-    @"greenlcd",
-    @"ide-anjuta",
-    @"ide-codewarrior",
-    @"ide-devcpp",
-    @"ide-eclipse",
-    @"ide-kdev",
-    @"ide-msvcpp",
-    @"kwrite",
-    @"matlab",
     @"navy",
-    @"nedit",
+    @"darkness",
     @"neon",
-    @"night",
     @"pablo",
-    @"peachpuff",
-    @"print",
-    @"rand01",
-    @"the",
-    @"typical",
-    @"vampire",
     @"vim-dark",
-    @"vim",
     @"whatis",
-    @"whitengrey",
-    @"zellner"
+    @"emacs",
+    @"ide-msvpp",
+    @"print",
+    @"vim",
+    @"zellner",
+    @"peachpuff",
+    @"dull"
 };
 
 static NSString *turboshThemes[] = {
-    @"acid",
-    @"berries-dark",
-    @"berries-light",
-    @"bipolar",
-    @"blacknblue",
-    @"bright",
-    @"contrast",
-    @"darkblue",
-    @"darkness",
-    @"desert",
-    @"dull",
-    @"easter",
-    @"emacs",
-    @"golden",
-    @"greenlcd",
-    @"ide-anjuta",
-    @"ide-codewarrior",
-    @"ide-devcpp",
-    @"ide-eclipse",
-    @"ide-kdev",
-    @"ide-msvcpp",
-    @"kwrite",
-    @"matlab",
-    @"navy",
-    @"nedit",
-    @"neon",
-    @"night",
-    @"pablo",
-    @"peachpuff",
-    @"print",
-    @"rand01",
-    @"the",
-    @"typical",
-    @"vampire",
-    @"vim-dark",
-    @"vim",
-    @"whatis",
-    @"whitengrey",
-    @"zellner"
+    @"Blue",
+    @"Dark 1",
+    @"Dark 2",
+    @"Dark 3",
+    @"Dark 4",
+    @"Dark 5",
+    @"Light 1",
+    @"Light 2",
+    @"Light 3",
+    @"Light 4",
+    @"Light 5",
+    @"Light 6"
 };
 
 static const int THEME_COUNT = sizeof(turboshThemes) / sizeof(NSString *);
@@ -132,7 +79,7 @@ typedef enum {
 
     if ([self respondsToSelector:@selector(clearsSelectionOnViewWillAppear)]) {
         self.clearsSelectionOnViewWillAppear = NO;
-        self.contentSizeForViewInPopover = CGSizeMake(150.0, 225.0);
+        self.contentSizeForViewInPopover = CGSizeMake(200.0, 350.0);
     }
 
     self.tableView.backgroundColor = [UIColor colorWithRed:0.15 green:0.15 blue:0.15 alpha:1.0];

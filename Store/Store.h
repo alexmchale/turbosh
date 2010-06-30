@@ -42,6 +42,9 @@
 + (void) setFontSize:(NSInteger)size;
 + (NSInteger) fontSize;
 
++ (void) setTheme:(NSString *)theme;
++ (NSString *) theme;
+
 + (void) setValue:(NSString *)value forKey:(NSString *)key;
 + (void) setIntValue:(NSInteger)value forKey:(NSString *)key;
 
