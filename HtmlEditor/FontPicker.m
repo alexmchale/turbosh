@@ -88,6 +88,33 @@ typedef enum {
 
 #pragma mark Table view data source
 
+- (UIView *) tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section
+{
+    // Make sure this section has a header.
+    NSString *text = [self tableView:aTableView titleForHeaderInSection:section];
+    if (!text || [text length] == 0) return nil;
+
+    // Build the header view.
+    CGRect frame = CGRectMake(0, 0, aTableView.bounds.size.width, 30);
+    UIView *headerView = [[[UIView alloc] initWithFrame:frame] autorelease];
+
+    // Configure the view.
+    headerView.backgroundColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.0];
+
+    // Add the label.
+    CGRect labelFrame = CGRectMake(10, 3, frame.size.width - 20, 18);
+    UILabel *label = [[UILabel alloc] initWithFrame:labelFrame];
+    label.text = text;
+    label.textColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0];
+    label.backgroundColor = [UIColor clearColor];
+    label.font = [UIFont boldSystemFontOfSize:16];
+    label.textAlignment = UITextAlignmentRight;
+    [headerView addSubview:label];
+    [label release];
+
+    return headerView;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return SECTION_COUNT;
