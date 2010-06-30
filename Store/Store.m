@@ -638,6 +638,20 @@ void load_project_file(sqlite3_stmt *t, ProjectFile *file)
     return size > 0 ? size : 14;
 }
 
+#pragma mark Theme Configuration
+
++ (void) setTheme:(NSString *)theme
+{
+    [self setValue:theme forKey:@"current.theme"];
+}
+
++ (NSString *) theme
+{
+    NSString *theme = [self stringValue:@"current.theme"];
+
+    return theme ? theme : @"vim-dark";
+}
+
 #pragma mark Key-Value
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key {

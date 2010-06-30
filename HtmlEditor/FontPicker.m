@@ -10,6 +10,98 @@ static NSString *fontSizeNames[] = {
 
 static const int FONT_SIZE_COUNT = 5;
 
+static NSString *shjsThemes[] = {
+    @"acid",
+    @"berries-dark",
+    @"berries-light",
+    @"bipolar",
+    @"blacknblue",
+    @"bright",
+    @"contrast",
+    @"darkblue",
+    @"darkness",
+    @"desert",
+    @"dull",
+    @"easter",
+    @"emacs",
+    @"golden",
+    @"greenlcd",
+    @"ide-anjuta",
+    @"ide-codewarrior",
+    @"ide-devcpp",
+    @"ide-eclipse",
+    @"ide-kdev",
+    @"ide-msvcpp",
+    @"kwrite",
+    @"matlab",
+    @"navy",
+    @"nedit",
+    @"neon",
+    @"night",
+    @"pablo",
+    @"peachpuff",
+    @"print",
+    @"rand01",
+    @"the",
+    @"typical",
+    @"vampire",
+    @"vim-dark",
+    @"vim",
+    @"whatis",
+    @"whitengrey",
+    @"zellner"
+};
+
+static NSString *turboshThemes[] = {
+    @"acid",
+    @"berries-dark",
+    @"berries-light",
+    @"bipolar",
+    @"blacknblue",
+    @"bright",
+    @"contrast",
+    @"darkblue",
+    @"darkness",
+    @"desert",
+    @"dull",
+    @"easter",
+    @"emacs",
+    @"golden",
+    @"greenlcd",
+    @"ide-anjuta",
+    @"ide-codewarrior",
+    @"ide-devcpp",
+    @"ide-eclipse",
+    @"ide-kdev",
+    @"ide-msvcpp",
+    @"kwrite",
+    @"matlab",
+    @"navy",
+    @"nedit",
+    @"neon",
+    @"night",
+    @"pablo",
+    @"peachpuff",
+    @"print",
+    @"rand01",
+    @"the",
+    @"typical",
+    @"vampire",
+    @"vim-dark",
+    @"vim",
+    @"whatis",
+    @"whitengrey",
+    @"zellner"
+};
+
+static const int THEME_COUNT = sizeof(turboshThemes) / sizeof(NSString *);
+
+typedef enum {
+    SECTION_FONT_SIZE,
+    SECTION_THEME,
+    SECTION_COUNT
+} Sections;
+
 
 
 @implementation FontPickerController
@@ -51,12 +143,25 @@ static const int FONT_SIZE_COUNT = 5;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return SECTION_COUNT;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return FONT_SIZE_COUNT;
+    switch (section) {
+        case SECTION_FONT_SIZE: return FONT_SIZE_COUNT;
+        case SECTION_THEME:     return THEME_COUNT;
+        default: assert(false);
+    }
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch (section) {
+        case SECTION_FONT_SIZE: return @"Font Size";
+        case SECTION_THEME:     return @"Color Scheme";
+        default: assert(false);
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -68,13 +173,36 @@ static const int FONT_SIZE_COUNT = 5;
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
 
-    NSString *fontSizeName = fontSizeNames[indexPath.row % FONT_SIZE_COUNT];
-    cell.textLabel.text = fontSizeName;
+    switch (indexPath.section) {
+        case SECTION_FONT_SIZE:
+        {
+            NSString *fontSizeName = fontSizeNames[indexPath.row % FONT_SIZE_COUNT];
+            cell.textLabel.text = fontSizeName;
 
-    if ([Store fontSize] == fontSizes[indexPath.row % FONT_SIZE_COUNT])
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    else
-        cell.accessoryType = UITableViewCellAccessoryNone;
+            if ([Store fontSize] == fontSizes[indexPath.row % FONT_SIZE_COUNT])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
+
+            break;
+        }
+
+        case SECTION_THEME:
+        {
+            NSString *turboshThemeName = turboshThemes[indexPath.row % THEME_COUNT];
+            NSString *shjsThemeName = shjsThemes[indexPath.row % THEME_COUNT];
+            cell.textLabel.text = turboshThemeName;
+
+            if ([shjsThemeName isEqual:[Store theme]])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
+
+            break;
+        }
+
+        default: assert(false);
+    }
 
     cell.textLabel.textColor = [UIColor whiteColor];
     cell.textLabel.backgroundColor = [UIColor clearColor];
@@ -100,8 +228,25 @@ static const int FONT_SIZE_COUNT = 5;
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
-    NSInteger size = fontSizes[indexPath.row % FONT_SIZE_COUNT];
-    [Store setFontSize:size];
+    switch (indexPath.section) {
+        case SECTION_FONT_SIZE:
+        {
+            NSInteger size = fontSizes[indexPath.row % FONT_SIZE_COUNT];
+            [Store setFontSize:size];
+
+            break;
+        }
+
+        case SECTION_THEME:
+        {
+            NSString *shjsThemeName = shjsThemes[indexPath.row % THEME_COUNT];
+            [Store setTheme:shjsThemeName];
+
+            break;
+        }
+
+        default: assert(false);
+    }
 
     if (self.delegate != nil) [self.delegate configurationChanged];
 }

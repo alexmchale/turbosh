@@ -17,6 +17,7 @@
     NSString *c = [file content];
     NSString *y = [NSString stringWithFormat:@"%d", (int)startingRect.origin.y];
     NSString *fs = [NSString stringWithFormat:@"%d", [Store fontSize]];
+    NSString *tm = [Store theme];
 
     if (!t || !c) {
         // Show a message and redirect to the project page.
@@ -31,6 +32,7 @@
         html = [html stringByReplacingOccurrencesOfString:@"___CONTENT___" withString:c];
         html = [html stringByReplacingOccurrencesOfString:@"___FONT_SIZE___" withString:fs];
         html = [html stringByReplacingOccurrencesOfString:@"___STARTING_OFFSET___" withString:y];
+        html = [html stringByReplacingOccurrencesOfString:@"___THEME___" withString:tm];
     }
 
     [webView loadHTMLString:html baseURL:baseURL];
