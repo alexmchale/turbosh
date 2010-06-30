@@ -76,7 +76,7 @@ static const char encodingTable[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopq
     AnsiCode *ansi = [[AnsiCode alloc] init];
     NSMutableString *ms = [NSMutableString string];
 
-    while (c = *rs++) {
+    while ((c = *rs++)) {
         if (c == 27) {
             [ansi start];
 

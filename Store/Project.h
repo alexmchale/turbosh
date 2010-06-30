@@ -5,13 +5,6 @@
 
 @interface Project : NSObject
 {
-    NSNumber *num;
-    NSString *name;
-    NSString *sshHost;
-    NSNumber *sshPort;
-    NSString *sshUser;
-    NSString *sshPass;
-    NSString *sshPath;
 }
 
 @property (nonatomic, retain) NSNumber *num;
