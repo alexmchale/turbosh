@@ -49,6 +49,11 @@
         window.scrollTo(0, ___STARTING_OFFSET___);
         sh_highlightDocument("", ".js");
         $("#preview").show();
+
+        setInterval(function() {
+            var bgColor = $("#preview").css("background-color");
+            $("body").css("background-color", bgColor);
+        }, 200);
     });
 
     function getCurrentScrollPosition() {
