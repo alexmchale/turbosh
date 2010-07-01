@@ -18,7 +18,7 @@ static NSString *shjsThemes[] = {
     @"vim-dark",
     @"whatis",
     @"emacs",
-    @"ide-msvpp",
+    @"ide-msvcpp",
     @"print",
     @"vim",
     @"zellner",
