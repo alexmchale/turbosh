@@ -127,6 +127,8 @@ typedef enum {
         case SECTION_THEME:     return THEME_COUNT;
         default: assert(false);
     }
+
+    return 0;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -136,6 +138,8 @@ typedef enum {
         case SECTION_THEME:     return @"Color Scheme";
         default: assert(false);
     }
+
+    return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
