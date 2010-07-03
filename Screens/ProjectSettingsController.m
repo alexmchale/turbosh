@@ -47,6 +47,7 @@
     }
 
     [Store storeProject:nextProject];
+    [myTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 
     [TurboshAppDelegate editProject:nextProject];
 
@@ -60,6 +61,8 @@
     [Store deleteProject:proj];
     [proj release];
     proj = nil;
+
+    [myTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 
     if ([Store projectCount] == 0) {
         [self addNewProject];
