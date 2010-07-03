@@ -2,9 +2,6 @@
 
 @implementation Project
 
-@synthesize num, name;
-@synthesize sshHost, sshPort, sshUser, sshPass, sshPath;
-
 #pragma mark Data Loaders
 
 + (id) current
@@ -39,7 +36,7 @@
 
 - (bool) existsInDatabase
 {
-    return [Store projectExists:num];
+    return [Store projectExists:self.num];
 }
 
 #pragma mark Memory Management
@@ -48,25 +45,20 @@
 {
     self = [super init];
 
-    num = nil;
-    name = nil;
-    sshHost = nil;
-    sshPort = [[NSNumber alloc] initWithInt:22];
-    sshUser = nil;
-    sshPass = nil;
-    sshPath = nil;
+    self.sshPort = [[NSNumber alloc] initWithInt:22];
 
     return self;
 }
 
 - (void) dealloc {
-    [num release];
-    [name release];
-    [sshHost release];
-    [sshPort release];
-    [sshUser release];
-    [sshPass release];
-    [sshPath release];
+    self.num = nil;
+    self.name = nil;
+    self.sshHost = nil;
+    self.sshPort = nil;
+    self.sshUser = nil;
+    self.sshUser = nil;
+    self.sshPass = nil;
+    self.sshPath = nil;
 
     [super dealloc];
 }
