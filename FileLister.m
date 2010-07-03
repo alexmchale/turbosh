@@ -57,6 +57,8 @@
 
 - (bool) close
 {
+    self.exitCode = [dispatcher exitCode];
+
     session = NULL;
     [dispatcher close];
 
@@ -126,10 +128,7 @@
         }
 
         default:
-            self.dispatcher = nil;
-            self.command = nil;
-
-            return false;
+            return [self close];
     }
 }
 

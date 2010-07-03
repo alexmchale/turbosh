@@ -18,6 +18,7 @@
 @property (nonatomic, retain) NSString *path;
 @property (nonatomic, retain) CommandDispatcher *dispatcher;
 @property FileUsage mode;
+@property int exitCode;
 
 - (id) initWithProject:(Project *)p session:(LIBSSH2_SESSION *)s;
 - (bool) step;
