@@ -29,13 +29,13 @@
 
     [TurboshAppDelegate sync:project.num];
     [TurboshAppDelegate reloadList];
-    [TurboshAppDelegate editProject:project];
+    switch_to_edit_project(project);
 }
 
 - (void) cancelAction {
     if (busy) return;
 
-    [TurboshAppDelegate editProject:project];
+    switch_to_edit_project(project);
 }
 
 #pragma mark View lifecycle
@@ -229,7 +229,7 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    [TurboshAppDelegate editProject:project];
+    switch_to_edit_project(project);
 }
 
 #pragma mark Toolbar Management

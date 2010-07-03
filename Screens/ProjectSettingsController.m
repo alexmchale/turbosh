@@ -49,7 +49,7 @@
     [Store storeProject:nextProject];
     [myTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 
-    [TurboshAppDelegate editProject:nextProject];
+    switch_to_edit_project(nextProject);
 
     [nextProject release];
 }
@@ -72,7 +72,7 @@
         nextProject.num = [Store projectNumAtOffset:0];
         [Store loadProject:nextProject];
 
-        [TurboshAppDelegate editProject:nextProject];
+        switch_to_edit_project(nextProject);
 
         [nextProject release];
     }

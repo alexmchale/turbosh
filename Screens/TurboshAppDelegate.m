@@ -21,30 +21,6 @@
     delegate.rootViewController.title = text;
 }
 
-+ (void) editProject:(Project *)project
-{
-    TurboshAppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-
-    if (delegate.projectSettingsController == nil) {
-        ProjectSettingsController *psc;
-
-        if (IS_IPAD)
-            psc = [[ProjectSettingsController alloc] initWithNibName:@"ProjectSettingsController-iPad" bundle:nil];
-        else
-            psc = [[ProjectSettingsController alloc] initWithNibName:@"ProjectSettingsController-iPhone" bundle:nil];
-
-        delegate.projectSettingsController = psc;
-        [psc release];
-    }
-
-    delegate.rootViewController.title = project.name;
-    [delegate.projectSettingsController setProject:project];
-
-    [Store setCurrentProject:project];
-
-    switch_to_controller(delegate.projectSettingsController);
-}
-
 + (void) editFile:(ProjectFile *)file
 {
     [self editFile:file atRect:CGRectMake(0, 0, 0, 0)];
@@ -185,7 +161,7 @@
     Project *currentProject = [Project current];
 
     if (IS_IPAD)
-        [TurboshAppDelegate editProject:currentProject];
+        switch_to_edit_project(currentProject);
     else
         switch_to_list();
 

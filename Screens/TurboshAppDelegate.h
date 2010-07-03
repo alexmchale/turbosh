@@ -39,7 +39,6 @@
 
 + (void) setMenuText:(NSString *)text;
 + (void) setLabelText:(NSString *)text;
-+ (void) editProject:(Project *)project;
 + (void) editFile:(ProjectFile *)file;
 + (void) editFile:(ProjectFile *)file atRect:(CGRect)startingRect;
 + (void) editCurrentFile;

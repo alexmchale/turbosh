@@ -200,7 +200,7 @@ typedef enum {
                     [Store setCurrentProject:project];
                     switch_to_list();
                 } else {
-                    [TurboshAppDelegate editProject:project];
+                    switch_to_edit_project(project);
                 }
             }
             break;
@@ -216,7 +216,7 @@ typedef enum {
     if (indexPath.section == MST_PROJECTS) {
         if (indexPath.row < [projects count]) {
             Project *project = [projects objectAtIndex:indexPath.row];
-            [TurboshAppDelegate editProject:project];
+            switch_to_edit_project(project);
         }
     }
 }

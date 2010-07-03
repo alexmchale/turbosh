@@ -31,12 +31,12 @@
     }
 
     [TurboshAppDelegate reloadList];
-    [TurboshAppDelegate editProject:project];
+    switch_to_edit_project(project);
 }
 
 - (void) cancelAction
 {
-    [TurboshAppDelegate editProject:project];
+    switch_to_edit_project(project);
 }
 
 #pragma mark View lifecycle
