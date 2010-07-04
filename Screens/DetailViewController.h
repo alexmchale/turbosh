@@ -12,7 +12,7 @@
 
     UIPopoverController *popoverController;
     UIToolbar *toolbar;
-    UIBarItem *projectButton;
+    UIBarButtonItem *projectButton;
 
     UIViewController<ContentPaneDelegate> *currentController;
 
@@ -25,7 +25,7 @@
 
 @property (nonatomic, retain) UIPopoverController *popoverController;
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
-@property (nonatomic, retain) UIBarItem *projectButton;
+@property (nonatomic, retain) UIBarButtonItem *projectButton;
 @property (nonatomic, retain) IBOutlet UILabel *label;
 @property (nonatomic, retain) IBOutlet UIActivityIndicatorView *spinner;
 

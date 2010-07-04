@@ -124,7 +124,21 @@
 
 - (void) switchToList
 {
-    switch_to_list();
+    if (IS_IPAD) {
+        if (!self.detailViewController.popoverController) {
+            self.detailViewController.popoverController =
+                [[[UIPopoverController alloc]
+                  initWithContentViewController:rootViewController]
+                 autorelease];
+        }
+
+        [self.detailViewController.popoverController
+             presentPopoverFromBarButtonItem:detailViewController.projectButton
+             permittedArrowDirections:UIPopoverArrowDirectionAny
+             animated:YES];
+    } else {
+        switch_to_list();
+    }
 }
 
 #pragma mark -
@@ -138,7 +152,7 @@
     // Initialize the public/private key pair.
     [[[KeyPair alloc] init] release];
 
-    if (splitViewController) {
+    if (splitViewController && [Store isSplit]) {
         UISplitViewController *split = splitViewController;
         [window addSubview:split.view];
         [window makeKeyAndVisible];

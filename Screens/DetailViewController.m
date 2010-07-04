@@ -45,8 +45,10 @@
 
     if (IS_IPAD) {
         if (UIDeviceOrientationIsLandscape(orient)) {
-            width -= toolbarHeight;
-            height += toolbarHeight;
+            if ([Store isSplit]) {
+                width -= toolbarHeight;
+                height += toolbarHeight;
+            }
         }
     }
 
