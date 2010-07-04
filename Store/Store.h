@@ -45,6 +45,9 @@
 + (void) setTheme:(NSString *)theme;
 + (NSString *) theme;
 
++ (void) setSplit:(bool)split;
++ (bool) isSplit;
+
 + (void) setValue:(NSString *)value forKey:(NSString *)key;
 + (void) setIntValue:(NSInteger)value forKey:(NSString *)key;
 

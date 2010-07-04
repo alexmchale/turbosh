@@ -652,6 +652,19 @@ void load_project_file(sqlite3_stmt *t, ProjectFile *file)
     return theme ? theme : @"pablo";
 }
 
+#pragma mark Theme Configuration
+
++ (void) setSplit:(bool)split
+{
+    int disableSplitInt = split ? 0 : 1;
+    [self setIntValue:disableSplitInt forKey:@"current.disable.split"];
+}
+
++ (bool) isSplit
+{
+    return [self intValue:@"current.disable.split"] != 1;
+}
+
 #pragma mark Key-Value
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key {
