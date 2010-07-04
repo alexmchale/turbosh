@@ -138,7 +138,7 @@ typedef enum {
     switch (section) {
         case SECTION_FONT_SIZE: return @"Font Size";
         case SECTION_THEME:     return @"Color Scheme";
-        case SECTION_SPLIT:     return @"App Layout";
+        case SECTION_SPLIT:     return IS_IPAD ? @"App Layout" : nil;
         default: assert(false);
     }
 
