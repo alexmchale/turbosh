@@ -46,6 +46,7 @@ static const int THEME_COUNT = sizeof(turboshThemes) / sizeof(NSString *);
 typedef enum {
     SECTION_FONT_SIZE,
     SECTION_THEME,
+    SECTION_SPLIT,
     SECTION_COUNT
 } Sections;
 
@@ -125,6 +126,7 @@ typedef enum {
     switch (section) {
         case SECTION_FONT_SIZE: return FONT_SIZE_COUNT;
         case SECTION_THEME:     return THEME_COUNT;
+        case SECTION_SPLIT:     return IS_IPAD ? 1 : 0;
         default: assert(false);
     }
 
@@ -136,6 +138,7 @@ typedef enum {
     switch (section) {
         case SECTION_FONT_SIZE: return @"Font Size";
         case SECTION_THEME:     return @"Color Scheme";
+        case SECTION_SPLIT:     return @"App Layout";
         default: assert(false);
     }
 
@@ -175,6 +178,14 @@ typedef enum {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             else
                 cell.accessoryType = UITableViewCellAccessoryNone;
+
+            break;
+        }
+
+        case SECTION_SPLIT:
+        {
+            cell.textLabel.text = @"Split View";
+            cell.accessoryType = CHECKMARK([Store isSplit]);
 
             break;
         }
@@ -220,6 +231,15 @@ typedef enum {
             NSString *shjsThemeName = shjsThemes[indexPath.row % THEME_COUNT];
             [Store setTheme:shjsThemeName];
 
+            break;
+        }
+
+        case SECTION_SPLIT:
+        {
+            bool isNowSet = ![Store isSplit];
+            [Store setSplit:isNowSet];
+
+            show_alert(@"Split Changed", @"You must restart Turbosh for this change to take effect.");
             break;
         }
 

@@ -20,3 +20,5 @@ typedef enum {
 #define IS_IPAD        (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define CURRENT_DEVICE ([UIDevice currentDevice])
 #define DELEGATE       ((TurboshAppDelegate *)[[UIApplication sharedApplication] delegate])
+
+#define CHECKMARK(v)   ((v) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone)
