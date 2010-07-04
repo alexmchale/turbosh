@@ -24,11 +24,11 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>26</string>
+	<string>27</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>CFBundleShortVersionString</key>
-	<string>1.4</string>
+	<string>2.1</string>
 	<key>NSMainNibFile</key>
 	<string>MainWindow-iPhone</string>
 	<key>NSMainNibFile~ipad</key>
