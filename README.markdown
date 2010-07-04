@@ -40,6 +40,13 @@ Please email me at alexmchale@gmail.com if you run into any troubles with Turbos
 
 ### Changes ###
 
+v2.1
+
+* Configurable themes for the file viewer.
+* Added configuration option to disable split-view mode (it's in the gear menu on the file view screen).
+* Improved diagnostic messages when Turbosh fails to connect.
+* Added .pm as an extension for Perl syntax highlighting.
+
 v2.0
 
 * Turbosh is now an iPad/iPhone hybrid app!
@@ -82,3 +89,7 @@ v1.1
 * Fixed a bug where sometimes a server failing to connect during synchronization could lock up the app until it times out.
 * Fixed a bug caused by UTF-8 characters in filenames.  The bug would cause the app to lock up or crash.
 * Fixed a bug when the file or task lists fail, the Cancel button would not be replaced by the Project button in portrait mode.
+
+v1.0
+
+* Initial release.
