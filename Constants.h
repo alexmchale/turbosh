@@ -18,6 +18,7 @@ typedef enum {
 
 #define IS_IPHONE      (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 #define IS_IPAD        (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define IS_SPLIT       (IS_IPAD && [Store isSplit])
 #define CURRENT_DEVICE ([UIDevice currentDevice])
 #define DELEGATE       ((TurboshAppDelegate *)[[UIApplication sharedApplication] delegate])
 

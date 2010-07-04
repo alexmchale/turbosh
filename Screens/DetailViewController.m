@@ -43,13 +43,9 @@
             height -= keyboardSize.height;
     }
 
-    if (IS_IPAD) {
-        if (UIDeviceOrientationIsLandscape(orient)) {
-            if ([Store isSplit]) {
-                width -= toolbarHeight;
-                height += toolbarHeight;
-            }
-        }
+    if (IS_SPLIT && UIDeviceOrientationIsLandscape(orient)) {
+        width -= toolbarHeight;
+        height += toolbarHeight;
     }
 
     NSLog(@"Adjusting controller size %@ TO (%d, %d)", [[controller class] description], width, height);
