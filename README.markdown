@@ -43,7 +43,7 @@ Please email me at alexmchale@gmail.com if you run into any troubles with Turbos
 v2.1
 
 * Configurable themes for the file viewer.
-* Added configuration option to disable split-view mode (it's in the gear menu on the file view screen).
+* Added configuration option to disable split-view mode on iPad (it's in the gear menu on the file view screen).
 * Improved diagnostic messages when Turbosh fails to connect.
 * Added .pm as an extension for Perl syntax highlighting.
 
