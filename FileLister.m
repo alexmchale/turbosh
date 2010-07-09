@@ -3,6 +3,7 @@
 @implementation FileLister
 
 @synthesize command, project, path, mode, dispatcher;
+@synthesize exitCode;
 
 - (id) initWithProject:(Project *)newProject
                session:(LIBSSH2_SESSION *)newSession

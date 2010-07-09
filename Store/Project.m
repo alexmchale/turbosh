@@ -2,6 +2,9 @@
 
 @implementation Project
 
+@synthesize num, name;
+@synthesize sshHost, sshPort, sshUser, sshPass, sshPath;
+
 #pragma mark Data Loaders
 
 + (id) current

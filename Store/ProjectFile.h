@@ -5,14 +5,6 @@
 
 @interface ProjectFile : NSObject
 {
-    NSNumber *num;
-    Project *project;
-
-    NSString *filename;
-    NSString *remoteMd5;
-    NSString *localMd5;
-
-    FileUsage usage;
 }
 
 @property (nonatomic, retain) NSNumber *num;
