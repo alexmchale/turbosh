@@ -19,6 +19,8 @@
 
 - (void) adjustControllerSize:(UIViewController *)controller
 {
+    if (!controller) return;
+
     UIDeviceOrientation orient = [[UIDevice currentDevice] orientation];
     NSInteger toolbarHeight = toolbar.frame.size.height;
     CGRect fr1 = self.view.frame;
@@ -209,18 +211,27 @@
 {
     keyboardShown = false;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasHidden:)
-                                                 name:UIKeyboardDidHideNotification object:nil];
+    [nc addObserver:self
+           selector:@selector(keyboardWasShown:)
+               name:UIKeyboardDidShowNotification object:nil];
+
+    [nc addObserver:self
+           selector:@selector(keyboardWasHidden:)
+               name:UIKeyboardDidHideNotification object:nil];
+
+    [nc addObserver:self
+           selector:@selector(adjustCurrentController)
+               name:UIDeviceOrientationDidChangeNotification object:nil];
+
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 }
 
 - (void)viewDidUnload
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 
     self.popoverController = nil;
     self.toolbar = nil;
