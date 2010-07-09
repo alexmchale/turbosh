@@ -43,9 +43,9 @@
 
 - (id) init
 {
-    self = [super init];
-
-    self.sshPort = [[NSNumber alloc] initWithInt:22];
+    if (self = [super init]) {
+        self.sshPort = [[NSNumber alloc] initWithInt:22];
+    }
 
     return self;
 }
