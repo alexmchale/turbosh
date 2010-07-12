@@ -369,7 +369,7 @@
         case TS_SUBSCRIPTION:       return @"Subscriptions";
         case TS_ADD_REM:            return @"Project Management";
         case TS_MANAGE_KEY:         return @"Public Key Authentication";
-        case TS_SUPPORT:            return @"App Support";
+        case TS_SUPPORT:            return nil;
         default:                    assert(false);
     }
 
