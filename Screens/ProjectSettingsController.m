@@ -499,10 +499,6 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
 
             switch (indexPath.row) {
-                case SUPPORT_VIEW_CONSOLE_LOG:
-                    cell.textLabel.text = @"View Application Log";
-                    break;
-
                 case SUPPORT_EMAIL_CONSOLE_LOG:
                     cell.textLabel.text = @"Email Application Log";
                     break;
@@ -636,10 +632,6 @@
         case TS_SUPPORT:
         {
             switch (indexPath.row) {
-                case SUPPORT_VIEW_CONSOLE_LOG:
-                    //show_console_log();
-                    break;
-
                 case SUPPORT_EMAIL_CONSOLE_LOG:
                     [self sendLogFile];
                     break;

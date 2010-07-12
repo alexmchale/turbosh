@@ -78,7 +78,6 @@ typedef enum {
 } TableAddRem;
 
 typedef enum {
-    SUPPORT_VIEW_CONSOLE_LOG,
     SUPPORT_EMAIL_CONSOLE_LOG,
     SUPPORT_ROW_COUNT
 } TableTechSupport;
