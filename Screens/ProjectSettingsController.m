@@ -212,6 +212,7 @@
 
     con.mailComposeDelegate = self;
     con.navigationBar.barStyle = UIBarStyleBlack;
+    [con setToRecipients:[NSArray arrayWithObject:@"turbosh@anticlever.com"]];
     [con setSubject:@"Turbosh Console Log"];
     [con setMessageBody:logContents isHTML:NO];
 
