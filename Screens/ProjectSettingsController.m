@@ -202,6 +202,27 @@
     [key release];
 }
 
+- (void) sendLogFile
+{
+    TurboshAppDelegate *app = [[UIApplication sharedApplication] delegate];
+    NSString *logContents = [NSString stringWithContentsOfFile:user_file_path(@"console.log")
+                                                      encoding:NSUTF8StringEncoding
+                                                         error:nil];
+    MFMailComposeViewController *con = [[MFMailComposeViewController alloc] init];
+
+    con.mailComposeDelegate = self;
+    con.navigationBar.barStyle = UIBarStyleBlack;
+    [con setSubject:@"Turbosh Console Log"];
+    [con setMessageBody:logContents isHTML:NO];
+
+    if (app.splitViewController)
+        [app.splitViewController presentModalViewController:con animated:YES];
+    else
+        [app.detailViewController presentModalViewController:con animated:YES];
+
+    [con release];
+}
+
 - (void) mailComposeController:(MFMailComposeViewController *)controller
            didFinishWithResult:(MFMailComposeResult)result
                          error:(NSError *)error
@@ -347,6 +368,7 @@
         case TS_SUBSCRIPTION:       return @"Subscriptions";
         case TS_ADD_REM:            return @"Project Management";
         case TS_MANAGE_KEY:         return @"Public Key Authentication";
+        case TS_SUPPORT:            return @"App Support";
         default:                    assert(false);
     }
 
@@ -360,6 +382,7 @@
         case TS_SUBSCRIPTION:       return TS_ROW_COUNT;
         case TS_ADD_REM:            return proj.num ? TAR_ROW_COUNT : 0;
         case TS_MANAGE_KEY:         return TPK_ROW_COUNT;
+        case TS_SUPPORT:            return SUPPORT_ROW_COUNT;
         default:                    assert(false);
     }
 
@@ -463,6 +486,24 @@
                 case TPK_RESET_KEY:
                     cell.textLabel.text = @"Generate a new key pair";
                     cell.accessoryType = UITableViewCellAccessoryNone;
+                    break;
+
+                default: assert(false);
+            }
+
+            break;
+
+        case TS_SUPPORT:
+            cell = [tableView cellForId:@"spCell" withStyle:UITableViewCellStyleDefault];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+
+            switch (indexPath.row) {
+                case SUPPORT_VIEW_CONSOLE_LOG:
+                    cell.textLabel.text = @"View Application Log";
+                    break;
+
+                case SUPPORT_EMAIL_CONSOLE_LOG:
+                    cell.textLabel.text = @"Email Application Log";
                     break;
 
                 default: assert(false);
@@ -590,6 +631,23 @@
             }
 
         }   break;
+
+        case TS_SUPPORT:
+        {
+            switch (indexPath.row) {
+                case SUPPORT_VIEW_CONSOLE_LOG:
+                    //show_console_log();
+                    break;
+
+                case SUPPORT_EMAIL_CONSOLE_LOG:
+                    [self sendLogFile];
+                    break;
+
+                default: assert(false);
+            }
+
+            break;
+        }
 
         default: assert(false);
     }

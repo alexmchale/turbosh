@@ -23,3 +23,11 @@ void synchronizer_run()
 
     [sync release];
 }
+
+NSString *user_file_path(NSString *filename)
+{
+    NSArray *searchPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [searchPath objectAtIndex:0];
+
+    return [documentsPath stringByAppendingPathComponent:filename];
+}

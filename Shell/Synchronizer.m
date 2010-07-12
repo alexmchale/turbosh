@@ -13,7 +13,7 @@
 #include <errno.h>
 #include <termios.h>
 
-#define SHOW_SYNC_LOG false
+#define SHOW_SYNC_LOG true
 #define SYNCHRONIZE_DELAY_SECONDS 0.05
 
 @implementation Synchronizer

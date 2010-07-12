@@ -2,7 +2,8 @@
 
 @implementation Utils
 
-NSString *hex_md5(NSData *nsData) {
+NSString *hex_md5(NSData *nsData)
+{
     unsigned char result[CC_MD5_DIGEST_LENGTH];
     const char *cData = [nsData bytes];
     const int cDataLen = [nsData length];
@@ -24,6 +25,8 @@ NSString *hex_md5(NSData *nsData) {
 
 void show_alert(NSString *title, NSString *message)
 {
+    NSLog(@"ALERT (%@) %@", title, message);
+
     UIAlertView *alert =
         [[UIAlertView alloc]
          initWithTitle:title

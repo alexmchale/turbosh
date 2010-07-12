@@ -31,6 +31,7 @@
 
 - (void) saveForm;
 - (void) setProject:(Project *)newProject;
+- (void) sendLogFile;
 
 typedef enum {
     TS_PROJECT_MAIN,
@@ -38,6 +39,7 @@ typedef enum {
     TS_SUBSCRIPTION,
     TS_ADD_REM,
     TS_MANAGE_KEY,
+    TS_SUPPORT,
     TS_SECTION_COUNT
 } TableSections;
 
@@ -74,5 +76,11 @@ typedef enum {
     TAR_REM_PROJECT,
     TAR_ROW_COUNT
 } TableAddRem;
+
+typedef enum {
+    SUPPORT_VIEW_CONSOLE_LOG,
+    SUPPORT_EMAIL_CONSOLE_LOG,
+    SUPPORT_ROW_COUNT
+} TableTechSupport;
 
 @end

@@ -152,6 +152,7 @@
     // Initialize the public/private key pair.
     [[[KeyPair alloc] init] release];
 
+    // Insert the main view.
     if (splitViewController && [Store isSplit]) {
         UISplitViewController *split = splitViewController;
         [window addSubview:split.view];
@@ -170,6 +171,11 @@
     } else {
         assert(false);
     }
+
+    // Redirect the logging to a file if we're not in DEBUG mode.
+    NSString *logPath = user_file_path(@"console.log");
+    freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "w", stderr);
+    NSLog(@"Turbosh App Startup at %@", [NSDate date]);
 
     // Select that last used project and update the DVC to show it.
     Project *currentProject = [Project current];
