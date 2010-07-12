@@ -662,7 +662,7 @@ static void kbd_callback(const char *name, int name_len,
     [lister close];
     self.lister = nil;
 
-    [transfer close];
+    [transfer close:9002];
     self.transfer = nil;
 
     self.projectsToSync = nil;

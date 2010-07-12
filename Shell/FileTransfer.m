@@ -9,9 +9,7 @@
     step = 0;
     success = false;
     isUpload = true;
-
-    file = f;
-    [file retain];
+    file = [f retain];
 
     NSData *rawContent = [file rawContent];
     if (rawContent)
@@ -31,9 +29,7 @@
     step = 0;
     success = false;
     isUpload = false;
-
-    file = f;
-    [file retain];
+    file = [f retain];
 
     content = [NSMutableData data];
     [content retain];
@@ -57,9 +53,11 @@
     int blockSize;
     static char buffer[0x4000];
 
+    NSLog(@"File Transfer %d (upload %d) (content %d/%d)", step, isUpload, content!=nil, [content length]);
+
     if (isUpload && content == nil) {
         success = false;
-        return [self close];
+        return [self close:9000];
     }
 
     switch (step)
@@ -70,7 +68,7 @@
             offset = 0;
             success = false;
 
-            if (!content) return [self close];
+            if (!content) return [self close:9001];
 
             if (isUpload)
                 channel = libssh2_scp_send(session, [[file fullpath] UTF8String], mode, [content length]);
@@ -78,9 +76,13 @@
                 channel = libssh2_scp_recv(session, [[file fullpath] UTF8String], &sb);
 
             if (channel == NULL) {
-                if (libssh2_session_last_errno(session) == LIBSSH2_ERROR_EAGAIN) return true;
+                rc = libssh2_session_last_errno(session);
 
-                return [self close];
+                if (rc == LIBSSH2_ERROR_EAGAIN) return true;
+
+                NSLog(@"Failed to establish an SCP channel %d.", rc);
+
+                return [self close:rc];
             }
 
             step++;
@@ -120,7 +122,7 @@
             }
 
             if (rc == LIBSSH2_ERROR_EAGAIN) return true;
-            if (rc < 0) return [self close];
+            if (rc < 0) return [self close:rc];
 
             offset += blockSize;
 
@@ -133,7 +135,7 @@
                 rc = libssh2_channel_send_eof(channel);
 
                 if (rc == LIBSSH2_ERROR_EAGAIN) return true;
-                if (rc < 0) return [self close];
+                if (rc < 0) return [self close:rc];
             }
 
             step++;
@@ -147,7 +149,7 @@
                 rc = libssh2_channel_wait_eof(channel);
 
                 if (rc == LIBSSH2_ERROR_EAGAIN) return true;
-                if (rc < 0) return [self close];
+                if (rc < 0) return [self close:rc];
             }
 
             step++;
@@ -161,7 +163,7 @@
                 rc = libssh2_channel_wait_closed(channel);
 
                 if (rc == LIBSSH2_ERROR_EAGAIN) return true;
-                if (rc < 0) return [self close];
+                if (rc < 0) return [self close:rc];
             }
 
             success = true;
@@ -172,12 +174,14 @@
         default:
             if (success) [Store storeRemote:file content:content];
 
-            return [self close];
+            return [self close:success];
     }
 }
 
-- (bool) close
+- (bool) close:(int)rc
 {
+    NSLog(@"Closing file transfer with code %d.", rc);
+
     if (channel != NULL) {
         libssh2_channel_free(channel);
         channel = NULL;

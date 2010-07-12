@@ -192,13 +192,18 @@
     return YES;
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void)applicationWillTerminate:(UIApplication *)application
+{
     synchronizer_stop();
     [Store close];
+
+    NSLog(@"Turbosh has terminated.");
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
+    NSLog(@"Turbosh is being put into the background.");
+
     synchronizer_stop();
 
     if([CURRENT_DEVICE respondsToSelector:@selector(isMultitaskingSupported)]) {
@@ -220,6 +225,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    NSLog(@"Turbosh is waking up from background.");
+
     [TurboshAppDelegate spin:false];
     synchronizer_start();
 }
