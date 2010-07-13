@@ -7,5 +7,6 @@
 - (id) generate;
 - (NSString *) publicFilename;
 - (NSString *) privateFilename;
+- (NSString *) readPublicKey;
 
 @end

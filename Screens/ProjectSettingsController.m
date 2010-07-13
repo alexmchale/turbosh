@@ -181,11 +181,8 @@
 
 - (void) sendPublicKey
 {
-    TurboshAppDelegate *app = [[UIApplication sharedApplication] delegate];
     KeyPair *key = [[KeyPair alloc] init];
-    NSString *publicKey = [NSString stringWithContentsOfFile:[key publicFilename]
-                                                    encoding:NSUTF8StringEncoding
-                                                       error:nil];
+    NSString *publicKey = [key readPublicKey];
     MFMailComposeViewController *con = [[MFMailComposeViewController alloc] init];
 
     con.mailComposeDelegate = self;
@@ -193,10 +190,7 @@
     [con setSubject:@"Turbosh Public Key"];
     [con setMessageBody:publicKey isHTML:NO];
 
-    if (IS_SPLIT)
-        [app.splitViewController presentModalViewController:con animated:YES];
-    else
-        [app.detailViewController presentModalViewController:con animated:YES];
+    present_dialog(con);
 
     [con release];
     [key release];

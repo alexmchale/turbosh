@@ -73,14 +73,17 @@
 
 - (NSString *) publicFilename
 {
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    return [documentsPath stringByAppendingPathComponent:@"public.key"];
+    return user_file_path(@"public.key");
 }
 
 - (NSString *) privateFilename
 {
-    NSString *documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    return [documentsPath stringByAppendingPathComponent:@"private.key"];
+    return user_file_path(@"private.key");
+}
+
+- (NSString *) readPublicKey
+{
+    return read_user_file(@"public.key");
 }
 
 @end
