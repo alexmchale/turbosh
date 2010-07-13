@@ -7,6 +7,7 @@
 
 @synthesize window, splitViewController, rootViewController, detailViewController;
 @synthesize projectSettingsController, fileViewController, taskExecController;
+@synthesize masterController;
 @synthesize synchronizer;
 
 + (void) setLabelText:(NSString *)text
@@ -154,9 +155,7 @@
 
     // Insert the main view.
     if (IS_SPLIT) {
-        UISplitViewController *split = splitViewController;
-        [window addSubview:split.view];
-        [window makeKeyAndVisible];
+        self.masterController = splitViewController;
     } else if (detailViewController) {
         UIBarButtonItem *projectButton =
             [[UIBarButtonItem alloc] initWithTitle:@"Project"
@@ -166,11 +165,13 @@
         detailViewController.projectButton = projectButton;
         [projectButton release];
 
-        [window addSubview:detailViewController.view];
-        [window makeKeyAndVisible];
+        self.masterController = detailViewController;
     } else {
         assert(false);
     }
+
+    [window addSubview:masterController.view];
+    [window makeKeyAndVisible];
 
     // Redirect the logging to a file if we're not in DEBUG mode.
     NSString *logPath = user_file_path(@"console.log");

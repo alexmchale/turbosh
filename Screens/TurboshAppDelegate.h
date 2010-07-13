@@ -35,6 +35,7 @@
 @property (nonatomic, retain) FileViewController *fileViewController;
 @property (nonatomic, retain) TaskExecController *taskExecController;
 
+@property (nonatomic, retain) UIViewController *masterController;
 @property (readonly) Synchronizer *synchronizer;
 
 + (void) setMenuText:(NSString *)text;

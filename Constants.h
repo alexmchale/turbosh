@@ -25,6 +25,6 @@ enum ErrorCodes {
 #define IS_SPLIT       (IS_IPAD && [Store isSplit])
 #define CURRENT_DEVICE ([UIDevice currentDevice])
 #define DELEGATE       ((TurboshAppDelegate *)[[UIApplication sharedApplication] delegate])
-#define MASTER_CON     (IS_SPLIT ? DELEGATE.splitViewController : DELEGATE.detailViewController)
+#define MASTER_CON     (DELEGATE.masterController)
 
 #define CHECKMARK(v)   ((v) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone)
