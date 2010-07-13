@@ -225,7 +225,7 @@
            didFinishWithResult:(MFMailComposeResult)result
                          error:(NSError *)error
 {
-    [MASTER_CON dismissModalViewControllerAnimated:YES];
+    dismiss_dialog();
 }
 
 - (void) promptForResetPublicKey

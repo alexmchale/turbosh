@@ -53,3 +53,8 @@ void present_dialog(UIViewController *controller)
     assert(master);
     [master presentModalViewController:controller animated:YES];
 }
+
+void dismiss_dialog()
+{
+    [MASTER_CON dismissModalViewControllerAnimated:YES];
+}
