@@ -65,7 +65,7 @@
 
 - (bool) step
 {
-    static char buffer[0x4000];
+    static char buffer[0x10000];
     int rc;
     char *errmsg;
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];

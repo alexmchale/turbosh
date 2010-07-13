@@ -51,7 +51,7 @@
     int rc;
     const void *contentPtr;
     int blockSize;
-    static char buffer[0x4000];
+    static char buffer[0x10000];
 
     NSLog(@"File Transfer %d (upload %d) (content %d/%d)", step, isUpload, content!=nil, [content length]);
 
