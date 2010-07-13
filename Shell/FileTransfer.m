@@ -52,6 +52,7 @@
     const void *contentPtr;
     int blockSize;
     static char buffer[0x10000];
+    char *errmsg;
 
     NSLog(@"File Transfer %d (upload %d) (content %d/%d)", step, isUpload, content!=nil, [content length]);
     assert(content);
@@ -75,11 +76,11 @@
                 channel = libssh2_scp_recv(session, [[file fullpath] UTF8String], &sb);
 
             if (channel == NULL) {
-                rc = libssh2_session_last_errno(session);
+                rc = libssh2_session_last_error(session, &errmsg, NULL, 0);
 
                 if (rc == LIBSSH2_ERROR_EAGAIN) return true;
 
-                NSLog(@"Failed to establish an SCP channel %d.", rc);
+                NSLog(@"Failed to establish an SCP channel %d: %s", rc, errmsg);
 
                 return [self close:rc];
             }
