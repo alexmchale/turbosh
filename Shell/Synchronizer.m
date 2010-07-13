@@ -184,10 +184,6 @@ static void kbd_callback(const char *name, int name_len,
         return;
     }
 
-    if (authPassword != NULL) free(authPassword);
-    authPassword = NULL;
-    if (project.sshPass) authPassword = strdup([project.sshPass UTF8String]);
-
     NSLog(@"Valid authentication modes for server: %s", authlist);
 
     authType.password = strstr(authlist, "password") != NULL;
@@ -231,6 +227,12 @@ static void kbd_callback(const char *name, int name_len,
 
 - (void) authenticateSshByPassword
 {
+    // Load the SSH password into the local buffer.
+
+    if (authPassword != NULL) free(authPassword);
+    authPassword = NULL;
+    if (project.sshPass) authPassword = strdup([project.sshPass UTF8String]);
+
     // Verify that we have connection parameters.
 
     if (!authPassword || !project.sshUser || !project.sshPass) {
