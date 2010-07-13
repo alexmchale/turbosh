@@ -193,7 +193,7 @@
     [con setSubject:@"Turbosh Public Key"];
     [con setMessageBody:publicKey isHTML:NO];
 
-    if (app.splitViewController)
+    if (IS_SPLIT)
         [app.splitViewController presentModalViewController:con animated:YES];
     else
         [app.detailViewController presentModalViewController:con animated:YES];
@@ -204,36 +204,27 @@
 
 - (void) sendLogFile
 {
-    TurboshAppDelegate *app = [[UIApplication sharedApplication] delegate];
-    NSString *logContents = [NSString stringWithContentsOfFile:user_file_path(@"console.log")
-                                                      encoding:NSUTF8StringEncoding
-                                                         error:nil];
-    MFMailComposeViewController *con = [[MFMailComposeViewController alloc] init];
+    NSString *logContents = read_user_file(@"console.log");
 
-    con.mailComposeDelegate = self;
-    con.navigationBar.barStyle = UIBarStyleBlack;
-    [con setToRecipients:[NSArray arrayWithObject:@"turbosh@anticlever.com"]];
-    [con setSubject:@"Turbosh Console Log"];
-    [con setMessageBody:logContents isHTML:NO];
+    if (logContents) {
+        MFMailComposeViewController *con = [[MFMailComposeViewController alloc] init];
 
-    if (app.splitViewController)
-        [app.splitViewController presentModalViewController:con animated:YES];
-    else
-        [app.detailViewController presentModalViewController:con animated:YES];
+        con.mailComposeDelegate = self;
+        con.navigationBar.barStyle = UIBarStyleBlack;
+        [con setToRecipients:[NSArray arrayWithObject:@"turbosh@anticlever.com"]];
+        [con setSubject:@"Turbosh Console Log"];
+        [con setMessageBody:logContents isHTML:NO];
+        [MASTER_CON presentModalViewController:con animated:YES];
 
-    [con release];
+        [con release];
+    }
 }
 
 - (void) mailComposeController:(MFMailComposeViewController *)controller
            didFinishWithResult:(MFMailComposeResult)result
                          error:(NSError *)error
 {
-    TurboshAppDelegate *app = [[UIApplication sharedApplication] delegate];
-
-    if (app.splitViewController)
-        [app.splitViewController dismissModalViewControllerAnimated:YES];
-    else
-        [app.detailViewController dismissModalViewControllerAnimated:YES];
+    [MASTER_CON dismissModalViewControllerAnimated:YES];
 }
 
 - (void) promptForResetPublicKey

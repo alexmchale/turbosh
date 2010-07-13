@@ -153,7 +153,7 @@
     [[[KeyPair alloc] init] release];
 
     // Insert the main view.
-    if (splitViewController && [Store isSplit]) {
+    if (IS_SPLIT) {
         UISplitViewController *split = splitViewController;
         [window addSubview:split.view];
         [window makeKeyAndVisible];

@@ -31,3 +31,10 @@ NSString *user_file_path(NSString *filename)
 
     return [documentsPath stringByAppendingPathComponent:filename];
 }
+
+NSString *read_user_file(NSString *filename)
+{
+    return [NSString stringWithContentsOfFile:user_file_path(filename)
+                                     encoding:NSUTF8StringEncoding
+                                        error:nil];
+}
