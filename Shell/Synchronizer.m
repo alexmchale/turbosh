@@ -14,7 +14,7 @@
 #include <termios.h>
 
 #define SHOW_SYNC_LOG true
-#define SYNCHRONIZE_DELAY_SECONDS 0.05
+#define SYNCHRONIZE_DELAY_SECONDS 0.025
 
 @implementation Synchronizer
 
