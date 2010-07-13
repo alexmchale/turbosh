@@ -594,7 +594,7 @@ static void kbd_callback(const char *name, int name_len,
 {
     // Adjust the state if we don't have a project and we're not idle.
     if (project == nil && state != SS_IDLE) state = SS_SELECT_PROJECT;
-    if (state != SS_IDLE && SHOW_SYNC_LOG) NSLog(@"Synchronizer At %d", state);
+    if (state != SS_IDLE && SHOW_SYNC_LOG) NSLog(@"Synchronizer at %d in p%@ f%@.", state, project.num, file.num);
     if (project && ![project existsInDatabase]) state = SS_TERMINATE_SSH;
     if (file && ![file existsInDatabase]) state = SS_TERMINATE_SSH;
 

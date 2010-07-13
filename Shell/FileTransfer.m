@@ -180,7 +180,7 @@
 
 - (bool) close:(int)rc
 {
-    NSLog(@"Closing file transfer with code %d.", rc);
+    NSLog(@"Closing file transfer at step %d with code %d.", step, rc);
 
     if (channel != NULL) {
         libssh2_channel_free(channel);
