@@ -174,8 +174,16 @@
     [window makeKeyAndVisible];
 
     // Redirect the logging to a file if we're not in DEBUG mode.
-    NSString *logPath = user_file_path(@"console.log");
-    freopen([logPath cStringUsingEncoding:NSASCIIStringEncoding], "w", stderr);
+    const char *logPath = [user_file_path(@"console.log") cStringUsingEncoding:NSASCIIStringEncoding];
+#ifdef NDEBUG
+    freopen(logPath, "w", stderr);
+#else
+    FILE *logFile = fopen(logPath, "w");
+    fprintf(logFile, "No log file is available in debug mode.");
+    fclose(logFile);
+#endif
+
+    // Log the current startup time.
     NSLog(@"Turbosh App Startup at %@", [NSDate date]);
 
     // Select that last used project and update the DVC to show it.
