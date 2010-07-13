@@ -54,10 +54,11 @@
     static char buffer[0x10000];
 
     NSLog(@"File Transfer %d (upload %d) (content %d/%d)", step, isUpload, content!=nil, [content length]);
+    assert(content);
 
-    if (isUpload && content == nil) {
+    if (content == nil) {
         success = false;
-        return [self close:9000];
+        return [self close:T_ERR_FILE_TRANSFER_NO_CONTENT];
     }
 
     switch (step)
@@ -67,8 +68,6 @@
 
             offset = 0;
             success = false;
-
-            if (!content) return [self close:9001];
 
             if (isUpload)
                 channel = libssh2_scp_send(session, [[file fullpath] UTF8String], mode, [content length]);

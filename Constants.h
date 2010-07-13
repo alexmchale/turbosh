@@ -16,6 +16,10 @@ typedef enum {
     FU_PATH
 } FileUsage;
 
+enum ErrorCodes {
+    T_ERR_FILE_TRANSFER_NO_CONTENT = 9000
+};
+
 #define IS_IPHONE      (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 #define IS_IPAD        (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define IS_SPLIT       (IS_IPAD && [Store isSplit])
