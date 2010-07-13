@@ -46,7 +46,8 @@ v2.1
 * Added configuration option to disable split-view mode on iPad (it's in the gear menu on the file view screen).
 * Improved diagnostic messages when Turbosh fails to connect.
 * Added .pm as an extension for Perl syntax highlighting.
-* Added ability to email console log. The log is fairly sparse right now, will be improved for diagnostics over time.
+* Added ability to email console log.
+* Synchronization is now faster.
 
 v2.0
 
