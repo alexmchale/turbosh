@@ -46,3 +46,10 @@ void adjust_current_controller()
 {
     [DELEGATE.detailViewController adjustCurrentController];
 }
+
+void present_dialog(UIViewController *controller)
+{
+    UIViewController *master = MASTER_CON;
+    assert(master);
+    [master presentModalViewController:controller animated:YES];
+}

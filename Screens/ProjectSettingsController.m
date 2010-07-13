@@ -214,7 +214,8 @@
         [con setToRecipients:[NSArray arrayWithObject:@"turbosh@anticlever.com"]];
         [con setSubject:@"Turbosh Console Log"];
         [con setMessageBody:logContents isHTML:NO];
-        [MASTER_CON presentModalViewController:con animated:YES];
+
+        present_dialog(con);
 
         [con release];
     }
