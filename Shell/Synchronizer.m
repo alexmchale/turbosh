@@ -232,7 +232,10 @@ static void kbd_callback(const char *name, int name_len,
 - (void) authenticateSshByPassword
 {
     // Verify that we have connection parameters.
+
     if (!authPassword || !project.sshUser || !project.sshPass) {
+        NSLog(@"No authentication parameters are configured %d %d %d.",
+              !!authPassword, !!project.sshUser, !!project.sshPass);
         state = SS_TERMINATE_SSH;
         return;
     }
@@ -277,6 +280,8 @@ static void kbd_callback(const char *name, int name_len,
         state = SS_EXECUTE_COMMAND;
     else
         state = SS_INITIATE_LIST;
+
+    NSLog(@"Authentication by password successful. Going to state %d.", state);
 }
 
 - (void) executeCommand
@@ -594,16 +599,28 @@ static void kbd_callback(const char *name, int name_len,
 {
     // Adjust the state if we don't have a project and we're not idle.
     if (project == nil && state != SS_IDLE) state = SS_SELECT_PROJECT;
-    if (state != SS_IDLE && SHOW_SYNC_LOG) NSLog(@"Synchronizer at %d in p%@ f%@.", state, project.num, file.num);
-    if (project && ![project existsInDatabase]) state = SS_TERMINATE_SSH;
-    if (file && ![file existsInDatabase]) state = SS_TERMINATE_SSH;
+
+    if (state != SS_IDLE && SHOW_SYNC_LOG)
+        NSLog(@"Synchronizer at %d in p%@ f%@.", state, project.num, file.num);
+
+    if (project && ![project existsInDatabase]) {
+        NSLog(@"Current project is missing. Terminating connection.");
+        state = SS_TERMINATE_SSH;
+    }
+
+    if (file && ![file existsInDatabase]) {
+        NSLog(@"Current file is missing. Terminating connection.");
+        state = SS_TERMINATE_SSH;
+    }
 
     [TurboshAppDelegate spin:(state != SS_IDLE)];
 
     // Abort this connection if there's a command ready and we're not connected for it.
     if (currentCommand && project && ![project.num isEqualToNumber:currentCommand.project.num]) {
+        NSLog(@"Command is ready to execute. Terminating current connection.");
         state = SS_TERMINATE_SSH;
     } else if (!currentCommand && [pendingCommands count] > 0) {
+        NSLog(@"Command available to execute. Terminating current connection.");
         state = SS_TERMINATE_SSH;
     }
 
