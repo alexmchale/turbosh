@@ -556,7 +556,10 @@ static void kbd_callback(const char *name, int name_len,
     if (project && ![project existsInDatabase]) self.project = nil;
     if (file && ![file existsInDatabase]) self.file = nil;
 
-    if (!currentCommand && [pendingCommands count] > 0) {
+    [currentCommand close];
+    self.currentCommand = nil;
+
+    if ([pendingCommands count] > 0) {
         self.currentCommand = [pendingCommands objectAtIndex:0];
         self.project = currentCommand.project;
         [pendingCommands removeObjectAtIndex:0];
