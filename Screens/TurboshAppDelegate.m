@@ -165,7 +165,8 @@
     [window makeKeyAndVisible];
 
     // Redirect the logging to a file if we're not in DEBUG mode.
-    const char *logPath = [user_file_path(@"console.log") cStringUsingEncoding:NSASCIIStringEncoding];
+    const NSString *nsLogPath = user_file_path(@"console.log");
+    const char *logPath = [nsLogPath cStringUsingEncoding:NSASCIIStringEncoding];
 #ifdef NDEBUG
     freopen(logPath, "w", stderr);
 #else
