@@ -151,6 +151,17 @@
     self.popoverController = nil;
 }
 
+// For non-split-view modes, this creates the project button.
+- (void) createProjectButton
+{
+    self.projectButton =
+        [[[UIBarButtonItem alloc]
+            initWithTitle:@"Project"
+            style:UIBarButtonItemStyleBordered
+            target:self
+            action:@selector(switchToList)] autorelease];
+}
+
 #pragma mark Rotation support
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

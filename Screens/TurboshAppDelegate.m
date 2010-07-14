@@ -157,14 +157,7 @@
     if (IS_SPLIT) {
         self.masterController = splitViewController;
     } else {
-        UIBarButtonItem *projectButton =
-            [[UIBarButtonItem alloc] initWithTitle:@"Project"
-                                             style:UIBarButtonItemStyleBordered
-                                            target:self
-                                            action:@selector(switchToList)];
-        detailViewController.projectButton = projectButton;
-        [projectButton release];
-
+        [detailViewController createProjectButton];
         self.masterController = detailViewController;
     }
 

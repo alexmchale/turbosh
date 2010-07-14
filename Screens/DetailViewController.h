@@ -32,5 +32,6 @@
 - (void) switchTo:(UIViewController<ContentPaneDelegate> *)controller;
 - (void) clearToolbar;
 - (void) adjustCurrentController;
+- (void) createProjectButton;
 
 @end
