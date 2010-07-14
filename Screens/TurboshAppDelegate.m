@@ -156,7 +156,7 @@
     // Insert the main view.
     if (IS_SPLIT) {
         self.masterController = splitViewController;
-    } else if (detailViewController) {
+    } else {
         UIBarButtonItem *projectButton =
             [[UIBarButtonItem alloc] initWithTitle:@"Project"
                                              style:UIBarButtonItemStyleBordered
@@ -166,8 +166,6 @@
         [projectButton release];
 
         self.masterController = detailViewController;
-    } else {
-        assert(false);
     }
 
     [window addSubview:masterController.view];
