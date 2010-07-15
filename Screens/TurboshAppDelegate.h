@@ -12,24 +12,14 @@
 
 @interface TurboshAppDelegate : NSObject <UIApplicationDelegate>
 {
-    UIWindow *window;
-
-    id splitViewController;
-    RootViewController *rootViewController;
-    DetailViewController *detailViewController;
-
-    ProjectSettingsController *projectSettingsController;
-    FileViewController *fileViewController;
-    TaskExecController *taskExecController;
-
-    Synchronizer *synchronizer;
 }
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic, retain) UIWindow *window;
 
-@property (nonatomic, retain) IBOutlet id splitViewController;
-@property (nonatomic, retain) IBOutlet RootViewController *rootViewController;
-@property (nonatomic, retain) IBOutlet DetailViewController *detailViewController;
+@property (nonatomic, retain) UISplitViewController *splitViewController;
+@property (nonatomic, retain) UINavigationController *menuController;
+@property (nonatomic, retain) RootViewController *rootViewController;
+@property (nonatomic, retain) DetailViewController *detailViewController;
 
 @property (nonatomic, retain) ProjectSettingsController *projectSettingsController;
 @property (nonatomic, retain) FileViewController *fileViewController;

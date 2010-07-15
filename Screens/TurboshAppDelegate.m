@@ -5,7 +5,7 @@
 
 @implementation TurboshAppDelegate
 
-@synthesize window, splitViewController, rootViewController, detailViewController;
+@synthesize window, splitViewController, menuController, rootViewController, detailViewController;
 @synthesize projectSettingsController, fileViewController, taskExecController;
 @synthesize masterController;
 @synthesize synchronizer;
@@ -129,7 +129,7 @@
         if (!self.detailViewController.popoverController) {
             self.detailViewController.popoverController =
                 [[[UIPopoverController alloc]
-                  initWithContentViewController:rootViewController]
+                  initWithContentViewController:menuController]
                  autorelease];
         }
 
@@ -145,6 +145,38 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
+- (void) buildWindow
+{
+    window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    rootViewController = [[RootViewController alloc] init];
+    detailViewController = [[DetailViewController alloc] initWithNibName:@"DetailView" bundle:nil];
+
+    if (IS_IPAD) {
+        self.menuController =
+            [[[UINavigationController alloc]
+              initWithRootViewController:rootViewController]
+             autorelease];
+    }
+
+    if (IS_SPLIT) {
+        UISplitViewController *svc = [[UISplitViewController alloc] init];
+        splitViewController = svc;
+
+        svc.delegate = detailViewController;
+
+        NSMutableArray *splitControllers = [NSMutableArray arrayWithObjects:menuController, detailViewController, nil];
+        [splitViewController setViewControllers:splitControllers];
+
+        self.masterController = splitViewController;
+    } else {
+        [detailViewController createProjectButton];
+        self.masterController = detailViewController;
+    }
+
+    [window addSubview:masterController.view];
+    [window makeKeyAndVisible];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Initialize the database.
@@ -154,15 +186,7 @@
     [[[KeyPair alloc] init] release];
 
     // Insert the main view.
-    if (IS_SPLIT) {
-        self.masterController = splitViewController;
-    } else {
-        [detailViewController createProjectButton];
-        self.masterController = detailViewController;
-    }
-
-    [window addSubview:masterController.view];
-    [window makeKeyAndVisible];
+    [self buildWindow];
 
     // Redirect the logging to a file if we're not in DEBUG mode.
     const NSString *nsLogPath = user_file_path(@"console.log");

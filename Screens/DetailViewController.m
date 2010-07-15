@@ -158,7 +158,7 @@
         [[[UIBarButtonItem alloc]
             initWithTitle:@"Project"
             style:UIBarButtonItemStyleBordered
-            target:self
+            target:DELEGATE
             action:@selector(switchToList)] autorelease];
 }
 

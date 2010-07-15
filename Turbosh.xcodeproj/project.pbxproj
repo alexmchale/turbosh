@@ -19,9 +19,7 @@
 		2804200C108E984D000629CD /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2804200A108E984D000629CD /* DetailViewController.m */; };
 		2804203C108E9BAB000629CD /* DetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2804203B108E9BAB000629CD /* DetailView.xib */; };
 		2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */; };
-		28AD73600D9D9599002E5188 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow-iPad.xib */; };
 		7414716511B4F0B100B5AC05 /* TextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7414716411B4F0B100B5AC05 /* TextFieldCell.m */; };
-		741A640111C4FE6B00E57D5E /* MainWindow-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 741A640011C4FE6B00E57D5E /* MainWindow-iPhone.xib */; };
 		741A64A911C55E3000E57D5E /* KeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 741A64A811C55E3000E57D5E /* KeyPair.m */; };
 		741A67CD11C688E800E57D5E /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 741A67CC11C688E800E57D5E /* MessageUI.framework */; };
 		741A697E11C7915100E57D5E /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 741A697D11C7915100E57D5E /* iTunesArtwork */; };
@@ -216,11 +214,9 @@
 		2804203B108E9BAB000629CD /* DetailView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailView.xib; sourceTree = "<group>"; };
 		2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28A0AAE50D9B0CCF005BE974 /* Turbosh_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Turbosh_Prefix.pch; path = ../Turbosh_Prefix.pch; sourceTree = "<group>"; };
-		28AD735F0D9D9599002E5188 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../main.m; sourceTree = "<group>"; };
 		7414716311B4F0B100B5AC05 /* TextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextFieldCell.h; path = Widgets/TextFieldCell.h; sourceTree = "<group>"; };
 		7414716411B4F0B100B5AC05 /* TextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextFieldCell.m; path = Widgets/TextFieldCell.m; sourceTree = "<group>"; };
-		741A640011C4FE6B00E57D5E /* MainWindow-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MainWindow-iPhone.xib"; sourceTree = "<group>"; };
 		741A64A711C55E3000E57D5E /* KeyPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KeyPair.h; path = Shell/KeyPair.h; sourceTree = "<group>"; };
 		741A64A811C55E3000E57D5E /* KeyPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KeyPair.m; path = Shell/KeyPair.m; sourceTree = "<group>"; };
 		741A67CC11C688E800E57D5E /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
@@ -431,7 +427,6 @@
 			children = (
 				74B54E391192D45700A4FF6C /* Constants.h */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
-				28AD735F0D9D9599002E5188 /* MainWindow-iPad.xib */,
 				28A0AAE50D9B0CCF005BE974 /* Turbosh_Prefix.pch */,
 				1D3623240D0F684500981E51 /* TurboshAppDelegate.h */,
 				1D3623250D0F684500981E51 /* TurboshAppDelegate.m */,
@@ -440,7 +435,6 @@
 				28042009108E984D000629CD /* DetailViewController.h */,
 				2804200A108E984D000629CD /* DetailViewController.m */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
-				741A640011C4FE6B00E57D5E /* MainWindow-iPhone.xib */,
 			);
 			name = Main;
 			path = Screens;
@@ -905,7 +899,6 @@
 				74B36F87115B2A9800E3B2D1 /* sh_xml.js in Resources */,
 				74B36F88115B2A9800E3B2D1 /* sh_xorg.js in Resources */,
 				74B36F89115B2A9800E3B2D1 /* sh_main.js in Resources */,
-				28AD73600D9D9599002E5188 /* MainWindow-iPad.xib in Resources */,
 				2804203C108E9BAB000629CD /* DetailView.xib in Resources */,
 				74B36F39115B2A9800E3B2D1 /* editor.html in Resources */,
 				74B36F3B115B2A9800E3B2D1 /* sh_acid.css in Resources */,
@@ -959,7 +952,6 @@
 				74818CBB11BBEAAA002EEA86 /* 19-gear.png in Resources */,
 				74818E5311BDF849002EEA86 /* find-script.sh in Resources */,
 				74356DB811C255720061E2C2 /* command-script.sh in Resources */,
-				741A640111C4FE6B00E57D5E /* MainWindow-iPhone.xib in Resources */,
 				741A697E11C7915100E57D5E /* iTunesArtwork in Resources */,
 				741A69F411C81AEE00E57D5E /* ProjectSettingsController-iPhone.xib in Resources */,
 				74A5796611CF876800E32654 /* TaskExecController-iPhone.xib in Resources */,

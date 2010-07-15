@@ -29,10 +29,6 @@
 	<true/>
 	<key>CFBundleShortVersionString</key>
 	<string>2.1</string>
-	<key>NSMainNibFile</key>
-	<string>MainWindow-iPhone</string>
-	<key>NSMainNibFile~ipad</key>
-	<string>MainWindow-iPad</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
