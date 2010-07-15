@@ -9,6 +9,13 @@
 
 #pragma mark Switcher View Manager
 
+- (void) updateOrientation
+{
+    UIDeviceOrientation newOrient = [CURRENT_DEVICE orientation];
+
+    if (UIDeviceOrientationIsValidInterfaceOrientation(newOrient)) orient = newOrient;
+}
+
 - (void) clearToolbar
 {
     if (projectButton)
@@ -21,7 +28,8 @@
 {
     if (!controller) return;
 
-    UIDeviceOrientation orient = [[UIDevice currentDevice] orientation];
+    [self updateOrientation];
+
     NSInteger toolbarHeight = toolbar.frame.size.height;
     CGRect fr1 = self.view.frame;
     int x, y;
@@ -33,7 +41,7 @@
     if (UIInterfaceOrientationIsLandscape(orient)) {
         width = fr1.size.height;
         height = fr1.size.width - toolbarHeight;
-    } else {
+    } else if (UIInterfaceOrientationIsPortrait(orient)) {
         width = fr1.size.width;
         height = fr1.size.height - toolbarHeight;
     }
@@ -182,7 +190,7 @@
 {
     // Get the size of the keyboard.
     if (!IS_IPAD && [[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
-        UIDeviceOrientation orient = [[UIDevice currentDevice] orientation];
+        [self updateOrientation];
 
         if (UIDeviceOrientationIsLandscape(orient)) {
             keyboardSize.width = 480;
@@ -221,6 +229,7 @@
 - (void) viewDidLoad
 {
     keyboardShown = false;
+    [self updateOrientation];
 
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 

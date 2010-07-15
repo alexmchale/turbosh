@@ -21,6 +21,8 @@
 
     bool keyboardShown;
     CGSize keyboardSize;
+
+    UIDeviceOrientation orient;
 }
 
 @property (nonatomic, retain) UIPopoverController *popoverController;
