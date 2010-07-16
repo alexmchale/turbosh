@@ -13,6 +13,8 @@
 {
     UIDeviceOrientation newOrient = [CURRENT_DEVICE orientation];
 
+    NSLog(@"Orientation updating from %d to %d.", orient, newOrient);
+
     if (UIDeviceOrientationIsValidInterfaceOrientation(newOrient)) orient = newOrient;
 }
 

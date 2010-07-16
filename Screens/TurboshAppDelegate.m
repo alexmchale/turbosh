@@ -151,6 +151,8 @@
     rootViewController = [[RootViewController alloc] init];
     detailViewController = [[DetailViewController alloc] initWithNibName:@"DetailView" bundle:nil];
 
+    [self.detailViewController.view setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
+
     if (IS_IPAD) {
         self.menuController =
             [[[UINavigationController alloc]
@@ -169,6 +171,9 @@
 
         self.masterController = splitViewController;
     } else {
+        CGRect screenFrame = [[UIScreen mainScreen] applicationFrame];
+        self.detailViewController.view.frame = screenFrame;
+
         [detailViewController createProjectButton];
         self.masterController = detailViewController;
     }

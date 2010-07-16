@@ -45,7 +45,7 @@
 					<object class="IBUIToolbar" id="410698538">
 						<reference key="NSNextResponder" ref="442233747"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrameSize">{960, 44}</string>
+						<string key="NSFrameSize">{768, 44}</string>
 						<reference key="NSSuperview" ref="442233747"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -58,7 +58,7 @@
 					<object class="IBUILabel" id="428599646">
 						<reference key="NSNextResponder" ref="442233747"/>
 						<int key="NSvFlags">290</int>
-						<string key="NSFrame">{{219, 11}, {521, 22}}</string>
+						<string key="NSFrame">{{219, 11}, {329, 22}}</string>
 						<reference key="NSSuperview" ref="442233747"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">1</int>
@@ -87,21 +87,18 @@
 					<object class="IBUIActivityIndicatorView" id="560998958">
 						<reference key="NSNextResponder" ref="442233747"/>
 						<int key="NSvFlags">-2147483383</int>
-						<string key="NSFrame">{{920, 728}, {20, 20}}</string>
+						<string key="NSFrame">{{728, 920}, {20, 20}}</string>
 						<reference key="NSSuperview" ref="442233747"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						<int key="IBUIStyle">2</int>
 					</object>
 				</object>
-				<string key="NSFrameSize">{960, 768}</string>
+				<string key="NSFrameSize">{768, 960}</string>
 				<reference key="NSSuperview"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">1</int>
 					<bytes key="NSRGB">MSAxIDEgMAA</bytes>
-				</object>
-				<object class="IBUISimulatedOrientationMetrics" key="IBUISimulatedOrientationMetrics">
-					<int key="interfaceOrientation">3</int>
 				</object>
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
@@ -207,7 +204,7 @@
 					<string>DetailViewController</string>
 					<string>UIResponder</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<string>{{329, 62}, {960, 768}}</string>
+					<string>{{332, 26}, {783, 819}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
