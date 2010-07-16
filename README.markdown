@@ -33,8 +33,6 @@ Please note that the file editor does not show the files syntax-highlighted.
 
 There's a limit of the number files in a path that Turbosh can handle.  I have had success with folders up to 50,000 files.  A customer sent in a report that it was failing against a folder of about 700,000 files.  The limit is somewhere in the middle.
 
-Turbosh does not work if /bin/sh is not bash. This is fixed in v2.0.
-
 Please email me at alexmchale@gmail.com if you run into any troubles with Turbosh.
 
 
