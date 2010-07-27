@@ -46,6 +46,7 @@ v2.1
 * Added .pm as an extension for Perl syntax highlighting.
 * Added ability to email console log.
 * Synchronization is now faster.
+* Fixed a bug that could cause files to never download.
 
 v2.0
 
