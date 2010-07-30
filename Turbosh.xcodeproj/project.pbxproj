@@ -32,6 +32,7 @@
 		7451C83811CF0E760098E044 /* UITableViewUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7451C83711CF0E760098E044 /* UITableViewUtil.m */; };
 		74610D8911642BB000CF7B04 /* ProjectFileSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 74610D8711642BB000CF7B04 /* ProjectFileSelector.m */; };
 		74610D8A11642BB000CF7B04 /* ProjectFileSelector-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74610D8811642BB000CF7B04 /* ProjectFileSelector-iPad.xib */; };
+		74690F2C11FE7540004D9E0E /* Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 74690F2B11FE7540004D9E0E /* Theme.m */; };
 		747EC175116150D8002D8CD8 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 747EC174116150D8002D8CD8 /* libz.dylib */; };
 		74818BA411BA56BE002EEA86 /* FileLister.m in Sources */ = {isa = PBXBuildFile; fileRef = 74818BA311BA56BE002EEA86 /* FileLister.m */; };
 		74818C7A11BAB02D002EEA86 /* FontPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 74818C7911BAB02D002EEA86 /* FontPicker.m */; };
@@ -235,6 +236,8 @@
 		74610D8611642BB000CF7B04 /* ProjectFileSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProjectFileSelector.h; path = Screens/ProjectFileSelector.h; sourceTree = "<group>"; };
 		74610D8711642BB000CF7B04 /* ProjectFileSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProjectFileSelector.m; path = Screens/ProjectFileSelector.m; sourceTree = "<group>"; };
 		74610D8811642BB000CF7B04 /* ProjectFileSelector-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "ProjectFileSelector-iPad.xib"; path = "Screens/ProjectFileSelector-iPad.xib"; sourceTree = "<group>"; };
+		74690F2A11FE7540004D9E0E /* Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Theme.h; path = Store/Theme.h; sourceTree = "<group>"; };
+		74690F2B11FE7540004D9E0E /* Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Theme.m; path = Store/Theme.m; sourceTree = "<group>"; };
 		747EC174116150D8002D8CD8 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		74818BA211BA56BE002EEA86 /* FileLister.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileLister.h; sourceTree = "<group>"; };
 		74818BA311BA56BE002EEA86 /* FileLister.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileLister.m; sourceTree = "<group>"; };
@@ -491,6 +494,8 @@
 		1D6F1BC01163E44D0000B47D /* Storehouse */ = {
 			isa = PBXGroup;
 			children = (
+				74690F2A11FE7540004D9E0E /* Theme.h */,
+				74690F2B11FE7540004D9E0E /* Theme.m */,
 				74B36FA0115B2B2A00E3B2D1 /* Project.h */,
 				74B36FA1115B2B2A00E3B2D1 /* Project.m */,
 				74B36FA2115B2B2A00E3B2D1 /* ProjectFile.h */,
@@ -1019,6 +1024,7 @@
 				749ED1E211CC001200AAE6B6 /* Navigation.m in Sources */,
 				7451C83811CF0E760098E044 /* UITableViewUtil.m in Sources */,
 				74A57BF311D1CF0300E32654 /* Management.m in Sources */,
+				74690F2C11FE7540004D9E0E /* Theme.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
