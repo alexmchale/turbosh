@@ -1,17 +1,7 @@
 #import "Theme.h"
 
-typedef enum {
-    NSString *shjsName;
-    NSString *turboshName;
-    UIColor *bgColor;
-    UIColor *fgColor;
-} ThemeSettings;
-
-ThemeSettings themeSettings[] = {
-    {   @"navy",
-        @"Blue",
-        [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:1.0],
-        [UIColor colorWithRed:
+static const ThemeSettings themeSettings[] = {
+    { @"navy", @"Blue", { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 } }
 };
 
 static NSString *shjsThemes[] = {
@@ -51,14 +41,46 @@ static UIColor *bgColors[] = {
 static UIColor *fgColors[] = {
 };
 
+static Theme *buildThemeObject(int index)
+{
+    assert(index >= 0);
+    assert(index < sizeof(themeSettings)/sizeof(ThemeSettings));
+
+    const ThemeSettings *settings = &themeSettings[index];
+
+    float fgRed = settings->fgColor.r;
+    float fgGreen = settings->fgColor.g;
+    float fgBlue = settings->fgColor.b;
+
+    float bgRed = settings->bgColor.r;
+    float bgGreen = settings->bgColor.g;
+    float bgBlue = settings->bgColor.b;
+
+    Theme *theme = [[[Theme alloc] init] autorelease];
+
+    theme.shjsName = settings->shjsName;
+    theme.turboshName = settings->turboshName;
+    theme.fgColor = [UIColor colorWithRed:fgRed green:fgGreen blue:fgBlue alpha:1.0];
+    theme.bgColor = [UIColor colorWithRed:bgRed green:bgGreen blue:bgBlue alpha:1.0];
+
+    return theme;
+}
 
 
 @implementation Theme
 
-@synthesize name, bgColor, fgColor;
+@synthesize shjsName, turboshName, bgColor, fgColor;
 
 + (Theme *) named:(NSString *)name
 {
+    int themeCount = sizeof(themeSettings) / sizeof(ThemeSettings);
+    int themeIndex = 0;
+
+    for (int i = 0; i < themeCount; ++i) {
+        if ([themeSettings[i].turboshName isEqualToString:name]) themeIndex = i;
+    }
+
+    return buildThemeObject(themeIndex);
 }
 
 @end
