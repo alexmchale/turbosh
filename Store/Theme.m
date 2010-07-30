@@ -1,44 +1,19 @@
 #import "Theme.h"
 
 static const ThemeSettings themeSettings[] = {
-    { @"navy", @"Blue", { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 } }
-};
-
-static NSString *shjsThemes[] = {
-    @"navy",
-    @"darkness",
-    @"neon",
-    @"pablo",
-    @"vim-dark",
-    @"whatis",
-    @"emacs",
-    @"ide-msvcpp",
-    @"print",
-    @"vim",
-    @"zellner",
-    @"peachpuff",
-    @"dull"
-};
-
-static NSString *turboshThemes[] = {
-    @"Blue",
-    @"Dark 1",
-    @"Dark 2",
-    @"Dark 3",
-    @"Dark 4",
-    @"Dark 5",
-    @"Light 1",
-    @"Light 2",
-    @"Light 3",
-    @"Light 4",
-    @"Light 5",
-    @"Light 6"
-};
-
-static UIColor *bgColors[] = {
-};
-
-static UIColor *fgColors[] = {
+    { @"Blue",    @"navy",       { 0.000, 0.000, 0.207 }, { 0.000, 0.545, 1.000 } },
+    { @"Dark 1",  @"darkness",   { 0.000, 0.000, 0.000 }, { 1.000, 1.000, 1.000 } },
+    { @"Dark 2",  @"neon",       { 0.000, 0.000, 0.000 }, { 1.000, 1.000, 1.000 } },
+    { @"Dark 3",  @"pablo",      { 0.000, 0.000, 0.000 }, { 1.000, 1.000, 1.000 } },
+    { @"Dark 4",  @"vim-dark",   { 0.000, 0.000, 0.000 }, { 1.000, 1.000, 1.000 } },
+    { @"Dark 5",  @"whatis",     { 0.000, 0.000, 0.000 }, { 1.000, 1.000, 1.000 } },
+    { @"Light 1", @"emacs",      { 1.000, 1.000, 1.000 }, { 0.000, 0.000, 0.000 } },
+    { @"Light 2", @"ide-msvcpp", { 1.000, 1.000, 1.000 }, { 0.000, 0.000, 0.000 } },
+    { @"Light 3", @"print",      { 1.000, 1.000, 1.000 }, { 0.000, 0.000, 0.000 } },
+    { @"Light 4", @"vim",        { 1.000, 1.000, 1.000 }, { 0.000, 0.000, 0.000 } },
+    { @"Light 5", @"zellner",    { 1.000, 1.000, 1.000 }, { 0.000, 0.000, 0.000 } },
+    { @"Light 6", @"peachpuff",  { 1.000, 0.854, 0.725 }, { 0.000, 0.000, 0.000 } },
+    { @"Light 7", @"dull",       { 0.749, 0.749, 0.749 }, { 0.396, 0.396, 0.396 } }
 };
 
 static Theme *buildThemeObject(int index)

@@ -7,8 +7,8 @@ typedef struct {
 } SimpleColor;
 
 typedef struct {
-    NSString *shjsName;
     NSString *turboshName;
+    NSString *shjsName;
     SimpleColor bgColor;
     SimpleColor fgColor;
 } ThemeSettings;
@@ -19,8 +19,8 @@ typedef struct {
 
 + (Theme *) named:(NSString *)name;
 
-@property (nonatomic, retain) NSString *shjsName;
 @property (nonatomic, retain) NSString *turboshName;
+@property (nonatomic, retain) NSString *shjsName;
 @property (nonatomic, retain) UIColor *bgColor;
 @property (nonatomic, retain) UIColor *fgColor;
 
