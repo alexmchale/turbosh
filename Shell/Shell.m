@@ -4,6 +4,7 @@
 #include <resolv.h>
 #include <errno.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 @implementation Shell
 
@@ -26,7 +27,7 @@ static void kbd_callback(const char *name, int name_len,
                          LIBSSH2_USERAUTH_KBDINT_RESPONSE *responses,
                          void **abstract)
 {
-    if (authPassword == NULL);
+    if (authPassword == NULL) return;
     if (num_prompts != 1 || strstr(prompts[0].text, "assword") == NULL) return;
 
     responses[0].text = authPassword;
@@ -43,14 +44,15 @@ static void kbd_callback(const char *name, int name_len,
     int rc;
 
     // Verify that we have somewhere to connect to.
-    if (!project || !project.sshHost || !project.sshPort ||
-        !project.sshUser || !project.sshPass || !project.sshPath) {
+    if (!project || !project.sshHost || !project.sshPort || !project.sshUser || !project.sshPath) {
+        show_alert(@"Connection Failed", @"Invalid connection parameters.");
         return false;
     }
 
     // Create the new socket.
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
         NSLog(@"Failed to create socket %d", errno);
+        show_alert(@"Connection Failed", @"Failed to create socket.");
         return false;
     }
 
@@ -70,12 +72,14 @@ static void kbd_callback(const char *name, int name_len,
     // Establish the TCP connection.
     if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) != 0) {
         NSLog(@"Failed to connect %d", errno);
+        show_alert(@"Connection Failed", @"Failed to initiate TCP connection to SSH server.");
         return false;
     }
 
     // Begin a new SSH session.
     if (!(session = libssh2_session_init())) {
         NSLog(@"Unable to create the SSH2 session.");
+        show_alert(@"Connection Failed", @"Failed to initialize SSH session, TCP connection was successful.");
         return false;
     }
 
@@ -90,34 +94,54 @@ static void kbd_callback(const char *name, int name_len,
 
     if (rc) {
         NSLog(@"Failure establishing SSH session: %d", rc);
+        show_alert(@"Connection Failed", @"Failed to begin SSH session, TCP connection was successful.");
         return nil;
     }
 
-    // Authenticate using the configured password.
+    KeyPair *keyPair = [[KeyPair alloc] init];
+
+    // Authenticate using the public key.
     do {
         const char *user = [project.sshUser UTF8String];
-        const char *pass = [project.sshPass UTF8String];
-        rc = libssh2_userauth_password(session, user, pass);
+        const char *pubfile = [[keyPair publicFilename] UTF8String];
+        const char *prifile = [[keyPair privateFilename] UTF8String];
+        rc = libssh2_userauth_publickey_fromfile(session, user, pubfile, prifile, NULL);
 
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
     } while (rc == LIBSSH2_ERROR_EAGAIN);
 
+    [keyPair release];
+
     if (rc != LIBSSH2_ERROR_NONE) {
-        NSLog(@"Authentication by password failed, trying interactive.");
+        if (!project.sshPass) return false;
 
+        // Authenticate using the configured password.
         do {
-            if (authPassword != NULL) free(authPassword);
-            authPassword = strdup([project.sshPass UTF8String]);
-
             const char *user = [project.sshUser UTF8String];
-            rc = libssh2_userauth_keyboard_interactive(session, user, &kbd_callback);
+            const char *pass = [project.sshPass UTF8String];
+            rc = libssh2_userauth_password(session, user, pass);
 
             [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
         } while (rc == LIBSSH2_ERROR_EAGAIN);
 
         if (rc != LIBSSH2_ERROR_NONE) {
-            NSLog(@"Authentication by keyboard-interactive failed.");
-            return false;
+            NSLog(@"Authentication by password failed, trying interactive.");
+
+            do {
+                if (authPassword != NULL) free(authPassword);
+                authPassword = strdup([project.sshPass UTF8String]);
+
+                const char *user = [project.sshUser UTF8String];
+                rc = libssh2_userauth_keyboard_interactive(session, user, &kbd_callback);
+
+                [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
+            } while (rc == LIBSSH2_ERROR_EAGAIN);
+
+            if (rc != LIBSSH2_ERROR_NONE) {
+                NSLog(@"Authentication by keyboard-interactive failed.");
+                show_alert(@"Connection Failed", @"Failed to authenticate over SSH.");
+                return false;
+            }
         }
     }
 
@@ -126,8 +150,9 @@ static void kbd_callback(const char *name, int name_len,
 
 // Disconnect the SSH session.
 - (void) disconnect {
-    libssh2_session_disconnect(session, "Normal Shutdown, Thank you for playing");
+    libssh2_session_disconnect(session, "Turbosh is exiting. Have a nice day.");
     libssh2_session_free(session);
+    session = NULL;
 
     close(sock);
 }
@@ -152,7 +177,31 @@ bool excluded_filename(NSString *filename)
     while ([fl step])
         [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.001]];
 
-    NSArray *files = [fl files];
+    NSArray *files = [[[fl files] retain] autorelease];
+
+    if (!files) {
+        switch (fl.exitCode) {
+            case 71:
+                show_alert(@"List Failure", @"Path does not exist.");
+                break;
+
+            case 72:
+                show_alert(@"List Failure", @"Path is not a directory.");
+                break;
+
+            case 73:
+                show_alert(@"List Failure", @"Path is not readable.");
+                break;
+
+            case 74:
+                show_alert(@"List Failure", @"Path is not executable.");
+                break;
+
+            default:
+                show_alert(@"List Failure", @"Could not get list of files on server.");
+                break;
+        }
+    }
 
     [fl release];
 

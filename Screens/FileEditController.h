@@ -15,5 +15,8 @@
 @property (nonatomic, retain) IBOutlet UITextView *textView;
 @property (nonatomic, retain) NSString *text;
 @property CGRect startingRect;
+@property (nonatomic, retain) UIBarButtonItem *cancelButton;
+@property (nonatomic, retain) UIBarButtonItem *spacer;
+@property (nonatomic, retain) UIBarButtonItem *saveButton;
 
 @end

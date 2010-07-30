@@ -3,6 +3,7 @@
 @implementation FileLister
 
 @synthesize command, project, path, mode, dispatcher;
+@synthesize exitCode;
 
 - (id) initWithProject:(Project *)newProject
                session:(LIBSSH2_SESSION *)newSession
@@ -10,9 +11,7 @@
     self = [super init];
 
     session = newSession;
-
-    project = newProject;
-    [project retain];
+    project = [newProject retain];
 
     step = 0;
     files = nil;
@@ -38,18 +37,30 @@
 
 - (NSString *) createCommand
 {
-    NSString *cf = nil;
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSURL *scriptURL = [NSURL fileURLWithPath:[bundle pathForResource:@"find-script" ofType:@"sh" inDirectory:NO]];
+    NSString *script = [[[NSString alloc] initWithContentsOfURL:scriptURL] autorelease];
+
     NSString *cp = [self.path stringBySingleQuoting];
+    NSString *cf = nil;
 
-    if (mode == FU_FILE) cf = @"find %@ -type f -print0";
-    if (mode == FU_TASK) cf = @"find %@ -type f -perm -100 -print0";
-    if (mode == FU_PATH) cf = @"find %@ -type d -print0";
+    if (mode == FU_FILE) cf = @"-type f ";
+    if (mode == FU_TASK) cf = @"-type f -perm -100";
+    if (mode == FU_PATH) cf = @"-type d";
 
-    return cf ? [NSString stringWithFormat:cf, cp] : nil;
+    if (cf == nil) return nil;
+
+    script = [script stringByReplacingOccurrencesOfString:@"___TARGET_PATH___" withString:cp];
+    script = [script stringByReplacingOccurrencesOfString:@"___FIND_PARAMETERS___" withString:cf];
+
+    return script;
 }
 
 - (bool) close
 {
+    self.exitCode = [dispatcher exitCode];
+
+    session = NULL;
     [dispatcher close];
 
     step = 0;
@@ -88,27 +99,26 @@
         // Parse the results.
         case 2:
         {
-            if (dispatcher.exitCode != 0) return [self close];
+            // Exit codes >1 are permission/existence errors.
+            if (dispatcher.exitCode > 1) return [self close];
 
             NSData *data = [dispatcher stdoutResponse];
-            const char *bytes = [data bytes];
-            const long length = [data length];
-            long offset = 0;
+            NSString *string = [data stringWithAutoEncoding];
+            NSArray *elements = [string arrayOfCaptureComponentsMatchedByRegex:@"[^\\n\\r]+"];
 
             files = [[NSMutableArray alloc] init];
 
-            while (offset < length) {
-                NSString *file = [NSString stringWithCString:&bytes[offset] encoding:NSUTF8StringEncoding];
+            for (NSArray *matches in elements) {
+                NSString *file = [matches objectAtIndex:0];
 
-                NSRange dotSlash = [file rangeOfString:@"./"];
-                if (dotSlash.location == 0) file = [file substringFromIndex:2];
+                if (!file || [file length] == 0) continue;
+
+                if (mode != FU_TASK) {
+                    NSRange dotSlash = [file rangeOfString:@"./"];
+                    if (dotSlash.location == 0) file = [file substringFromIndex:2];
+                }
 
                 if (!excluded_filename(file)) [files addObject:file];
-
-                // Scan to 1 past the NULL.
-                while (offset < length && bytes[offset] != '\0')
-                    offset++;
-                offset++;
             }
 
             [files sortUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -119,10 +129,7 @@
         }
 
         default:
-            self.dispatcher = nil;
-            self.command = nil;
-
-            return false;
+            return [self close];
     }
 }
 

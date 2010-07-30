@@ -2,7 +2,7 @@
 
 @implementation TextFieldCell
 
-@synthesize text;
+@synthesize label, text;
 
 #pragma mark Action Handlers
 
@@ -17,6 +17,23 @@
 
 static NSString *CellIdentifier = @"TextFieldCell";
 
+- (void) adjustSizeFor:(UITableView *)tableView
+{
+    CGRect tableFrame = tableView.frame;
+    int yOffset = 10;
+    int height = self.frame.size.height - (2 * yOffset);
+    int wOffset = IS_IPAD ? 100 : 25;
+
+    label.frame = CGRectMake(10, yOffset, 90, height);
+
+    if (label)
+        text.frame = CGRectMake(110, yOffset, tableFrame.size.width - wOffset - 110, height);
+    else
+        text.frame = CGRectMake(10, yOffset, tableFrame.size.width - wOffset - 10, height);
+
+    [tableView setNeedsLayout];
+}
+
 - (id) initWithTableView:(UITableView *)tableView named:(NSString *)name
 {
     [self initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
@@ -25,38 +42,43 @@ static NSString *CellIdentifier = @"TextFieldCell";
         [view removeFromSuperview];
     }
 
-    CGRect tableFrame = tableView.frame;
-    int yOffset = 10;
-    int height = self.frame.size.height - (2 * yOffset);
-
-    UILabel *label = [[UILabel alloc] init];
-    label.text = name;
-    label.frame = CGRectMake(10, yOffset, 90, height);
-    label.font = [UIFont boldSystemFontOfSize:14.0];
-    label.textAlignment = UITextAlignmentRight;
-    label.backgroundColor = [UIColor clearColor];
+    if (name) {
+        label = [[UILabel alloc] init];
+        label.text = name;
+        label.font = [UIFont boldSystemFontOfSize:14.0];
+        label.textAlignment = UITextAlignmentRight;
+        label.backgroundColor = [UIColor clearColor];
+    }
 
     text = [[UITextField alloc] init];
     text.textColor = [UIColor colorWithRed:0.243 green:0.306 blue:0.435 alpha:1.0];
     text.autocorrectionType = UITextAutocorrectionTypeNo;
     text.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    text.clearButtonMode = UITextFieldViewModeWhileEditing;
 
-    if (name == nil)
-        text.frame = CGRectMake(10, yOffset, tableFrame.size.width - 150, height);
-    else
-        text.frame = CGRectMake(110, yOffset, tableFrame.size.width - 250, height);
-
-    if (name != nil) [self.contentView addSubview:label];
+    if (label) [self.contentView addSubview:label];
     [self.contentView addSubview:text];
 
-    [label release];
+    [self adjustSizeFor:tableView];
 
     return self;
 }
 
+- (NSString *) value
+{
+    return text.text;
+}
+
+- (void) setValue:(NSString *)value
+{
+    text.text = value ? value : @"";
+}
+
 - (void) dealloc
 {
+    [label release];
     [text release];
+
     [super dealloc];
 }
 

@@ -17,6 +17,7 @@
     NSString *c = [file content];
     NSString *y = [NSString stringWithFormat:@"%d", (int)startingRect.origin.y];
     NSString *fs = [NSString stringWithFormat:@"%d", [Store fontSize]];
+    NSString *tm = [Store theme];
 
     if (!t || !c) {
         // Show a message and redirect to the project page.
@@ -31,22 +32,12 @@
         html = [html stringByReplacingOccurrencesOfString:@"___CONTENT___" withString:c];
         html = [html stringByReplacingOccurrencesOfString:@"___FONT_SIZE___" withString:fs];
         html = [html stringByReplacingOccurrencesOfString:@"___STARTING_OFFSET___" withString:y];
+        html = [html stringByReplacingOccurrencesOfString:@"___THEME___" withString:tm];
     }
 
     [webView loadHTMLString:html baseURL:baseURL];
 
-    [TurboshAppDelegate setLabelText:[file condensedPath]];
-}
-
-// The designated initializer.  Override if you create the controller
-// programmatically and want to perform customization that is not
-// appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        file = nil;
-    }
-
-    return self;
+    [Store setCurrentFile:file];
 }
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
@@ -65,6 +56,7 @@
     [super viewDidAppear:animated];
 
     [self loadFile];
+    [TurboshAppDelegate setLabelText:[file condensedPath]];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -74,7 +66,13 @@
 
 #pragma mark Memory Management
 
-- (void)dealloc {
+- (void) viewDidUnload
+{
+    self.file = nil;
+}
+
+- (void)dealloc
+{
     self.webView = nil;
     self.file = nil;
     self.fontPicker = nil;
@@ -110,12 +108,11 @@
 
 #pragma mark Font Picker Delegate
 
-- (void) fontChanged:(NSInteger)fontSize
+- (void) configurationChanged
 {
     [self.fontPickerPopover dismissPopoverAnimated:YES];
 
     self.startingRect = CGRectMake(0, 0, webView.frame.size.width, webView.frame.size.height);
-    [Store setFontSize:fontSize];
     [self loadFile];
 }
 
@@ -127,18 +124,24 @@
         self.fontPicker =
             [[[FontPickerController alloc]
                 initWithStyle:UITableViewStylePlain] autorelease];
-
         self.fontPicker.delegate = self;
 
-        self.fontPickerPopover =
-            [[[UIPopoverController alloc]
-                initWithContentViewController:self.fontPicker] autorelease];
+        if (IS_IPAD) {
+
+            self.fontPickerPopover =
+                [[[UIPopoverController alloc]
+                    initWithContentViewController:self.fontPicker] autorelease];
+        }
     }
 
-    [self.fontPickerPopover
-        presentPopoverFromBarButtonItem:sender
-        permittedArrowDirections:UIPopoverArrowDirectionAny
-        animated:YES];
+    if (IS_IPAD) {
+        [self.fontPickerPopover
+            presentPopoverFromBarButtonItem:sender
+            permittedArrowDirections:UIPopoverArrowDirectionAny
+            animated:YES];
+    } else {
+        switch_to_controller(self.fontPicker);
+    }
 }
 
 - (void) startEdit
@@ -146,12 +149,13 @@
     NSString *r = [webView stringByEvaluatingJavaScriptFromString:@"getCurrentScrollPosition()"];
     NSInteger y = [r integerValue];
 
-    FileEditController *fec = [[FileEditController alloc] initWithNibName:@"FileEditController" bundle:nil];
+    NSString *nib = IS_IPAD ? @"FileEditController-iPad" : @"FileEditController-iPhone";
+    FileEditController *fec = [[FileEditController alloc] initWithNibName:nib bundle:nil];
 
     fec.text = file.content;
     fec.startingRect = CGRectMake(0, y, webView.frame.size.width, webView.frame.size.height);
 
-    [TurboshAppDelegate switchTo:fec];
+    switch_to_controller(fec);
 
     [fec release];
 }

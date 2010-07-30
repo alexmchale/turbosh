@@ -4,8 +4,6 @@ Turbosh lets you view and edit files while offline. It'll synchronize them back 
 
 * Please see the Known Issues section below *
 
-* Version 1.2 has been submitted to Apple for review *
-
 
 ### Typical Workflow ###
 
@@ -33,16 +31,43 @@ Please note that the file editor does not show the files syntax-highlighted.
 
 ### Known Issues ###
 
-Turbosh does not play nice if you have your shell set to something other than bash or sh. This is fixed in v1.2.  For now, consider changing your shell or adding a second user account that uses bash.
-
-Paths or filenames with spaces in them do not work properly. This is fixed in v1.2.
-
 There's a limit of the number files in a path that Turbosh can handle.  I have had success with folders up to 50,000 files.  A customer sent in a report that it was failing against a folder of about 700,000 files.  The limit is somewhere in the middle.
 
 Please email me at alexmchale@gmail.com if you run into any troubles with Turbosh.
 
 
 ### Changes ###
+
+v2.1
+
+* Configurable themes for the file viewer.
+* Added configuration option to disable split-view mode on iPad (it's in the gear menu on the file view screen).
+* Improved diagnostic messages when Turbosh fails to connect.
+* Added .pm as an extension for Perl syntax highlighting.
+* Added ability to email console log.
+* Synchronization is now faster.
+* Fixed a bug that could cause files to never download.
+
+v2.0
+
+* Turbosh is now an iPad/iPhone hybrid app!
+* Support for fast app switching (iOS4 only).
+* The synchronizer will now run one time when the app is put in the background (iOS4 only).
+* Tasks should now launch faster, even if the synchronizer is running.
+* Fixed a bug that caused systems that had /bin/sh as a shell other than bash.
+* Fixed a bug that could cause the synchronizer to stall if no valid authentication mode could be found.
+
+v1.3
+
+* Feature: There is now a gear in the file viewer to change the font size. Five sizes are available.
+* Feature: There is a new screen that lets you synchronize a directory. This causes all new files that appear in that directory to be downloaded when synchronizing.
+* Feature: New screen to edit the parameters passed to a task when it is run. Ability to run arbitrary commands as tasks.
+* Feature: Public key authentication is now supported. Turbosh now has a public key that will be tried before the password for authentication.
+* The current project is now marked with a checkmark in the file list.
+* When adding a new project, Turbosh will now clone the current project's host, port, username, password and path settings.
+* Bug Fix: Turbosh now only uses POSIX parameters when calling find. This enables support for Solaris.
+* Bug Fix: Project paths that contain files the user cannot read would cause files lists to fail.
+* Improve support for UTF-8, UTF-16 and UTF-32 files.
 
 v1.2
 
@@ -65,3 +90,7 @@ v1.1
 * Fixed a bug where sometimes a server failing to connect during synchronization could lock up the app until it times out.
 * Fixed a bug caused by UTF-8 characters in filenames.  The bug would cause the app to lock up or crash.
 * Fixed a bug when the file or task lists fail, the Cancel button would not be replaced by the Project button in portrait mode.
+
+v1.0
+
+* Initial release.

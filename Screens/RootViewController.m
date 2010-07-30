@@ -4,14 +4,22 @@
 @implementation RootViewController
 
 @synthesize detailViewController;
+@synthesize projects;
+@synthesize files;
+@synthesize tasks;
 
 #pragma mark Management
 
 - (void) reload
 {
-    [self.tableView reloadData];
+    Project *currentProject = [Project current];
+    currentProjectNum = [currentProject.num intValue];
 
-    currentProjectNum = [[Store currentProjectNum] intValue];
+    self.projects = [Store projects];
+    self.files = [Store files:currentProject ofUsage:FU_FILE];
+    self.tasks = [Store files:currentProject ofUsage:FU_TASK];
+
+    [self.tableView reloadData];
 }
 
 #pragma mark View lifecycle
@@ -21,13 +29,23 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackOpaque;
     self.tableView.backgroundColor = [UIColor colorWithRed:0.15 green:0.15 blue:0.15 alpha:1.0];
     self.tableView.separatorColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:1.0];
+
+    if (IS_IPHONE) {
+        Project *currentProject = [Project current];
+        [TurboshAppDelegate setLabelText:currentProject.name];
+    }
+
+    [self reload];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.clearsSelectionOnViewWillAppear = NO;
-    self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
+    if ([self respondsToSelector:@selector(clearsSelectionOnViewWillAppear)])
+        self.clearsSelectionOnViewWillAppear = NO;
+
+    if ([self respondsToSelector:@selector(contentSizeForViewInPopover)])
+        self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 
     self.view.backgroundColor = [UIColor colorWithRed:0.90 green:0.90 blue:0.90 alpha:1.0];
 }
@@ -54,8 +72,8 @@ typedef enum {
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
-        case MST_FILES:     return [Store fileCountForCurrentProject:FU_FILE] ? @"Files" : @"";
-        case MST_TASKS:     return [Store fileCountForCurrentProject:FU_TASK] ? @"Tasks" : @"";
+        case MST_FILES:     return [files count] ? @"Files" : @"";
+        case MST_TASKS:     return [tasks count] ? @"Tasks" : @"";
         case MST_PROJECTS:  return @"Projects";
         default:            return @"";
     }
@@ -90,9 +108,9 @@ typedef enum {
 
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     switch (section) {
-        case MST_FILES:     return [Store fileCountForCurrentProject:FU_FILE];
-        case MST_TASKS:     return [Store fileCountForCurrentProject:FU_TASK];
-        case MST_PROJECTS:  return [Store projectCount];
+        case MST_FILES:     return [files count];
+        case MST_TASKS:     return [tasks count];
+        case MST_PROJECTS:  return [projects count];
         default:            return 0;
     }
 }
@@ -100,8 +118,6 @@ typedef enum {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     static NSString *CellIdentifier = @"MenuCellIdentifier";
-    Project *project = [[Project alloc] init];
-    ProjectFile *file = [[ProjectFile alloc] init];
 
     // Dequeue or create a cell of the appropriate type.
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -109,31 +125,38 @@ typedef enum {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:CellIdentifier] autorelease];
     }
+
+    cell.textLabel.text = @"";
     cell.accessoryType = UITableViewCellAccessoryNone;
 
     switch (indexPath.section) {
         case MST_FILES:
-            [project loadCurrent];
-            [file loadByNumber:[Store projectFileNumber:project atOffset:indexPath.row ofUsage:FU_FILE]];
-            cell.textLabel.text = [file condensedPath];
+            if (indexPath.row < [files count]) {
+                ProjectFile *file = [files objectAtIndex:indexPath.row];
+                cell.textLabel.text = [file condensedPath];
+            }
             break;
 
         case MST_TASKS:
-            [project loadCurrent];
-            file.num = [Store projectFileNumber:project atOffset:indexPath.row ofUsage:FU_TASK];
-            file.project = project;
-            file.usage = FU_TASK;
-            [Store loadProjectFile:file];
-            cell.textLabel.text = [file condensedPath];
+            if (indexPath.row < [tasks count]) {
+                ProjectFile *file = [tasks objectAtIndex:indexPath.row];
+                cell.textLabel.text = [file condensedPath];
+            }
             break;
 
         case MST_PROJECTS:
-            [project loadByOffset:indexPath.row];
-            cell.textLabel.text = project.name;
-//            if (project.num && [project.num intValue] == currentProjectNum)
-//                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-//            else
-//                cell.accessoryType = UITableViewCellAccessoryNone;
+            if (indexPath.row < [projects count]) {
+                Project *project = [projects objectAtIndex:indexPath.row];
+
+                cell.textLabel.text = project.name;
+
+                if (IS_IPHONE)
+                    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+                else if (project.num && [project.num intValue] == currentProjectNum)
+                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                else
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+            }
             break;
     }
 
@@ -141,57 +164,46 @@ typedef enum {
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.contentView.backgroundColor = [UIColor clearColor];
 
-    [file release];
-    [project release];
-
     return cell;
 
 }
 
-#pragma mark -
 #pragma mark Table view delegate
 
 - (void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
         case MST_FILES:
-        {
-            Project *p = [[[Project alloc] init] loadCurrent];
-            ProjectFile *f = [[ProjectFile alloc] init];
-            f.num = [Store projectFileNumber:p atOffset:indexPath.row ofUsage:FU_FILE];
-            f.project = p;
-            [Store loadProjectFile:f];
+            if (indexPath.row < [files count]) {
+                ProjectFile *file = [files objectAtIndex:indexPath.row];
+                [Store loadProjectFile:file];
 
-            if (f.remoteMd5)
-                [TurboshAppDelegate editFile:f];
-            else
-                show_alert(@"File Not Ready", @"That file has not yet been downloaded from the server.");
-
-            [f release];
-            [p release];
-        }   break;
+                if (file.remoteMd5)
+                    [TurboshAppDelegate editFile:file];
+                else
+                    show_alert(@"File Not Ready", @"That file has not yet been downloaded from the server.");
+            }
+            break;
 
         case MST_TASKS:
-        {
-            Project *p = [[[Project alloc] init] loadCurrent];
-            ProjectFile *f = [[ProjectFile alloc] init];
-            f.num = [Store projectFileNumber:p atOffset:indexPath.row ofUsage:FU_FILE];
-            f.project = p;
-            f.usage = FU_TASK;
-            [Store loadProjectFile:f];
-            [TurboshAppDelegate launchTask:f];
-            [f release];
-            [p release];
-        }   break;
+            if (indexPath.row < [tasks count]) {
+                ProjectFile *file = [tasks objectAtIndex:indexPath.row];
+                [TurboshAppDelegate launchTask:file];
+            }
+            break;
 
         case MST_PROJECTS:
-        {
-            Project *p = [[Project alloc] init];
-            p.num = [Store projectNumAtOffset:indexPath.row];
-            [Store loadProject:p];
-            [TurboshAppDelegate editProject:p];
-            [p release];
-        }   break;
+            if (indexPath.row < [projects count]) {
+                Project *project = [projects objectAtIndex:indexPath.row];
+
+                if (IS_IPHONE) {
+                    [Store setCurrentProject:project];
+                    switch_to_list();
+                } else {
+                    switch_to_edit_project(project);
+                }
+            }
+            break;
 
         default: assert(false);
     }
@@ -199,28 +211,40 @@ typedef enum {
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark -
+- (void) tableView:(UITableView *)aTableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == MST_PROJECTS) {
+        if (indexPath.row < [projects count]) {
+            Project *project = [projects objectAtIndex:indexPath.row];
+            switch_to_edit_project(project);
+        }
+    }
+}
+
+#pragma mark Toolbar Management
+
+- (void) viewSwitcher:(DetailViewController *)switcher configureToolbar:(UIToolbar *)toolbar {
+    toolbar.items = [NSArray array];
+}
+
 #pragma mark Memory management
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-
-    // Relinquish ownership any cached data, images, etc. that aren't in use.
+- (void)viewDidUnload
+{
+    self.detailViewController = nil;
+    self.projects = nil;
+    self.files = nil;
+    self.tasks = nil;
 }
 
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
-}
-
-
-- (void)dealloc {
+- (void)dealloc
+{
     [detailViewController release];
+    [projects release];
+    [files release];
+    [tasks release];
 
     [super dealloc];
 }
 
-
 @end
-

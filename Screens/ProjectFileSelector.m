@@ -29,23 +29,16 @@
 
     [TurboshAppDelegate sync:project.num];
     [TurboshAppDelegate reloadList];
-    [TurboshAppDelegate editProject:project];
+    switch_to_edit_project(project);
 }
 
 - (void) cancelAction {
     if (busy) return;
 
-    [TurboshAppDelegate editProject:project];
+    switch_to_edit_project(project);
 }
 
 #pragma mark View lifecycle
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.clearsSelectionOnViewWillAppear = NO;
-}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -53,12 +46,14 @@
 
     [super viewDidAppear:animated];
 
-    NSString *error = nil;
-
     MBProgressHUD *hud = [[[MBProgressHUD alloc] initWithView:self.view] autorelease];
     hud.labelText = @"Loading Files";
     [self.view addSubview:hud];
     [hud show:YES];
+
+    self.allFiles = nil;
+    self.syncFiles = nil;
+    self.shownFiles = nil;
 
     Shell *shell = [[Shell alloc] initWithProject:project];
 
@@ -70,28 +65,17 @@
             self.syncFiles = [NSMutableArray arrayWithArray:[Store filenames:project ofUsage:mode]];
             self.removedFiles = [NSMutableArray array];
             [myTableView reloadData];
-        } else {
-            error = @"Failed to get list of files.";
         }
 
         [shell disconnect];
-    } else {
-        error = @"Failed to connect to server.";
     }
 
     [shell release];
 
-    if (error) {
-        self.allFiles = nil;
-        self.syncFiles = nil;
-        self.shownFiles = nil;
-    }
-
     [hud hide:YES];
     [hud removeFromSuperview];
 
-    if (allFiles == nil || error != nil)
-        show_alert(@"Connection Failed", error);
+    if (!self.allFiles) switch_to_edit_current_project();
 
     busy = false;
 }
@@ -236,7 +220,7 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    [TurboshAppDelegate editProject:project];
+    switch_to_edit_project(project);
 }
 
 #pragma mark Toolbar Management

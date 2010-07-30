@@ -4,7 +4,20 @@
 
 @synthesize session;
 @synthesize project;
-@synthesize pwdCommand;
+
+- (NSString *) createCommand
+{
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSURL *scriptURL = [NSURL fileURLWithPath:[bundle pathForResource:@"command-script" ofType:@"sh" inDirectory:NO]];
+    NSString *script = [[[NSString alloc] initWithContentsOfURL:scriptURL] autorelease];
+
+    script = [script stringByReplacingOccurrencesOfString:@"___ROOT_PATH___" withString:[project.sshPath stringBySingleQuoting]];
+    script = [script stringByReplacingOccurrencesOfString:@"___COMMAND___" withString:command];
+    script = [script stringByReplacingOccurrencesOfRegex:@"[\r\n]" withString:@" "];
+    script = [NSString stringWithFormat:@"sh -c %@", [script stringBySingleQuoting]];
+
+    return script;
+}
 
 - (id) initWithProject:(Project *)newProject
                session:(LIBSSH2_SESSION *)newSession
@@ -13,18 +26,16 @@
     self = [super init];
 
     session = newSession;
+    channel = NULL;
 
     project = newProject;
     [project retain];
 
-    command = newCommand;
-    [command retain];
+    command = [newCommand retain];
+    commandScript = [[self createCommand] retain];
 
     assert(project.sshPath);
     assert(command);
-
-    NSString *escapedProjectPath = [project.sshPath stringBySingleQuoting];
-    pwdCommand = [[NSString alloc] initWithFormat:@"cd %@ && %@ < /dev/null", escapedProjectPath, command];
 
     exitCode = 0;
 
@@ -42,8 +53,8 @@
     [self close];
 
     [project release];
-    [pwdCommand release];
     [command release];
+    [commandScript release];
     [stdoutResponse release];
     [stderrResponse release];
     [environ release];
@@ -54,7 +65,7 @@
 
 - (bool) step
 {
-    static char buffer[0x4000];
+    static char buffer[0x10000];
     int rc;
     char *errmsg;
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -78,10 +89,7 @@
 
             [nc postNotificationName:@"begin" object:self];
 
-            if (channel == NULL) {
-                fprintf(stderr, "command (%s) error (%d): %s\n", [command UTF8String], rc, errmsg);
-                return [self close];
-            }
+            if (channel == NULL) return [self close];
 
             step++;
             environStep = 0;
@@ -127,12 +135,10 @@
         case 3:
             // Dispatch the command to the server.
 
-            rc = libssh2_channel_exec(channel, [pwdCommand UTF8String]);
+            rc = libssh2_channel_exec(channel, [commandScript UTF8String]);
 
             if (rc == LIBSSH2_ERROR_EAGAIN) return true;
             if (rc != LIBSSH2_ERROR_NONE) return [self close];
-
-            NSLog(@"Executing: %@", pwdCommand);
 
             step++;
 
@@ -175,8 +181,6 @@
                                               nil];
 
                     [nc postNotificationName:@"progress" object:self userInfo:userInfo];
-
-                    NSLog(@"cmd(%@) stdout %d bytes", command, rc);
                 }
             }
 
@@ -202,8 +206,6 @@
                                               nil];
 
                     [nc postNotificationName:@"progress" object:self userInfo:userInfo];
-
-                    NSLog(@"cmd(%@) stderr %d bytes", command, rc);
                 }
             }
 
@@ -231,8 +233,6 @@
 
 - (bool) close
 {
-    NSLog(@"cmd(%@) closing at step %d with exit code %d", command, step, exitCode);
-
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
 
     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -240,6 +240,8 @@
                               nil];
 
     [nc postNotificationName:@"finish" object:self userInfo:userInfo];
+
+    session = NULL;
 
     if (channel != NULL) {
         libssh2_channel_free(channel);

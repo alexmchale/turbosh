@@ -1,24 +1,10 @@
 #import <Foundation/Foundation.h>
 #import "Project.h"
 
-typedef enum {
-    FU_FILE,
-    FU_TASK,
-    FU_PATH
-} FileUsage;
-
 @class Project;
 
 @interface ProjectFile : NSObject
 {
-    NSNumber *num;
-    Project *project;
-
-    NSString *filename;
-    NSString *remoteMd5;
-    NSString *localMd5;
-
-    FileUsage usage;
 }
 
 @property (nonatomic, retain) NSNumber *num;
@@ -31,6 +17,7 @@ typedef enum {
 - (id) loadByNumber:(NSNumber *)number;
 - (id) loadByProject:(Project *)myProject filename:(NSString *)myFilename forUsage:(FileUsage)myUsage;
 
+- (NSData *) rawContent;
 - (NSString *)content;
 - (NSString *)contentType;
 - (NSString *)fullpath;

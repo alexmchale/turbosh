@@ -12,6 +12,7 @@
 + (void) open;
 + (void) close;
 
++ (NSArray *) projects;
 + (BOOL) loadProject:(Project *)project;
 + (void) storeProject:(Project *)project;
 + (void) deleteProject:(Project *)project;
@@ -28,17 +29,24 @@
 + (NSInteger) fileCountForCurrentProject:(FileUsage)usage;
 + (NSInteger) fileCount:(Project *)project ofUsage:(FileUsage)usage;
 + (NSArray *) filenames:(Project *)project ofUsage:(FileUsage)usage;
++ (NSArray *) files:(Project *)project ofUsage:(FileUsage)usage;
 + (void) deleteProjectFile:(ProjectFile *)file;
 + (BOOL) loadProjectFile:(ProjectFile *)file;
 + (void) storeProjectFile:(ProjectFile *)file;
 + (NSNumber *) projectFileNumber:(Project *)project filename:(NSString *)filename ofUsage:(FileUsage)usage;
-+ (NSString *) fileContent:(ProjectFile *)file;
++ (NSData *) fileContent:(ProjectFile *)file;
 + (void) storeLocal:(ProjectFile *)file content:(NSData *)content;
 + (void) storeRemote:(ProjectFile *)file content:(NSData *)content;
 + (bool) fileExists:(NSNumber *)num;
 
 + (void) setFontSize:(NSInteger)size;
 + (NSInteger) fontSize;
+
++ (void) setTheme:(NSString *)theme;
++ (NSString *) theme;
+
++ (void) setSplit:(bool)split;
++ (bool) isSplit;
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key;
 + (void) setIntValue:(NSInteger)value forKey:(NSString *)key;

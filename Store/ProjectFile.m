@@ -113,8 +113,12 @@
 
 #pragma mark Content
 
-- (NSString *) content {
+- (NSData *) rawContent {
     return [Store fileContent:self];
+}
+
+- (NSString *) content {
+    return [[self rawContent] stringWithAutoEncoding];
 }
 
 - (NSString *) contentType {
@@ -129,11 +133,15 @@
         @"cpp",        @"c++",
         @"cpp",        @"cc",
         @"cpp",        @"cxx",
+        @"cpp",        @"h",
         @"latex",      @"tex",
         @"python",     @"py",
         @"php",        @"php3",
         @"php",        @"php4",
         @"perl",       @"pl",
+        @"perl",       @"pm",
+        @"xml",        @"xsl",
+        @"xml",        @"xslt",
         nil
     ];
 

@@ -2,7 +2,8 @@
 
 @implementation Utils
 
-NSString *hex_md5(NSData *nsData) {
+NSString *hex_md5(NSData *nsData)
+{
     unsigned char result[CC_MD5_DIGEST_LENGTH];
     const char *cData = [nsData bytes];
     const int cDataLen = [nsData length];
@@ -24,6 +25,8 @@ NSString *hex_md5(NSData *nsData) {
 
 void show_alert(NSString *title, NSString *message)
 {
+    NSLog(@"ALERT (%@) %@", title, message);
+
     UIAlertView *alert =
         [[UIAlertView alloc]
          initWithTitle:title
@@ -36,16 +39,21 @@ void show_alert(NSString *title, NSString *message)
     [alert release];
 }
 
-+ (NSString *) getUrl:(NSURL *)url {
-	NSURLResponse *resp;
-	NSError *error;
+void show_action_sheet(UIViewController<UIActionSheetDelegate> *con, int tag, NSString *msg, NSString *no, NSString *yes)
+{
+    UIActionSheet *actionSheet =
+        [[UIActionSheet alloc]
+         initWithTitle:msg
+         delegate:con
+         cancelButtonTitle:no
+         destructiveButtonTitle:yes
+         otherButtonTitles:nil];
 
-	NSURLRequest *req = [NSURLRequest requestWithURL:url];
-	NSData *data = [NSURLConnection sendSynchronousRequest:req returningResponse:&resp error:&error];
+    actionSheet.tag = tag;
+    actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
+    [actionSheet showInView:con.view];
 
-	if (data == nil) return nil;
-
-	return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+    [actionSheet release];
 }
 
 @end

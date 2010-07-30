@@ -10,9 +10,15 @@
     #import <UIKit/UIKit.h>
     #import <sqlite3.h>
     #import <CommonCrypto/CommonDigest.h>
+    #import <openssl/rsa.h>
+    #import <MessageUI/MessageUI.h>
+    #import <MessageUI/MFMailComposeViewController.h>
 
     #import "Util/AnsiCode.h"
     #import "Util/StringUtil.h"
+    #import "Util/DataUtil.h"
+    #import "UITableViewUtil.h"
+    #import "Shell/KeyPair.h"
 
     #import "MBProgressHUD.h"
     #import "RegexKitLite.h"
@@ -38,5 +44,9 @@
     #import "ProjectFileSelector.h"
     #import "FileEditController.h"
     #import "TaskExecController.h"
+    #import "RootViewController.h"
+
+    #import "Navigation.h"
+    #import "Management.h"
 
 #endif

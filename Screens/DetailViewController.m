@@ -3,15 +3,20 @@
 #import "QuartzCore/CAAnimation.h"
 #import "QuartzCore/CAMediaTimingFunction.h"
 
-@interface DetailViewController ()
-@property (nonatomic, retain) UIPopoverController *popoverController;
-@end
-
 @implementation DetailViewController
 
 @synthesize toolbar, popoverController, label, spinner, projectButton;
 
 #pragma mark Switcher View Manager
+
+- (void) updateOrientation
+{
+    UIDeviceOrientation newOrient = [CURRENT_DEVICE orientation];
+
+    NSLog(@"Orientation updating from %d to %d.", orient, newOrient);
+
+    if (UIDeviceOrientationIsValidInterfaceOrientation(newOrient)) orient = newOrient;
+}
 
 - (void) clearToolbar
 {
@@ -21,13 +26,56 @@
         toolbar.items = [NSArray array];
 }
 
-- (void)switchTo:(UIViewController<ContentPaneDelegate> *)controller
+- (void) adjustControllerSize:(UIViewController *)controller
 {
-    // Adjust the incoming controller's view to match the available size.
+    if (!controller) return;
+
+    [self updateOrientation];
+
     NSInteger toolbarHeight = toolbar.frame.size.height;
     CGRect fr1 = self.view.frame;
-    controller.view.frame = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);
+    int x, y;
+    int width, height;
 
+    x = 0;
+    y = toolbarHeight;
+
+    if (UIInterfaceOrientationIsLandscape(orient)) {
+        width = fr1.size.height;
+        height = fr1.size.width - toolbarHeight;
+    } else if (UIInterfaceOrientationIsPortrait(orient)) {
+        width = fr1.size.width;
+        height = fr1.size.height - toolbarHeight;
+    }
+
+    if (keyboardShown) {
+        if (UIDeviceOrientationIsLandscape(orient))
+            height -= keyboardSize.width;
+        else
+            height -= keyboardSize.height;
+    }
+
+    if (IS_SPLIT && UIDeviceOrientationIsLandscape(orient)) {
+        width -= toolbarHeight;
+        height += toolbarHeight;
+    }
+
+    NSLog(@"Adjusting controller size %@ TO (%d, %d)", [[controller class] description], width, height);
+
+    controller.view.frame = CGRectMake(x, y, width, height);
+    [controller.view setNeedsLayout];
+
+    SEL reloadSelector = @selector(reload);
+    if ([controller respondsToSelector:reloadSelector]) [controller performSelector:reloadSelector];
+}
+
+- (void) adjustCurrentController
+{
+    [self adjustControllerSize:currentController];
+}
+
+- (void)switchTo:(UIViewController<ContentPaneDelegate> *)controller
+{
     // Remove all controls from the toolbar except the popover button.
     if ([[toolbar items] count] > 0) {
         UIBarButtonItem *pb = [[toolbar items] objectAtIndex:0];
@@ -35,6 +83,15 @@
     } else {
         [toolbar setItems:[NSArray array]];
     }
+
+    // Force the view to load.
+    if (![controller isViewLoaded]) {
+        [controller loadView];
+        [controller viewDidLoad];
+    }
+
+    // Adjust the incoming controller's view to match the available size.
+    [self adjustControllerSize:controller];
 
     // View will appear / disappear.
     [currentController viewWillDisappear:YES];
@@ -104,30 +161,100 @@
     self.popoverController = nil;
 }
 
+// For non-split-view modes, this creates the project button.
+- (void) createProjectButton
+{
+    self.projectButton =
+        [[[UIBarButtonItem alloc]
+            initWithTitle:@"Project"
+            style:UIBarButtonItemStyleBordered
+            target:DELEGATE
+            action:@selector(switchToList)] autorelease];
+}
+
 #pragma mark Rotation support
 
-// Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
     return YES;
+}
+
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+{
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self adjustCurrentController];
+    [currentController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+}
+
+#pragma mark Keyboard Listeners
+
+- (void) setKeyboardSize:(NSNotification *)aNotification
+{
+    // Get the size of the keyboard.
+    if (!IS_IPAD && [[[UIDevice currentDevice] systemVersion] floatValue] < 3.2) {
+        [self updateOrientation];
+
+        if (UIDeviceOrientationIsLandscape(orient)) {
+            keyboardSize.width = 480;
+            keyboardSize.height = 140;
+        } else {
+            keyboardSize.width = 320;
+            keyboardSize.height = 216;
+        }
+    } else {
+        NSDictionary* info = [aNotification userInfo];
+        CGRect keyboardBounds;
+        [[info valueForKey:UIKeyboardFrameBeginUserInfoKey] getValue:&keyboardBounds];
+        keyboardSize = keyboardBounds.size;
+    }
+}
+
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    keyboardShown = true;
+    [self setKeyboardSize:aNotification];
+    [self adjustControllerSize:currentController];
+}
+
+
+// Called when the UIKeyboardDidHideNotification is sent
+- (void)keyboardWasHidden:(NSNotification*)aNotification
+{
+    keyboardShown = false;
+    [self setKeyboardSize:aNotification];
+    [self adjustControllerSize:currentController];
 }
 
 #pragma mark View lifecycle
 
 - (void) viewDidLoad
 {
-    projectButton = nil;
+    keyboardShown = false;
+    [self updateOrientation];
+
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+
+    [nc addObserver:self
+           selector:@selector(keyboardWasShown:)
+               name:UIKeyboardDidShowNotification object:nil];
+
+    [nc addObserver:self
+           selector:@selector(keyboardWasHidden:)
+               name:UIKeyboardDidHideNotification object:nil];
+
+    [nc addObserver:self
+           selector:@selector(adjustCurrentController)
+               name:UIDeviceOrientationDidChangeNotification object:nil];
+
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 }
 
-- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    NSInteger toolbarHeight = toolbar.frame.size.height;
-    CGRect fr1 = self.view.frame;
-    CGRect fr2 = CGRectMake(0, toolbarHeight, fr1.size.width, fr1.size.height - toolbarHeight);
-    currentController.view.frame = fr2;
+- (void)viewDidUnload
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 
-    [currentController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-}
-
-- (void)viewDidUnload {
     self.popoverController = nil;
     self.toolbar = nil;
     self.projectButton = nil;

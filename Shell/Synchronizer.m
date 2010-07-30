@@ -13,7 +13,8 @@
 #include <errno.h>
 #include <termios.h>
 
-#define SYNCHRONIZE_DELAY_SECONDS 0.05
+#define SHOW_SYNC_LOG true
+#define SYNCHRONIZE_DELAY_SECONDS 0.025
 
 @implementation Synchronizer
 
@@ -26,13 +27,14 @@
 
 // The function kbd_callback is needed for keyboard-interactive authentication via LIBSSH2.
 static char *authPassword = NULL;
+static NSLock *kbd_callback_lock = nil;
 static void kbd_callback(const char *name, int name_len,
                          const char *instruction, int instruction_len, int num_prompts,
                          const LIBSSH2_USERAUTH_KBDINT_PROMPT *prompts,
                          LIBSSH2_USERAUTH_KBDINT_RESPONSE *responses,
                          void **abstract)
 {
-    if (authPassword == NULL);
+    if (authPassword == NULL) return;
     if (num_prompts != 1 || strstr(prompts[0].text, "assword") == NULL) return;
 
     responses[0].text = authPassword;
@@ -84,7 +86,7 @@ static void kbd_callback(const char *name, int name_len,
 {
     // Verify that the current project has a server configured.
     if (!project || !project.sshHost || !project.sshPort ||
-            !project.sshUser || !project.sshPass || !project.sshPath ||
+            !project.sshUser || !project.sshPath ||
             [project.sshHost length] == 0) {
         state = SS_SELECT_PROJECT;
         return;
@@ -182,18 +184,64 @@ static void kbd_callback(const char *name, int name_len,
         return;
     }
 
-    if (authPassword != NULL) free(authPassword);
-    authPassword = strdup([project.sshPass UTF8String]);
+    NSLog(@"Valid authentication modes for server: %s", authlist);
 
     authType.password = strstr(authlist, "password") != NULL;
     authType.interactive = strstr(authlist, "keyboard-interactive") != NULL;
     authType.publickey = strstr(authlist, "publickey") != NULL;
 
-    state = SS_AUTHENTICATE_SSH;
+    state = SS_AUTHENTICATE_SSH_BY_KEY;
 }
 
-- (void) authenticateSsh
+- (void) authenticateSshByKey
 {
+    // Verify that we have connection parameters.
+    if (!project.sshUser) {
+        state = SS_TERMINATE_SSH;
+        return;
+    }
+
+    // Authenticate using the stored SSH key.
+    KeyPair *key = [[KeyPair alloc] init];
+    const char *user = [project.sshUser UTF8String];
+    const char *privateKey = [[key privateFilename] UTF8String];
+    const char *publicKey = [[key publicFilename] UTF8String];
+
+    int rc = libssh2_userauth_publickey_fromfile(session, user, publicKey, privateKey, NULL);
+
+    [key release];
+
+    if (rc == LIBSSH2_ERROR_EAGAIN) return;
+
+    if (rc != LIBSSH2_ERROR_NONE) {
+        NSLog(@"Authentication by key failed: %d", rc);
+        state = SS_AUTHENTICATE_SSH_BY_PASSWORD;
+        return;
+    }
+
+    if (currentCommand && [project.num isEqualToNumber:currentCommand.project.num])
+        state = SS_EXECUTE_COMMAND;
+    else
+        state = SS_INITIATE_LIST;
+}
+
+- (void) authenticateSshByPassword
+{
+    // Load the SSH password into the local buffer.
+
+    if (authPassword != NULL) free(authPassword);
+    authPassword = NULL;
+    if (project.sshPass) authPassword = strdup([project.sshPass UTF8String]);
+
+    // Verify that we have connection parameters.
+
+    if (!authPassword || !project.sshUser || !project.sshPass) {
+        NSLog(@"No authentication parameters are configured %d %d %d.",
+              !!authPassword, !!project.sshUser, !!project.sshPass);
+        state = SS_TERMINATE_SSH;
+        return;
+    }
+
     // Authenticate using the configured password.
     const char *user = [project.sshUser UTF8String];
     const char *pass = [project.sshPass UTF8String];
@@ -203,13 +251,17 @@ static void kbd_callback(const char *name, int name_len,
 
         if (rc == LIBSSH2_ERROR_EAGAIN) return;
 
-        if (rc != 0) {
+        if (rc != LIBSSH2_ERROR_NONE) {
             NSLog(@"Authentication by password failed.");
             state = SS_TERMINATE_SSH;
             return;
         }
     } else if (authType.interactive) {
-        int rc = libssh2_userauth_keyboard_interactive(session, user, &kbd_callback);
+        int rc;
+
+        @synchronized(kbd_callback_lock) {
+            rc = libssh2_userauth_keyboard_interactive(session, user, &kbd_callback);
+        }
 
         if (rc == LIBSSH2_ERROR_EAGAIN) return;
 
@@ -222,6 +274,7 @@ static void kbd_callback(const char *name, int name_len,
         // TODO: Show an error message.
 
         NSLog(@"No valid authentication mode was found.");
+        state = SS_TERMINATE_SSH;
         return;
     }
 
@@ -229,6 +282,8 @@ static void kbd_callback(const char *name, int name_len,
         state = SS_EXECUTE_COMMAND;
     else
         state = SS_INITIATE_LIST;
+
+    NSLog(@"Authentication by password successful. Going to state %d.", state);
 }
 
 - (void) executeCommand
@@ -237,6 +292,9 @@ static void kbd_callback(const char *name, int name_len,
 
     if (![currentCommand step]) {
         self.currentCommand = nil;
+        self.project = nil;
+        self.file = nil;
+        startup = true;
         state = SS_TERMINATE_SSH;
     }
 }
@@ -310,7 +368,7 @@ static void kbd_callback(const char *name, int name_len,
 
     [Store loadProjectFile:file];
 
-    if (self.file.remoteMd5)
+    if (file.remoteMd5 && [file.remoteMd5 length] == 32)
         state = SS_INITIATE_HASH;
     else
         state = SS_INITIATE_DOWNLOAD;
@@ -402,14 +460,13 @@ static void kbd_callback(const char *name, int name_len,
 - (void) testIfChanged
 {
     NSData *md5Data = [dispatcher stdoutResponse];
-    NSString *remoteMd5 = [[NSString alloc] initWithData:md5Data encoding:NSUTF8StringEncoding];
+    NSString *remoteMd5 = [md5Data stringWithAutoEncoding];
     NSString *md5 = [remoteMd5 findMd5];
 
     bool lEl = [file.localMd5 isEqualToString:file.remoteMd5];
     bool lEr = [file.localMd5 isEqualToString:md5];
     bool rEr = [file.remoteMd5 isEqualToString:md5];
 
-    [remoteMd5 release];
     self.dispatcher = nil;
 
     if (rEr && lEr) {
@@ -484,10 +541,11 @@ static void kbd_callback(const char *name, int name_len,
 
 - (void) terminateSsh
 {
-    if (dispatcher) {
-        [dispatcher close];
-        self.dispatcher = nil;
-    }
+    [dispatcher close];
+    self.dispatcher = nil;
+
+    [lister close];
+    self.lister = nil;
 
     if (session != NULL) {
         libssh2_session_disconnect(session, "Normal Shutdown, Thank you for playing");
@@ -498,15 +556,26 @@ static void kbd_callback(const char *name, int name_len,
     if (project && ![project existsInDatabase]) self.project = nil;
     if (file && ![file existsInDatabase]) self.file = nil;
 
+    [currentCommand close];
+    self.currentCommand = nil;
+
+    if ([pendingCommands count] > 0) {
+        self.currentCommand = [pendingCommands objectAtIndex:0];
+        self.project = currentCommand.project;
+        [pendingCommands removeObjectAtIndex:0];
+    }
+
     state = SS_DISCONNECT;
 }
 
 - (void) disconnect
 {
-    close(sock);
-    sock = 0;
+    if (sock != 0) {
+        close(sock);
+        sock = 0;
+    }
 
-    state = SS_SELECT_PROJECT;
+    state = currentCommand ? SS_BEGIN_CONN : SS_SELECT_PROJECT;
 }
 
 - (void) idle
@@ -535,11 +604,30 @@ static void kbd_callback(const char *name, int name_len,
 {
     // Adjust the state if we don't have a project and we're not idle.
     if (project == nil && state != SS_IDLE) state = SS_SELECT_PROJECT;
-    if (state != SS_IDLE) NSLog(@"Synchronizer At %d", state);
-    if (project && ![project existsInDatabase]) state = SS_TERMINATE_SSH;
-    if (file && ![file existsInDatabase]) state = SS_TERMINATE_SSH;
+
+    if (state != SS_IDLE && SHOW_SYNC_LOG)
+        NSLog(@"Synchronizer at %d in p%@ f%@.", state, project.num, file.num);
+
+    if (project && ![project existsInDatabase]) {
+        NSLog(@"Current project is missing. Terminating connection.");
+        state = SS_TERMINATE_SSH;
+    }
+
+    if (file && ![file existsInDatabase]) {
+        NSLog(@"Current file is missing. Terminating connection.");
+        state = SS_TERMINATE_SSH;
+    }
 
     [TurboshAppDelegate spin:(state != SS_IDLE)];
+
+    // Abort this connection if there's a command ready and we're not connected for it.
+    if (currentCommand && project && ![project.num isEqualToNumber:currentCommand.project.num]) {
+        NSLog(@"Command is ready to execute. Terminating current connection.");
+        state = SS_TERMINATE_SSH;
+    } else if (!currentCommand && [pendingCommands count] > 0) {
+        NSLog(@"Command available to execute. Terminating current connection.");
+        state = SS_TERMINATE_SSH;
+    }
 
     // Post a notification of the synchronizer's current state.
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -549,6 +637,7 @@ static void kbd_callback(const char *name, int name_len,
     if (file) [userInfo setObject:file forKey:@"file"];
     if (state == SS_EXECUTE_COMMAND && currentCommand) [userInfo setObject:currentCommand forKey:@"task"];
     [nc postNotificationName:@"sync-state" object:self userInfo:userInfo];
+    [userInfo release];
 
     // Execute the appropriate callback for this state.
     switch (state) {
@@ -557,7 +646,8 @@ static void kbd_callback(const char *name, int name_len,
         case SS_ESTABLISH_CONN:         return [self establishConnection];
         case SS_ESTABLISH_SSH:          return [self establishSsh];
         case SS_REQUEST_AUTH_TYPE:      return [self requestAuthType];
-        case SS_AUTHENTICATE_SSH:       return [self authenticateSsh];
+        case SS_AUTHENTICATE_SSH_BY_KEY:        return [self authenticateSshByKey];
+        case SS_AUTHENTICATE_SSH_BY_PASSWORD:   return [self authenticateSshByPassword];
         case SS_EXECUTE_COMMAND:        return [self executeCommand];
         case SS_INITIATE_LIST:          return [self initiateList];
         case SS_CONTINUE_LIST:          return [self continueList];
@@ -579,6 +669,43 @@ static void kbd_callback(const char *name, int name_len,
 
         default: assert(false);
     }
+}
+
+- (SyncState) state { return state; }
+
+- (void) stop
+{
+    [currentCommand close];
+    self.currentCommand = nil;
+
+    [dispatcher close];
+    self.dispatcher = nil;
+
+    [lister close];
+    self.lister = nil;
+
+    [transfer close:9002];
+    self.transfer = nil;
+
+    self.projectsToSync = nil;
+    self.project = nil;
+    self.file = nil;
+
+    startup = false;
+    [pendingCommands removeAllObjects];
+
+    if (session != NULL) {
+        libssh2_session_disconnect(session, "Normal Shutdown, Thank you for playing");
+        libssh2_session_free(session);
+        session = NULL;
+    }
+
+    if (sock != 0) {
+        close(sock);
+        sock = 0;
+    }
+
+    state = SS_IDLE;
 }
 
 - (void) synchronize
@@ -634,6 +761,8 @@ static void kbd_callback(const char *name, int name_len,
 - (id) init
 {
     self = [super init];
+
+    if (!kbd_callback_lock) kbd_callback_lock = [[NSLock alloc] init];
 
     timer = [NSTimer timerWithTimeInterval:SYNCHRONIZE_DELAY_SECONDS
                                     target:self

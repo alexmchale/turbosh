@@ -48,6 +48,24 @@ static sqlite3 *db;
 
         [self setValue:@"1" forKey:@"version"];
     }
+
+    const int CURRENT_VERSION = 2;
+
+    for (int version = [self intValue:@"version"]; version < CURRENT_VERSION; ++version) {
+        switch (version) {
+            case 1:
+            {
+                const char *s = "UPDATE files SET path='./'||path WHERE usage LIKE 'task'";
+                sqlite3_exec(db, s, NULL, NULL, NULL);
+
+                break;
+            }
+
+            default: assert(false);
+        }
+    }
+
+    [self setIntValue:CURRENT_VERSION forKey:@"version"];
 }
 
 + (void) close {
@@ -56,12 +74,17 @@ static sqlite3 *db;
 
 #pragma mark SQLite Utils
 
+static NSData *get_data(sqlite3_stmt *stmt, int column) {
+    const char *data = sqlite3_column_blob(stmt, column);
+    const int length = sqlite3_column_bytes(stmt, column);
+
+    return [NSData dataWithBytes:data length:length];
+}
+
 static NSString *get_string(sqlite3_stmt *stmt, int column) {
-    char *cString = (char *)sqlite3_column_text(stmt, column);
+    const char *data = (char *)sqlite3_column_text(stmt, column);
 
-    if (cString == NULL) return nil;
-
-    return [NSString stringWithUTF8String:cString];
+    return data ? [NSString stringWithUTF8String:data] : nil;
 }
 
 static NSNumber *get_integer(sqlite3_stmt *stmt, int column) {
@@ -77,17 +100,32 @@ static void bind_prepare(sqlite3_stmt **stmt, const char *sql) {
     sqlite3_prepare_v2(db, sql, -1, stmt, NULL);
 }
 
-static void bind_string(sqlite3_stmt *stmt, int column, const NSString *s, bool allowNull) {
-    assert(allowNull || s);
+static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull) {
+    if (!allowNull && !d) d = [NSData data];
 
-    if (s != nil)
-        sqlite3_bind_text(stmt, column, [s UTF8String], -1, SQLITE_TRANSIENT);
+    if (d != nil)
+        sqlite3_bind_blob(stmt, column, [d bytes], [d length], SQLITE_TRANSIENT);
     else
         sqlite3_bind_null(stmt, column);
 }
 
+static void bind_string(sqlite3_stmt *stmt, int column, const NSString *s, bool allowNull) {
+    if (!allowNull && !s) s = @"";
+
+    NSMutableData *data = [[s dataWithAutoEncoding] mutableCopy];
+    [data appendBytes:"\0" length:1];
+    const char *cString = [data bytes];
+
+    if (s != nil)
+        sqlite3_bind_text(stmt, column, cString, -1, SQLITE_TRANSIENT);
+    else
+        sqlite3_bind_null(stmt, column);
+
+    [data release];
+}
+
 static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allowNull) {
-    assert(allowNull || n);
+    if (!allowNull && !n) n = [NSNumber numberWithInt:0];
 
     if (n != nil)
         sqlite3_bind_int(stmt, column, [n intValue]);
@@ -95,13 +133,8 @@ static void bind_integer(sqlite3_stmt *stmt, int column, NSNumber *n, bool allow
         sqlite3_bind_null(stmt, column);
 }
 
-static void bind_data(sqlite3_stmt *stmt, int column, NSData *d, bool allowNull) {
-    assert(allowNull || d);
-
-    if (d != nil)
-        sqlite3_bind_blob(stmt, column, [d bytes], [d length], SQLITE_TRANSIENT);
-    else
-        sqlite3_bind_null(stmt, column);
+static bool bind_row(sqlite3_stmt *stmt) {
+    return sqlite3_step(stmt) == SQLITE_ROW;
 }
 
 static void bind_finalize(sqlite3_stmt *stmt, int rowCount) {
@@ -127,11 +160,46 @@ static NSString *usage_str(FileUsage usage)
 
 #pragma mark Project
 
+void load_project(sqlite3_stmt *t, Project *project) {
+    project.num = get_integer(t, 0);
+    project.name = get_string(t, 1);
+    project.sshHost = get_string(t, 2);
+    project.sshPort = get_integer(t, 3);
+    project.sshUser = get_string(t, 4);
+    project.sshPass = get_string(t, 5);
+    project.sshPath = get_string(t, 6);
+}
+
++ (NSArray *) projects
+{
+    const char *s = "SELECT id, name, "
+                    "ssh_hostname, ssh_port, "
+                    "ssh_username, ssh_password, ssh_path "
+                    "FROM projects";
+
+    NSMutableArray *projects = [NSMutableArray array];
+    sqlite3_stmt *t;
+    bind_prepare(&t, s);
+
+    while (bind_row(t)) {
+        Project *project = [[Project alloc] init];
+
+        load_project(t, project);
+        [projects addObject:project];
+
+        [project release];
+    }
+
+    bind_finalize(t, 0);
+
+    return projects;
+}
+
 + (BOOL) loadProject:(Project *)project {
     assert(project != nil);
     assert(project.num != nil);
 
-    char *s = "SELECT name, "
+    char *s = "SELECT id, name, "
               "ssh_hostname, ssh_port, "
               "ssh_username, ssh_password, ssh_path "
               "FROM projects "
@@ -144,13 +212,7 @@ static NSString *usage_str(FileUsage usage)
 
     switch (sqlite3_step(t)) {
         case SQLITE_ROW:
-            project.name = get_string(t, 0);
-            project.sshHost = get_string(t, 1);
-            project.sshPort = get_integer(t, 2);
-            project.sshUser = get_string(t, 3);
-            project.sshPass = get_string(t, 4);
-            project.sshPath = get_string(t, 5);
-
+            load_project(t, project);
             found = TRUE;
             break;
 
@@ -171,6 +233,8 @@ static NSString *usage_str(FileUsage usage)
     assert(project != nil);
     assert(project.name != nil);
 
+    if (!project.sshPort) project.sshPort = [NSNumber numberWithInt:22];
+
     sqlite3_stmt *t;
     char *s = "INSERT INTO projects ("
               "id, name, "
@@ -180,16 +244,18 @@ static NSString *usage_str(FileUsage usage)
 
     bind_integer(t, 1, project.num, true);
     bind_string(t, 2, project.name, false);
-    bind_string(t, 3, project.sshHost, true);
+    bind_string(t, 3, project.sshHost, false);
     bind_integer(t, 4, project.sshPort, true);
-    bind_string(t, 5, project.sshUser, true);
-    bind_string(t, 6, project.sshPass, true);
-    bind_string(t, 7, project.sshPath, true);
+    bind_string(t, 5, project.sshUser, false);
+    bind_string(t, 6, project.sshPass, false);
+    bind_string(t, 7, project.sshPath, false);
 
     sqlite3_step(t);
     sqlite3_finalize(t);
 
     project.num = [NSNumber numberWithInt:sqlite3_last_insert_rowid(db)];
+
+    [self loadProject:project];
 }
 
 + (void) deleteProject:(Project *)project
@@ -312,7 +378,7 @@ static NSString *usage_str(FileUsage usage)
     if (project.num == nil) return 0;
 
     NSString *idcl =
-        [NSString stringWithFormat:@"project_id=%d AND usage='%@'",
+        [NSString stringWithFormat:@"project_id=%d AND usage LIKE '%@'",
             [project.num intValue],
             usage_str(usage)];
 
@@ -321,9 +387,8 @@ static NSString *usage_str(FileUsage usage)
 
 + (NSInteger) fileCountForCurrentProject:(FileUsage)usage
 {
-    Project *proj = [[[Project alloc] init] loadCurrent];
+    Project *proj = [Project current];
     NSInteger count = [self fileCount:proj ofUsage:usage];
-    [proj release];
 
     return count;
 }
@@ -335,7 +400,7 @@ static NSString *usage_str(FileUsage usage)
     assert(project.num != nil);
 
     sqlite3_stmt *stmt;
-    const char *sql = "SELECT path FROM files WHERE project_id=? AND usage=?";
+    const char *sql = "SELECT path FROM files WHERE project_id=? AND usage LIKE ?";
     sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
     sqlite3_bind_int(stmt, 1, [project.num intValue]);
     bind_string(stmt, 2, usage_str(usage), false);
@@ -359,11 +424,31 @@ static NSString *usage_str(FileUsage usage)
     file.num = nil;
 }
 
+void load_project_file(sqlite3_stmt *t, ProjectFile *file)
+{
+    NSNumber *loadedProjectId = get_integer(t, 1);
+
+    if (file.project == nil) {
+        assert(loadedProjectId != nil);
+
+        Project *project = [[Project alloc] init];
+        project.num = loadedProjectId;
+        [Store loadProject:project];
+        file.project = project;
+        [project release];
+    }
+
+    file.num = get_integer(t, 0);
+    file.filename = get_string(t, 2);
+    file.remoteMd5 = get_string(t, 3);
+    file.localMd5 = get_string(t, 4);
+}
+
 + (BOOL) loadProjectFile:(ProjectFile *)file
 {
     assert(file.num);
 
-    const char *s = "SELECT project_id, path, remote_md5, local_md5 "
+    const char *s = "SELECT id, project_id, path, remote_md5, local_md5 "
                     "FROM files "
                     "WHERE id=?";
 
@@ -375,23 +460,7 @@ static NSString *usage_str(FileUsage usage)
     switch (sqlite3_step(t)) {
         case SQLITE_ROW:
         {
-            NSNumber *loadedProjectId = get_integer(t, 0);
-
-            if (file.project == nil) {
-                assert(loadedProjectId != nil);
-
-                Project *project = [[Project alloc] init];
-                project.num = loadedProjectId;
-                [Store loadProject:project];
-                file.project = project;
-                [project release];
-            }
-
-            [file.project.num isEqualToNumber:loadedProjectId];
-
-            file.filename = get_string(t, 1);
-            file.remoteMd5 = get_string(t, 2);
-            file.localMd5 = get_string(t, 3);
+            load_project_file(t, file);
 
             found = TRUE;
         }   break;
@@ -407,6 +476,35 @@ static NSString *usage_str(FileUsage usage)
     sqlite3_finalize(t);
 
     return found;
+}
+
++ (NSArray *) files:(Project *)project ofUsage:(FileUsage)usage
+{
+    if (!project.num) return [NSArray array];
+
+    const char *s = "SELECT id, project_id, path, remote_md5, local_md5 "
+                    "FROM files "
+                    "WHERE project_id=? AND usage LIKE ?";
+
+    NSMutableArray *files = [NSMutableArray array];
+    sqlite3_stmt *t;
+    bind_prepare(&t, s);
+    bind_integer(t, 1, project.num, false);
+    bind_string(t, 2, usage_str(usage), false);
+
+    while (bind_row(t)) {
+        ProjectFile *file = [[ProjectFile alloc] init];
+
+        file.usage = usage;
+        load_project_file(t, file);
+        [files addObject:file];
+
+        [file release];
+    }
+
+    bind_finalize(t, 0);
+
+    return files;
 }
 
 + (void) storeProjectFile:(ProjectFile *)file
@@ -454,13 +552,24 @@ static NSString *usage_str(FileUsage usage)
     bind_finalize(stmt, 0);
 }
 
-+ (NSString *) fileContent:(ProjectFile *)file
++ (NSData *) fileContent:(ProjectFile *)file
 {
     if (!file.num) return nil;
 
-    NSInteger num = [file.num intValue];
-    NSString *fileid = [NSString stringWithFormat:@"id=%d", num];
-    return [self scalar:@"content" onTable:@"files" where:fileid offset:0 orderBy:@"id"];
+    NSData *content = nil;
+
+    sqlite3_stmt *stmt;
+    const char *sql = "SELECT content FROM files WHERE id=?";
+    bind_prepare(&stmt, sql);
+    bind_integer(stmt, 1, file.num, false);
+
+    if (bind_row(stmt)) {
+        content = get_data(stmt, 0);
+    }
+
+    bind_finalize(stmt, 0);
+
+    return content;
 }
 
 + (NSNumber *) projectFileNumber:(Project *)project
@@ -469,18 +578,20 @@ static NSString *usage_str(FileUsage usage)
 {
     assert(project.num);
 
+    if (!project.num) return nil;
+
     NSNumber *num = nil;
     sqlite3_stmt *stmt;
-    const char *sql = "SELECT id FROM files WHERE project_id=? AND path=? AND usage=?";
-    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-    sqlite3_bind_int(stmt, 1, [project.num intValue]);
-    sqlite3_bind_text(stmt, 2, [filename UTF8String], -1, SQLITE_TRANSIENT);
+    const char *sql = "SELECT id FROM files WHERE project_id=? AND path LIKE ? AND usage LIKE ?";
+    bind_prepare(&stmt, sql);
+    bind_integer(stmt, 1, project.num, false);
+    bind_string(stmt, 2, filename, false);
     bind_string(stmt, 3, usage_str(usage), false);
 
-    if (sqlite3_step(stmt) == SQLITE_ROW)
+    if (bind_row(stmt))
         num = get_integer(stmt, 0);
 
-    sqlite3_finalize(stmt);
+    bind_finalize(stmt, 0);
 
     return num;
 }
@@ -493,7 +604,7 @@ static NSString *usage_str(FileUsage usage)
     assert(project.num != nil);
 
     NSString *wherecl =
-        [NSString stringWithFormat:@"project_id=%d AND usage='%@'",
+        [NSString stringWithFormat:@"project_id=%d AND usage LIKE '%@'",
             [project.num intValue],
             usage_str(usage)];
 
@@ -527,14 +638,41 @@ static NSString *usage_str(FileUsage usage)
     return size > 0 ? size : 14;
 }
 
+#pragma mark Theme Configuration
+
++ (void) setTheme:(NSString *)theme
+{
+    [self setValue:theme forKey:@"current.theme"];
+}
+
++ (NSString *) theme
+{
+    NSString *theme = [self stringValue:@"current.theme"];
+
+    return theme ? theme : @"pablo";
+}
+
+#pragma mark Theme Configuration
+
++ (void) setSplit:(bool)split
+{
+    int disableSplitInt = split ? 0 : 1;
+    [self setIntValue:disableSplitInt forKey:@"current.disable.split"];
+}
+
++ (bool) isSplit
+{
+    return [self intValue:@"current.disable.split"] != 1;
+}
+
 #pragma mark Key-Value
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key {
     sqlite3_stmt *stmt;
     const char *sql = "INSERT INTO kv (k, v) VALUES (?, ?)";
-    sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
-    sqlite3_bind_text(stmt, 1, [key UTF8String], -1, SQLITE_TRANSIENT);
-    sqlite3_bind_blob(stmt, 2, [value UTF8String], -1, SQLITE_TRANSIENT);
+    bind_prepare(&stmt, sql);
+    bind_string(stmt, 1, key, false);
+    bind_string(stmt, 2, value, false);
     bind_finalize(stmt, 0);
 }
 
@@ -546,25 +684,14 @@ static NSString *usage_str(FileUsage usage)
 + (NSString *) stringValue:(NSString *)key {
     NSString *value = nil;
 
-    sqlite3_stmt *selStmt;
-    NSString *selSql = @"SELECT v FROM kv WHERE k LIKE ?";
-    sqlite3_prepare_v2(db, [selSql UTF8String], -1, &selStmt, NULL);
-    sqlite3_bind_text(selStmt, 1, [key UTF8String], -1, SQLITE_TRANSIENT);
+    sqlite3_stmt *stmt;
+    const char *sql = "SELECT v FROM kv WHERE k LIKE ?";
+    bind_prepare(&stmt, sql);
+    bind_string(stmt, 1, key, false);
 
-    switch(sqlite3_step(selStmt)) {
-    case SQLITE_ROW:
-        value = get_string(selStmt, 0);
-        break;
+    if (bind_row(stmt)) value = get_string(stmt, 0);
 
-    case SQLITE_DONE:
-        break;
-
-    default:
-        assert(1 != 1);
-        break;
-    }
-
-    sqlite3_finalize(selStmt);
+    bind_finalize(stmt, 0);
 
     return value;
 }
@@ -581,22 +708,20 @@ static NSString *usage_str(FileUsage usage)
               onTable:(NSString *)tab
                 where:(NSString *)where
                offset:(NSInteger)offset
-              orderBy:(NSString *)order {
-
-    sqlite3_stmt *t;
+              orderBy:(NSString *)order
+{
+    sqlite3_stmt *stmt;
     NSString *f = @"SELECT %@ FROM %@ WHERE %@ ORDER BY %@ LIMIT 1 OFFSET %d";
     NSString *s = [NSString stringWithFormat:f, col, tab, where, order, offset];
     NSString *v = nil;
 
-    sqlite3_prepare_v2(db, [s UTF8String], -1, &t, NULL);
+    bind_prepare(&stmt, [s UTF8String]);
 
-    if (sqlite3_step(t) == SQLITE_ROW)
-        v = get_string(t, 0);
+    if (bind_row(stmt)) v = get_string(stmt, 0);
 
-    sqlite3_finalize(t);
+    bind_finalize(stmt, 0);
 
     return v;
-
 }
 
 + (NSInteger) scalarInt:(NSString *)col

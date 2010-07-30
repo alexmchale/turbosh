@@ -1,4 +1,5 @@
 #import "ProjectSettingsController.h"
+#import "ProjectTaskManager.h"
 
 @implementation ProjectSettingsController
 
@@ -9,14 +10,46 @@
 
 #pragma mark Action Management
 
+- (NSIndexPath *) indexOfField:(UITextField *)textField
+{
+    int section = TS_SSH_CREDENTIALS;
+    int row = 999;
+
+    if (textField == projectName.text) {
+        section = TS_PROJECT_MAIN;
+        row = TM_NAME;
+    }
+
+    if (textField == sshHost.text) row = TC_HOSTNAME;
+    if (textField == sshPort.text) row = TC_PORT;
+    if (textField == sshUser.text) row = TC_USERNAME;
+    if (textField == sshPass.text) row = TC_PASSWORD;
+    if (textField == sshPath.text) row = TC_PATH;
+
+    if (row == 999)
+        return nil;
+
+    return [NSIndexPath indexPathForRow:row inSection:section];
+}
+
 - (void) addNewProject
 {
     Project *nextProject = [[Project alloc] init];
 
     nextProject.name = @"New Project";
-    [Store storeProject:nextProject];
 
-    [TurboshAppDelegate editProject:nextProject];
+    if (proj) {
+        nextProject.sshHost = proj.sshHost;
+        nextProject.sshPort = proj.sshPort;
+        nextProject.sshUser = proj.sshUser;
+        nextProject.sshPass = proj.sshPass;
+        nextProject.sshPath = proj.sshPath;
+    }
+
+    [Store storeProject:nextProject];
+    [myTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+
+    switch_to_edit_project(nextProject);
 
     [nextProject release];
 }
@@ -26,6 +59,10 @@
     assert(proj);
 
     [Store deleteProject:proj];
+    [proj release];
+    proj = nil;
+
+    [myTableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 
     if ([Store projectCount] == 0) {
         [self addNewProject];
@@ -35,7 +72,7 @@
         nextProject.num = [Store projectNumAtOffset:0];
         [Store loadProject:nextProject];
 
-        [TurboshAppDelegate editProject:nextProject];
+        switch_to_edit_project(nextProject);
 
         [nextProject release];
     }
@@ -43,7 +80,7 @@
 
 - (void) updateStatus:(NSNotification *)notif
 {
-    enum SyncState state = [[notif.userInfo valueForKey:@"state"] intValue];
+    SyncState state = [[notif.userInfo valueForKey:@"state"] intValue];
     Project *p = [notif.userInfo valueForKey:@"project"];
     ProjectFile *f = [notif.userInfo valueForKey:@"file"];
     CommandDispatcher *d = [notif.userInfo valueForKey:@"task"];
@@ -51,13 +88,15 @@
 
     switch (state) {
         case SS_SELECT_PROJECT:
+            t = @"Selecting project to synchronize";
             break;
 
         case SS_BEGIN_CONN:
         case SS_ESTABLISH_CONN:
         case SS_ESTABLISH_SSH:
         case SS_REQUEST_AUTH_TYPE:
-        case SS_AUTHENTICATE_SSH:
+        case SS_AUTHENTICATE_SSH_BY_KEY:
+        case SS_AUTHENTICATE_SSH_BY_PASSWORD:
             t = [NSString stringWithFormat:@"Connecting to %@", [p name]];
             break;
 
@@ -77,11 +116,7 @@
             break;
 
         case SS_FILE_IS_MISSING:
-            break;
-
         case SS_DELETE_LOCAL_FILE:
-            break;
-
         case SS_TEST_IF_CHANGED:
             break;
 
@@ -94,8 +129,6 @@
             break;
 
         case SS_CONTINUE_TRANSFER:
-            break;
-
         case SS_COMPLETE_TRANSFER:
             break;
 
@@ -117,6 +150,8 @@
     if (t) syncLabel.text = t;
 }
 
+#pragma mark Manage Public Key
+
 - (BOOL) resignFirstResponder
 {
     [super resignFirstResponder];
@@ -133,53 +168,78 @@
     return YES;
 }
 
-#pragma mark View Initialization
-
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        proj = nil;
-
-        projectName = [[UITextField alloc] init];
-        projectName.autocorrectionType = UITextAutocorrectionTypeNo;
-        projectName.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        projectName.delegate = self;
-        projectName.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        sshHost = [[UITextField alloc] init];
-        sshHost.autocorrectionType = UITextAutocorrectionTypeNo;
-        sshHost.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        sshHost.delegate = self;
-        sshHost.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        sshPort = [[UITextField alloc] init];
-        sshPort.keyboardType = UIKeyboardTypeNumberPad;
-        sshPort.delegate = self;
-        sshPort.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        sshUser = [[UITextField alloc] init];
-        sshUser.autocorrectionType = UITextAutocorrectionTypeNo;
-        sshUser.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        sshUser.delegate = self;
-        sshUser.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        sshPass = [[UITextField alloc] init];
-        sshPass.secureTextEntry = YES;
-        sshPass.autocorrectionType = UITextAutocorrectionTypeNo;
-        sshPass.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        sshPass.delegate = self;
-        sshPass.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        sshPath = [[UITextField alloc] init];
-        sshPath.autocorrectionType = UITextAutocorrectionTypeNo;
-        sshPath.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        sshPath.delegate = self;
-        sshPath.clearButtonMode = UITextFieldViewModeWhileEditing;
-
-        syncLabel = nil;
-    }
-    return self;
+- (void) copyPublicKey
+{
+    KeyPair *key = [[KeyPair alloc] init];
+    NSString *publicKey = [NSString stringWithContentsOfFile:[key publicFilename]
+                                                    encoding:NSUTF8StringEncoding
+                                                       error:nil];
+    UIPasteboard *pb = [UIPasteboard generalPasteboard];
+    [pb setString:publicKey];
+    [key release];
 }
+
+- (void) sendPublicKey
+{
+    KeyPair *key = [[KeyPair alloc] init];
+    NSString *publicKey = [key readPublicKey];
+    MFMailComposeViewController *con = [[MFMailComposeViewController alloc] init];
+
+    con.mailComposeDelegate = self;
+    con.navigationBar.barStyle = UIBarStyleBlack;
+    [con setSubject:@"Turbosh Public Key"];
+    [con setMessageBody:publicKey isHTML:NO];
+
+    present_dialog(con);
+
+    [con release];
+    [key release];
+}
+
+- (void) sendLogFile
+{
+    NSString *logContents = read_user_file(@"console.log");
+
+    if (logContents) {
+        MFMailComposeViewController *con = [[MFMailComposeViewController alloc] init];
+
+        con.mailComposeDelegate = self;
+        con.navigationBar.barStyle = UIBarStyleBlack;
+        [con setToRecipients:[NSArray arrayWithObject:@"turbosh@anticlever.com"]];
+        [con setSubject:@"Turbosh Console Log"];
+        [con setMessageBody:logContents isHTML:NO];
+
+        present_dialog(con);
+
+        [con release];
+    }
+}
+
+- (void) mailComposeController:(MFMailComposeViewController *)controller
+           didFinishWithResult:(MFMailComposeResult)result
+                         error:(NSError *)error
+{
+    dismiss_dialog();
+}
+
+- (void) promptForResetPublicKey
+{
+    NSString *act =
+        [NSString
+         stringWithFormat:@"Are you sure you want to generate a new SSH key?",
+         proj.name];
+
+    show_action_sheet(self, TAG_RESET_KEY, act, @"Nevermind", @"Reset it!");
+}
+
+- (void) resetPublicKey
+{
+    KeyPair *key = [[KeyPair alloc] init];
+    [key generate];
+    [key release];
+}
+
+#pragma mark View Initialization
 
 - (void) viewWillAppear:(BOOL)animated
 {
@@ -213,11 +273,60 @@
 
 - (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self resignFirstResponder];
+
     [myTableView reloadData];
+
+    [projectName adjustSizeFor:myTableView];
+    [sshHost adjustSizeFor:myTableView];
+    [sshPort adjustSizeFor:myTableView];
+    [sshUser adjustSizeFor:myTableView];
+    [sshPass adjustSizeFor:myTableView];
+    [sshPath adjustSizeFor:myTableView];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
+}
+
+- (void) viewDidLoad
+{
+    self.projectName = [TextFieldCell cellForTableView:myTableView labeled:@"Name"];
+    self.projectName.text.delegate = self;
+    [self.projectName setValue:proj.name];
+
+    self.sshHost = [TextFieldCell cellForTableView:myTableView labeled:@"Hostname"];
+    self.sshHost.text.delegate = self;
+    [self.sshHost setValue:proj.sshHost];
+
+    self.sshPort = [TextFieldCell cellForTableView:myTableView labeled:@"Port"];
+    self.sshPort.text.delegate = self;
+    self.sshPort.text.keyboardType = UIKeyboardTypeNumberPad;
+    [self.sshPort setValue:(proj.sshPort ? [proj.sshPort stringValue] : @"22")];
+
+    self.sshUser = [TextFieldCell cellForTableView:myTableView labeled:@"Username"];
+    self.sshUser.text.delegate = self;
+    [self.sshUser setValue:proj.sshUser];
+
+    self.sshPass = [TextFieldCell cellForTableView:myTableView labeled:@"Password"];
+    self.sshPass.text.delegate = self;
+    self.sshPass.text.secureTextEntry = YES;
+    [self.sshPass setValue:proj.sshPass];
+
+    self.sshPath = [TextFieldCell cellForTableView:myTableView labeled:@"Path"];
+    self.sshPath.text.delegate = self;
+    [self.sshPath setValue:proj.sshPath];
+}
+
+- (void) viewDidUnload
+{
+    self.projectName = nil;
+    self.sshHost = nil;
+    self.sshPort = nil;
+    self.sshUser = nil;
+    self.sshPass = nil;
+    self.sshPath = nil;
 }
 
 - (void)dealloc {
@@ -243,10 +352,10 @@
     switch (section) {
         case TS_PROJECT_MAIN:       return @"Project";
         case TS_SSH_CREDENTIALS:    return @"SSH Credentials";
-        case TS_FILES:              return @"";
-        case TS_PATHS:              return @"";
-        case TS_TASKS:              return @"";
-        case TS_ADD_REM:            return @"";
+        case TS_SUBSCRIPTION:       return @"Subscriptions";
+        case TS_ADD_REM:            return @"Project Management";
+        case TS_MANAGE_KEY:         return @"Public Key Authentication";
+        case TS_SUPPORT:            return nil;
         default:                    assert(false);
     }
 
@@ -257,55 +366,14 @@
     switch (section) {
         case TS_PROJECT_MAIN:       return TM_ROW_COUNT;
         case TS_SSH_CREDENTIALS:    return TC_ROW_COUNT;
-        case TS_FILES:              return TF_ROW_COUNT;
-        case TS_PATHS:              return TP_ROW_COUNT;
-        case TS_TASKS:              return TT_ROW_COUNT;
+        case TS_SUBSCRIPTION:       return TS_ROW_COUNT;
         case TS_ADD_REM:            return proj.num ? TAR_ROW_COUNT : 0;
+        case TS_MANAGE_KEY:         return TPK_ROW_COUNT;
+        case TS_SUPPORT:            return SUPPORT_ROW_COUNT;
         default:                    assert(false);
     }
 
     return 0;
-}
-
-- (UITableViewCell *) cellFor:(UITableView *)tableView
-						field:(UITextField *)field
-						 name:(NSString *)name
-						value:(NSString *)value
-{
-    static NSString *CellIdentifier = @"ProjectSettingsTextFieldCellIdentifier";
-
-    // Dequeue or create a cell of the appropriate type.
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-									   reuseIdentifier:CellIdentifier] autorelease];
-    }
-
-    for (UIView *view in cell.contentView.subviews) {
-        [view removeFromSuperview];
-    }
-
-    CGRect tableFrame = tableView.frame;
-    int yOffset = 10;
-    int height = cell.frame.size.height - (2 * yOffset);
-
-    UILabel *label = [[UILabel alloc] init];
-    label.text = name;
-    label.frame = CGRectMake(10, yOffset, 90, height);
-    label.font = [UIFont boldSystemFontOfSize:14.0];
-    label.textAlignment = UITextAlignmentRight;
-    label.backgroundColor = [UIColor clearColor];
-
-    field.text = value;
-    field.frame = CGRectMake(110, yOffset, tableFrame.size.width - 220, height);
-    field.textColor = [UIColor colorWithRed:0.243 green:0.306 blue:0.435 alpha:1.0];
-
-    [cell.contentView addSubview:label];
-    [cell.contentView addSubview:field];
-
-    [label release];
-
-    return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -316,7 +384,7 @@
         case TS_PROJECT_MAIN:
             switch (indexPath.row) {
                 case TM_NAME:
-					cell = [self cellFor:tableView field:projectName name:@"Name" value:proj.name];
+                    cell = projectName;
                     break;
 
                 default: assert(false);
@@ -326,71 +394,53 @@
         case TS_SSH_CREDENTIALS:
             switch (indexPath.row) {
                 case TC_HOSTNAME:
-					cell = [self cellFor:tableView field:sshHost name:@"Hostname" value:proj.sshHost];
+                    cell = sshHost;
                     break;
 
                 case TC_PORT:
-					cell = [self cellFor:tableView field:sshPort name:@"Port" value:[proj.sshPort stringValue]];
+                    cell = sshPort;
                     break;
 
                 case TC_USERNAME:
-					cell = [self cellFor:tableView field:sshUser name:@"Username" value:proj.sshUser];
+                    cell = sshUser;
                     break;
 
                 case TC_PASSWORD:
-					cell = [self cellFor:tableView field:sshPass name:@"Password" value:proj.sshPass];
+                    cell = sshPass;
                     break;
 
                 case TC_PATH:
-					cell = [self cellFor:tableView field:sshPath name:@"Path" value:proj.sshPath];
+                    cell = sshPath;
                     break;
 
                 default: assert(false);
             }
             break;
 
-        case TS_FILES:
-            cell = [tableView dequeueReusableCellWithIdentifier:@"FilesCell"];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:@"FilesCell"] autorelease];
+        case TS_SUBSCRIPTION:
+            cell = [tableView cellForId:@"FilesCell" withStyle:UITableViewCellStyleDefault];
+
+            switch (indexPath.row) {
+                case TS_MANAGE_FILES:
+                    cell.textLabel.text = @"Synchronized Files";
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    break;
+
+                case TS_MANAGE_PATHS:
+                    cell.textLabel.text = @"Synchronized Paths";
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    break;
+
+                case TS_MANAGE_TASKS:
+                    cell.textLabel.text = @"Task Executables";
+                    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+                    break;
             }
-
-            cell.textLabel.text = @"Synchronized Files";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-
-            break;
-
-        case TS_PATHS:
-            cell = [tableView dequeueReusableCellWithIdentifier:@"PathsCell"];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:@"PathsCell"] autorelease];
-            }
-
-            cell.textLabel.text = @"Synchronized Paths";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-
-            break;
-
-        case TS_TASKS:
-            cell = [tableView dequeueReusableCellWithIdentifier:@"TasksCell"];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:@"TasksCell"] autorelease];
-            }
-
-            cell.textLabel.text = @"Task Executables";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
             break;
 
         case TS_ADD_REM:
-            cell = [tableView dequeueReusableCellWithIdentifier:@"AddRemCell"];
-            if (cell == nil) {
-                cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                               reuseIdentifier:@"AddRemCell"] autorelease];
-            }
+            cell = [tableView cellForId:@"AddRemCell" withStyle:UITableViewCellStyleDefault];
 
             switch (indexPath.row) {
                 case TAR_ADD_PROJECT:
@@ -399,6 +449,44 @@
 
                 case TAR_REM_PROJECT:
                     cell.textLabel.text = @"Delete This Project";
+                    break;
+
+                default: assert(false);
+            }
+
+            break;
+
+        case TS_MANAGE_KEY:
+            cell = [tableView cellForId:@"pkCell" withStyle:UITableViewCellStyleDefault];
+
+            switch (indexPath.row) {
+                case TPK_CLIPBOARD_KEY:
+                    cell.textLabel.text = @"Copy public key to clipboard";
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    break;
+
+                case TPK_SEND_KEY:
+                    cell.textLabel.text = @"Email public key";
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    break;
+
+                case TPK_RESET_KEY:
+                    cell.textLabel.text = @"Generate a new key pair";
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    break;
+
+                default: assert(false);
+            }
+
+            break;
+
+        case TS_SUPPORT:
+            cell = [tableView cellForId:@"spCell" withStyle:UITableViewCellStyleDefault];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+
+            switch (indexPath.row) {
+                case SUPPORT_EMAIL_CONSOLE_LOG:
+                    cell.textLabel.text = @"Email Application Log";
                     break;
 
                 default: assert(false);
@@ -456,50 +544,33 @@
             }
             break;
 
-        case TS_FILES:
+        case TS_SUBSCRIPTION:
         {
             [self resignFirstResponder];
 
-            ProjectFileSelector *pfs = [[ProjectFileSelector alloc]
-                                         initWithNibName:@"ProjectFileSelector"
-                                         bundle:nil];
+            NSString *nib = IS_IPAD ? @"ProjectFileSelector-iPad" : @"ProjectFileSelector-iPhone";
+            ProjectFileSelector *pfs = [[ProjectFileSelector alloc] initWithNibName:nib bundle:nil];
             pfs.project = proj;
-            pfs.mode = FU_FILE;
 
-            [TurboshAppDelegate switchTo:pfs];
+            switch (indexPath.row) {
+                case TS_MANAGE_FILES:
+                    pfs.mode = FU_FILE;
+                    break;
+
+                case TS_MANAGE_PATHS:
+                    pfs.mode = FU_PATH;
+                    break;
+
+                case TS_MANAGE_TASKS:
+                    pfs.mode = FU_TASK;
+                    break;
+            }
+
+            switch_to_controller(pfs);
             [pfs release];
 
-        }   break;
-
-        case TS_PATHS:
-        {
-            [self resignFirstResponder];
-
-            ProjectFileSelector *pfs = [[ProjectFileSelector alloc]
-                                        initWithNibName:@"ProjectFileSelector"
-                                        bundle:nil];
-            pfs.project = proj;
-            pfs.mode = FU_PATH;
-
-            [TurboshAppDelegate switchTo:pfs];
-            [pfs release];
-
-        }   break;
-
-        case TS_TASKS:
-        {
-            [self resignFirstResponder];
-
-            ProjectFileSelector *pfs = [[ProjectFileSelector alloc]
-                                        initWithNibName:@"ProjectFileSelector"
-                                        bundle:nil];
-            pfs.project = proj;
-            pfs.mode = FU_TASK;
-
-            [TurboshAppDelegate switchTo:pfs];
-            [pfs release];
-
-        }   break;
+            break;
+        }
 
         case TS_ADD_REM:
         {
@@ -517,28 +588,58 @@
                          stringWithFormat:@"Are you sure you want to remove the project %@ from Turbosh?",
                          proj.name];
 
-                    UIActionSheet *actionSheet =
-                        [[UIActionSheet alloc]
-                         initWithTitle:act
-                         delegate:self
-                         cancelButtonTitle:@"Nevermind"
-                         destructiveButtonTitle:@"Remove it!"
-                         otherButtonTitles:nil];
-
-                    actionSheet.tag = TAG_DELETE_PROJECT;
-                    actionSheet.actionSheetStyle = UIActionSheetStyleDefault;
-                    [actionSheet showInView:self.view];
-
-                    [actionSheet release];
+                    show_action_sheet(self, TAG_DELETE_PROJECT, act, @"Nevermind", @"Remove it!");
                 }   break;
 
                 default: assert(false);
             }
         }   break;
 
+        case TS_MANAGE_KEY:
+        {
+            switch (indexPath.row) {
+                case TPK_CLIPBOARD_KEY:
+                    [self copyPublicKey];
+                    break;
+
+                case TPK_SEND_KEY:
+                    [self sendPublicKey];
+                    break;
+
+                case TPK_RESET_KEY:
+                    [self promptForResetPublicKey];
+                    break;
+
+                default: assert(false);
+            }
+
+        }   break;
+
+        case TS_SUPPORT:
+        {
+            switch (indexPath.row) {
+                case SUPPORT_EMAIL_CONSOLE_LOG:
+                    [self sendLogFile];
+                    break;
+
+                default: assert(false);
+            }
+
+            break;
+        }
+
         default: assert(false);
     }
 
+}
+
+- (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == TS_SUBSCRIPTION && indexPath.row == TS_MANAGE_TASKS) {
+        ProjectTaskManager *ptm = [[ProjectTaskManager alloc] initWithStyle:UITableViewStyleGrouped];
+        switch_to_controller(ptm);
+        [ptm release];
+    }
 }
 
 #pragma mark Action Sheet Delegate
@@ -548,6 +649,9 @@
 {
     if (actionSheet.tag == TAG_DELETE_PROJECT && buttonIndex == 0)
         [self removeThisProject];
+
+    if (actionSheet.tag == TAG_RESET_KEY && buttonIndex == 0)
+        [self resetPublicKey];
 }
 
 #pragma mark Text Field Delegate
@@ -558,20 +662,20 @@
 
 	NSNumberFormatter *nf = [[NSNumberFormatter alloc] init];
 
-    proj.name = projectName.text;
+    proj.name = projectName.text.text;
 
-    proj.sshHost = sshHost.text;
+    proj.sshHost = sshHost.text.text;
 
-    NSString *portString = [sshPort.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *portString = [sshPort.text.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (!portString || [@"" isEqualToString:portString])
         proj.sshPort = [NSNumber numberWithInt:22];
     else
         proj.sshPort = [nf numberFromString:portString];
     if ([proj.sshPort intValue] <= 0) proj.sshPort = [NSNumber numberWithInt:22];
 
-    proj.sshUser = sshUser.text;
-    proj.sshPass = sshPass.text;
-    proj.sshPath = sshPath.text;
+    proj.sshUser = sshUser.text.text;
+    proj.sshPass = sshPass.text.text;
+    proj.sshPath = sshPath.text.text;
 
     [Store storeProject:proj];
 
@@ -580,11 +684,41 @@
     [nf release];
 }
 
+- (void)selectIndexEvent:(NSTimer *)theTimer
+{
+    NSIndexPath *indexPath = theTimer.userInfo;
+
+    if (indexPath) {
+        [myTableView scrollToRowAtIndexPath:indexPath
+                           atScrollPosition:UITableViewScrollPositionMiddle
+                                   animated:YES];
+    }
+}
+
+- (void) textFieldDidBeginEditing:(UITextField *)textField
+{
+    adjust_current_controller();
+
+    NSIndexPath *indexPath = [self indexOfField:textField];
+
+    if (indexPath) {
+        [myTableView scrollToRowAtIndexPath:indexPath
+                           atScrollPosition:UITableViewScrollPositionMiddle
+                                   animated:YES];
+
+        [NSTimer scheduledTimerWithTimeInterval:0.50
+                                         target:self
+                                       selector:@selector(selectIndexEvent:)
+                                       userInfo:indexPath
+                                        repeats:NO];
+    }
+}
+
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {
     [self saveForm];
 
-    if (textField == projectName) [TurboshAppDelegate reloadList];
+    if (textField == projectName.text) [TurboshAppDelegate reloadList];
 }
 
 #pragma mark Project Management
@@ -594,18 +728,19 @@
 
     // Store the project in this form.
 
+    [proj release];
     proj = newProject;
     [newProject retain];
 
     // Now update the fields in this form for the new project.
 
-    projectName.text = proj.name;
+    projectName.text.text = proj.name;
 
-    sshHost.text = proj.sshHost;
-    sshPort.text = [proj.sshPort stringValue];
-    sshUser.text = proj.sshUser;
-    sshPass.text = proj.sshPass;
-    sshPath.text = proj.sshPath;
+    sshHost.text.text = proj.sshHost;
+    sshPort.text.text = [proj.sshPort stringValue];
+    sshUser.text.text = proj.sshUser;
+    sshPass.text.text = proj.sshPass;
+    sshPath.text.text = proj.sshPath;
 
     [myTableView reloadData];
 }
