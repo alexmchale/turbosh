@@ -5,7 +5,7 @@
 @synthesize shjsName, turboshName, bgColor, fgColor;
 
 static const ThemeSettings themeSettings[] = {
-    { @"Blue",    @"navy",       { 0.000, 0.000, 0.207 }, { 0.000, 0.545, 1.000 } },
+    { @"Blue",    @"navy",       { 0.000, 0.000, 0.207 }, { 0.882, 0.905, 0.184 } },
     { @"Dark 1",  @"darkness",   { 0.000, 0.000, 0.000 }, { 1.000, 1.000, 1.000 } },
     { @"Dark 2",  @"neon",       { 0.000, 0.000, 0.000 }, { 1.000, 1.000, 1.000 } },
     { @"Dark 3",  @"pablo",      { 0.000, 0.000, 0.000 }, { 1.000, 1.000, 1.000 } },
