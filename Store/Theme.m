@@ -1,5 +1,9 @@
 #import "Theme.h"
 
+@implementation Theme
+
+@synthesize shjsName, turboshName, bgColor, fgColor;
+
 static const ThemeSettings themeSettings[] = {
     { @"Blue",    @"navy",       { 0.000, 0.000, 0.207 }, { 0.000, 0.545, 1.000 } },
     { @"Dark 1",  @"darkness",   { 0.000, 0.000, 0.000 }, { 1.000, 1.000, 1.000 } },
@@ -16,12 +20,15 @@ static const ThemeSettings themeSettings[] = {
     { @"Light 7", @"dull",       { 0.749, 0.749, 0.749 }, { 0.396, 0.396, 0.396 } }
 };
 
-static Theme *buildThemeObject(int index)
-{
-    assert(index >= 0);
-    assert(index < sizeof(themeSettings)/sizeof(ThemeSettings));
+static const int themeCount = sizeof(themeSettings) / sizeof(ThemeSettings);
 
-    const ThemeSettings *settings = &themeSettings[index];
+static NSMutableArray *themes = nil;
+
+static Theme *buildThemeObject(NSUInteger index)
+{
+    assert(index < themeCount);
+
+    const ThemeSettings *settings = &themeSettings[index % themeCount];
 
     float fgRed = settings->fgColor.r;
     float fgGreen = settings->fgColor.g;
@@ -41,21 +48,33 @@ static Theme *buildThemeObject(int index)
     return theme;
 }
 
-
-@implementation Theme
-
-@synthesize shjsName, turboshName, bgColor, fgColor;
-
-+ (Theme *) named:(NSString *)name
++ (Theme *) themeWithShjsName:(NSString *)name
 {
-    int themeCount = sizeof(themeSettings) / sizeof(ThemeSettings);
     int themeIndex = 0;
 
     for (int i = 0; i < themeCount; ++i) {
-        if ([themeSettings[i].turboshName isEqualToString:name]) themeIndex = i;
+        if ([themeSettings[i].shjsName isEqualToString:name]) themeIndex = i;
     }
 
     return buildThemeObject(themeIndex);
+}
+
++ (NSArray *) all
+{
+    if (!themes) {
+        themes = [[NSMutableArray alloc] init];
+
+        for (int i = 0; i < themeCount; ++i) {
+            [themes addObject:buildThemeObject(i)];
+        }
+    }
+
+    return themes;
+}
+
++ (Theme *) current
+{
+    return [Store theme];
 }
 
 @end

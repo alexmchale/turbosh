@@ -17,7 +17,7 @@
     NSString *c = [file content];
     NSString *y = [NSString stringWithFormat:@"%d", (int)startingRect.origin.y];
     NSString *fs = [NSString stringWithFormat:@"%d", [Store fontSize]];
-    NSString *tm = [Store theme];
+    NSString *tm = [Store theme].shjsName;
 
     if (!t || !c) {
         // Show a message and redirect to the project page.

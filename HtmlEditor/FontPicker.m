@@ -1,6 +1,10 @@
 #import "FontPicker.h"
 
+@implementation FontPickerController
 
+@synthesize delegate = _delegate;
+
+#pragma mark Constants
 
 static NSInteger fontSizes[] = { 12, 14, 16, 18, 20 };
 
@@ -10,51 +14,12 @@ static NSString *fontSizeNames[] = {
 
 static const int FONT_SIZE_COUNT = 5;
 
-static NSString *shjsThemes[] = {
-    @"navy",
-    @"darkness",
-    @"neon",
-    @"pablo",
-    @"vim-dark",
-    @"whatis",
-    @"emacs",
-    @"ide-msvcpp",
-    @"print",
-    @"vim",
-    @"zellner",
-    @"peachpuff",
-    @"dull"
-};
-
-static NSString *turboshThemes[] = {
-    @"Blue",
-    @"Dark 1",
-    @"Dark 2",
-    @"Dark 3",
-    @"Dark 4",
-    @"Dark 5",
-    @"Light 1",
-    @"Light 2",
-    @"Light 3",
-    @"Light 4",
-    @"Light 5",
-    @"Light 6"
-};
-
-static const int THEME_COUNT = sizeof(turboshThemes) / sizeof(NSString *);
-
 typedef enum {
     SECTION_FONT_SIZE,
     SECTION_THEME,
     SECTION_SPLIT,
     SECTION_COUNT
 } Sections;
-
-
-
-@implementation FontPickerController
-
-@synthesize delegate = _delegate;
 
 #pragma mark Actions
 
@@ -125,7 +90,7 @@ typedef enum {
 {
     switch (section) {
         case SECTION_FONT_SIZE: return FONT_SIZE_COUNT;
-        case SECTION_THEME:     return THEME_COUNT;
+        case SECTION_THEME:     return [[Theme all] count];
         case SECTION_SPLIT:     return IS_IPAD ? 1 : 0;
         default: assert(false);
     }
@@ -170,11 +135,10 @@ typedef enum {
 
         case SECTION_THEME:
         {
-            NSString *turboshThemeName = turboshThemes[indexPath.row % THEME_COUNT];
-            NSString *shjsThemeName = shjsThemes[indexPath.row % THEME_COUNT];
-            cell.textLabel.text = turboshThemeName;
+            Theme *theme = [[Theme all] objectAtIndex:indexPath.row];
+            cell.textLabel.text = theme.turboshName;
 
-            if ([shjsThemeName isEqual:[Store theme]])
+            if ([theme.shjsName isEqual:[Store theme].shjsName])
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             else
                 cell.accessoryType = UITableViewCellAccessoryNone;
@@ -228,8 +192,7 @@ typedef enum {
 
         case SECTION_THEME:
         {
-            NSString *shjsThemeName = shjsThemes[indexPath.row % THEME_COUNT];
-            [Store setTheme:shjsThemeName];
+            [Store setTheme:[[Theme all] objectAtIndex:indexPath.row]];
 
             break;
         }
