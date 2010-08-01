@@ -1,5 +1,14 @@
 @implementation FileTransfer
 
+// Rely on the `cp` command to fix the uploaded file's permissions.
+NSString *file_mover_command(NSString *filename)
+{
+    NSString *temp = [[NSString stringWithFormat:@"%@.part", filename] stringBySingleQuoting];
+    NSString *real = [filename stringBySingleQuoting];
+
+    return [NSString stringWithFormat:@"cp %@ %@ ; rm -f %@", temp, real, temp];
+}
+
 - (id) initWithSession:(LIBSSH2_SESSION *)s upload:(ProjectFile *)f
 {
     self = [super init];
@@ -10,6 +19,11 @@
     success = false;
     isUpload = true;
     file = [f retain];
+    filePartialName = [[NSString alloc] initWithFormat:@"%@.part", [f fullpath]];
+
+    NSString *moverScript = file_mover_command([f filename]);
+    NSLog(@"Mover script: %@", moverScript);
+    fileMover = [[CommandDispatcher alloc] initWithProject:f.project session:session command:moverScript];
 
     NSData *rawContent = [file rawContent];
     if (rawContent)
@@ -30,6 +44,8 @@
     success = false;
     isUpload = false;
     file = [f retain];
+    filePartialName = nil;
+    fileMover = nil;
 
     content = [NSMutableData data];
     [content retain];
@@ -40,19 +56,24 @@
 - (void) dealloc
 {
     [file release];
+    [filePartialName release];
     [content release];
+    [fileMover release];
 
     [super dealloc];
 }
 
 - (bool) step
 {
+    static char buffer[0x10000];
+
     int mode = 0700;
     int rc;
     const void *contentPtr;
     int blockSize;
-    static char buffer[0x10000];
     char *errmsg;
+    const char *filename = [[file fullpath] UTF8String];
+    const char *partname = [filePartialName UTF8String];
 
     NSLog(@"File Transfer %d (upload %d) (content %d/%d)", step, isUpload, content!=nil, [content length]);
     assert(content);
@@ -71,9 +92,9 @@
             success = false;
 
             if (isUpload)
-                channel = libssh2_scp_send(session, [[file fullpath] UTF8String], mode, [content length]);
+                channel = libssh2_scp_send(session, partname, mode, [content length]);
             else
-                channel = libssh2_scp_recv(session, [[file fullpath] UTF8String], &sb);
+                channel = libssh2_scp_recv(session, filename, &sb);
 
             if (channel == NULL) {
                 rc = libssh2_session_last_error(session, &errmsg, NULL, 0);
@@ -164,6 +185,18 @@
 
                 if (rc == LIBSSH2_ERROR_EAGAIN) return true;
                 if (rc < 0) return [self close:rc];
+            }
+
+            step++;
+
+            return true;
+
+        case 5:
+            // Put the uploaded file into place.
+
+            if (isUpload && fileMover) {
+                if ([fileMover step]) return true;
+                [fileMover close];
             }
 
             success = true;

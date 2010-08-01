@@ -38,3 +38,27 @@ NSString *read_user_file(NSString *filename)
                                      encoding:NSUTF8StringEncoding
                                         error:nil];
 }
+
+NSString *read_bundle_file(NSString *filename)
+{
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *filePath = [bundle pathForResource:filename ofType:nil];
+    NSURL *fileURL = [NSURL fileURLWithPath:filePath];
+
+    return [[[NSString alloc] initWithContentsOfURL:fileURL] autorelease];
+}
+
+NSString *script_command(NSString *scriptName, NSDictionary *params)
+{
+    NSString *script = read_bundle_file(scriptName);
+    
+    for (NSString *key in params) {
+        NSString *value = [[params objectForKey:key] stringValue];
+        NSString *anchor = [NSString stringWithFormat:@"___%@___", key];
+        script = [script stringByReplacingOccurrencesOfString:anchor withString:value];
+    }
+    
+    script = [script stringByReplacingOccurrencesOfRegex:@"[\r\n]" withString:@" "];
+    
+    return script;
+}
