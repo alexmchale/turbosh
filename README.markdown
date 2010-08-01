@@ -38,6 +38,11 @@ Please email me at alexmchale@gmail.com if you run into any troubles with Turbos
 
 ### Changes ###
 
+v2.2
+
+* The file editor will now use the foreground/background colors of the file viewer.
+* Fixed a bug that could cause files to be truncated if an upload is interrupted by a data connection failure.
+
 v2.1
 
 * Configurable themes for the file viewer.
