@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#import <Theme.h>
 
 @protocol FontPickerDelegate
 - (void) configurationChanged;

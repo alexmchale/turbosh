@@ -6,9 +6,11 @@
     LIBSSH2_CHANNEL *channel;
 
     ProjectFile *file;
+    NSString *filePartialName;
     NSMutableData *content;
     int offset;
     struct stat sb;
+    CommandDispatcher *fileMover;
 
     int step;
     bool success;

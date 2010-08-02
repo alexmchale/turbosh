@@ -640,16 +640,19 @@ void load_project_file(sqlite3_stmt *t, ProjectFile *file)
 
 #pragma mark Theme Configuration
 
-+ (void) setTheme:(NSString *)theme
++ (void) setTheme:(Theme *)theme
 {
-    [self setValue:theme forKey:@"current.theme"];
+    assert(theme);
+
+    [self setValue:theme.shjsName forKey:@"current.theme"];
 }
 
-+ (NSString *) theme
++ (Theme *) theme
 {
-    NSString *theme = [self stringValue:@"current.theme"];
+    NSString *shjsName = [self stringValue:@"current.theme"];
+    if (!shjsName) shjsName = @"pablo";
 
-    return theme ? theme : @"pablo";
+    return [Theme themeWithShjsName:shjsName];
 }
 
 #pragma mark Theme Configuration

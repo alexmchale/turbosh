@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
+#import <Theme.h>
 
 @class Project;
 @class ProjectFile;
@@ -42,8 +43,8 @@
 + (void) setFontSize:(NSInteger)size;
 + (NSInteger) fontSize;
 
-+ (void) setTheme:(NSString *)theme;
-+ (NSString *) theme;
++ (void) setTheme:(Theme *)theme;
++ (Theme *) theme;
 
 + (void) setSplit:(bool)split;
 + (bool) isSplit;

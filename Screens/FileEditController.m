@@ -76,6 +76,8 @@
 {
     textView.font = [UIFont fontWithName:@"Courier New" size:[Store fontSize]];
     textView.text = text;
+    textView.textColor = [Theme current].fgColor;
+    textView.backgroundColor = [Theme current].bgColor;
 
     ProjectFile *file = [[ProjectFile alloc] init];
     file.num = [Store currentFileNum];
