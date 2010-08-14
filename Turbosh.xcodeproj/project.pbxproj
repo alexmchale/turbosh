@@ -29,6 +29,7 @@
 		74356D1F11C1D7990061E2C2 /* ProjectTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 74356D1E11C1D7990061E2C2 /* ProjectTaskManager.m */; };
 		74356DB811C255720061E2C2 /* command-script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 74356DB711C255720061E2C2 /* command-script.sh */; };
 		7441538511DA10820043BD4A /* Icon-iPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7441538411DA10820043BD4A /* Icon-iPhone.png */; };
+		745131CA1216BE6E00C855D7 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7441E9881215F65100AE183D /* libcrypto.a */; };
 		7451C83811CF0E760098E044 /* UITableViewUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7451C83711CF0E760098E044 /* UITableViewUtil.m */; };
 		74610D8911642BB000CF7B04 /* ProjectFileSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 74610D8711642BB000CF7B04 /* ProjectFileSelector.m */; };
 		74610D8A11642BB000CF7B04 /* ProjectFileSelector-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74610D8811642BB000CF7B04 /* ProjectFileSelector-iPad.xib */; };
@@ -38,7 +39,6 @@
 		74818C7A11BAB02D002EEA86 /* FontPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 74818C7911BAB02D002EEA86 /* FontPicker.m */; };
 		74818CBB11BBEAAA002EEA86 /* 19-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 74818CBA11BBEAAA002EEA86 /* 19-gear.png */; };
 		74818E5311BDF849002EEA86 /* find-script.sh in Resources */ = {isa = PBXBuildFile; fileRef = 74818E5211BDF849002EEA86 /* find-script.sh */; };
-		7486315911B5739900C938AB /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7486313811B571C800C938AB /* libcrypto.a */; };
 		749ED1E211CC001200AAE6B6 /* Navigation.m in Sources */ = {isa = PBXBuildFile; fileRef = 749ED1E111CC001200AAE6B6 /* Navigation.m */; };
 		74A5796611CF876800E32654 /* TaskExecController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A5796511CF876800E32654 /* TaskExecController-iPhone.xib */; };
 		74A57B8D11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A57B8C11D1B8BB00E32654 /* ProjectFileSelector-iPhone.xib */; };
@@ -171,21 +171,21 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7486313711B571C800C938AB /* PBXContainerItemProxy */ = {
+		7441E9871215F65100AE183D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7486312E11B571C800C938AB /* openssl.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 9069D28C0FCE659A0042E34C;
 			remoteInfo = crypto;
 		};
-		7486315311B5734C00C938AB /* PBXContainerItemProxy */ = {
+		7441E9931215F65E00AE183D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7486312E11B571C800C938AB /* openssl.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 9069D13C0FCE35730042E34C;
 			remoteInfo = make;
 		};
-		7486315511B5734F00C938AB /* PBXContainerItemProxy */ = {
+		7441E9951215F66200AE183D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7486312E11B571C800C938AB /* openssl.xcodeproj */;
 			proxyType = 1;
@@ -245,7 +245,7 @@
 		74818C7911BAB02D002EEA86 /* FontPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FontPicker.m; sourceTree = "<group>"; };
 		74818CBA11BBEAAA002EEA86 /* 19-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "19-gear.png"; sourceTree = "<group>"; };
 		74818E5211BDF849002EEA86 /* find-script.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = "find-script.sh"; path = "Shell/find-script.sh"; sourceTree = "<group>"; };
-		7486312E11B571C800C938AB /* openssl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openssl.xcodeproj; path = "/Users/alexmchale/Projects/openssl-xcode/openssl.xcodeproj"; sourceTree = "<absolute>"; };
+		7486312E11B571C800C938AB /* openssl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openssl.xcodeproj; path = "../openssl-xcode/openssl.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		749ED1E011CC001200AAE6B6 /* Navigation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Navigation.h; path = Main/Navigation.h; sourceTree = "<group>"; };
 		749ED1E111CC001200AAE6B6 /* Navigation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Navigation.m; path = Main/Navigation.m; sourceTree = "<group>"; };
 		74A5796511CF876800E32654 /* TaskExecController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "TaskExecController-iPhone.xib"; path = "Screens/TaskExecController-iPhone.xib"; sourceTree = "<group>"; };
@@ -410,6 +410,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				745131CA1216BE6E00C855D7 /* libcrypto.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
@@ -417,7 +418,6 @@
 				74B371EF115DC8C300E3B2D1 /* libsqlite3.dylib in Frameworks */,
 				747EC175116150D8002D8CD8 /* libz.dylib in Frameworks */,
 				74D7403A11674C2E0010A592 /* libicucore.dylib in Frameworks */,
-				7486315911B5739900C938AB /* libcrypto.a in Frameworks */,
 				741A67CD11C688E800E57D5E /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -564,6 +564,14 @@
 			name = Widgets;
 			sourceTree = "<group>";
 		};
+		7441E9831215F65100AE183D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7441E9881215F65100AE183D /* libcrypto.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		747EC1DF1161810C002D8CD8 /* Shell */ = {
 			isa = PBXGroup;
 			children = (
@@ -583,14 +591,6 @@
 				741A64A811C55E3000E57D5E /* KeyPair.m */,
 			);
 			name = Shell;
-			sourceTree = "<group>";
-		};
-		7486312F11B571C800C938AB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				7486313811B571C800C938AB /* libcrypto.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		749ED1DC11CBFFA900AAE6B6 /* Navigation */ = {
@@ -810,8 +810,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				7486315411B5734C00C938AB /* PBXTargetDependency */,
-				7486315611B5734F00C938AB /* PBXTargetDependency */,
+				7441E9941215F65E00AE183D /* PBXTargetDependency */,
+				7441E9961215F66200AE183D /* PBXTargetDependency */,
 			);
 			name = Turbosh;
 			productName = Turbosh;
@@ -837,7 +837,7 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 7486312F11B571C800C938AB /* Products */;
+					ProductGroup = 7441E9831215F65100AE183D /* Products */;
 					ProjectRef = 7486312E11B571C800C938AB /* openssl.xcodeproj */;
 				},
 			);
@@ -849,11 +849,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		7486313811B571C800C938AB /* libcrypto.a */ = {
+		7441E9881215F65100AE183D /* libcrypto.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libcrypto.a;
-			remoteRef = 7486313711B571C800C938AB /* PBXContainerItemProxy */;
+			remoteRef = 7441E9871215F65100AE183D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1031,15 +1031,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7486315411B5734C00C938AB /* PBXTargetDependency */ = {
+		7441E9941215F65E00AE183D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = make;
-			targetProxy = 7486315311B5734C00C938AB /* PBXContainerItemProxy */;
+			targetProxy = 7441E9931215F65E00AE183D /* PBXContainerItemProxy */;
 		};
-		7486315611B5734F00C938AB /* PBXTargetDependency */ = {
+		7441E9961215F66200AE183D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = crypto;
-			targetProxy = 7486315511B5734F00C938AB /* PBXContainerItemProxy */;
+			targetProxy = 7441E9951215F66200AE183D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
