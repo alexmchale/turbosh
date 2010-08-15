@@ -49,12 +49,16 @@
 + (void) setSplit:(bool)split;
 + (bool) isSplit;
 
++ (NSString *) contentType:(ProjectFile *)file;
++ (void) setContentType:(NSString *)contentType forFile:(ProjectFile *)file;
+
 + (void) setValue:(NSString *)value forKey:(NSString *)key;
 + (void) setIntValue:(NSInteger)value forKey:(NSString *)key;
 
 + (NSString *) stringValue:(NSString *)key;
 + (NSInteger) intValue:(NSString *)key;
 
++ (void) setColumn:(NSString *)col onTable:(NSString *)tab withValue:(NSString *)val where:(NSString *)where;
 + (NSString *) scalar:(NSString *)col onTable:(NSString *)tab where:(NSString *)where offset:(NSInteger)offset orderBy:(NSString *)order;
 + (NSInteger) scalarInt:(NSString *)col onTable:(NSString *)tab;
 + (NSInteger) scalarInt:(NSString *)col onTable:(NSString *)tab offset:(NSInteger)offset orderBy:(NSString *)order;

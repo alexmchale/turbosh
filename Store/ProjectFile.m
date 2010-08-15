@@ -6,6 +6,7 @@
 @synthesize project;
 @synthesize filename, localMd5, remoteMd5;
 @synthesize usage;
+@synthesize contentType;
 
 #pragma mark Data Loaders
 
@@ -49,6 +50,12 @@
 - (bool) existsInDatabase
 {
     return [Store fileExists:num];
+}
+
++ (ProjectFile *) current
+{
+    NSNumber *currentFileNumber = [Store currentFileNum];
+    return [[[[ProjectFile alloc] init] loadByNumber:currentFileNumber] autorelease];
 }
 
 #pragma mark Memory Management
@@ -122,6 +129,9 @@
 }
 
 - (NSString *) contentType {
+    NSString *savedType = [Store contentType:self];
+    if (savedType) return savedType;
+
     NSDictionary *types = [NSDictionary dictionaryWithObjectsAndKeys:
         @"ruby",       @"rb",
         @"javascript", @"js",
@@ -149,6 +159,11 @@
     NSString *type = [types objectForKey:ext];
 
     return type ? type : ext;
+}
+
+- (void) setContentType:(NSString *)ct
+{
+    [Store setContentType:ct forFile:self];
 }
 
 - (NSString *) extension {

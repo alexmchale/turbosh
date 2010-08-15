@@ -13,9 +13,12 @@
 @property (nonatomic, retain) NSString *remoteMd5;
 @property (nonatomic, retain) NSString *localMd5;
 @property FileUsage usage;
+@property (nonatomic, retain) NSString *contentType;
 
 - (id) loadByNumber:(NSNumber *)number;
 - (id) loadByProject:(Project *)myProject filename:(NSString *)myFilename forUsage:(FileUsage)myUsage;
+
++ (ProjectFile *) current;
 
 - (NSData *) rawContent;
 - (NSString *)content;

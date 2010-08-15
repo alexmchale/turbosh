@@ -14,10 +14,20 @@ static NSString *fontSizeNames[] = {
 
 static const int FONT_SIZE_COUNT = 5;
 
+static NSString *syntaxTypes[] = {
+    @"c", @"cpp", @"csharp", @"css", @"html",
+    @"java", @"javascript", @"latex", @"perl", @"php",
+    @"python", @"ruby", @"scala", @"sql", @"tcl",
+    @"xml"
+};
+
+static const int SYNTAX_COUNT = 16;
+
 typedef enum {
     SECTION_FONT_SIZE,
     SECTION_THEME,
     SECTION_SPLIT,
+    SECTION_SYNTAX,
     SECTION_COUNT
 } Sections;
 
@@ -92,6 +102,7 @@ typedef enum {
         case SECTION_FONT_SIZE: return FONT_SIZE_COUNT;
         case SECTION_THEME:     return [[Theme all] count];
         case SECTION_SPLIT:     return IS_IPAD ? 1 : 0;
+        case SECTION_SYNTAX:    return SYNTAX_COUNT;
         default: assert(false);
     }
 
@@ -104,6 +115,7 @@ typedef enum {
         case SECTION_FONT_SIZE: return @"Font Size";
         case SECTION_THEME:     return @"Color Scheme";
         case SECTION_SPLIT:     return IS_IPAD ? @"App Layout" : nil;
+        case SECTION_SYNTAX:    return @"File Syntax";
         default: assert(false);
     }
 
@@ -150,6 +162,20 @@ typedef enum {
         {
             cell.textLabel.text = @"Split View";
             cell.accessoryType = CHECKMARK([Store isSplit]);
+
+            break;
+        }
+
+        case SECTION_SYNTAX:
+        {
+            NSString *syntax = syntaxTypes[indexPath.row % SYNTAX_COUNT];
+            ProjectFile *file = [ProjectFile current];
+            cell.textLabel.text = syntax;
+
+            if ([syntax isEqualToString:file.contentType])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
 
             break;
         }
@@ -203,6 +229,14 @@ typedef enum {
             [Store setSplit:isNowSet];
 
             show_alert(@"Split Changed", @"You must restart Turbosh for this change to take effect.");
+            break;
+        }
+
+        case SECTION_SYNTAX:
+        {
+            ProjectFile *file = [ProjectFile current];
+            file.contentType = syntaxTypes[indexPath.row % SYNTAX_COUNT];
+
             break;
         }
 

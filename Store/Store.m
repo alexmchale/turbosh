@@ -49,13 +49,21 @@ static sqlite3 *db;
         [self setValue:@"1" forKey:@"version"];
     }
 
-    const int CURRENT_VERSION = 2;
+    const int CURRENT_VERSION = 3;
 
     for (int version = [self intValue:@"version"]; version < CURRENT_VERSION; ++version) {
         switch (version) {
             case 1:
             {
                 const char *s = "UPDATE files SET path='./'||path WHERE usage LIKE 'task'";
+                sqlite3_exec(db, s, NULL, NULL, NULL);
+
+                break;
+            }
+
+            case 2:
+            {
+                const char *s = "ALTER TABLE files ADD COLUMN syntax TEXT";
                 sqlite3_exec(db, s, NULL, NULL, NULL);
 
                 break;
@@ -668,6 +676,22 @@ void load_project_file(sqlite3_stmt *t, ProjectFile *file)
     return [self intValue:@"current.disable.split"] != 1;
 }
 
+#pragma mark Content Type Configuration
+
++ (NSString *) contentType:(ProjectFile *)file
+{
+    assert(file);
+
+    NSString *where = [NSString stringWithFormat:@"id=%@", file.num];
+    return [self scalar:@"syntax" onTable:@"files" where:where offset:0 orderBy:@"id"];
+}
+
++ (void) setContentType:(NSString *)contentType forFile:(ProjectFile *)file
+{
+    NSString *where = [NSString stringWithFormat:@"id=%@", file.num];
+    [self setColumn:@"syntax" onTable:@"files" withValue:contentType where:where];
+}
+
 #pragma mark Key-Value
 
 + (void) setValue:(NSString *)value forKey:(NSString *)key {
@@ -706,6 +730,17 @@ void load_project_file(sqlite3_stmt *t, ProjectFile *file)
 }
 
 #pragma mark SQL Utilities
+
++ (void) setColumn:(NSString *)col onTable:(NSString *)tab withValue:(NSString *)val where:(NSString *)where
+{
+    sqlite3_stmt *s;
+    NSString *f = @"UPDATE %@ SET %@=? WHERE %@";
+    NSString *q = [NSString stringWithFormat:f, tab, col, where];
+
+    bind_prepare(&s, [q UTF8String]);
+    bind_string(s, 1, val, true);
+    bind_finalize(s, 0);
+}
 
 + (NSString *) scalar:(NSString *)col
               onTable:(NSString *)tab
