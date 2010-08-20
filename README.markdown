@@ -42,6 +42,7 @@ v2.2
 
 * The file editor will now use the foreground/background colors of the file viewer.
 * Fixed a bug that could cause files to be truncated if an upload is interrupted by a data connection failure.
+* The syntax highlighting used on a file is now user-overrideable.
 
 v2.1
 

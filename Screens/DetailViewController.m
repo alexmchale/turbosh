@@ -46,6 +46,8 @@
     } else if (UIInterfaceOrientationIsPortrait(orient)) {
         width = fr1.size.width;
         height = fr1.size.height - toolbarHeight;
+    } else {
+        return;
     }
 
     if (keyboardShown) {
